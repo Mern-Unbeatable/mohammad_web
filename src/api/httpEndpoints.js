@@ -39,7 +39,9 @@ export const API_ENDPOINTS = {
   MESSAGES: {
     LIST: "/messages",
     RECIPIENTS: "/messages/recipients",
+    UNREAD: "/messages/unread",
     DIRECT: "/messages/direct",
+    DIRECT_WITH: (userId) => `/messages/direct/${userId}`,
     GROUP: "/messages/group",
     DETAILS: (conversationId) => `/messages/${conversationId}`,
     RENAME: (conversationId) => `/messages/${conversationId}`,
@@ -126,6 +128,10 @@ export const API_ENDPOINTS = {
       ME: "/users/me",
       UPDATE: "/users/me",
       CHANGE_PASSWORD: "/users/me/password",
+    },
+
+    UPLOADS: {
+      SINGLE: "/uploads",
     },
   },
 

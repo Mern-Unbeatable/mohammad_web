@@ -21,6 +21,7 @@ const MessagesPageContent = ({
   mobilePanel = 'list',
   onSend,
   onUploadFile,
+  pendingListing = null,
   ...messengerProps
 }) => {
   const { setBottomNavHidden } = useLayoutChrome();
@@ -101,9 +102,10 @@ const MessagesPageContent = ({
       .filter((a) => a.url && !a.uploading)
       .map(({ url, name, mimeType, size }) => ({ url, name, mimeType, size }));
     const body = draft.trim();
-    if (!body && ready.length === 0) return;
+    const listingId = pendingListing && !pendingListing.loading ? pendingListing.id : undefined;
+    if (!body && ready.length === 0 && !listingId) return;
 
-    const ok = await onSend?.({ body, attachments: ready });
+    const ok = await onSend?.({ body, attachments: ready, listingId });
     if (ok) {
       setDrafts((prev) => ({ ...prev, [key]: '' }));
       setPending((prev) => ({ ...prev, [key]: [] }));
@@ -119,6 +121,7 @@ const MessagesPageContent = ({
       onDraftChange={setDraft}
       onSend={handleSend}
       attachments={attachments}
+      pendingListing={pendingListing}
       onAddFiles={onUploadFile ? handleAddFiles : undefined}
       onRemoveAttachment={handleRemoveAttachment}
       heightClass={isPanel ? 'h-full min-h-0' : 'h-full xl:h-[680px]'}

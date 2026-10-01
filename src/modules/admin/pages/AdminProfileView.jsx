@@ -7,17 +7,26 @@ import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import {
   fetchAdminProfile,
   updateAdminProfile,
+  updateAdminAvatar,
   changeAdminPassword,
   clearProfileError,
   setProfileField,
 } from "@/features/admin/profile";
 
 const emptyPasswords = { current: "", next: "", confirm: "" };
+const IMAGE_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 const AdminProfileView = () => {
   const dispatch = useDispatch();
-  const { form, loading, savingProfile, savingPassword, error, saveError } =
-    useSelector((state) => state.adminProfile);
+  const {
+    form,
+    loading,
+    savingProfile,
+    uploadingAvatar,
+    savingPassword,
+    error,
+    saveError,
+  } = useSelector((state) => state.adminProfile);
   const [passwords, setPasswords] = useState(emptyPasswords);
 
   useEffect(() => {
@@ -43,6 +52,18 @@ const AdminProfileView = () => {
     const result = await dispatch(updateAdminProfile(trimmed));
     if (updateAdminProfile.fulfilled.match(result)) {
       toast.success("Profile updated");
+    }
+  };
+
+  const handleAvatarChange = async (file) => {
+    if (uploadingAvatar) return;
+    if (!IMAGE_MIME.has(file.type)) {
+      toast.error("Please upload a JPG, PNG, or WebP image");
+      return;
+    }
+    const result = await dispatch(updateAdminAvatar(file));
+    if (updateAdminAvatar.fulfilled.match(result)) {
+      toast.success("Profile photo updated");
     }
   };
 
@@ -94,6 +115,8 @@ const AdminProfileView = () => {
       onChangePassword={
         savingPassword ? (e) => e.preventDefault() : handleChangePassword
       }
+      onAvatarChange={handleAvatarChange}
+      avatarUploading={uploadingAvatar}
     />
   );
 };

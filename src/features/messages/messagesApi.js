@@ -41,6 +41,11 @@ export async function getConversation(conversationId) {
   return unwrapApiData(await crudService.get(E.DETAILS(conversationId)));
 }
 
+/** The caller's existing 1:1 conversation with `userId`, or null. */
+export async function getDirectConversation(userId) {
+  return unwrapApiData(await crudService.get(E.DIRECT_WITH(userId))) ?? null;
+}
+
 export async function getThread(conversationId, params = {}) {
   const query = dropEmpty({ pageSize: 30, ...params });
   const response = await crudService.get(E.THREAD(conversationId), query);
@@ -54,22 +59,37 @@ export async function markRead(conversationId) {
   return unwrapApiData(await crudService.post(E.READ(conversationId)));
 }
 
+export async function getUnreadSummary() {
+  const data = unwrapApiData(await crudService.get(E.UNREAD));
+  return {
+    messages: Number(data?.messages) || 0,
+    conversations: Number(data?.conversations) || 0,
+  };
+}
+
 export async function getRecipients(params = {}) {
   const response = await crudService.get(E.RECIPIENTS, dropEmpty(params));
   return listOf(response);
 }
 
+/** `{ participantId, message, listingId? }` */
 export async function startDirect(payload) {
-  return unwrapApiData(await crudService.post(E.DIRECT, payload));
+  return unwrapApiData(await crudService.post(E.DIRECT, dropEmpty(payload)));
 }
 
 export async function createGroup(payload) {
   return unwrapApiData(await crudService.post(E.GROUP, payload));
 }
 
-export async function sendMessage(conversationId, { body = "", attachments = [] }) {
+export async function sendMessage(
+  conversationId,
+  { body = "", attachments = [], listingId },
+) {
   return unwrapApiData(
-    await crudService.post(E.SEND(conversationId), { body, attachments }),
+    await crudService.post(
+      E.SEND(conversationId),
+      dropEmpty({ body, attachments, listingId }),
+    ),
   );
 }
 

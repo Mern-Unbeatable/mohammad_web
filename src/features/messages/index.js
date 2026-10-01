@@ -23,6 +23,7 @@ export {
 export {
   fetchConversations,
   fetchConversation,
+  fetchDirectConversation,
   fetchThread,
   markConversationRead,
   fetchRecipients,
@@ -34,6 +35,7 @@ export {
   renameGroup,
   addParticipants,
   removeParticipant,
+  fetchUnreadSummary,
 } from "./messagesThunks";
 export {
   toConversationModel,
@@ -41,8 +43,16 @@ export {
   formatMessageTime,
   formatBubbleTime,
   attachmentSummary,
+  messagePreview,
+  toChatListingModel,
   isImageAttachment,
   isSeenByOther,
 } from "./messagesMappers";
 export { useMessagesSocket, queryPresence } from "./realtime";
+export { useUnreadMessages } from "./useUnreadMessages";
+export {
+  parseLegacyChatLink,
+  resolveLegacyChatLink,
+  resolveNotificationLink,
+} from "./chatLinks";
 export * as messagesApi from "./messagesApi";

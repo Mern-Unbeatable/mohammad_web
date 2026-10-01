@@ -17,7 +17,7 @@ export const adminNavItems = [
   { to: '/admin', label: 'Dashboard Overview', icon: LayoutDashboard, end: true },
   { to: '/admin/users', label: 'Users', icon: Users },
   { to: '/admin/recruitment', label: 'Recruitment', icon: Briefcase },
-  { to: '/admin/chat', label: 'Chat', icon: MessageSquare },
+  { to: '/admin/chat', label: 'Chat', icon: MessageSquare, badge: 'unreadMessages' },
   { to: '/admin/general', label: 'General Post', icon: Newspaper },
   { to: '/admin/marketplace', label: 'Marketplace', icon: ShoppingBag },
   { to: '/admin/reports', label: 'Reports Resolved', icon: ShieldCheck },

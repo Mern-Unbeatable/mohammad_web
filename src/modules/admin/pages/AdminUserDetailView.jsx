@@ -11,6 +11,7 @@ import ActivitySection from "@/components/data-display/ActivitySection/ActivityS
 import { ProfilePageSkeleton } from "@/components/common/Skeleton";
 import { SubscriptionDetailsCard } from "@/modules/user/components/profile/ProfileSections";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
+import { CHAT_BASE_PATHS, chatPath } from "@/shared/constants/chat";
 import {
   fetchUserDetails,
   clearSelectedUser,
@@ -19,6 +20,7 @@ import { getAdminMemberPosts } from "@/modules/admin/data/users";
 
 const AdminUserDetailView = () => {
   const { userId } = useParams();
+  const adminChatHref = chatPath(CHAT_BASE_PATHS.ADMIN, { id: userId });
   const dispatch = useDispatch();
 
   const { selectedUser, selectedUserLoading, error } = useSelector(
@@ -146,7 +148,7 @@ const AdminUserDetailView = () => {
           <ProfileHero
             user={profile}
             showMessage
-            messageHref={`/admin/chat?user=${userId}`}
+            messageHref={adminChatHref}
             showEdit={false}
           />
           <ProfessionalInfoCard user={profile} extended />
@@ -163,7 +165,7 @@ const AdminUserDetailView = () => {
           isPremium={profile.membershipStatus === "premium"}
           showEdit={false}
           showMessage
-          messageHref={`/admin/chat?user=${userId}`}
+          messageHref={adminChatHref}
           subscriptionSlot={
             <SubscriptionDetailsCard subscription={profile.subscription} />
           }

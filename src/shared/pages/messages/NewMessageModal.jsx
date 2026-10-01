@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Loader2, X } from 'lucide-react';
+import ChatListingCard from '@/components/data-display/Messenger/ChatListingCard';
 import RecipientPicker from '@/shared/pages/messages/RecipientPicker';
 
 const fieldClass =
@@ -14,6 +15,8 @@ const NewMessageForm = ({
   recipientsLoading,
   onSearchRecipients,
   initialRecipientId,
+  listing = null,
+  onRemoveListing,
   submitting,
 }) => {
   const [selected, setSelected] = useState(initialRecipientId ? [initialRecipientId] : []);
@@ -27,12 +30,17 @@ const NewMessageForm = ({
   }, []);
 
   const recipientId = selected[0] || '';
-  const canSubmit = Boolean(recipientId) && message.trim().length > 0 && !submitting;
+  const listingId = listing && !listing.loading ? listing.id : undefined;
+  const canSubmit =
+    Boolean(recipientId) &&
+    (message.trim().length > 0 || Boolean(listingId)) &&
+    !listing?.loading &&
+    !submitting;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!canSubmit) return;
-    const ok = await onSend?.({ recipientId, message: message.trim() });
+    const ok = await onSend?.({ recipientId, message: message.trim(), listingId });
     if (ok !== false) onClose();
   };
 
@@ -87,17 +95,22 @@ const NewMessageForm = ({
 
           <div>
             <label htmlFor="new-message-body" className={labelClass}>
-              Message<span className="text-pink-light"> *</span>
+              Message{listing ? null : <span className="text-pink-light"> *</span>}
             </label>
+            {listing ? (
+              <ChatListingCard listing={listing} onRemove={onRemoveListing} className="mb-2" />
+            ) : null}
             <textarea
               id="new-message-body"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={4}
               maxLength={5000}
-              placeholder="Write your message..."
+              placeholder={
+                listing ? 'Hi, is this still available?' : 'Write your message...'
+              }
               className={`${fieldClass} resize-y`}
-              required
+              required={!listing}
             />
           </div>
 

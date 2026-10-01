@@ -1,22 +1,26 @@
-import { useState } from 'react';
-import { useSearchParams } from 'react-router';
+import { Outlet, useLocation, useNavigate } from 'react-router';
 import PanelPage from '@/shared/layout/PanelLayout/PanelPage';
 import PanelPageHeader from '@/shared/layout/PanelLayout/PanelPageHeader';
 import SegmentedTabs from '@/components/common/SegmentedTabs/SegmentedTabs';
-import MessagesContainer from '@/shared/pages/messages/MessagesContainer';
-import ChatModerationPanel from '@/modules/admin/components/chat/ChatModerationPanel';
+import { CHAT_BASE_PATHS, chatPath } from '@/shared/constants/chat';
+
+const ADMIN_CHAT_MODERATION_PATH = `${CHAT_BASE_PATHS.ADMIN}/moderation`;
 
 const TABS = [
   { id: 'inbox', label: 'My conversations' },
   { id: 'moderation', label: 'Moderation' },
 ];
 
+/** Admin chat shell: the active tab is the route (inbox sections vs `/moderation`). */
 const AdminChatView = () => {
-  const [searchParams] = useSearchParams();
-  const [tab, setTab] = useState('inbox');
-  // Deep links (notifications, "Message" on a user profile) always target the inbox.
-  const activeTab =
-    searchParams.has('conversation') || searchParams.has('user') ? 'inbox' : tab;
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const activeTab = pathname.startsWith(ADMIN_CHAT_MODERATION_PATH) ? 'moderation' : 'inbox';
+
+  const handleTabChange = (tab) => {
+    if (tab === activeTab) return;
+    navigate(tab === 'moderation' ? ADMIN_CHAT_MODERATION_PATH : chatPath(CHAT_BASE_PATHS.ADMIN));
+  };
 
   return (
     <PanelPage className="flex h-[calc(100dvh-5.5rem)] flex-col lg:h-[calc(100dvh-3rem)]">
@@ -27,17 +31,13 @@ const AdminChatView = () => {
           <SegmentedTabs
             tabs={TABS}
             activeTab={activeTab}
-            onTabChange={setTab}
+            onTabChange={handleTabChange}
             ariaLabel="Chat sections"
           />
         }
       />
       <div className="mt-4 flex min-h-0 flex-1 flex-col">
-        {activeTab === 'inbox' ? (
-          <MessagesContainer variant="panel" />
-        ) : (
-          <ChatModerationPanel />
-        )}
+        <Outlet />
       </div>
     </PanelPage>
   );

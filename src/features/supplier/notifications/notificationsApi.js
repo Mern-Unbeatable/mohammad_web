@@ -68,6 +68,12 @@ export async function getNotifications(params = {}) {
   return parseListResponse(response, query);
 }
 
+/** Account-wide unread total (`meta.unreadCount` is independent of paging/filters). */
+export async function getUnreadCount() {
+  const { meta } = await getNotifications({ page: 1, pageSize: 1 });
+  return Number(meta?.unreadCount) || 0;
+}
+
 // ═══════════════════════════════════════════════════════════════════════
 // Mark one read
 // ═══════════════════════════════════════════════════════════════════════

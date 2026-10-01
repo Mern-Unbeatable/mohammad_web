@@ -8,12 +8,16 @@
  */
 
 export { default as userNotificationsReducer } from "./notificationsSlice";
-export { clearNotificationsError } from "./notificationsSlice";
+export {
+  clearNotificationsError,
+  selectUserUnreadNotificationCount,
+} from "./notificationsSlice";
 export {
   fetchUserNotifications,
   markUserNotificationRead,
   markAllUserNotificationsRead,
   removeUserNotification,
+  fetchUserUnreadNotificationCount,
 } from "./notificationsThunks";
 export {
   toNotificationListModel,

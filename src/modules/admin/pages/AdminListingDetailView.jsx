@@ -9,6 +9,8 @@ import { ListingDetailSkeleton } from "@/components/common/Skeleton";
 import { formatPrice } from "@/modules/user/data/marketplace";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import NotFound from "@/shared/pages/NotFound";
+import { useAuth } from "@/shared/auth/useAuth";
+import { CHAT_BASE_PATHS, listingChatPath } from "@/shared/constants/chat";
 import {
   fetchListingDetails,
   clearSelectedListing,
@@ -25,6 +27,7 @@ const SpecTile = ({ label, value }) => (
 const AdminListingDetailView = () => {
   const { listingId } = useParams();
   const dispatch = useDispatch();
+  const { user } = useAuth();
   const [activeImage, setActiveImage] = useState(0);
 
   const { selectedListing, selectedListingLoading, error } = useSelector(
@@ -141,13 +144,15 @@ const AdminListingDetailView = () => {
               Excl. VAT · Collection or delivery
             </p>
 
-            <button
-              type="button"
-              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#066BB0]"
-            >
-              <MessageCircle className="h-4 w-4" />
-              Contact seller
-            </button>
+            {listing.seller.id && listing.seller.id !== user?.id ? (
+              <Link
+                to={listingChatPath(CHAT_BASE_PATHS.ADMIN, listing.seller.id, listing.id)}
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#066BB0]"
+              >
+                <MessageCircle className="h-4 w-4" />
+                Contact seller
+              </Link>
+            ) : null}
 
             <div className="mt-5 flex items-center gap-2 border-t border-[#E4E7EC] pt-4 text-[12px] text-[#64748B]">
               <BadgeCheck className="h-4 w-4 shrink-0 text-green-primary" />

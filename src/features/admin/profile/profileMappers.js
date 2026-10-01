@@ -1,27 +1,27 @@
+import { toAccountIdentity } from "@/shared/auth/accountIdentity";
+
 /**
  * Map API user → AdminAccountForm shape.
  */
 export function mapUserToForm(user) {
-  const profile = user?.profile || {};
-  const name =
-    profile.name ||
-    [profile.firstName, profile.lastName].filter(Boolean).join(" ") ||
-    user?.email ||
-    "";
+  const { name, initials, avatar } = toAccountIdentity(user);
   return {
     name,
     email: user?.email || "",
     displayName: name || "Admin",
     displayEmail: user?.email || "",
+    avatar,
+    initials,
   };
 }
 
 /**
  * Split a full name into firstName / lastName for PATCH /users/me.
+ * A single-word name keeps an empty last name instead of repeating the word.
  */
 export function nameToProfilePayload(fullName) {
-  const trimmed = String(fullName || "").trim();
-  const [firstName, ...rest] = trimmed.split(/\s+/);
-  const lastName = rest.join(" ") || firstName;
-  return { firstName, lastName };
+  const [firstName = "", ...rest] = String(fullName || "")
+    .trim()
+    .split(/\s+/);
+  return { firstName, lastName: rest.join(" ") };
 }

@@ -8,12 +8,16 @@
  */
 
 export { default as supplierNotificationsReducer } from "./notificationsSlice";
-export { clearNotificationsError } from "./notificationsSlice";
+export {
+  clearNotificationsError,
+  selectSupplierUnreadNotificationCount,
+} from "./notificationsSlice";
 export {
   fetchSupplierNotifications,
   markSupplierNotificationRead,
   markAllSupplierNotificationsRead,
   removeSupplierNotification,
+  fetchSupplierUnreadNotificationCount,
 } from "./notificationsThunks";
 export {
   toNotificationListModel,

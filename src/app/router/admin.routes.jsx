@@ -1,8 +1,10 @@
 import RequireRole from '@/shared/auth/RequireRole';
 import { USER_ROLES } from '@/shared/constants/roles';
+import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
 import { lazyPage } from '@/shared/routing/lazyPage';
 import AdminLayout from '@/modules/admin/layout/AdminLayout';
 import PanelNotFound from '@/shared/pages/PanelNotFound';
+import { buildChatRoute } from './chat.routes';
 
 const AdminDashboardView = lazyPage(() => import('@/modules/admin/pages/AdminDashboardView'));
 const AdminUsersView = lazyPage(() => import('@/modules/admin/pages/AdminUsersView'));
@@ -10,6 +12,10 @@ const AdminUserDetailView = lazyPage(() => import('@/modules/admin/pages/AdminUs
 const AdminRecruitmentView = lazyPage(() => import('@/modules/admin/pages/AdminRecruitmentView'));
 const AdminJobDetailView = lazyPage(() => import('@/modules/admin/pages/AdminJobDetailView'));
 const AdminChatView = lazyPage(() => import('@/modules/admin/pages/AdminChatView'));
+const AdminChatInboxView = lazyPage(() => import('@/modules/admin/pages/AdminChatInboxView'));
+const ChatModerationView = lazyPage(
+  () => import('@/modules/admin/components/chat/ChatModerationPanel'),
+);
 const AdminGeneralView = lazyPage(() => import('@/modules/admin/pages/AdminGeneralView'));
 const AdminGeneralPostDetailView = lazyPage(
   () => import('@/modules/admin/pages/AdminGeneralPostDetailView'),
@@ -49,7 +55,19 @@ export const adminRoutes = {
           element: <AdminJobDetailView />,
           handle: { title: 'Job detail' },
         },
-        { path: 'chat', element: <AdminChatView />, handle: { title: 'Chat' } },
+        buildChatRoute({
+          path: 'chat',
+          basePath: CHAT_BASE_PATHS.ADMIN,
+          shell: <AdminChatView />,
+          inbox: <AdminChatInboxView />,
+          extraRoutes: [
+            {
+              path: 'moderation',
+              element: <ChatModerationView />,
+              handle: { title: 'Chat moderation' },
+            },
+          ],
+        }),
         { path: 'general', element: <AdminGeneralView />, handle: { title: 'General' } },
         {
           path: 'general/:postId',

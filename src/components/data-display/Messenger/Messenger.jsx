@@ -15,6 +15,7 @@ import {
   X,
 } from 'lucide-react';
 import Avatar from '@/components/ui/Avatar';
+import ChatListingCard from './ChatListingCard';
 
 const FILE_ACCEPT =
   'image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,video/mp4,video/quicktime';
@@ -33,6 +34,17 @@ const ChatAvatar = ({ chat, size = 'md' }) =>
   ) : (
     <Avatar initials={chat.initials} size={size} className={chat.avatarClass} />
   );
+
+const ChatName = ({ chat, className }) => (
+  <span className="flex min-w-0 items-center gap-1.5">
+    <span className={`truncate ${className}`}>{chat.name}</span>
+    {chat.isAdmin ? (
+      <span className="shrink-0 rounded-full bg-secondary px-1.5 py-0.5 text-[10px] font-semibold uppercase leading-none tracking-wide text-primary">
+        Admin
+      </span>
+    ) : null}
+  </span>
+);
 
 const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
   <button
@@ -54,7 +66,7 @@ const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
 
     <div className="min-w-0 flex-1">
       <div className="flex items-center justify-between gap-2">
-        <p className="truncate text-[14px] font-semibold text-deep-blue">{chat.name}</p>
+        <ChatName chat={chat} className="text-[14px] font-semibold text-deep-blue" />
         <span className="shrink-0 text-[11px] text-[#98A2B3]">{chat.time}</span>
       </div>
       <p
@@ -128,9 +140,17 @@ const AttachmentList = ({ attachments, isMe }) => {
   );
 };
 
-const MessageBubble = ({ message, showAvatar, chat, onDeleteMessage }) => {
+const MessageBubble = ({ message, showAvatar, chat, onDeleteMessage, getListingHref }) => {
   const isMe = message.from === 'me';
   const text = message.text || message.body || '';
+  const listingCard = message.listing ? (
+    <ChatListingCard
+      listing={message.listing}
+      href={getListingHref?.(message.listing.id)}
+      tone={isMe ? 'me' : 'them'}
+      className={text ? 'mb-1' : ''}
+    />
+  ) : null;
   const senderChat = {
     name: message.sender || chat.name,
     avatar: chat.isGroup ? message.senderAvatar : chat.avatar,
@@ -142,6 +162,7 @@ const MessageBubble = ({ message, showAvatar, chat, onDeleteMessage }) => {
     return (
       <div className="group flex flex-col items-end">
         <div className="relative max-w-[min(85%,420px)] sm:max-w-[min(100%,420px)]">
+          {listingCard ? <div className="flex justify-end">{listingCard}</div> : null}
           {text ? (
             <div className="rounded-2xl rounded-br-sm bg-primary px-4 py-2.5 text-[13px] leading-relaxed whitespace-pre-wrap break-words text-white">
               {text}
@@ -175,6 +196,7 @@ const MessageBubble = ({ message, showAvatar, chat, onDeleteMessage }) => {
         {chat.isGroup && message.sender && showAvatar ? (
           <p className="mb-1 text-[11px] font-medium text-[#64748B]">{message.sender}</p>
         ) : null}
+        {listingCard}
         {text ? (
           <div className="rounded-2xl rounded-bl-sm bg-[#E8ECF0] px-4 py-2.5 text-[13px] leading-relaxed whitespace-pre-wrap break-words text-[#334155]">
             {text}
@@ -248,6 +270,9 @@ const Messenger = ({
   attachments = [],
   onAddFiles,
   onRemoveAttachment,
+  pendingListing = null,
+  onRemovePendingListing,
+  getListingHref,
   seen = false,
   mobilePanel = 'list',
   onMobileBack,
@@ -262,11 +287,13 @@ const Messenger = ({
   const imageInputRef = useRef(null);
 
   const uploading = attachments.some((a) => a.uploading);
+  const listingLoading = Boolean(pendingListing?.loading);
   const canSend =
     Boolean(displayChat) &&
     !sending &&
     !uploading &&
-    (draft.trim().length > 0 || attachments.some((a) => a.url));
+    !listingLoading &&
+    (draft.trim().length > 0 || attachments.some((a) => a.url) || Boolean(pendingListing));
 
   const handleFiles = (event) => {
     if (event.target.files?.length) onAddFiles?.(Array.from(event.target.files));
@@ -344,7 +371,7 @@ const Messenger = ({
           ) : null}
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto scrollbar-hide xl:divide-y xl:divide-[#E4E7EC]">
+        <div className="min-h-0 flex-1 overflow-y-auto scrollbar-thin xl:divide-y xl:divide-[#E4E7EC]">
           {loading && chats.length === 0 ? (
             <ConversationListSkeleton />
           ) : chats.length > 0 ? (
@@ -412,9 +439,10 @@ const Messenger = ({
                 </div>
 
                 <div className="min-w-0">
-                  <p className="truncate text-[14px] font-semibold text-deep-blue sm:text-[15px]">
-                    {displayChat.name}
-                  </p>
+                  <ChatName
+                    chat={displayChat}
+                    className="text-[14px] font-semibold text-deep-blue sm:text-[15px]"
+                  />
                   <p className="truncate text-[11px] text-[#64748B] sm:text-[12px]">
                     {!displayChat.isGroup && displayChat.online
                       ? 'Online'
@@ -487,6 +515,7 @@ const Messenger = ({
                         showAvatar={showAvatar}
                         chat={displayChat}
                         onDeleteMessage={onDeleteMessage}
+                        getListingHref={getListingHref}
                       />
                       {seen && index === lastMineIndex ? (
                         <p className="mt-0.5 px-1 text-right text-[10px] font-medium text-[#98A2B3]">
@@ -500,6 +529,13 @@ const Messenger = ({
             </div>
 
             <div className="shrink-0 border-t border-[#E4E7EC] bg-white px-3 pb-3 pt-2.5 sm:px-5 sm:py-4">
+              {pendingListing ? (
+                <ChatListingCard
+                  listing={pendingListing}
+                  onRemove={onRemovePendingListing}
+                  className="mb-2"
+                />
+              ) : null}
               {attachments.length > 0 ? (
                 <div className="mb-2 flex flex-wrap gap-2">
                   {attachments.map((attachment, index) => (
@@ -576,7 +612,9 @@ const Messenger = ({
                     }
                   }}
                   maxLength={5000}
-                  placeholder="Write a message..."
+                  placeholder={
+                    pendingListing ? 'Ask the seller about this listing...' : 'Write a message...'
+                  }
                   className="min-w-0 flex-1 bg-transparent py-2 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3]"
                 />
                 <button

@@ -3,19 +3,27 @@ import { NavLink, Link, useLocation, useNavigate } from 'react-router';
 import { LogOut, Menu, X } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import Avatar from '@/components/ui/Avatar';
+import CountBadge from '@/components/ui/CountBadge';
+import { useUnreadMessages } from '@/features/messages';
 import { useAuth } from '@/shared/auth/useAuth';
+import { toAccountIdentity } from '@/shared/auth/accountIdentity';
 import { roleLabel as formatRoleLabel } from '@/shared/constants/roles';
 import ScrollToTop from '@/shared/routing/ScrollToTop';
 
 const SIDEBAR_WIDTH = 260;
 
-const PanelLayout = ({ navItems, children }) => {
+/** `badgeCounts` adds role-specific nav badges keyed by `navItems[].badge`. */
+const PanelLayout = ({ navItems, badgeCounts: extraBadgeCounts, children }) => {
   const { user, role, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const roleLabel = formatRoleLabel(role || user?.role);
+  const identity = toAccountIdentity(user);
+  const { conversations: unreadChats } = useUnreadMessages();
+  const badgeCounts = { unreadMessages: unreadChats, ...extraBadgeCounts };
+  const hasBadges = navItems.some(({ badge }) => badgeCounts[badge] > 0);
 
   useEffect(() => {
     setSidebarOpen(false);
@@ -59,7 +67,7 @@ const PanelLayout = ({ navItems, children }) => {
           Main menu
         </p>
         <ul className="space-y-0.5">
-          {navItems.map(({ to, label, icon: Icon, end }) => (
+          {navItems.map(({ to, label, icon: Icon, end, badge }) => (
             <li key={to}>
               <NavLink
                 to={to}
@@ -75,6 +83,11 @@ const PanelLayout = ({ navItems, children }) => {
               >
                 <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={1.8} />
                 {label}
+                <CountBadge
+                  count={badgeCounts[badge]}
+                  label={`${badgeCounts[badge]} unread`}
+                  className="ml-auto"
+                />
               </NavLink>
             </li>
           ))}
@@ -83,9 +96,14 @@ const PanelLayout = ({ navItems, children }) => {
 
       <div className="shrink-0 border-t border-[#E4E7EC] p-4">
         <div className="mb-3 flex items-center gap-3 rounded-lg border border-[#E4E7EC] p-3">
-          <Avatar src={user?.avatar} alt={user?.name} initials={user?.initials} size="sm" />
+          <Avatar
+            src={identity.avatar}
+            alt={identity.name}
+            initials={identity.initials}
+            size="sm"
+          />
           <div className="min-w-0">
-            <p className="truncate text-[13px] font-semibold text-deep-blue">{user?.name}</p>
+            <p className="truncate text-[13px] font-semibold text-deep-blue">{identity.name}</p>
             <p className="text-[11px] text-[#64748B]">{roleLabel}</p>
           </div>
         </div>
@@ -133,11 +151,14 @@ const PanelLayout = ({ navItems, children }) => {
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
-            className="rounded-lg p-2 text-[#64748B] hover:bg-[#F9FAFB]"
-            aria-label="Open menu"
+            className="relative rounded-lg p-2 text-[#64748B] hover:bg-[#F9FAFB]"
+            aria-label={hasBadges ? 'Open menu, unread items' : 'Open menu'}
             aria-expanded={sidebarOpen}
           >
             <Menu className="h-5 w-5" />
+            {hasBadges ? (
+              <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-[#CC1016] ring-2 ring-white" />
+            ) : null}
           </button>
           <Link to="/" className="flex items-center gap-2">
             <img src={logo} alt="Lab Unity" className="h-7 w-auto" />

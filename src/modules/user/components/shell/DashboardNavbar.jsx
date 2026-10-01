@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import logo from "@/assets/logo.png";
 import Avatar from "@/components/ui/Avatar";
 import Container from "@/components/ui/Container";
+import CountBadge from "@/components/ui/CountBadge";
 import { useAuth } from "@/shared/auth/useAuth";
 import ProfileDropdown from "./ProfileDropdown";
 import { navItems } from "@/modules/user/data/dashboard";
@@ -29,6 +30,18 @@ import {
   toSearchResultsModel,
 } from "@/features/user/search";
 import { toProfilePageUser } from "@/features/user/profile";
+import { useUnreadMessages } from "@/features/messages";
+import {
+  fetchUserUnreadNotificationCount,
+  selectUserUnreadNotificationCount,
+} from "@/features/user/notifications";
+import { useNotificationBadge } from "@/shared/hooks/useNotificationBadge";
+import { CHAT_BASE_PATHS } from "@/shared/constants/chat";
+
+const userNotificationBadge = {
+  fetchCount: fetchUserUnreadNotificationCount,
+  selectCount: selectUserUnreadNotificationCount,
+};
 
 const iconMap = {
   home: Home,
@@ -116,6 +129,21 @@ const DashboardNavbar = () => {
   const { results, loading, error } = useSelector((state) => state.userSearch);
   const { user } = useSelector((state) => state.userProfile);
   const profileUser = useMemo(() => toProfilePageUser(user), [user]);
+  const { conversations: unreadChats } = useUnreadMessages();
+  const unreadNotifications = useNotificationBadge(userNotificationBadge);
+  const badges = {
+    messages: {
+      count: unreadChats,
+      label: `${unreadChats} unread ${unreadChats === 1 ? "conversation" : "conversations"}`,
+    },
+    notifications: {
+      count: unreadNotifications,
+      label: `${unreadNotifications} unread ${unreadNotifications === 1 ? "notification" : "notifications"}`,
+    },
+  };
+  const unreadLabel = badges.messages.label;
+  const badgeFor = (id) => badges[id]?.count ?? 0;
+  const badgeLabelFor = (id) => badges[id]?.label;
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -131,7 +159,7 @@ const DashboardNavbar = () => {
     if (item.id === "marketplace") return pathname.startsWith("/marketplace");
     if (item.id === "recruitment") return pathname.startsWith("/recruitment");
     if (item.id === "general") return pathname.startsWith("/general");
-    if (item.id === "messages") return pathname.startsWith("/messages");
+    if (item.id === "messages") return pathname.startsWith(CHAT_BASE_PATHS.USER);
     if (item.id === "blogs") return pathname.startsWith("/blogs");
     if (item.id === "notifications")
       return pathname.startsWith("/notifications");
@@ -247,25 +275,38 @@ const DashboardNavbar = () => {
           </div>
 
           <Link
-            to="/messages"
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[#64748B] hover:bg-[#F9FAFB] sm:h-10 sm:w-10"
-            aria-label="Messages"
+            to={CHAT_BASE_PATHS.USER}
+            className="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[#64748B] hover:bg-[#F9FAFB] sm:h-10 sm:w-10"
+            aria-label={unreadChats ? `Messages, ${unreadLabel}` : "Messages"}
           >
             <MessageSquare className="h-5 w-5" />
+            <CountBadge
+              count={unreadChats}
+              className="absolute right-0.5 top-0.5 sm:right-1 sm:top-1"
+            />
           </Link>
 
           <button
             type="button"
             onClick={() => setMenuOpen((prev) => !prev)}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-label={
+              menuOpen
+                ? "Close menu"
+                : unreadNotifications
+                  ? `Open menu, ${badges.notifications.label}`
+                  : "Open menu"
+            }
             aria-expanded={menuOpen}
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-deep-blue hover:bg-[#F9FAFB] sm:h-10 sm:w-10"
+            className="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-deep-blue hover:bg-[#F9FAFB] sm:h-10 sm:w-10"
           >
             {menuOpen ? (
               <X className="h-5 w-5" />
             ) : (
               <Menu className="h-5 w-5" />
             )}
+            {!menuOpen && unreadNotifications ? (
+              <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-[#CC1016] ring-2 ring-white sm:right-2 sm:top-2" />
+            ) : null}
           </button>
         </div>
 
@@ -314,7 +355,14 @@ const DashboardNavbar = () => {
                       : "text-[#64748B] hover:bg-[#F9FAFB] hover:text-deep-blue"
                   }`}
                 >
-                  <Icon className="h-5 w-5" strokeWidth={active ? 2.2 : 1.8} />
+                  <span className="relative">
+                    <Icon className="h-5 w-5" strokeWidth={active ? 2.2 : 1.8} />
+                    <CountBadge
+                      count={badgeFor(id)}
+                      label={badgeLabelFor(id)}
+                      className="absolute -right-2.5 -top-1.5"
+                    />
+                  </span>
                   <span>{label}</span>
                 </Link>
               );
@@ -378,6 +426,11 @@ const DashboardNavbar = () => {
                       >
                         <Icon className="h-5 w-5 shrink-0" />
                         {label}
+                        <CountBadge
+                          count={badgeFor(id)}
+                          label={badgeLabelFor(id)}
+                          className="ml-auto"
+                        />
                       </Link>
                     </li>
                   );

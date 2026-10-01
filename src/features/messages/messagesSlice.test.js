@@ -8,8 +8,17 @@ import reducer, {
   conversationReadByOther,
   presenceChanged,
   presenceSet,
+  resetMessages,
 } from "./messagesSlice";
-import { fetchConversations, fetchThread, sendMessage, startDirect } from "./messagesThunks";
+import {
+  fetchConversations,
+  fetchThread,
+  fetchUnreadSummary,
+  markConversationRead,
+  sendMessage,
+  startDirect,
+} from "./messagesThunks";
+import { logoutUser } from "../auth/authThunks";
 
 vi.mock("./messagesApi", () => ({ getApiErrorMessage: (_err, fallback) => fallback }));
 
@@ -246,5 +255,82 @@ describe("messagesSlice selection and thunks", () => {
     expect(next.activeConversationId).toBe("d");
     expect(next.conversations.map((c) => c.id)).toEqual(["d"]);
     expect(next.activeDetail).toEqual(direct);
+  });
+});
+
+describe("messagesSlice unread totals", () => {
+  const withUnread = (unread, ...rows) => ({
+    ...withConversations(...rows),
+    unread: { ...initialState.unread, ...unread },
+  });
+
+  it("stores the latest server summary and ignores stale responses", () => {
+    let state = reducer(initialState, fetchUnreadSummary.pending("old"));
+    state = reducer(state, fetchUnreadSummary.pending("new"));
+    state = reducer(
+      state,
+      fetchUnreadSummary.fulfilled({ messages: 9, conversations: 3 }, "old"),
+    );
+    expect(state.unread).toMatchObject({ messages: 0, conversations: 0, loaded: false });
+    state = reducer(
+      state,
+      fetchUnreadSummary.fulfilled({ messages: 4, conversations: 2 }, "new"),
+    );
+    expect(state.unread).toMatchObject({ messages: 4, conversations: 2, loaded: true });
+  });
+
+  it("does not surface badge refresh failures as a messages error", () => {
+    const state = reducer(
+      initialState,
+      fetchUnreadSummary.rejected(null, "req", undefined, "Failed"),
+    );
+    expect(state.error).toBeNull();
+  });
+
+  it("increments totals for messages arriving in inactive conversations", () => {
+    let state = withUnread(
+      { messages: 1, conversations: 1 },
+      conversation("a", "2026-09-26T10:00:00Z", { unreadCount: 1 }),
+      conversation("b", "2026-09-26T09:00:00Z"),
+    );
+    const arrive = (id, conversationId) =>
+      messageReceived({
+        conversationId,
+        message: message(id, conversationId, "2026-09-26T11:00:00Z"),
+        currentUserId: "u1",
+      });
+    state = reducer(state, arrive("m1", "a"));
+    expect(state.unread).toMatchObject({ messages: 2, conversations: 1 });
+    state = reducer(state, arrive("m2", "b"));
+    expect(state.unread).toMatchObject({ messages: 3, conversations: 2 });
+  });
+
+  it("clears a conversation's share when it is opened or marked read", () => {
+    let state = withUnread(
+      { messages: 5, conversations: 2 },
+      conversation("a", "2026-09-26T10:00:00Z", { unreadCount: 3 }),
+      conversation("b", "2026-09-26T09:00:00Z", { unreadCount: 2 }),
+    );
+    state = reducer(state, setActiveConversation("a"));
+    expect(state.unread).toMatchObject({ messages: 2, conversations: 1 });
+    state = reducer(
+      state,
+      markConversationRead.fulfilled({ conversationId: "b" }, "req", "b"),
+    );
+    expect(state.unread).toMatchObject({ messages: 0, conversations: 0 });
+    state = reducer(
+      state,
+      fetchThread.fulfilled({ conversationId: "a", data: [], hasMore: false }, "req", {}),
+    );
+    expect(state.unread).toMatchObject({ messages: 0, conversations: 0 });
+  });
+
+  it("keeps totals when the chat page resets and clears them on logout", () => {
+    const state = withUnread({ messages: 2, conversations: 1, loaded: true });
+    const reset = reducer(state, resetMessages());
+    expect(reset.unread).toMatchObject({ messages: 2, conversations: 1 });
+    expect(reducer(reset, logoutUser.fulfilled(undefined, "req")).unread).toEqual(
+      initialState.unread,
+    );
   });
 });

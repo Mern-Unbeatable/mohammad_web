@@ -349,7 +349,7 @@ function ProfileHeroPreview({ variantId }) {
       <ProfileHero
         user={DEMO_CONTACT}
         showMessage
-        messageHref="/messages"
+        messageHref="/chat"
         showEdit={false}
       />
     );
@@ -435,7 +435,7 @@ function MessengerPreview({ variantId }) {
 function ContactProfileHeroPreview({ variantId }) {
   if (variantId === 'pending') {
     return (
-      <ContactProfileHero contact={DEMO_CONTACT_PENDING} pending messageHref="/messages" />
+      <ContactProfileHero contact={DEMO_CONTACT_PENDING} pending messageHref="/chat" />
     );
   }
   if (variantId === 'connected') {
@@ -443,12 +443,12 @@ function ContactProfileHeroPreview({ variantId }) {
       <ContactProfileHero
         contact={DEMO_CONTACT_CONNECTED}
         connected
-        messageHref="/messages"
+        messageHref="/chat"
       />
     );
   }
   return (
-    <ContactProfileHero contact={DEMO_CONTACT} onConnect={() => {}} messageHref="/messages" />
+    <ContactProfileHero contact={DEMO_CONTACT} onConnect={() => {}} messageHref="/chat" />
   );
 }
 
@@ -495,7 +495,7 @@ function ContactProfilePageContentPreview({ variantId }) {
       posts={posts}
       onReport={() => {}}
       onConnect={() => {}}
-      messageHref="/messages"
+      messageHref="/chat"
     />
   );
 }

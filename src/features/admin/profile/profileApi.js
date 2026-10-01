@@ -41,6 +41,26 @@ export async function updateProfile(payload) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════
+// Upload a profile image via /uploads (multer field `file`)
+// ═══════════════════════════════════════════════════════════════════════
+export async function uploadFile(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await crudService.upload(
+    API_ENDPOINTS.ADMIN.UPLOADS.SINGLE,
+    formData,
+    null,
+    { timeout: 60000 },
+  );
+  const data = unwrapApiData(response) || response;
+  if (!data?.url) {
+    throw new Error("Upload did not return a file URL");
+  }
+  return data;
+}
+
+// ═══════════════════════════════════════════════════════════════════════
 // Change password
 // ═══════════════════════════════════════════════════════════════════════
 export async function changePassword(input) {

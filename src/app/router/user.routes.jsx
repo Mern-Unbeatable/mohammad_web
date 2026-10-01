@@ -1,8 +1,10 @@
 import { Navigate } from 'react-router';
 import RequireRole from '@/shared/auth/RequireRole';
 import { USER_ROLES } from '@/shared/constants/roles';
+import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
 import { lazyPage } from '@/shared/routing/lazyPage';
 import UserDashboardLayout from '@/modules/user/layout/UserDashboardLayout';
+import { buildChatRoute, legacyChatRoute } from './chat.routes';
 
 const FeedView = lazyPage(() => import('@/modules/user/pages/feed/FeedView'));
 const ContactsView = lazyPage(() => import('@/modules/user/pages/contacts/ContactsView'));
@@ -99,7 +101,12 @@ export const userRoutes = {
           element: <GeneralPostDetailView />,
           handle: { title: 'Post' },
         },
-        { path: '/messages', element: <MessagesView />, handle: { title: 'Messages' } },
+        buildChatRoute({
+          path: CHAT_BASE_PATHS.USER,
+          basePath: CHAT_BASE_PATHS.USER,
+          inbox: <MessagesView />,
+        }),
+        legacyChatRoute('/messages', CHAT_BASE_PATHS.USER),
         { path: '/blogs', element: <BlogsView />, handle: { title: 'Blogs' } },
         { path: '/blogs/:slug', element: <BlogDetailView />, handle: { title: 'Blog' } },
         {

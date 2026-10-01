@@ -45,6 +45,25 @@ export const updateAdminProfile = createAsyncThunk(
 );
 
 // ═══════════════════════════════════════════════════════════════════════
+// Update profile image (upload → PATCH avatarUrl)
+// ═══════════════════════════════════════════════════════════════════════
+export const updateAdminAvatar = createAsyncThunk(
+  "adminProfile/updateAdminAvatar",
+  async (file, { rejectWithValue, dispatch }) => {
+    try {
+      const uploaded = await profileApi.uploadFile(file);
+      const user = await profileApi.updateProfile({ avatarUrl: uploaded.url });
+      dispatch(setUser(user));
+      return user;
+    } catch (err) {
+      return rejectWithValue(
+        profileApi.getApiErrorMessage(err, "Failed to update profile image"),
+      );
+    }
+  },
+);
+
+// ═══════════════════════════════════════════════════════════════════════
 // Change password
 // ═══════════════════════════════════════════════════════════════════════
 export const changeAdminPassword = createAsyncThunk(

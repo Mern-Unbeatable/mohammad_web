@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { toast } from 'react-toastify';
 import ConfirmModal from '@/components/common/ConfirmModal/ConfirmModal';
 import MessagesPageContent from '@/shared/pages/messages/MessagesPageContent';
@@ -17,6 +17,7 @@ import {
   deleteMessage,
   fetchConversation,
   fetchConversations,
+  fetchDirectConversation,
   fetchRecipients,
   fetchThread,
   isSeenByOther,
@@ -34,39 +35,50 @@ import {
   sendMessage,
   setActiveConversation,
   startDirect,
+  toChatListingModel,
   toConversationModel,
   toMessageModel,
   useMessagesSocket,
 } from '@/features/messages';
+import { marketplaceApi } from '@/features/user/marketplace';
+import {
+  CHAT_BASE_PATHS,
+  CHAT_LISTING_PARAM,
+  CHAT_SECTIONS,
+  chatPath,
+  chatTargetFor,
+} from '@/shared/constants/chat';
+import { marketplaceListingPath } from '@/shared/constants/marketplace';
 
 const SEARCH_DEBOUNCE_MS = 300;
 /** Fallback refresh while the realtime connection is down. */
 const POLL_INTERVAL_MS = 20000;
 const DESKTOP_QUERY = '(min-width: 1280px)';
 
+const tabForSection = (section) => (section === CHAT_SECTIONS.GROUP ? 'groups' : 'messages');
+const sectionForTab = (tab) => (tab === 'groups' ? CHAT_SECTIONS.GROUP : CHAT_SECTIONS.DIRECT);
 const typeForTab = (tab) => (tab === 'groups' ? 'group' : 'direct');
-
-const removeParam = (setSearchParams, name) =>
-  setSearchParams(
-    (prev) => {
-      const next = new URLSearchParams(prev);
-      next.delete(name);
-      return next;
-    },
-    { replace: true },
-  );
 
 /**
  * API-backed messenger shared by User, Supplier and Admin inboxes.
- * Supports `?conversation=<id>` (open a thread) and `?user=<id>` (start a chat).
+ * The URL is the source of truth (see `ChatLayout`): `section` picks the
+ * tab and `targetId` the open conversation — the other user's id for direct
+ * chats (opens the composer when no thread exists yet), the conversation id
+ * for groups. `?listing=<id>` on a direct chat preloads that marketplace
+ * listing into the composer (see `listingChatPath`).
  */
-const MessagesContainer = ({ variant = 'dashboard' }) => {
+const MessagesContainer = ({
+  variant = 'dashboard',
+  basePath = CHAT_BASE_PATHS.USER,
+  section = CHAT_SECTIONS.DIRECT,
+  targetId = null,
+}) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth();
   const currentUserId = user?.id;
-  const [searchParams, setSearchParams] = useSearchParams();
-  const conversationParam = searchParams.get('conversation');
-  const userParam = searchParams.get('user');
+  const currentRole = user?.role;
 
   const {
     conversations,
@@ -87,11 +99,12 @@ const MessagesContainer = ({ variant = 'dashboard' }) => {
     error,
   } = useSelector((state) => state.messages);
 
-  const [tab, setTab] = useState('messages');
+  const tab = tabForSection(section);
   const [query, setQuery] = useState('');
   const [search, setSearch] = useState('');
-  const [mobilePanel, setMobilePanel] = useState('list');
   const [newMessageOpen, setNewMessageOpen] = useState(false);
+  /** Direct target with no thread yet; the composer opens for it. */
+  const [missingDirectId, setMissingDirectId] = useState(null);
   const [groupModalOpen, setGroupModalOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
@@ -118,33 +131,133 @@ const MessagesContainer = ({ variant = 'dashboard' }) => {
     dispatch(clearMessagesError());
   }, [error, dispatch]);
 
-  // Desktop: open the newest conversation of the current tab when nothing is selected.
+  const goTo = useCallback(
+    (target, options) => navigate(chatPath(basePath, target), options),
+    [navigate, basePath],
+  );
+
+  const listingParam =
+    section === CHAT_SECTIONS.DIRECT && targetId ? searchParams.get(CHAT_LISTING_PARAM) : null;
+  /** `{ id, listing }` from the marketplace API for `listingParam`. */
+  const [loadedListing, setLoadedListing] = useState(null);
+
+  const dropListingParam = useCallback(() => {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete(CHAT_LISTING_PARAM);
+        return next;
+      },
+      { replace: true },
+    );
+  }, [setSearchParams]);
+
   useEffect(() => {
-    if (conversationsLoading || activeConversationId || conversations.length === 0) return;
+    if (!listingParam) return undefined;
+    let cancelled = false;
+    marketplaceApi
+      .getListingById(listingParam)
+      .then((listing) => {
+        if (cancelled) return;
+        const unavailable =
+          listing?.status && listing.status !== 'ACTIVE' && listing.seller?.id !== currentUserId;
+        if (!listing?.id || unavailable) {
+          toast.error('That listing is no longer available');
+          dropListingParam();
+          return;
+        }
+        setLoadedListing({ id: listingParam, listing });
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        toast.error(marketplaceApi.getApiErrorMessage(err, 'That listing is no longer available'));
+        dropListingParam();
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [listingParam, currentUserId, dropListingParam]);
+
+  const pendingListing = useMemo(() => {
+    if (!listingParam) return null;
+    if (loadedListing?.id !== listingParam) return { id: listingParam, loading: true };
+    return toChatListingModel(loadedListing.listing);
+  }, [listingParam, loadedListing]);
+
+  const getListingHref = useCallback(
+    (listingId) => marketplaceListingPath(currentRole, listingId),
+    [currentRole],
+  );
+
+  const conversationsRef = useRef(conversations);
+  const activeIdRef = useRef(activeConversationId);
+  useEffect(() => {
+    conversationsRef.current = conversations;
+    activeIdRef.current = activeConversationId;
+  });
+
+  // URL → open conversation. Runs on direct navigation, refresh and in-app links.
+  useEffect(() => {
+    if (!targetId) {
+      dispatch(setActiveConversation(null));
+      return undefined;
+    }
+    let cancelled = false;
+    const open = (conversationId) => {
+      if (activeIdRef.current === conversationId) return;
+      dispatch(setActiveConversation(conversationId));
+      dispatch(fetchThread({ conversationId }));
+    };
+    const unavailable = () => {
+      if (cancelled) return;
+      toast.error('That conversation is no longer available');
+      navigate(chatPath(basePath, { section }), { replace: true });
+    };
+
+    if (section === CHAT_SECTIONS.GROUP) {
+      const known = conversationsRef.current.some((c) => c.isGroup && c.id === targetId);
+      open(targetId);
+      if (!known) {
+        dispatch(fetchConversation(targetId)).then((result) => {
+          if (!fetchConversation.fulfilled.match(result) || !result.payload?.isGroup) {
+            unavailable();
+          }
+        });
+      }
+    } else {
+      const known = conversationsRef.current.find(
+        (c) => !c.isGroup && c.otherUserId === targetId,
+      );
+      if (known) {
+        open(known.id);
+      } else {
+        dispatch(fetchDirectConversation(targetId)).then((result) => {
+          if (cancelled) return;
+          if (!fetchDirectConversation.fulfilled.match(result)) {
+            unavailable();
+          } else if (result.payload) {
+            open(result.payload.id);
+          } else {
+            dispatch(setActiveConversation(null));
+            setMissingDirectId(targetId);
+          }
+        });
+      }
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, [section, targetId, basePath, dispatch, navigate]);
+
+  // Desktop: open the newest conversation of the current section when none is in the URL.
+  useEffect(() => {
+    if (targetId || conversationsLoading || conversations.length === 0) return;
     const first = conversations[0];
     if (Boolean(first.isGroup) !== (type === 'group')) return;
     if (!window.matchMedia(DESKTOP_QUERY).matches) return;
-    dispatch(setActiveConversation(first.id));
-    dispatch(fetchThread({ conversationId: first.id }));
-  }, [conversationsLoading, activeConversationId, conversations, type, dispatch]);
-
-  // Deep link from notifications: ?conversation=<id>
-  useEffect(() => {
-    if (!conversationParam) return;
-    const id = conversationParam;
-    removeParam(setSearchParams, 'conversation');
-    dispatch(setActiveConversation(id));
-    dispatch(fetchConversation(id)).then((result) => {
-      if (!fetchConversation.fulfilled.match(result)) {
-        toast.error('That conversation is no longer available');
-        dispatch(setActiveConversation(null));
-        return;
-      }
-      setTab(result.payload.isGroup ? 'groups' : 'messages');
-      setMobilePanel('chat');
-      dispatch(fetchThread({ conversationId: id }));
-    });
-  }, [conversationParam, dispatch, setSearchParams]);
+    const target = chatTargetFor(first);
+    if (target) goTo(target, { replace: true });
+  }, [targetId, conversationsLoading, conversations, type, goTo]);
 
   const refreshVisible = useCallback(() => {
     dispatch(fetchConversations({ type, search, page: 1, silent: true }));
@@ -186,7 +299,7 @@ const MessagesContainer = ({ variant = 'dashboard' }) => {
       if (conversationId === activeConversationId) {
         toast.info('This conversation is no longer available');
         setInfoOpen(false);
-        setMobilePanel('list');
+        goTo({ section }, { replace: true });
       }
       dispatch(conversationRemoved(conversationId));
     },
@@ -246,34 +359,48 @@ const MessagesContainer = ({ variant = 'dashboard' }) => {
   const activeChat = activeModel ? { ...activeModel, messages: messageModels } : null;
   const seen = isSeenByOther(activeRaw, messageModels, currentUserId);
 
+  const composeUserId =
+    section === CHAT_SECTIONS.DIRECT && targetId && missingDirectId === targetId
+      ? targetId
+      : null;
+  const mobilePanel = targetId ? 'chat' : 'list';
+  const startedDirectRef = useRef(false);
+
   const handleSearchRecipients = useCallback(
-    (term) => dispatch(fetchRecipients({ search: term, include: userParam || undefined })),
-    [dispatch, userParam],
+    (term) => dispatch(fetchRecipients({ search: term, include: composeUserId || undefined })),
+    [dispatch, composeUserId],
   );
 
   const openChat = (id) => {
+    const conversation =
+      conversations.find((c) => c.id === id) || (activeDetail?.id === id ? activeDetail : null);
+    const target = chatTargetFor(conversation);
+    if (target) {
+      if (target.section !== section || target.id !== targetId) goTo(target);
+      return;
+    }
+    // A direct chat whose other member is gone has no addressable URL.
     if (id !== activeConversationId) {
       dispatch(setActiveConversation(id));
       dispatch(fetchThread({ conversationId: id }));
     }
-    setMobilePanel('chat');
   };
 
   const handleTabChange = (nextTab) => {
     if (nextTab === tab) return;
-    setTab(nextTab);
     setQuery('');
     setSearch('');
-    setMobilePanel('list');
-    dispatch(setActiveConversation(null));
+    goTo({ section: sectionForTab(nextTab) });
   };
 
-  const handleSend = async ({ body, attachments }) => {
+  const handleSend = async ({ body, attachments, listingId }) => {
     if (!activeConversationId) return false;
     const result = await dispatch(
-      sendMessage({ conversationId: activeConversationId, body, attachments }),
+      sendMessage({ conversationId: activeConversationId, body, attachments, listingId }),
     );
-    return sendMessage.fulfilled.match(result);
+    const ok = sendMessage.fulfilled.match(result);
+    if (ok && listingId) dropListingParam();
+    return ok;
   };
 
   const handleUploadFile = async (file) => {
@@ -285,28 +412,36 @@ const MessagesContainer = ({ variant = 'dashboard' }) => {
     }
   };
 
-  const openFreshThread = (conversationId, nextTab) => {
-    setTab(nextTab);
-    setMobilePanel('chat');
-    if (conversationId) dispatch(fetchThread({ conversationId }));
+  /** The created/reused conversation is already active; load it and point the URL at it. */
+  const openFreshThread = (conversation, options) => {
+    if (conversation?.id) dispatch(fetchThread({ conversationId: conversation.id }));
+    const target = chatTargetFor(conversation);
+    if (target) goTo(target, options);
   };
 
   const closeNewMessage = () => {
     setNewMessageOpen(false);
-    if (userParam) removeParam(setSearchParams, 'user');
+    const started = startedDirectRef.current;
+    startedDirectRef.current = false;
+    // Dismissing the composer opened by `messages/:userId` leaves that URL.
+    if (composeUserId && !started) goTo({ section: CHAT_SECTIONS.DIRECT }, { replace: true });
+    setMissingDirectId(null);
   };
 
-  const handleStartDirect = async ({ recipientId, message }) => {
-    const result = await dispatch(startDirect({ participantId: recipientId, message }));
+  const handleStartDirect = async ({ recipientId, message, listingId }) => {
+    const result = await dispatch(
+      startDirect({ participantId: recipientId, message, listingId }),
+    );
     if (!startDirect.fulfilled.match(result)) return false;
-    openFreshThread(result.payload?.id, 'messages');
+    startedDirectRef.current = true;
+    openFreshThread(result.payload, { replace: Boolean(composeUserId) });
     return true;
   };
 
   const handleCreateGroup = async ({ name, members }) => {
     const result = await dispatch(createGroup({ name, participantIds: members }));
     if (!createGroup.fulfilled.match(result)) return false;
-    openFreshThread(result.payload?.id, 'groups');
+    openFreshThread(result.payload);
     return true;
   };
 
@@ -324,7 +459,7 @@ const MessagesContainer = ({ variant = 'dashboard' }) => {
     if (leaveConversation.fulfilled.match(result)) {
       toast.success('You left the group');
       setInfoOpen(false);
-      setMobilePanel('list');
+      goTo({ section: CHAT_SECTIONS.GROUP }, { replace: true });
     }
   };
 
@@ -382,18 +517,23 @@ const MessagesContainer = ({ variant = 'dashboard' }) => {
           )
         }
         seen={seen}
+        pendingListing={composeUserId ? null : pendingListing}
+        onRemovePendingListing={dropListingParam}
+        getListingHref={getListingHref}
         mobilePanel={mobilePanel}
-        onMobileBack={() => setMobilePanel('list')}
+        onMobileBack={() => goTo({ section }, { replace: true })}
       />
 
       <NewMessageModal
-        open={newMessageOpen || Boolean(userParam)}
+        open={newMessageOpen || Boolean(composeUserId)}
         onClose={closeNewMessage}
         onSend={handleStartDirect}
         recipients={recipients}
         recipientsLoading={recipientsLoading}
         onSearchRecipients={handleSearchRecipients}
-        initialRecipientId={userParam}
+        initialRecipientId={composeUserId}
+        listing={composeUserId ? pendingListing : null}
+        onRemoveListing={dropListingParam}
         submitting={actionLoading}
       />
 

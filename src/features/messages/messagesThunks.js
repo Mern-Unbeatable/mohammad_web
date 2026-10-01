@@ -34,6 +34,13 @@ export const fetchConversation = createAsyncThunk(
   ),
 );
 
+export const fetchDirectConversation = createAsyncThunk(
+  "messages/fetchDirectConversation",
+  withError("Failed to open conversation", (userId) =>
+    messagesApi.getDirectConversation(userId),
+  ),
+);
+
 export const fetchThread = createAsyncThunk(
   "messages/fetchThread",
   withError("Failed to load messages", async (arg) => {
@@ -48,6 +55,12 @@ export const markConversationRead = createAsyncThunk(
   withError("Failed to mark conversation as read", (conversationId) =>
     messagesApi.markRead(conversationId),
   ),
+);
+
+/** Background badge refresh: failures are ignored, not surfaced as `state.error`. */
+export const fetchUnreadSummary = createAsyncThunk(
+  "messages/fetchUnreadSummary",
+  withError("Failed to load unread messages", () => messagesApi.getUnreadSummary()),
 );
 
 export const fetchRecipients = createAsyncThunk(
@@ -71,13 +84,17 @@ export const createGroup = createAsyncThunk(
 
 export const sendMessage = createAsyncThunk(
   "messages/sendMessage",
-  withError("Failed to send message", async ({ conversationId, body, attachments }) => {
-    const message = await messagesApi.sendMessage(conversationId, {
-      body,
-      attachments,
-    });
-    return { conversationId, message };
-  }),
+  withError(
+    "Failed to send message",
+    async ({ conversationId, body, attachments, listingId }) => {
+      const message = await messagesApi.sendMessage(conversationId, {
+        body,
+        attachments,
+        listingId,
+      });
+      return { conversationId, message };
+    },
+  ),
 );
 
 export const deleteMessage = createAsyncThunk(

@@ -10,6 +10,8 @@ const REALTIME_EVENTS = [
   "conversation:removed",
   "conversation:read",
   "presence:update",
+  "notification:new",
+  "notification:updated",
 ];
 
 const MAX_AUTH_RETRIES = 3;

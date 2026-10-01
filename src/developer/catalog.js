@@ -587,7 +587,7 @@ export const COMPONENT_DOCS = [
       { name: 'showEdit', type: 'boolean', required: false, defaultValue: 'true', description: 'Show Edit profile button.' },
     ],
     requiredExample: `<ProfileHero user={user} editHref="/profile/edit" />`,
-    optionalExample: `<ProfileHero user={contact} showMessage messageHref="/messages" showEdit={false} />`,
+    optionalExample: `<ProfileHero user={contact} showMessage messageHref="/chat" showEdit={false} />`,
     previewId: 'profile-hero',
     variants: [
       { id: 'owner', name: 'Own profile', description: 'Edit profile button.' },
@@ -733,7 +733,7 @@ export const COMPONENT_DOCS = [
       { name: 'onConnect', type: '() => void', required: false, description: 'Connect button clicked.' },
       { name: 'messageHref', type: 'string', required: false, description: 'Link for Message button.' },
     ],
-    requiredExample: `<ContactProfileHero contact={contact} onConnect={connect} messageHref="/messages" />`,
+    requiredExample: `<ContactProfileHero contact={contact} onConnect={connect} messageHref="/chat" />`,
     optionalExample: `<ContactProfileHero contact={contact} connected pending onConnect={connect} />`,
     previewId: 'contact-profile-hero',
     variants: [
@@ -802,10 +802,10 @@ export const COMPONENT_DOCS = [
       { name: 'posts', type: 'Post[]', required: false, description: 'Activity posts for this contact.' },
       { name: 'connected / pending', type: 'boolean', required: false, description: 'Connection button states.' },
       { name: 'onConnect', type: '() => void', required: false, description: 'Connect handler.' },
-      { name: 'messageHref', type: 'string', required: false, defaultValue: "'/messages'", description: 'Message link.' },
+      { name: 'messageHref', type: 'string', required: false, defaultValue: "'/chat'", description: 'Message link.' },
     ],
     requiredExample: `<ContactProfilePageContent contact={contact} posts={posts} onConnect={connect} />`,
-    optionalExample: `<ContactProfilePageContent contact={contact} connected messageHref="/messages" />`,
+    optionalExample: `<ContactProfilePageContent contact={contact} connected messageHref="/chat" />`,
     previewId: 'contact-profile-page-content',
     variants: [
       { id: 'with-activity', name: 'With activity', description: 'Contact with feed posts.' },

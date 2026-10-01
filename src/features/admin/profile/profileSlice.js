@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchAdminProfile,
   updateAdminProfile,
+  updateAdminAvatar,
   changeAdminPassword,
 } from "./profileThunks";
 import { mapUserToForm } from "./profileMappers";
@@ -11,6 +12,8 @@ const emptyForm = {
   email: "",
   displayName: "",
   displayEmail: "",
+  avatar: null,
+  initials: "",
 };
 
 const initialState = {
@@ -18,6 +21,7 @@ const initialState = {
   form: emptyForm,
   loading: false,
   savingProfile: false,
+  uploadingAvatar: false,
   savingPassword: false,
   error: null,
   saveError: null,
@@ -63,6 +67,21 @@ const profileSlice = createSlice({
       })
       .addCase(updateAdminProfile.rejected, (state, action) => {
         state.savingProfile = false;
+        state.saveError = action.payload;
+      })
+      .addCase(updateAdminAvatar.pending, (state) => {
+        state.uploadingAvatar = true;
+        state.saveError = null;
+      })
+      .addCase(updateAdminAvatar.fulfilled, (state, action) => {
+        state.uploadingAvatar = false;
+        state.user = action.payload;
+        const { avatar, initials } = mapUserToForm(action.payload);
+        // Keep any unsaved name edits in the form.
+        state.form = { ...state.form, avatar, initials };
+      })
+      .addCase(updateAdminAvatar.rejected, (state, action) => {
+        state.uploadingAvatar = false;
         state.saveError = action.payload;
       })
       .addCase(changeAdminPassword.pending, (state) => {

@@ -15,7 +15,7 @@ const ContactProfilePageContent = ({
   pending = false,
   onConnect,
   onMessage,
-  messageHref = '/messages',
+  messageHref = '/chat',
 }) => (
   <div className="space-y-4">
     <ContactProfileHero

@@ -1,9 +1,9 @@
 import PanelPage from '@/shared/layout/PanelLayout/PanelPage';
-import MessagesContainer from '@/shared/pages/messages/MessagesContainer';
+import ChatLayout from '@/shared/layout/ChatLayout/ChatLayout';
 
 const SupplierMessagesView = () => (
   <PanelPage className="flex h-[calc(100dvh-5.5rem)] flex-col lg:h-[calc(100dvh-3rem)]">
-    <MessagesContainer variant="panel" />
+    <ChatLayout variant="panel" />
   </PanelPage>
 );
 

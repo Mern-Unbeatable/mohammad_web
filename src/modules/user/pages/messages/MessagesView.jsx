@@ -1,5 +1,5 @@
-import MessagesContainer from '@/shared/pages/messages/MessagesContainer';
+import ChatLayout from '@/shared/layout/ChatLayout/ChatLayout';
 
-const MessagesView = () => <MessagesContainer variant="dashboard" />;
+const MessagesView = () => <ChatLayout variant="dashboard" />;
 
 export default MessagesView;

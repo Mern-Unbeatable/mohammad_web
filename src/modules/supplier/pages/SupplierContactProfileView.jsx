@@ -15,6 +15,7 @@ import {
 } from "@/features/supplier/contacts";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import NotFound from "@/shared/pages/NotFound";
+import { CHAT_BASE_PATHS, chatPath } from "@/shared/constants/chat";
 
 const SupplierContactProfileView = () => {
   const { contactId } = useParams();
@@ -87,7 +88,7 @@ const SupplierContactProfileView = () => {
           connected={contact.connected}
           pending={contact.pending || connectingId === contact.id}
           onConnect={handleConnect}
-          messageHref={`/supplier/messages?user=${contact.id}`}
+          messageHref={chatPath(CHAT_BASE_PATHS.SUPPLIER, { id: contact.id })}
         />
       </PanelPage>
 

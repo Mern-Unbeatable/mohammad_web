@@ -12,6 +12,8 @@ import {
   clearNotificationsError,
   toNotificationListModel,
 } from "@/features/supplier/notifications";
+import { resolveNotificationLink } from "@/features/messages";
+import { CHAT_BASE_PATHS } from "@/shared/constants/chat";
 
 const NotificationItem = ({ item, onMarkRead }) => {
   const Icon = item.icon;
@@ -78,9 +80,10 @@ const SupplierNotificationsView = () => {
     if (item.unread) {
       await dispatch(markSupplierNotificationRead(item.id));
     }
-    if (item.link) {
-      navigate(item.link);
-    }
+    if (!item.link) return;
+    const { to, failed } = await resolveNotificationLink(item.link, CHAT_BASE_PATHS.SUPPLIER);
+    if (failed) toast.error("That conversation is no longer available");
+    navigate(to);
   };
 
   const handleMarkAllRead = async () => {

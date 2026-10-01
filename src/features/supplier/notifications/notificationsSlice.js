@@ -4,7 +4,9 @@ import {
   markSupplierNotificationRead,
   markAllSupplierNotificationsRead,
   removeSupplierNotification,
+  fetchSupplierUnreadNotificationCount,
 } from "./notificationsThunks";
+import { logoutUser } from "../../auth/authThunks";
 
 const initialState = {
   notifications: [],
@@ -18,6 +20,8 @@ const initialState = {
   loading: false,
   actionLoading: false,
   error: null,
+  /** Latest badge refresh; older responses must not overwrite newer counts. */
+  unreadRequestId: null,
 };
 
 const notificationsSlice = createSlice({
@@ -93,9 +97,21 @@ const notificationsSlice = createSlice({
       .addCase(removeSupplierNotification.rejected, (state, action) => {
         state.actionLoading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(fetchSupplierUnreadNotificationCount.pending, (state, action) => {
+        state.unreadRequestId = action.meta.requestId;
+      })
+      .addCase(fetchSupplierUnreadNotificationCount.fulfilled, (state, action) => {
+        if (state.unreadRequestId !== action.meta.requestId) return;
+        state.notificationsMeta.unreadCount = action.payload;
+      })
+      .addCase(logoutUser.fulfilled, () => initialState)
+      .addCase(logoutUser.rejected, () => initialState);
   },
 });
 
 export const { clearNotificationsError } = notificationsSlice.actions;
+
+export const selectSupplierUnreadNotificationCount = (state) =>
+  state.supplierNotifications.notificationsMeta.unreadCount ?? 0;
 export default notificationsSlice.reducer;

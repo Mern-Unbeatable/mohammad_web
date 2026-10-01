@@ -12,6 +12,7 @@ export { clearProfileError, setProfileField } from "./profileSlice";
 export {
   fetchAdminProfile,
   updateAdminProfile,
+  updateAdminAvatar,
   changeAdminPassword,
 } from "./profileThunks";
 export { mapUserToForm, nameToProfilePayload } from "./profileMappers";

@@ -15,6 +15,7 @@ import {
   toContactProfileModel,
 } from "@/features/user/contacts";
 import NotFound from "@/shared/pages/NotFound";
+import { CHAT_BASE_PATHS, chatPath } from "@/shared/constants/chat";
 
 const ContactProfileView = () => {
   const { contactId } = useParams();
@@ -101,7 +102,7 @@ const ContactProfileView = () => {
             connected={contact.connected}
             pending={contact.pending || connectingId === contact.id}
             onConnect={handleConnect}
-            messageHref={`/messages?user=${contact.id}`}
+            messageHref={chatPath(CHAT_BASE_PATHS.USER, { id: contact.id })}
           />
         </Container>
       </main>

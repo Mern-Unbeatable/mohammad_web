@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   Heart,
   MessageCircle,
+  Pencil,
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Container from '@/components/ui/Container';
@@ -16,12 +17,13 @@ import { ListingDetailSkeleton } from '@/components/common/Skeleton';
 import {
   fetchListingDetails,
   toggleSaveListing,
-  enquireListing,
   clearMarketplaceError,
   clearSelectedListing,
   toListingDetailModel,
 } from '@/features/user/marketplace';
 import { formatPrice } from '@/modules/user/data/marketplace';
+import { useAuth } from '@/shared/auth/useAuth';
+import { CHAT_BASE_PATHS, listingChatPath } from '@/shared/constants/chat';
 import NotFound from '@/shared/pages/NotFound';
 
 const SpecTile = ({ label, value }) => (
@@ -73,16 +75,14 @@ const ImageGallery = ({ images, title, activeImage, onSelect }) => (
 const ListingDetailView = () => {
   const { listingId } = useParams();
   const dispatch = useDispatch();
+  const { user } = useAuth();
   const {
     selectedListing,
     selectedListingLoading,
-    enquiring,
     error,
   } = useSelector((state) => state.userMarketplace);
 
   const [activeImage, setActiveImage] = useState(0);
-  const [enquireOpen, setEnquireOpen] = useState(false);
-  const [enquireMessage, setEnquireMessage] = useState('');
 
   useEffect(() => {
     dispatch(clearMarketplaceError());
@@ -120,31 +120,14 @@ const ListingDetailView = () => {
 
   const images = listing.images?.length ? listing.images : listing.image ? [listing.image] : [];
   const saved = Boolean(listing.isSaved);
+  const sellerId = listing.seller.id;
+  const isOwnListing = Boolean(sellerId && sellerId === user?.id);
 
   const handleToggleSave = async () => {
     const result = await dispatch(toggleSaveListing(listing.id));
     if (toggleSaveListing.rejected.match(result)) {
       toast.error(result.payload || 'Failed to update saved listing');
     }
-  };
-
-  const handleEnquire = async (e) => {
-    e.preventDefault();
-    const message = enquireMessage.trim();
-    if (!message) {
-      toast.error('Please enter a message');
-      return;
-    }
-    const result = await dispatch(
-      enquireListing({ listingId: listing.id, message }),
-    );
-    if (enquireListing.fulfilled.match(result)) {
-      toast.success('Enquiry sent');
-      setEnquireOpen(false);
-      setEnquireMessage('');
-      return;
-    }
-    toast.error(result.payload || 'Failed to send enquiry');
   };
 
   return (
@@ -206,14 +189,23 @@ const ListingDetailView = () => {
               </p>
 
               <div className="mt-5 space-y-2.5">
-                <button
-                  type="button"
-                  onClick={() => setEnquireOpen(true)}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#066BB0]"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  Contact seller
-                </button>
+                {isOwnListing ? (
+                  <Link
+                    to={`/marketplace/${listing.id}/edit`}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#066BB0]"
+                  >
+                    <Pencil className="h-4 w-4" />
+                    Edit listing
+                  </Link>
+                ) : sellerId ? (
+                  <Link
+                    to={listingChatPath(CHAT_BASE_PATHS.USER, sellerId, listing.id)}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#066BB0]"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    Contact seller
+                  </Link>
+                ) : null}
                 <button
                   type="button"
                   onClick={handleToggleSave}
@@ -263,55 +255,6 @@ const ListingDetailView = () => {
           </aside>
         </div>
       </Container>
-
-      {enquireOpen ? (
-        <div
-          className="fixed inset-0 z-[100] flex items-end justify-center bg-black/50 sm:items-center sm:p-4"
-          onClick={() => setEnquireOpen(false)}
-          role="presentation"
-        >
-          <div
-            className="w-full max-w-[420px] rounded-t-2xl bg-white p-5 sm:rounded-xl"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="enquire-title"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 id="enquire-title" className="text-[17px] font-bold text-deep-blue">
-              Contact seller
-            </h2>
-            <p className="mt-1 text-[13px] text-[#64748B]">
-              Send a short message about this listing.
-            </p>
-            <form onSubmit={handleEnquire} className="mt-4 space-y-3">
-              <textarea
-                value={enquireMessage}
-                onChange={(e) => setEnquireMessage(e.target.value)}
-                rows={4}
-                placeholder="Hi, is this still available?"
-                className="w-full resize-none rounded-lg border border-[#E4E7EC] px-3 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10"
-                required
-              />
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setEnquireOpen(false)}
-                  className="rounded-md px-4 py-2 text-[13px] font-semibold text-[#64748B] hover:bg-[#F9FAFB]"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={enquiring}
-                  className="rounded-md bg-primary px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#066BB0] disabled:opacity-60"
-                >
-                  {enquiring ? 'Sending…' : 'Send'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      ) : null}
     </main>
   );
 };

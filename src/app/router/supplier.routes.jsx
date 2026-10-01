@@ -1,8 +1,10 @@
 import RequireRole from '@/shared/auth/RequireRole';
 import { USER_ROLES } from '@/shared/constants/roles';
+import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
 import { lazyPage } from '@/shared/routing/lazyPage';
 import SupplierLayout from '@/modules/supplier/layout/SupplierLayout';
 import PanelNotFound from '@/shared/pages/PanelNotFound';
+import { buildChatRoute, legacyChatRoute } from './chat.routes';
 
 const SupplierDashboardView = lazyPage(
   () => import('@/modules/supplier/pages/SupplierDashboardView'),
@@ -86,7 +88,12 @@ export const supplierRoutes = {
           element: <SupplierJobDetailView />,
           handle: { title: 'Job detail' },
         },
-        { path: 'messages', element: <SupplierMessagesView />, handle: { title: 'Messages' } },
+        buildChatRoute({
+          path: 'chat',
+          basePath: CHAT_BASE_PATHS.SUPPLIER,
+          inbox: <SupplierMessagesView />,
+        }),
+        legacyChatRoute('messages', CHAT_BASE_PATHS.SUPPLIER),
         { path: 'blogs', element: <SupplierBlogsView />, handle: { title: 'Blogs' } },
         {
           path: 'blogs/:slug',

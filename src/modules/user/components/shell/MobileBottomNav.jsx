@@ -1,5 +1,8 @@
 import { Bell, Briefcase, Home, SquarePlus, Users } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
+import { useSelector } from 'react-redux';
+import CountBadge from '@/components/ui/CountBadge';
+import { selectUserUnreadNotificationCount } from '@/features/user/notifications';
 import { useFeedActions } from '@/modules/user/context/FeedActionsContext';
 import { useLayoutChrome } from '@/shared/context/LayoutChromeContext';
 
@@ -7,7 +10,7 @@ const tabs = [
   { id: 'home', label: 'Home', icon: Home, to: '/feed' },
   { id: 'network', label: 'Network', icon: Users, to: '/contacts', badge: 2 },
   { id: 'post', label: 'Post', icon: SquarePlus, action: 'create' },
-  { id: 'notifications', label: 'Notifications', icon: Bell, to: '/notifications', badge: 5 },
+  { id: 'notifications', label: 'Notifications', icon: Bell, to: '/notifications' },
   { id: 'jobs', label: 'Jobs', icon: Briefcase, to: '/recruitment' },
 ];
 
@@ -15,8 +18,12 @@ const MobileBottomNav = () => {
   const { pathname } = useLocation();
   const { openCreatePost } = useFeedActions();
   const { bottomNavHidden } = useLayoutChrome();
+  // Kept fresh by `useNotificationBadge` in DashboardNavbar.
+  const unreadNotifications = useSelector(selectUserUnreadNotificationCount);
 
   if (bottomNavHidden) return null;
+
+  const badgeFor = (tab) => (tab.id === 'notifications' ? unreadNotifications : tab.badge);
 
   const isTabActive = (tab) => {
     if (tab.id === 'home') return pathname === '/feed';
@@ -32,8 +39,11 @@ const MobileBottomNav = () => {
       aria-label="Mobile navigation"
     >
       <ul className="mx-auto flex h-14 max-w-lg items-stretch">
-        {tabs.map(({ id, label, icon: Icon, to, badge, action }) => {
-          const isActive = isTabActive({ id, to });
+        {tabs.map((tab) => {
+          const { id, label, to, action } = tab;
+          const Icon = tab.icon;
+          const isActive = isTabActive(tab);
+          const badge = badgeFor(tab);
           const isPost = action === 'create';
 
           const content = (
@@ -46,11 +56,7 @@ const MobileBottomNav = () => {
                   className={`h-6 w-6 ${isActive ? 'text-deep-blue' : 'text-[#64748B]'}`}
                   strokeWidth={isActive ? 2.2 : 1.8}
                 />
-                {badge ? (
-                  <span className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#CC1016] px-1 text-[10px] font-bold leading-none text-white">
-                    {badge}
-                  </span>
-                ) : null}
+                <CountBadge count={badge} className="absolute -right-2 -top-1" />
               </span>
               <span
                 className={`text-[10px] font-medium leading-none ${

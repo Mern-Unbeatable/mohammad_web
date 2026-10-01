@@ -61,6 +61,43 @@ export function attachmentSummary(attachments = []) {
 export const isImageAttachment = (attachment) =>
   String(attachment?.mimeType || "").startsWith("image/");
 
+/** Conversation-list preview for a message (mirrors server `previewOf`). */
+export function messagePreview(message) {
+  if (!message) return "";
+  return (
+    message.body ||
+    attachmentSummary(message.attachments) ||
+    (message.listing ? "Shared a listing" : "")
+  );
+}
+
+const LISTING_STATUS_LABEL = { SOLD: "Sold", REMOVED: "No longer listed" };
+
+const priceFormatter = new Intl.NumberFormat("en-BE", {
+  style: "currency",
+  currency: "EUR",
+  maximumFractionDigits: 0,
+});
+
+/**
+ * Listing card shown in the composer and inside messages. Accepts a message's
+ * `listing` or a marketplace API listing (same id/title/price/image/status keys).
+ */
+export function toChatListingModel(listing) {
+  if (!listing?.id) return null;
+  const price = Number(listing.price);
+  const status = listing.status || "ACTIVE";
+  return {
+    id: listing.id,
+    title: listing.title || "Marketplace listing",
+    price: Number.isFinite(price) ? priceFormatter.format(price) : "",
+    image: listing.image || listing.images?.[0] || null,
+    status,
+    available: status === "ACTIVE",
+    statusLabel: LISTING_STATUS_LABEL[status] || null,
+  };
+}
+
 export function toConversationModel(conversation, { onlineUserIds } = {}) {
   if (!conversation?.id) return null;
   const online =
@@ -79,6 +116,7 @@ export function toConversationModel(conversation, { onlineUserIds } = {}) {
     time: formatMessageTime(conversation.time),
     unread: conversation.unreadCount ?? 0,
     otherUserId: conversation.otherUserId || null,
+    isAdmin: !conversation.isGroup && conversation.otherUserRole === "ADMIN",
     myRole: conversation.myRole || null,
     participants: Array.isArray(conversation.participants)
       ? conversation.participants
@@ -104,6 +142,7 @@ export function toMessageModel(message, currentUserId) {
     body,
     text: body,
     attachments: Array.isArray(message.attachments) ? message.attachments : [],
+    listing: toChatListingModel(message.listing),
     from: isMine ? "me" : "them",
     senderId: message.senderId || null,
     sender: typeof message.sender === "string" ? message.sender : null,

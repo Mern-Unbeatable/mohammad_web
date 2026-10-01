@@ -21,6 +21,20 @@ export const fetchUserNotifications = createAsyncThunk(
   },
 );
 
+/** Background badge refresh; touches only `notificationsMeta.unreadCount`. */
+export const fetchUserUnreadNotificationCount = createAsyncThunk(
+  "userNotifications/fetchUserUnreadNotificationCount",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await notificationsApi.getUnreadCount();
+    } catch (err) {
+      return rejectWithValue(
+        notificationsApi.getApiErrorMessage(err, "Failed to load notifications"),
+      );
+    }
+  },
+);
+
 export const markUserNotificationRead = createAsyncThunk(
   "userNotifications/markUserNotificationRead",
   async (notificationId, { rejectWithValue }) => {
