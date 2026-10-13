@@ -421,12 +421,12 @@ const DashboardNavbar = () => {
           <div
             aria-hidden="false"
             onClick={closeMenu}
-            className="fixed inset-0 z-[60] bg-[#0A1A44]/50 xl:hidden"
+            className="fixed inset-0 z-[60] bg-[#0A1A44]/50 motion-safe:animate-fade-in xl:hidden"
           />
 
-          <div className="fixed inset-x-0 top-14 bottom-0 z-[65] overflow-y-auto bg-white xl:hidden">
-            <Container className="pb-[calc(3.5rem+env(safe-area-inset-bottom))] pt-4 sm:pb-4">
-              <div className="mb-4 flex items-center gap-3 border-b border-[#E4E7EC] pb-4">
+          <div className="fixed bottom-0 right-0 top-14 z-[65] w-[min(20rem,85vw)] overflow-y-auto border-l border-[#E4E7EC] bg-white shadow-xl motion-safe:animate-drawer-in-right xl:hidden">
+            <div className="px-4 pb-[calc(3.5rem+env(safe-area-inset-bottom))] pt-4 sm:pb-4">
+              <div className="mb-4 flex items-center gap-3 border-b border-[#E4E7EC] pb-4 motion-safe:animate-menu-item-in">
                 <Avatar
                   src={profileUser?.avatar}
                   alt={profileUser?.name || "Member"}
@@ -434,11 +434,11 @@ const DashboardNavbar = () => {
                   size="md"
                   className="bg-[#FEF3C7] text-[#B45309]"
                 />
-                <div>
-                  <p className="text-[14px] font-semibold text-deep-blue">
+                <div className="min-w-0">
+                  <p className="truncate text-[14px] font-semibold text-deep-blue">
                     {profileUser?.name || "Member"}
                   </p>
-                  <p className="text-[12px] text-[#64748B]">
+                  <p className="truncate text-[12px] text-[#64748B]">
                     {[profileUser?.title, profileUser?.company]
                       .filter(Boolean)
                       .join(" · ")}
@@ -446,12 +446,16 @@ const DashboardNavbar = () => {
                 </div>
               </div>
 
-              <ul className="grid grid-cols-2 gap-2">
-                {navItems.map(({ id, label, icon, to }) => {
+              <ul className="space-y-1">
+                {navItems.map(({ id, label, icon, to }, index) => {
                   const Icon = iconMap[icon];
                   const active = isNavActive({ id, to });
                   return (
-                    <li key={id}>
+                    <li
+                      key={id}
+                      className="motion-safe:animate-menu-item-in"
+                      style={{ animationDelay: `${60 + index * 30}ms` }}
+                    >
                       <Link
                         to={to}
                         onClick={closeMenu}
@@ -474,7 +478,10 @@ const DashboardNavbar = () => {
                 })}
               </ul>
 
-              <div className="mt-6 border-t border-[#E4E7EC] pt-4">
+              <div
+                className="mt-6 border-t border-[#E4E7EC] pt-4 motion-safe:animate-menu-item-in"
+                style={{ animationDelay: `${60 + navItems.length * 30}ms` }}
+              >
                 <button
                   type="button"
                   onClick={handleLogout}
@@ -484,7 +491,7 @@ const DashboardNavbar = () => {
                   Log out
                 </button>
               </div>
-            </Container>
+            </div>
           </div>
         </>
       )}

@@ -12,7 +12,7 @@ import {
   Sparkles,
   Users,
 } from 'lucide-react';
-import Avatar from '@/components/ui/Avatar';
+import ZoomableAvatar from '@/components/data-display/ZoomableAvatar/ZoomableAvatar';
 import Card from '@/components/ui/Card';
 import { currentUser } from '@/modules/user/data/dashboard';
 import { coverGradientClass } from '@/shared/utils/coverGradient';
@@ -88,12 +88,13 @@ const ProfileHero = ({
       <div className="relative px-4 pb-5 pt-3 sm:px-6 sm:pb-6 sm:pt-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
-            <Avatar
+            <ZoomableAvatar
               src={user.avatar}
               alt={user.name}
               initials={user.initials}
               size="xl"
-              className="-mt-[4.25rem] shrink-0 border-[3px] border-white shadow-sm sm:-mt-[4.75rem]"
+              className="-mt-[4.25rem] shrink-0 self-start sm:-mt-[4.75rem]"
+              avatarClassName="border-[3px] border-white shadow-sm"
             />
 
             <div className="min-w-0">
