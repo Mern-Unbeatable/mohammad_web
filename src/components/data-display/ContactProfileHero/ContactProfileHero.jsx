@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Briefcase,
   Building2,
@@ -8,16 +8,16 @@ import {
   MessageCircle,
   UserPlus,
   Users,
-} from 'lucide-react';
-import { Link } from 'react-router';
-import Avatar from '@/components/ui/Avatar';
-import Card from '@/components/ui/Card';
-import { MetaItem } from '@/components/data-display/ProfileHero/ProfileHero';
-import { coverGradientClass } from '@/shared/utils/coverGradient';
+} from "lucide-react";
+import { Link } from "react-router";
+import Card from "@/components/ui/Card";
+import ZoomableAvatar from "@/components/data-display/ZoomableAvatar/ZoomableAvatar";
+import { MetaItem } from "@/components/data-display/ProfileHero/ProfileHero";
+import { coverGradientClass } from "@/shared/utils/coverGradient";
 
 /** The contact model fills missing fields with "—"; those rows are hidden. */
 const isShown = (value) =>
-  typeof value === 'string' && value.trim() !== '' && value.trim() !== '—';
+  typeof value === "string" && value.trim() !== "" && value.trim() !== "—";
 
 const ContactProfileHero = ({
   contact,
@@ -51,28 +51,33 @@ const ContactProfileHero = ({
 
       <div className="relative px-4 pb-5 pt-3 sm:px-6 sm:pb-6 sm:pt-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-          <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
-            <Avatar
+          <div className="flex min-w-0 flex-col items-center gap-3 text-center sm:flex-row sm:items-start sm:gap-5 sm:text-left">
+            <ZoomableAvatar
               src={contact.avatar}
               alt={contact.name}
               initials={contact.initials}
               size="xl"
-              className={`-mt-[4.25rem] shrink-0 border-[3px] border-white shadow-sm sm:-mt-[4.75rem] ${contact.avatarClass || ''}`}
+              className="-mt-[4rem] shrink-0 sm:-mt-[3rem]"
+              avatarClassName={`border-[3px] border-white shadow-sm ${contact.avatarClass || ""}`}
             />
 
-            <div className="min-w-0">
-              <h1 className="text-[24px] font-bold leading-tight tracking-tight text-deep-blue sm:text-[28px]">
+            <div className="w-full min-w-0 sm:w-auto">
+              <h1 className="break-words text-[22px] font-bold leading-tight tracking-tight text-deep-blue sm:text-[28px]">
                 {contact.name}
               </h1>
 
               {isShown(contact.title) ? (
-                <p className="mt-1.5 inline-flex items-center gap-1.5 text-[15px] font-medium text-[#475467]">
-                  <Briefcase aria-hidden className="h-4 w-4 shrink-0 text-primary" strokeWidth={2} />
+                <p className="mt-1.5 inline-flex max-w-full items-center gap-1.5 text-[14px] font-medium text-[#475467] sm:text-[15px]">
+                  <Briefcase
+                    aria-hidden
+                    className="h-4 w-4 shrink-0 text-primary"
+                    strokeWidth={2}
+                  />
                   {contact.title}
                 </p>
               ) : null}
 
-              <ul className="mt-2.5 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[13px] text-[#64748B]">
+              <ul className="mt-2.5 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[13px] text-[#64748B] sm:justify-start sm:gap-x-5">
                 {isShown(contact.company) ? (
                   <MetaItem icon={Building2}>{contact.company}</MetaItem>
                 ) : null}
@@ -82,8 +87,8 @@ const ContactProfileHero = ({
                 <MetaItem icon={Users}>
                   <span className="font-semibold text-deep-blue">
                     {connections.toLocaleString()}
-                  </span>{' '}
-                  {connections === 1 ? 'connection' : 'connections'}
+                  </span>{" "}
+                  {connections === 1 ? "connection" : "connections"}
                 </MetaItem>
               </ul>
             </div>
@@ -96,8 +101,8 @@ const ContactProfileHero = ({
               disabled={connected || pending}
               className={`inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-3.5 py-2 text-[12px] font-semibold transition-colors sm:flex-none ${
                 connected || pending
-                  ? 'bg-green-secondary text-green-primary'
-                  : 'bg-primary text-white hover:bg-[#066BB0]'
+                  ? "bg-green-secondary text-green-primary"
+                  : "bg-primary text-white hover:bg-[#066BB0]"
               }`}
             >
               {connected ? (

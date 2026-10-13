@@ -1,8 +1,30 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { Check, Clock, UserPlus, UserRound } from "lucide-react";
+import {
+  Briefcase,
+  Building2,
+  Check,
+  Clock,
+  MapPin,
+  UserPlus,
+  UserRound,
+} from "lucide-react";
 import Card from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
+
+const InfoLine = ({ icon, value, className = "" }) => {
+  const Icon = icon;
+  if (!value || value === "—") return null;
+  return (
+    <li
+      className={`inline-flex max-w-full items-center gap-1.5 text-[13px] ${className}`}
+    >
+      <Icon aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-[#98A2B3]" />
+      <span className="truncate">{value}</span>
+    </li>
+  );
+};
+
 const ContactCard = ({
   contact,
   profileBasePath = "/contacts",
@@ -39,7 +61,7 @@ const ContactCard = ({
           alt={contact.name}
           initials={contact.initials}
           size="lg"
-          className={`relative -mt-7 border-4 border-white shadow-sm ${contact.avatarClass || ""}`}
+          className={`relative -mt-10 h-20! w-20! border-4 border-white text-[24px]! shadow-sm ${contact.avatarClass || ""}`}
         />
         <Link
           to={`${profileBasePath}/${contact.id}`}
@@ -47,11 +69,15 @@ const ContactCard = ({
         >
           {contact.name}
         </Link>
-        <p className="mt-1 text-[13px] text-[#475467]">{contact.title}</p>
-        <p className="mt-0.5 text-[13px] font-semibold text-deep-blue">
-          {contact.company}
-        </p>
-        <p className="text-[13px] text-[#64748B]">{contact.country}</p>
+        <ul className="mt-1 flex w-full flex-col items-center gap-1">
+          <InfoLine icon={Briefcase} value={contact.title} className="text-[#475467]" />
+          <InfoLine
+            icon={Building2}
+            value={contact.company}
+            className="font-semibold text-deep-blue"
+          />
+          <InfoLine icon={MapPin} value={contact.country} className="text-[#64748B]" />
+        </ul>
 
         <div
           className={`mt-auto grid w-full gap-2 pt-4 ${connected ? "grid-cols-1" : "grid-cols-2"}`}

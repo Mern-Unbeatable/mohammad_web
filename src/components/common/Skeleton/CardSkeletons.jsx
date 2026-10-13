@@ -7,7 +7,7 @@ export const ContactCardSkeleton = () => (
     <Skeleton className="h-16 w-full" rounded="none" />
     <div className="flex flex-col items-center px-5 pb-5">
       <Skeleton
-        className="-mt-7 h-14 w-14 border-4 border-white"
+        className="-mt-10 h-20 w-20 border-4 border-white"
         rounded="full"
       />
       <Skeleton className="mt-3 h-4 w-28" />
