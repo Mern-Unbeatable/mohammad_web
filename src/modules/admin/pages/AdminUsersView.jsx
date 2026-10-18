@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 import DataTable from "@/components/data-display/DataTable/DataTable";
 import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
+import Avatar from "@/components/ui/Avatar";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
 import SuspendUserModal from "@/modules/admin/components/SuspendUserModal";
@@ -105,6 +106,7 @@ const AdminUsersView = () => {
       return {
         id: u.id,
         userName: rawName,
+        avatar: u.profile?.avatar || "",
         userType: u.profileType || u.profile?.title || "Laboratory",
         company: u.profile?.company || u.profile?.country || "N/A",
         role: u.role || "USER",
@@ -166,7 +168,17 @@ const AdminUsersView = () => {
 
   const userColumns = useMemo(() => {
     const base = [
-      { key: "userName", header: "User Name", className: "font-semibold" },
+      {
+        key: "userName",
+        header: "User Name",
+        className: "font-semibold",
+        render: (value, row) => (
+          <div className="flex items-center gap-3">
+            <Avatar src={row.avatar} alt={value} size="sm" />
+            <span className="truncate">{value}</span>
+          </div>
+        ),
+      },
       { key: "userType", header: "User Type" },
       { key: "company", header: "Company/Organization" },
       { key: "role", header: "Role" },

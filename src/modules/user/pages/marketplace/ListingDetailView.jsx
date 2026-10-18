@@ -404,6 +404,8 @@ const ListingDetailView = () => {
               <Card className="p-5">
                 <div className="flex items-center gap-3">
                   <Avatar
+                    src={listing.seller.avatar}
+                    alt={listing.seller.name}
                     initials={listing.seller.initials}
                     size="md"
                     className={listing.seller.avatarClass}
