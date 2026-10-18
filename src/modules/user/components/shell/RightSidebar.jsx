@@ -168,7 +168,7 @@ const JobsList = ({ items, loading }) => (
                 <img
                   src={image}
                   alt=""
-                  className="mt-0.5 h-10 w-10 shrink-0 rounded-lg border border-[#EAECF0] object-cover"
+                  className="mt-0.5 h-10 w-10 shrink-0 rounded-lg border border-[#E4E7EC] bg-white object-contain p-0.5"
                 />
               ) : null}
               <div className="min-w-0 flex-1">

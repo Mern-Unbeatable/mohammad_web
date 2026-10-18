@@ -80,8 +80,8 @@ describe("JobCard image", () => {
     expect(html).not.toContain("<img");
   });
 
-  it("keeps my job cards without an image", () => {
+  it("shows the image on my job cards too", () => {
     const html = render({ job: withImage, variant: "mine" });
-    expect(html).not.toContain("<img");
+    expect(html).toContain('src="https://cdn.test/job.png"');
   });
 });

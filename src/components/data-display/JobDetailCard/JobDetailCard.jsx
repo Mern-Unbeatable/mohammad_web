@@ -19,7 +19,7 @@ const JobDetailCard = ({
           <img
             src={job.image}
             alt=""
-            className="h-16 w-16 shrink-0 rounded-xl object-cover sm:h-[72px] sm:w-[72px]"
+            className="h-16 w-16 shrink-0 rounded-xl border border-[#E4E7EC] bg-white object-contain p-1 sm:h-[72px] sm:w-[72px]"
           />
           <div className="min-w-0 flex-1">
             <h1 className="text-[20px] font-bold leading-tight text-deep-blue sm:text-[22px]">

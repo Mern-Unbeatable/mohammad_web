@@ -297,7 +297,7 @@ const MyJobsView = () => {
                     <img
                       src={app.job.image}
                       alt=""
-                      className="w-16 shrink-0 self-stretch rounded-lg object-cover"
+                      className="w-16 shrink-0 self-stretch rounded-lg border border-[#E4E7EC] bg-white object-contain p-1"
                     />
                   ) : null}
                   <div className="min-w-0 flex-1">

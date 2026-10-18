@@ -24,6 +24,9 @@ import {
 import NotFound from "@/shared/pages/NotFound";
 import { isJobOpen, jobClosedNotice } from "@/shared/constants/jobStatus";
 
+const capitalize = (text) =>
+  text ? text.charAt(0).toUpperCase() + text.slice(1) : "";
+
 const toCandidateModel = (app) => {
   const applicant = app.applicant || {};
   return {
@@ -38,6 +41,9 @@ const toCandidateModel = (app) => {
     appliedLabel: formatPostedAgo(app.appliedAt || app.createdAt).replace(
       /^Posted /,
       "Applied ",
+    ),
+    appliedAgo: capitalize(
+      formatPostedAgo(app.appliedAt || app.createdAt).replace(/^Posted /, ""),
     ),
     profileHref: applicant.id ? `/contacts/${applicant.id}` : null,
   };
@@ -288,12 +294,15 @@ const JobDetailView = () => {
                               </span>
                             ) : null}
                           </p>
-                          <div className="mt-1 flex flex-wrap items-center gap-2">
-                            <span className="inline-flex rounded-full bg-secondary px-2.5 py-0.5 text-[11px] font-semibold text-primary">
+                          <div className="mt-1 flex min-w-0 items-center gap-2">
+                            <span className="inline-flex shrink-0 rounded-full bg-secondary px-2.5 py-0.5 text-[11px] font-semibold text-primary">
                               {candidate.status}
                             </span>
-                            <span className="text-[11px] text-[#98A2B3]">
-                              {candidate.appliedLabel}
+                            <span
+                              className="truncate whitespace-nowrap text-[11px] text-[#98A2B3]"
+                              title={candidate.appliedLabel}
+                            >
+                              {candidate.appliedAgo}
                             </span>
                           </div>
                         </div>

@@ -59,11 +59,11 @@ const JobImageField = ({
       </p>
 
       <div className="flex items-center gap-4 rounded-lg border border-dashed border-[#D0D5DD] bg-[#F9FAFB] p-3 sm:p-4">
-        <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#EAECF0] bg-white sm:h-[72px] sm:w-[72px]">
+        <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#E4E7EC] bg-white sm:h-[72px] sm:w-[72px]">
           {uploading ? (
             <Loader2 className="h-5 w-5 animate-spin text-primary" />
           ) : value ? (
-            <img src={value} alt="Company logo" className="h-full w-full object-cover" />
+            <img src={value} alt="Company logo" className="h-full w-full object-contain p-1" />
           ) : (
             <ImagePlus className="h-6 w-6 text-[#98A2B3]" />
           )}

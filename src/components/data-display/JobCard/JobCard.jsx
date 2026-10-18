@@ -26,7 +26,7 @@ const JobCard = ({
   const status = job.status || JOB_STATUS.OPEN;
   const canToggleStatus =
     variant === 'mine' && onToggleStatus && status !== JOB_STATUS.REMOVED;
-  const showImage = variant === 'browse' && Boolean(job.image);
+  const showImage = variant !== 'admin' && Boolean(job.image);
 
   return (
   <Card className={`p-4 sm:p-5 ${highlighted ? 'border-[#E67E22]' : ''}`}>
@@ -36,7 +36,7 @@ const JobCard = ({
           <img
             src={job.image}
             alt=""
-            className="h-14 w-14 shrink-0 rounded-xl object-cover sm:h-16 sm:w-16"
+            className="h-14 w-14 shrink-0 rounded-xl border border-[#E4E7EC] bg-white object-contain p-1 sm:h-16 sm:w-16"
           />
         ) : null}
         <div className="min-w-0 flex-1">
