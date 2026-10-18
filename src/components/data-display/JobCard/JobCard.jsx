@@ -26,7 +26,7 @@ const JobCard = ({
   const status = job.status || JOB_STATUS.OPEN;
   const canToggleStatus =
     variant === 'mine' && onToggleStatus && status !== JOB_STATUS.REMOVED;
-  const showImage = variant !== 'admin' && Boolean(job.image);
+  const showImage = Boolean(job.image);
 
   return (
   <Card className={`p-4 sm:p-5 ${highlighted ? 'border-[#E67E22]' : ''}`}>

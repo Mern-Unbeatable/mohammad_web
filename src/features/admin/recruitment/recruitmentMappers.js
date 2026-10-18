@@ -43,6 +43,9 @@ export const RECRUITMENT_TIME_OPTIONS = [
   "Last 90 days",
 ];
 
+const PLACEHOLDER_IMAGE =
+  "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=200&h=200&fit=crop";
+
 export const levelToApi = (label) => LEVEL_API[label];
 export const timeToApi = (label) => TIME_API[label];
 
@@ -75,7 +78,7 @@ export function toJobCardModel(job) {
     level: LEVEL_LABEL[job.level] || job.level,
     salary: job.salary || "—",
     postedAgo: formatPostedAgo(job.postedAt),
-    image: job.imageUrl || job.image || "",
+    image: job.imageUrl || job.image || PLACEHOLDER_IMAGE,
     requirements: Array.isArray(job.requirements) ? job.requirements : [],
   };
 }

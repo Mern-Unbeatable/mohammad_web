@@ -3,7 +3,7 @@ import { MapPin } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 
 /** "Posted by" card for the member who created a job. */
-const JobPosterCard = ({ owner, isSelf = false }) => {
+const JobPosterCard = ({ owner, isSelf = false, profilePath }) => {
   if (!owner?.id) return null;
 
   const name =
@@ -12,7 +12,11 @@ const JobPosterCard = ({ owner, isSelf = false }) => {
     "Member";
   const headline = [owner.title, owner.company].filter(Boolean).join(" · ");
   const location = owner.location || owner.country;
-  const profileHref = isSelf ? "/profile" : `/contacts/${owner.id}`;
+  const profileHref = profilePath
+    ? profilePath(owner.id)
+    : isSelf
+      ? "/profile"
+      : `/contacts/${owner.id}`;
 
   return (
     <section className="rounded-xl border border-[#E4E7EC] bg-white p-4">

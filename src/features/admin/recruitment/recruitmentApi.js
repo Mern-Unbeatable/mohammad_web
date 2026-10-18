@@ -68,6 +68,20 @@ export async function getJobById(jobId) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════
+// Job applications
+// ═══════════════════════════════════════════════════════════════════════
+export async function getJobApplications(jobId) {
+  const response = await crudService.get(
+    API_ENDPOINTS.ADMIN.RECRUITMENT.APPLICATIONS(jobId),
+  );
+  const data = unwrapApiData(response);
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data?.data)) return data.data;
+  if (Array.isArray(response?.data)) return response.data;
+  return [];
+}
+
+// ═══════════════════════════════════════════════════════════════════════
 // Delete job
 // ═══════════════════════════════════════════════════════════════════════
 export async function deleteJob(jobId) {
