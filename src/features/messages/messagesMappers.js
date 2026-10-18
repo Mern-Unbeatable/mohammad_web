@@ -1,4 +1,5 @@
 /** Map API conversations / messages onto the Messenger UI models. */
+import { stripFormatting } from "./messageFormat";
 
 const toDate = (value) => {
   if (!value) return null;
@@ -65,7 +66,7 @@ export const isImageAttachment = (attachment) =>
 export function messagePreview(message) {
   if (!message) return "";
   return (
-    message.body ||
+    stripFormatting(message.body) ||
     attachmentSummary(message.attachments) ||
     (message.listing ? "Shared a listing" : "")
   );
@@ -112,7 +113,7 @@ export function toConversationModel(conversation, { onlineUserIds } = {}) {
     subtitle: conversation.subtitle || null,
     initials: conversation.initials || "?",
     avatar: conversation.avatar || null,
-    preview: conversation.preview || "",
+    preview: stripFormatting(conversation.preview),
     time: formatMessageTime(conversation.time),
     unread: conversation.unreadCount ?? 0,
     otherUserId: conversation.otherUserId || null,

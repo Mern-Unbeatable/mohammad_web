@@ -2,9 +2,14 @@ import { useLayoutEffect, useRef } from "react";
 import { Link } from "react-router";
 import {
   ArrowLeft,
+  Bold,
+  Code,
   FileText,
   Image as ImageIcon,
   Info,
+  Italic,
+  List,
+  ListOrdered,
   Loader2,
   LogOut,
   MessageSquare,
@@ -12,14 +17,44 @@ import {
   Plus,
   Search,
   Send,
+  Strikethrough,
   Trash2,
   X,
 } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
+import { applyComposerFormat, continueList } from "@/features/messages/composerFormat";
 import ChatListingCard from "./ChatListingCard";
+import FormattedMessage from "./FormattedMessage";
 
 const FILE_ACCEPT =
   "image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,video/mp4,video/quicktime";
+
+const MAX_MESSAGE_LENGTH = 5000;
+
+const FORMAT_TOOLS = [
+  { kind: "bold", label: "Bold", shortcut: "Ctrl+B", icon: <Bold className="h-4 w-4" /> },
+  { kind: "italic", label: "Italic", shortcut: "Ctrl+I", icon: <Italic className="h-4 w-4" /> },
+  { kind: "strike", label: "Strikethrough", icon: <Strikethrough className="h-4 w-4" /> },
+  { kind: "code", label: "Inline code", shortcut: "Ctrl+E", icon: <Code className="h-4 w-4" /> },
+  { kind: "bullet", label: "Bulleted list", icon: <List className="h-4 w-4" /> },
+  { kind: "numbered", label: "Numbered list", icon: <ListOrdered className="h-4 w-4" /> },
+];
+
+const FORMAT_SHORTCUTS = { b: "bold", i: "italic", e: "code" };
+
+/** Toolbar button that keeps the textarea's focus and selection while clicked. */
+const ComposerToolButton = ({ label, onClick, className = "", children }) => (
+  <button
+    type="button"
+    onMouseDown={(e) => e.preventDefault()}
+    onClick={onClick}
+    aria-label={label}
+    title={label}
+    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[#64748B] transition-colors hover:bg-[#F2F4F7] hover:text-deep-blue ${className}`}
+  >
+    {children}
+  </button>
+);
 
 const isImage = (attachment) =>
   String(attachment?.mimeType || "").startsWith("image/");
@@ -183,13 +218,13 @@ const MessageBubble = ({
   if (isMe) {
     return (
       <div className="group flex flex-col items-end">
-        <div className="relative max-w-[min(85%,420px)] sm:max-w-[min(100%,420px)]">
+        <div className="relative max-w-[min(85%,560px)] sm:max-w-[min(100%,560px)]">
           {listingCard ? (
             <div className="flex justify-end">{listingCard}</div>
           ) : null}
           {text ? (
-            <div className="rounded-2xl rounded-br-sm bg-primary px-4 py-2.5 text-[13px] leading-relaxed whitespace-pre-wrap break-words text-white">
-              {text}
+            <div className="space-y-1.5 rounded-2xl rounded-br-sm bg-primary px-4 py-2.5 text-[13px] leading-relaxed break-words text-white">
+              <FormattedMessage text={text} tone="me" />
             </div>
           ) : null}
           <AttachmentList attachments={message.attachments} isMe />
@@ -198,7 +233,7 @@ const MessageBubble = ({
               type="button"
               onClick={() => onDeleteMessage(message.id)}
               aria-label="Delete message"
-              className="absolute -left-8 top-1/2 hidden -translate-y-1/2 rounded-md p-1 text-[#98A2B3] hover:bg-[#F9FAFB] hover:text-[#CC1016] group-hover:block [@media(hover:none)]:block"
+              className="absolute -left-8 top-1.5 hidden rounded-md p-1 text-[#98A2B3] hover:bg-[#F9FAFB] hover:text-[#CC1016] group-hover:block [@media(hover:none)]:block"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </button>
@@ -218,7 +253,7 @@ const MessageBubble = ({
       ) : (
         <div className="w-9 shrink-0" aria-hidden="true" />
       )}
-      <div className="max-w-[min(85%,420px)] sm:max-w-[min(100%,420px)]">
+      <div className="max-w-[min(85%,560px)] sm:max-w-[min(100%,560px)]">
         {chat.isGroup && message.sender && showAvatar ? (
           <p className="mb-1 text-[11px] font-medium text-[#64748B]">
             {message.sender}
@@ -226,8 +261,8 @@ const MessageBubble = ({
         ) : null}
         {listingCard}
         {text ? (
-          <div className="rounded-2xl rounded-bl-sm bg-[#E8ECF0] px-4 py-2.5 text-[13px] leading-relaxed whitespace-pre-wrap break-words text-[#334155]">
-            {text}
+          <div className="space-y-1.5 rounded-2xl rounded-bl-sm bg-[#E8ECF0] px-4 py-2.5 text-[13px] leading-relaxed break-words text-[#334155]">
+            <FormattedMessage text={text} tone="them" />
           </div>
         ) : null}
         <AttachmentList attachments={message.attachments} />
@@ -397,6 +432,54 @@ const Messenger = ({
   const threadRef = useThreadScroll(messages, displayChat?.id ?? activeChatId);
   const fileInputRef = useRef(null);
   const imageInputRef = useRef(null);
+  const composerRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const el = composerRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }, [draft, displayChat?.id]);
+
+  const replaceDraft = (next, selectionStart, selectionEnd = selectionStart) => {
+    if (next.length > MAX_MESSAGE_LENGTH) return;
+    onDraftChange?.(next);
+    requestAnimationFrame(() => {
+      const el = composerRef.current;
+      if (!el) return;
+      el.focus();
+      el.setSelectionRange(selectionStart, selectionEnd);
+    });
+  };
+
+  const applyFormat = (kind) => {
+    const el = composerRef.current;
+    if (!el) return;
+    const next = applyComposerFormat(draft, el.selectionStart, el.selectionEnd, kind);
+    replaceDraft(next.value, next.selectionStart, next.selectionEnd);
+  };
+
+  const handleComposerKeyDown = (e) => {
+    if (e.nativeEvent.isComposing) return;
+    const shortcut = (e.ctrlKey || e.metaKey) && !e.altKey && FORMAT_SHORTCUTS[e.key.toLowerCase()];
+    if (shortcut) {
+      e.preventDefault();
+      applyFormat(shortcut);
+      return;
+    }
+    if (e.key !== "Enter") return;
+    if (!e.shiftKey) {
+      e.preventDefault();
+      if (canSend) onSend?.();
+      return;
+    }
+    const el = e.currentTarget;
+    if (el.selectionStart !== el.selectionEnd) return;
+    const next = continueList(draft, el.selectionStart);
+    if (!next) return;
+    e.preventDefault();
+    replaceDraft(next.value, next.caret);
+  };
 
   const uploading = attachments.some((a) => a.uploading);
   const listingLoading = Boolean(pendingListing?.loading);
@@ -648,7 +731,7 @@ const Messenger = ({
               )}
             </div>
 
-            <div className="shrink-0 border-t border-[#E4E7EC] bg-white px-3 pb-3 pt-2.5 sm:px-5 sm:py-4">
+            <div className="shrink-0 border-t border-[#E4E7EC]/70 bg-[#F4F6F9]/80 px-3 pb-3 pt-2.5 backdrop-blur-md sm:px-5 sm:py-4">
               {pendingListing ? (
                 <ChatListingCard
                   listing={pendingListing}
@@ -684,74 +767,85 @@ const Messenger = ({
                 </div>
               ) : null}
 
-              <div className="flex items-center gap-1.5 rounded-full border border-[#E4E7EC] bg-[#F3F4F6] py-1.5 pl-2.5 pr-1.5 sm:gap-2 sm:pl-4">
-                {onAddFiles ? (
-                  <>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      multiple
-                      accept={FILE_ACCEPT}
-                      className="hidden"
-                      onChange={handleFiles}
-                    />
-                    <input
-                      ref={imageInputRef}
-                      type="file"
-                      multiple
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleFiles}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      aria-label="Attach file"
-                      className="shrink-0 rounded-full p-1.5 text-[#64748B] hover:text-deep-blue"
-                    >
-                      <Paperclip className="h-[18px] w-[18px]" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => imageInputRef.current?.click()}
-                      aria-label="Attach image"
-                      className="shrink-0 rounded-full p-1.5 text-green-primary hover:opacity-80"
-                    >
-                      <ImageIcon className="h-[18px] w-[18px]" />
-                    </button>
-                  </>
-                ) : null}
-                <input
-                  type="text"
+              <div className="rounded-2xl border border-[#E4E7EC] bg-white shadow-[0_1px_3px_rgba(15,23,42,0.06)] transition-shadow focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/10">
+                <textarea
+                  ref={composerRef}
+                  rows={1}
                   value={draft}
                   onChange={(e) => onDraftChange?.(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      if (canSend) onSend?.();
-                    }
-                  }}
+                  onKeyDown={handleComposerKeyDown}
                   maxLength={5000}
+                  aria-label="Message"
                   placeholder={
                     pendingListing
                       ? "Ask the seller about this listing..."
                       : "Write a message..."
                   }
-                  className="min-w-0 flex-1 bg-transparent py-2 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3]"
+                  className="block max-h-48 min-h-[44px] w-full resize-none overflow-y-auto bg-transparent px-4 pb-1 pt-3 text-[14px] leading-6 text-deep-blue outline-none [scrollbar-width:thin] placeholder:text-[#98A2B3]"
                 />
-                <button
-                  type="button"
-                  aria-label="Send message"
-                  onClick={onSend}
-                  disabled={!canSend}
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-[#066BB0] disabled:opacity-50"
-                >
-                  {sending ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <Send className="h-4 w-4" />
-                  )}
-                </button>
+                <div className="flex items-center gap-0.5 px-2 pb-2 pt-1">
+                  {onAddFiles ? (
+                    <>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        multiple
+                        accept={FILE_ACCEPT}
+                        className="hidden"
+                        onChange={handleFiles}
+                      />
+                      <input
+                        ref={imageInputRef}
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleFiles}
+                      />
+                      <ComposerToolButton
+                        label="Attach file"
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <Paperclip className="h-4 w-4" />
+                      </ComposerToolButton>
+                      <ComposerToolButton
+                        label="Attach image"
+                        onClick={() => imageInputRef.current?.click()}
+                        className="text-green-primary"
+                      >
+                        <ImageIcon className="h-4 w-4" />
+                      </ComposerToolButton>
+                      <span className="mx-1 h-5 w-px bg-[#E4E7EC]" aria-hidden="true" />
+                    </>
+                  ) : null}
+                  <div className="flex min-w-0 items-center gap-0.5 overflow-x-auto [scrollbar-width:none]">
+                    {FORMAT_TOOLS.map(({ kind, label, shortcut, icon }) => (
+                      <ComposerToolButton
+                        key={kind}
+                        label={shortcut ? `${label} (${shortcut})` : label}
+                        onClick={() => applyFormat(kind)}
+                      >
+                        {icon}
+                      </ComposerToolButton>
+                    ))}
+                  </div>
+                  <span className="ml-auto hidden shrink-0 whitespace-nowrap pl-2 pr-2 text-[11px] text-[#98A2B3] md:inline">
+                    <kbd className="font-sans font-semibold">Shift + Enter</kbd> new line
+                  </span>
+                  <button
+                    type="button"
+                    aria-label="Send message"
+                    onClick={onSend}
+                    disabled={!canSend}
+                    className="ml-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-[#066BB0] disabled:bg-[#B2CCFF] md:ml-0"
+                  >
+                    {sending ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Send className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </>

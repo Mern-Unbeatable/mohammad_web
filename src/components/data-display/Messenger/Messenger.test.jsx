@@ -130,6 +130,21 @@ describe('Messenger group activity notices', () => {
   });
 });
 
+describe('Messenger composer and message formatting', () => {
+  it('uses a multi-line composer and renders formatted message text', () => {
+    const html = render({
+      activeChat: {
+        ...direct,
+        messages: [{ id: 'm1', from: 'them', text: 'Please **review**:\n- item one' }],
+      },
+    });
+
+    expect(html).toMatch(/<textarea[^>]*rows="1"[^>]*aria-label="Message"/);
+    expect(html).toContain('<strong class="font-semibold">review</strong>');
+    expect(html).toMatch(/<ul[^>]*><li[^>]*>item one<\/li><\/ul>/);
+  });
+});
+
 describe('memberProfilePath', () => {
   it.each([
     ['USER', '/contacts/u1'],
