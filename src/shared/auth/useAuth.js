@@ -21,7 +21,7 @@ import { normalizeAppRole, roleHomePath } from "@/shared/constants/roles";
  */
 export const useAuth = () => {
   const dispatch = useDispatch();
-  const { user, isAuthenticated, loading, error, sessionReady, token } =
+  const { user, isAuthenticated, loading, error, sessionReady, token, loggingOut } =
     useSelector((state) => state.auth);
 
   const role = normalizeAppRole(user);
@@ -77,9 +77,12 @@ export const useAuth = () => {
     };
   };
 
+  /** Resolves once the session is cleared; callers navigate afterwards. Repeat clicks are ignored. */
   const logout = async () => {
-    await dispatch(logoutUser());
+    const resultAction = await dispatch(logoutUser());
+    if (resultAction.meta?.condition) return false;
     toast.info("Logged out successfully");
+    return true;
   };
 
   const refresh = async () => {
@@ -154,6 +157,7 @@ export const useAuth = () => {
     loading,
     error,
     sessionReady: Boolean(sessionReady),
+    loggingOut: Boolean(loggingOut),
     role,
     login,
     register,

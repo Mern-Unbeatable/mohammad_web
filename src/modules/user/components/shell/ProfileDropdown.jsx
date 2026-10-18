@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { CreditCard, LogOut, User } from 'lucide-react';
+import { CreditCard, Loader2, LogOut, User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 import Avatar from '@/components/ui/Avatar';
 import { useAuth } from '@/shared/auth/useAuth';
 import { toProfilePageUser } from '@/features/user/profile';
 
 const ProfileDropdown = () => {
-  const { logout } = useAuth();
+  const { logout, loggingOut } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
@@ -15,7 +15,7 @@ const ProfileDropdown = () => {
   const profile = toProfilePageUser(user);
 
   useEffect(() => {
-    if (!open) return undefined;
+    if (!open || loggingOut) return undefined;
 
     const handleClickOutside = (event) => {
       if (rootRef.current && !rootRef.current.contains(event.target)) {
@@ -34,14 +34,12 @@ const ProfileDropdown = () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [open]);
+  }, [open, loggingOut]);
 
   const close = () => setOpen(false);
 
-  const handleLogout = () => {
-    close();
-    logout();
-    navigate('/login');
+  const handleLogout = async () => {
+    if (await logout()) navigate('/login', { replace: true });
   };
 
   const displayName = profile?.name || 'Member';
@@ -149,10 +147,16 @@ const ProfileDropdown = () => {
               type="button"
               role="menuitem"
               onClick={handleLogout}
-              className="flex w-full items-center gap-3 bg-[#FEF2F2] px-4 py-3 text-[13px] font-semibold text-[#DC2626] transition-colors hover:bg-[#FEE2E2]"
+              disabled={loggingOut}
+              aria-busy={loggingOut}
+              className="flex w-full items-center gap-3 bg-[#FEF2F2] px-4 py-3 text-[13px] font-semibold text-[#DC2626] transition-colors hover:bg-[#FEE2E2] disabled:cursor-wait disabled:opacity-70"
             >
-              <LogOut className="h-[18px] w-[18px]" strokeWidth={1.8} />
-              Log out
+              {loggingOut ? (
+                <Loader2 className="h-[18px] w-[18px] animate-spin" strokeWidth={1.8} />
+              ) : (
+                <LogOut className="h-[18px] w-[18px]" strokeWidth={1.8} />
+              )}
+              {loggingOut ? 'Logging out…' : 'Log out'}
             </button>
           </div>
         </div>

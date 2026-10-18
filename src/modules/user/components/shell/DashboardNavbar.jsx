@@ -5,6 +5,7 @@ import {
   Briefcase,
   Home,
   LayoutGrid,
+  Loader2,
   LogOut,
   Menu,
   MessageSquare,
@@ -141,7 +142,7 @@ const DashboardNavbar = () => {
   }
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { logout } = useAuth();
+  const { logout, loggingOut } = useAuth();
   const { results, loading, error } = useSelector((state) => state.userSearch);
   const { user } = useSelector((state) => state.userProfile);
   const profileUser = useMemo(() => toProfilePageUser(user), [user]);
@@ -169,9 +170,7 @@ const DashboardNavbar = () => {
   const closeMenu = () => setMenuOpen(false);
 
   const handleLogout = async () => {
-    closeMenu();
-    await logout();
-    navigate("/login", { replace: true });
+    if (await logout()) navigate("/login", { replace: true });
   };
 
   const isNavActive = (item) => {
@@ -485,10 +484,16 @@ const DashboardNavbar = () => {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#E4E7EC] px-4 py-3 text-[14px] font-semibold text-[#475467] transition-colors hover:border-[#D0D5DD] hover:bg-[#F9FAFB]"
+                  disabled={loggingOut}
+                  aria-busy={loggingOut}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#E4E7EC] px-4 py-3 text-[14px] font-semibold text-[#475467] transition-colors hover:border-[#D0D5DD] hover:bg-[#F9FAFB] disabled:cursor-wait disabled:opacity-70"
                 >
-                  <LogOut className="h-5 w-5" />
-                  Log out
+                  {loggingOut ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <LogOut className="h-5 w-5" />
+                  )}
+                  {loggingOut ? "Logging out…" : "Log out"}
                 </button>
               </div>
             </div>

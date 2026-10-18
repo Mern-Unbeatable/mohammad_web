@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Link, useLocation, useNavigate } from 'react-router';
-import { LogOut, Menu, X } from 'lucide-react';
+import { Loader2, LogOut, Menu, X } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import Avatar from '@/components/ui/Avatar';
 import CountBadge from '@/components/ui/CountBadge';
@@ -14,7 +14,7 @@ const SIDEBAR_WIDTH = 260;
 
 /** `badgeCounts` adds role-specific nav badges keyed by `navItems[].badge`. */
 const PanelLayout = ({ navItems, badgeCounts: extraBadgeCounts, children }) => {
-  const { user, role, logout } = useAuth();
+  const { user, role, logout, loggingOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -37,10 +37,8 @@ const PanelLayout = ({ navItems, badgeCounts: extraBadgeCounts, children }) => {
     };
   }, [sidebarOpen]);
 
-  const handleLogout = () => {
-    setSidebarOpen(false);
-    logout();
-    navigate('/login');
+  const handleLogout = async () => {
+    if (await logout()) navigate('/login', { replace: true });
   };
 
   const closeSidebar = () => setSidebarOpen(false);
@@ -110,10 +108,16 @@ const PanelLayout = ({ navItems, badgeCounts: extraBadgeCounts, children }) => {
         <button
           type="button"
           onClick={handleLogout}
-          className="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-[13px] font-semibold text-pink-light transition-colors hover:bg-pink-secondary"
+          disabled={loggingOut}
+          aria-busy={loggingOut}
+          className="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-[13px] font-semibold text-pink-light transition-colors hover:bg-pink-secondary disabled:cursor-wait disabled:opacity-70"
         >
-          <LogOut className="h-4 w-4" />
-          Log Out
+          {loggingOut ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <LogOut className="h-4 w-4" />
+          )}
+          {loggingOut ? 'Logging out…' : 'Log Out'}
         </button>
       </div>
     </>

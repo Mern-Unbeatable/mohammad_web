@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { Menu, X } from 'lucide-react';
+import { Loader2, Menu, X } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import Container from '@/components/ui/Container';
 import { useAuth } from '@/shared/auth/useAuth';
@@ -13,13 +13,13 @@ const navLinks = [
 ];
 
 const AuthActions = ({ onNavigate, className = '' }) => {
-  const { isAuthenticated, isSupplier, isAdmin, homePath, logout } = useAuth();
+  const { isAuthenticated, isSupplier, isAdmin, homePath, logout, loggingOut } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    if (!(await logout())) return;
     onNavigate?.();
-    navigate('/');
+    navigate('/', { replace: true });
   };
 
   if (isAuthenticated) {
@@ -30,9 +30,12 @@ const AuthActions = ({ onNavigate, className = '' }) => {
         <button
           type="button"
           onClick={handleLogout}
-          className="text-[15px] font-normal leading-none text-deep-blue transition-colors hover:text-primary xl:text-[16px]"
+          disabled={loggingOut}
+          aria-busy={loggingOut}
+          className="inline-flex items-center gap-1.5 text-[15px] font-normal leading-none text-deep-blue transition-colors hover:text-primary disabled:cursor-wait disabled:opacity-70 xl:text-[16px]"
         >
-          Log out
+          {loggingOut ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+          {loggingOut ? 'Logging out…' : 'Log out'}
         </button>
         {isSupplierOrAdmin ? (
           <Link
