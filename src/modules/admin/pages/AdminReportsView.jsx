@@ -122,8 +122,14 @@ const AdminReportsView = () => {
       {
         key: "reportedItem",
         header: "Reported Item",
-        wrap: true,
-        className: "max-w-[220px]",
+        render: (value) => (
+          <span
+            className="block max-w-[250px] truncate"
+            title={value || undefined}
+          >
+            {value}
+          </span>
+        ),
       },
       { key: "type", header: "Type" },
       { key: "reason", header: "Reason" },
