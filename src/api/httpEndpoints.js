@@ -164,6 +164,7 @@ export const API_ENDPOINTS = {
       DETAILS: (jobId) => `/recruitment/${jobId}`,
       UPDATE: (jobId) => `/recruitment/${jobId}`,
       DELETE: (jobId) => `/recruitment/${jobId}`,
+      APPLY: (jobId) => `/recruitment/${jobId}/apply`,
       APPLICATIONS: (jobId) => `/recruitment/${jobId}/applications`,
     },
 

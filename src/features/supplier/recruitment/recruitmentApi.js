@@ -109,4 +109,12 @@ export async function deleteJob(jobId) {
   return { jobId, data: unwrapApiData(response) ?? response };
 }
 
+export async function applyToJob(jobId, payload = {}) {
+  const response = await crudService.post(
+    API_ENDPOINTS.SUPPLIER.RECRUITMENT.APPLY(jobId),
+    payload,
+  );
+  return unwrapApiData(response) || response;
+}
+
 export { getApiErrorMessage };
