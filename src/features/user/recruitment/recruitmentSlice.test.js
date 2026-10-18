@@ -1,6 +1,32 @@
 import { describe, expect, it } from "vitest";
 import reducer, { invalidateJobsList } from "./recruitmentSlice";
-import { fetchJobs } from "./recruitmentThunks";
+import { applyToJob, fetchJobDetails, fetchJobs } from "./recruitmentThunks";
+
+describe("applying to the open job", () => {
+  it("marks the selected job as applied so the button disables", () => {
+    let state = reducer(undefined, { type: "@@init" });
+    state = reducer(
+      state,
+      fetchJobDetails.fulfilled({ id: "j1", myApplication: null }, "r", "j1"),
+    );
+    state = reducer(
+      state,
+      applyToJob.fulfilled(
+        {
+          jobId: "j1",
+          application: { id: "a1", status: "APPLIED", createdAt: "2026-10-18" },
+        },
+        "r2",
+        { jobId: "j1" },
+      ),
+    );
+    expect(state.selectedJob.myApplication).toEqual({
+      id: "a1",
+      status: "APPLIED",
+      appliedAt: "2026-10-18",
+    });
+  });
+});
 
 const initial = reducer(undefined, { type: "@@init" });
 const page = (n) => ({

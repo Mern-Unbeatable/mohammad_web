@@ -1,9 +1,17 @@
-import { Check, MapPin } from 'lucide-react';
+import { Link } from 'react-router';
+import { Check, MapPin, Pencil } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import FormattedMessage from '@/components/data-display/Messenger/FormattedMessage';
 
-const JobDetailCard = ({ job, applyHref, onApply, showApplyButton = true }) => (
+const JobDetailCard = ({
+  job,
+  applyHref,
+  onApply,
+  showApplyButton = true,
+  applied = false,
+  editHref,
+}) => (
   <>
     <Card>
       <div className="p-5 sm:p-6">
@@ -13,7 +21,7 @@ const JobDetailCard = ({ job, applyHref, onApply, showApplyButton = true }) => (
             alt=""
             className="h-16 w-16 shrink-0 rounded-xl object-cover sm:h-[72px] sm:w-[72px]"
           />
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <h1 className="text-[20px] font-bold leading-tight text-deep-blue sm:text-[22px]">
               {job.title}
             </h1>
@@ -23,6 +31,15 @@ const JobDetailCard = ({ job, applyHref, onApply, showApplyButton = true }) => (
               {job.location}
             </p>
           </div>
+          {editHref ? (
+            <Link
+              to={editHref}
+              className="inline-flex h-9 shrink-0 items-center gap-1.5 self-start rounded-md bg-[#FEF3E8] px-3 text-[12px] font-semibold text-[#E67E22] hover:bg-[#FDEBD6]"
+            >
+              <Pencil className="h-3.5 w-3.5" />
+              Edit
+            </Link>
+          ) : null}
         </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-2 border-b border-[#E4E7EC] pb-5">
@@ -56,7 +73,16 @@ const JobDetailCard = ({ job, applyHref, onApply, showApplyButton = true }) => (
     </Card>
 
     {showApplyButton ? (
-      applyHref ? (
+      applied ? (
+        <button
+          type="button"
+          disabled
+          className="mt-5 inline-flex cursor-not-allowed items-center justify-center gap-1.5 rounded-lg bg-[#E4E7EC] px-5 py-2.5 text-[13px] font-semibold text-[#64748B]"
+        >
+          <Check className="h-4 w-4" strokeWidth={2.5} />
+          Already applied
+        </button>
+      ) : applyHref ? (
         <a
           href={applyHref}
           target="_blank"

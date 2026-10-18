@@ -48,3 +48,27 @@ describe("JobCard status handling", () => {
     expect(html).toContain("View Details");
   });
 });
+
+describe("JobCard image", () => {
+  const withImage = {
+    ...job("OPEN"),
+    image: "https://cdn.test/job.png",
+    owner: { id: "u1", avatar: "https://cdn.test/a.png" },
+  };
+
+  it("shows the job's details-page image on public cards, not the poster's picture", () => {
+    const html = render({ job: withImage });
+    expect(html).toContain('src="https://cdn.test/job.png"');
+    expect(html).not.toContain("a.png");
+  });
+
+  it("renders no image when the job has none", () => {
+    const html = render({ job: job("OPEN") });
+    expect(html).not.toContain("<img");
+  });
+
+  it("keeps my job cards without an image", () => {
+    const html = render({ job: withImage, variant: "mine" });
+    expect(html).not.toContain("<img");
+  });
+});

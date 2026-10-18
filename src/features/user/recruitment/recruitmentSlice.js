@@ -164,11 +164,16 @@ const recruitmentSlice = createSlice({
       })
       .addCase(applyToJob.fulfilled, (state, action) => {
         state.applying = false;
-        if (action.payload?.application) {
-          state.applications = [
-            action.payload.application,
-            ...state.applications,
-          ];
+        const application = action.payload?.application;
+        if (application) {
+          state.applications = [application, ...state.applications];
+        }
+        if (state.selectedJob?.id === action.payload?.jobId) {
+          state.selectedJob.myApplication = {
+            id: application?.id ?? null,
+            status: application?.status ?? "APPLIED",
+            appliedAt: application?.createdAt ?? new Date().toISOString(),
+          };
         }
       })
       .addCase(applyToJob.rejected, (state, action) => {

@@ -24,32 +24,42 @@ const JobCard = ({
   const status = job.status || JOB_STATUS.OPEN;
   const canToggleStatus =
     variant === 'mine' && onToggleStatus && status !== JOB_STATUS.REMOVED;
+  const showImage = variant === 'browse' && Boolean(job.image);
 
   return (
   <Card className={`p-4 sm:p-5 ${highlighted ? 'border-[#E67E22]' : ''}`}>
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <div className="min-w-0 flex-1">
-        <h3 className="text-[15px] font-bold leading-snug text-deep-blue sm:text-[16px] lg:text-[17px]">
-          {job.title}
-        </h3>
-        <p className="mt-1 text-[13px] text-[#64748B] sm:text-[14px] lg:text-[15px]">
-          {job.company} · {job.location}
-        </p>
+      <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
+        {showImage ? (
+          <img
+            src={job.image}
+            alt=""
+            className="h-14 w-14 shrink-0 rounded-xl object-cover sm:h-16 sm:w-16"
+          />
+        ) : null}
+        <div className="min-w-0 flex-1">
+          <h3 className="text-[15px] font-bold leading-snug text-deep-blue sm:text-[16px] lg:text-[17px]">
+            {job.title}
+          </h3>
+          <p className="mt-1 text-[13px] text-[#64748B] sm:text-[14px] lg:text-[15px]">
+            {job.company} · {job.location}
+          </p>
 
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          {variant === 'mine' ? (
-            <span
-              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide sm:text-[11px] ${STATUS_BADGE_CLASS[status] || STATUS_BADGE_CLASS[JOB_STATUS.CLOSED]}`}
-            >
-              {JOB_STATUS_LABEL[status] || status}
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            {variant === 'mine' ? (
+              <span
+                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide sm:text-[11px] ${STATUS_BADGE_CLASS[status] || STATUS_BADGE_CLASS[JOB_STATUS.CLOSED]}`}
+              >
+                {JOB_STATUS_LABEL[status] || status}
+              </span>
+            ) : null}
+            <Badge variant="fulltime">{job.employmentType}</Badge>
+            <Badge variant="post">{job.level}</Badge>
+            <span className="inline-flex items-center rounded-full bg-green-secondary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-green-primary sm:text-[11px] lg:text-[12px]">
+              {job.salary}
             </span>
-          ) : null}
-          <Badge variant="fulltime">{job.employmentType}</Badge>
-          <Badge variant="post">{job.level}</Badge>
-          <span className="inline-flex items-center rounded-full bg-green-secondary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-green-primary sm:text-[11px] lg:text-[12px]">
-            {job.salary}
-          </span>
-          <span className="text-[11px] text-[#98A2B3] sm:text-[12px] lg:text-[13px]">{job.postedAgo}</span>
+            <span className="text-[11px] text-[#98A2B3] sm:text-[12px] lg:text-[13px]">{job.postedAgo}</span>
+          </div>
         </div>
       </div>
 

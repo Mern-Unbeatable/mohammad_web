@@ -64,7 +64,8 @@ const SupplierJobDetailView = () => {
     Boolean(authUser?.id) &&
     Boolean(selectedJob?.owner?.id) &&
     authUser.id === selectedJob.owner.id;
-  const applied = appliedJobId === job.id;
+  const justApplied = appliedJobId === job.id;
+  const applied = justApplied || Boolean(selectedJob.myApplication);
   const isOpen = isJobOpen(job);
 
   const closeApplyForm = () => {
@@ -109,7 +110,8 @@ const SupplierJobDetailView = () => {
         onApply={
           !isOwner && !job.applyLink ? () => setShowApplyForm(true) : undefined
         }
-        showApplyButton={!isOwner && isOpen && !applied && !showApplyForm}
+        showApplyButton={!isOwner && (isOpen || applied) && !showApplyForm}
+        applied={applied}
       />
 
       {!isOpen ? (
@@ -118,13 +120,13 @@ const SupplierJobDetailView = () => {
         </p>
       ) : null}
 
-      {applied ? (
+      {justApplied ? (
         <p className="text-[14px] font-medium text-green-primary">
           Your application has been submitted.
         </p>
       ) : null}
 
-      {!isOwner && isOpen && showApplyForm ? (
+      {!isOwner && isOpen && !applied && showApplyForm ? (
         <Card>
           <form onSubmit={handleApplySubmit} className="space-y-4 p-5 sm:p-6">
             <div>

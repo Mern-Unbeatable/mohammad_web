@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
+import { Eye } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Pagination from "@/components/common/Pagination/Pagination";
 import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
@@ -284,29 +285,34 @@ const MyJobsView = () => {
               {myApplications.map((app) => (
                 <div
                   key={app.id}
-                  className="rounded-xl border border-[#E4E7EC] bg-white px-5 py-4"
+                  className="flex items-center gap-3 rounded-xl border border-[#E4E7EC] bg-white px-4 py-3"
                 >
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="min-w-0">
-                      {app.jobId ? (
-                        <Link
-                          to={`${JOB_BASE}/${app.jobId}`}
-                          className="text-[15px] font-semibold text-primary hover:underline"
-                        >
-                          {app.job?.title || "Job posting"}
-                        </Link>
-                      ) : (
-                        <p className="text-[15px] font-semibold text-deep-blue">
-                          {app.job?.title || "Job posting"}
-                        </p>
-                      )}
-                      <p className="mt-0.5 text-[13px] text-[#64748B]">
-                        {[app.job?.company, app.job?.location]
-                          .filter(Boolean)
-                          .join(" · ") || "—"}
+                  {app.job?.image ? (
+                    <img
+                      src={app.job.image}
+                      alt=""
+                      className="w-16 shrink-0 self-stretch rounded-lg object-cover"
+                    />
+                  ) : null}
+                  <div className="min-w-0 flex-1">
+                    {app.jobId ? (
+                      <Link
+                        to={`${JOB_BASE}/${app.jobId}`}
+                        className="block truncate text-[15px] font-semibold text-deep-blue hover:text-primary hover:underline"
+                      >
+                        {app.job?.title || "Job posting"}
+                      </Link>
+                    ) : (
+                      <p className="truncate text-[15px] font-semibold text-deep-blue">
+                        {app.job?.title || "Job posting"}
                       </p>
-                    </div>
-                    <div className="flex shrink-0 flex-col items-start gap-1 sm:items-end">
+                    )}
+                    <p className="mt-0.5 truncate text-[13px] text-[#64748B]">
+                      {[app.job?.company, app.job?.location]
+                        .filter(Boolean)
+                        .join(" · ") || "—"}
+                    </p>
+                    <div className="mt-1 flex flex-wrap items-center gap-2">
                       <span className="inline-flex rounded-full bg-secondary px-2.5 py-0.5 text-[11px] font-semibold text-primary">
                         {app.status}
                       </span>
@@ -315,6 +321,16 @@ const MyJobsView = () => {
                       </span>
                     </div>
                   </div>
+                  {app.jobId ? (
+                    <Link
+                      to={`${JOB_BASE}/${app.jobId}`}
+                      aria-label={`View ${app.job?.title || "job posting"}`}
+                      className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-primary/30 px-3 py-1.5 text-[12px] font-semibold text-primary transition-colors hover:bg-[#E8F3FB]"
+                    >
+                      <Eye className="h-3.5 w-3.5" />
+                      View
+                    </Link>
+                  ) : null}
                 </div>
               ))}
             </div>

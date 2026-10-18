@@ -29,6 +29,14 @@ describe("CardSkeleton", () => {
     expect(renderToStaticMarkup(<CardSkeleton variant="nope" />)).toBe("");
   });
 
+  it("renders candidate rows and the poster card", () => {
+    const rows = renderToStaticMarkup(<CardSkeleton variant="candidate" count={3} />);
+    expect(rows.match(/rounded-xl border/g)).toHaveLength(3);
+    expect(renderToStaticMarkup(<CardSkeleton variant="jobPoster" />)).toContain(
+      "h-11 w-11",
+    );
+  });
+
   it("shows owner action placeholders only for my job cards", () => {
     const mine = renderToStaticMarkup(<CardSkeleton variant="myJob" />);
     const browse = renderToStaticMarkup(<CardSkeleton variant="job" />);
