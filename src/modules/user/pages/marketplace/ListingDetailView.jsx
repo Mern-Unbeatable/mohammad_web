@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router';
+import { useCallback, useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   BadgeCheck,
@@ -22,9 +22,16 @@ import {
   toListingDetailModel,
 } from '@/features/user/marketplace';
 import { formatPrice } from '@/modules/user/data/marketplace';
+import { messagesApi } from '@/features/messages';
 import { useAuth } from '@/shared/auth/useAuth';
-import { CHAT_BASE_PATHS, listingChatPath } from '@/shared/constants/chat';
+import {
+  CHAT_BASE_PATHS,
+  CHAT_SECTIONS,
+  chatPath,
+  chatTargetFor,
+} from '@/shared/constants/chat';
 import NotFound from '@/shared/pages/NotFound';
+import ContactSellerModal from '@/modules/user/components/marketplace/ContactSellerModal';
 
 const SpecTile = ({ label, value }) => (
   <div className="rounded-xl border border-[#E4E7EC] bg-[#F9FAFB] px-4 py-3.5">
@@ -75,6 +82,7 @@ const ImageGallery = ({ images, title, activeImage, onSelect }) => (
 const ListingDetailView = () => {
   const { listingId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const {
     selectedListing,
@@ -83,6 +91,9 @@ const ListingDetailView = () => {
   } = useSelector((state) => state.userMarketplace);
 
   const [activeImage, setActiveImage] = useState(0);
+  /** Listing id the Contact seller dialog is open for. */
+  const [contactListingId, setContactListingId] = useState(null);
+  const closeContact = useCallback(() => setContactListingId(null), []);
 
   useEffect(() => {
     dispatch(clearMarketplaceError());
@@ -131,6 +142,20 @@ const ListingDetailView = () => {
     if (toggleSaveListing.rejected.match(result)) {
       toast.error(result.payload || 'Failed to update saved listing');
     }
+  };
+
+  /** Reuses (or creates) the 1:1 thread with the seller; throws so the modal can retry. */
+  const handleContactSend = async (message) => {
+    const conversation = await messagesApi.startDirect({
+      participantId: sellerId,
+      message,
+      listingId: listing.id,
+    });
+    const target = chatTargetFor(conversation) || {
+      section: CHAT_SECTIONS.DIRECT,
+      id: sellerId,
+    };
+    navigate(chatPath(CHAT_BASE_PATHS.USER, target));
   };
 
   return (
@@ -201,13 +226,15 @@ const ListingDetailView = () => {
                     Edit listing
                   </Link>
                 ) : sellerId ? (
-                  <Link
-                    to={listingChatPath(CHAT_BASE_PATHS.USER, sellerId, listing.id)}
+                  <button
+                    type="button"
+                    onClick={() => setContactListingId(listing.id)}
+                    aria-haspopup="dialog"
                     className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#066BB0]"
                   >
                     <MessageCircle className="h-4 w-4" />
                     Contact seller
-                  </Link>
+                  </button>
                 ) : null}
                 <button
                   type="button"
@@ -258,6 +285,13 @@ const ListingDetailView = () => {
           </aside>
         </div>
       </Container>
+
+      <ContactSellerModal
+        open={contactListingId === listing.id && Boolean(sellerId) && !isOwnListing}
+        listing={listing}
+        onClose={closeContact}
+        onSend={handleContactSend}
+      />
     </main>
   );
 };

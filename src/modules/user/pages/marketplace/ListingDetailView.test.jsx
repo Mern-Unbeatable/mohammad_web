@@ -69,6 +69,22 @@ describe('ListingDetailView seller profile link', () => {
     expect(html).toContain('Contact seller');
   });
 
+  it('opens a dialog from Contact seller instead of linking to the chat', () => {
+    const html = render({
+      selectedListing: listing({ id: OTHER, firstName: 'Ana', lastName: 'Lab' }),
+    });
+
+    expect(html).toMatch(/<button type="button" aria-haspopup="dialog"[^>]*>.*Contact seller<\/button>/);
+    expect(html).not.toContain('href="/chat');
+    expect(html).not.toContain('role="dialog"');
+  });
+
+  it('offers no Contact seller action on my own listing', () => {
+    const html = render({ selectedListing: listing({ id: ME, firstName: 'Élise' }) });
+
+    expect(html).not.toContain('Contact seller');
+  });
+
   it('hides the link when the listing has no seller information', () => {
     const html = render({ selectedListing: listing(undefined) });
 
