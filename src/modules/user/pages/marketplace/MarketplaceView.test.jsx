@@ -90,6 +90,16 @@ describe('MarketplaceView pagination', () => {
     expect(html).toContain('aria-label="Page 2" aria-current="page"');
   });
 
+  it('offers an Other category filter and restores it from the URL', () => {
+    const html = render('/marketplace?category=Other', {
+      listings: [{ ...listing('o1'), category: 'OTHER' }],
+      listingsMeta: { page: 1, pageSize: 8, total: 1, totalPages: 1 },
+    });
+
+    expect(html).toMatch(/aria-pressed="true"[^>]*>Other</);
+    expect(html).toContain('Listing o1');
+  });
+
   it('falls back to All for an unknown category', () => {
     const html = render('/marketplace?category=Rockets', loadedPage(1));
     expect(html).toMatch(/aria-pressed="true"[^>]*>All</);

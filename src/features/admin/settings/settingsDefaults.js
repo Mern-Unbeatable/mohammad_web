@@ -34,6 +34,7 @@ export const DEFAULT_MARKETPLACE_CATEGORIES = [
   "Safety",
   "Consumables",
   "Microscopy",
+  "Other",
 ];
 
 export const DEFAULT_GENERAL_CATEGORIES = ["News", "Document"];

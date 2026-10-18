@@ -10,6 +10,7 @@ export const MARKETPLACE_CATEGORY_OPTIONS = [
   "Safety",
   "Consumables",
   "Microscopy",
+  "Other",
 ];
 
 const CATEGORY_TO_API = {
@@ -22,6 +23,7 @@ const CATEGORY_TO_API = {
   Safety: "SAFETY",
   Consumables: "CONSUMABLES",
   Microscopy: "MICROSCOPY",
+  Other: "OTHER",
 };
 
 const CATEGORY_LABEL = {
@@ -33,6 +35,7 @@ const CATEGORY_LABEL = {
   SAFETY: "Safety",
   CONSUMABLES: "Consumables",
   MICROSCOPY: "Microscopy",
+  OTHER: "Other",
 };
 
 const CONDITION_LABEL = {

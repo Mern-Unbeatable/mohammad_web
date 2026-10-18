@@ -48,7 +48,7 @@ const render = ({ user = { id: ME, role: 'USER' }, selectedListing }) => {
 };
 
 const sellerProfileHref = (html) =>
-  html.match(/href="([^"]*)"[^>]*>View seller profile</)?.[1] ?? null;
+  html.match(/href="([^"]*)"[^>]*>(?:(?!<a\b).)*?View seller profile</)?.[1] ?? null;
 
 const descriptionParagraph = (html) =>
   html.match(/<p class="([^"]*)">([^<]*Line one[^<]*)<\/p>/) ?? [];
@@ -136,6 +136,77 @@ describe('ListingDetailView image slider', () => {
     const html = withImages(1);
     expect(html).not.toContain('Next image');
     expect(html).not.toContain('View image');
+  });
+});
+
+describe('ListingDetailView seller email and WhatsApp', () => {
+  const withSeller = (seller) => render({ selectedListing: listing(seller) });
+  const connectedSeller = {
+    id: OTHER,
+    firstName: 'Ana',
+    email: 'ana@lab.io',
+    phone: '+33 612345678',
+    contactVisible: true,
+  };
+
+  it('shows Email and WhatsApp when the seller shared both', () => {
+    const html = withSeller(connectedSeller);
+    expect(html).toContain('href="mailto:ana@lab.io?subject=');
+    expect(html).toContain('href="https://wa.me/33612345678?text=');
+    expect(html).toContain('target="_blank" rel="noopener noreferrer"');
+  });
+
+  const disabledButton = (html, label) =>
+    html.match(new RegExp(`<button type="button" disabled=""[^>]*aria-label="${label}: [^"]*"[^>]*>`))?.[0] ??
+    null;
+
+  it('greys out and disables WhatsApp when the seller has no phone number', () => {
+    const html = withSeller({ ...connectedSeller, phone: null });
+    expect(html).toContain('mailto:ana@lab.io');
+    expect(html).not.toContain('wa.me');
+    const whatsApp = disabledButton(html, 'WhatsApp');
+    expect(whatsApp).toContain('title="Seller hasn&#x27;t added a phone number"');
+    expect(whatsApp).toContain('cursor-not-allowed');
+    expect(whatsApp).toContain('text-[#98A2B3]');
+  });
+
+  it('greys out and disables Email when the seller has no email', () => {
+    const html = withSeller({ ...connectedSeller, email: null });
+    expect(html).toContain('wa.me/33612345678');
+    expect(disabledButton(html, 'Email')).toContain('title="Seller hasn&#x27;t added an email"');
+  });
+
+  it('shows both buttons disabled when the seller shared neither', () => {
+    const html = withSeller({ id: OTHER, firstName: 'Ana' });
+    expect(html).not.toContain('mailto:');
+    expect(html).not.toContain('wa.me');
+    expect(disabledButton(html, 'Email')).not.toBeNull();
+    expect(disabledButton(html, 'WhatsApp')).not.toBeNull();
+    expect(html).toContain('Contact seller');
+  });
+
+  it('shows neither button on my own listing', () => {
+    const html = withSeller({ ...connectedSeller, id: ME });
+    expect(html).not.toContain('mailto:');
+    expect(html).not.toContain('wa.me');
+    expect(html).not.toContain('WhatsApp');
+  });
+});
+
+describe('ListingDetailView save button', () => {
+  it('is a heart icon button in the price card corner, not a full-width button', () => {
+    const html = render({ selectedListing: listing({ id: OTHER, firstName: 'Ana' }) });
+    expect(html).toMatch(/<button[^>]*aria-label="Save listing"[^>]*aria-pressed="false"[^>]*class="absolute right-4 top-4/);
+    expect(html).not.toContain('>Save listing<');
+    expect(html).not.toContain('>Saved<');
+  });
+
+  it('shows the filled saved state', () => {
+    const html = render({
+      selectedListing: { ...listing({ id: OTHER, firstName: 'Ana' }), isSaved: true },
+    });
+    expect(html).toMatch(/aria-label="Remove from saved"[^>]*aria-pressed="true"/);
+    expect(html).toMatch(/lucide-heart[^"]*fill-current/);
   });
 });
 
