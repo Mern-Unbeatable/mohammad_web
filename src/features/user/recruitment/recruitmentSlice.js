@@ -17,6 +17,8 @@ const initialState = {
   selectedJob: null,
   applications: [],
   applicationsMeta: { page: 1, pageSize: 10, total: 0, totalPages: 1 },
+  /** Status filter of the loaded applications page (`applied` | `cancelled` | null). */
+  applicationsStatus: null,
   jobsLoading: true,
   jobsRequestId: null,
   jobsError: null,
@@ -178,7 +180,10 @@ const recruitmentSlice = createSlice({
         state.applying = false;
         const application = action.payload?.application;
         if (application) {
-          state.applications = [application, ...state.applications];
+          state.applications = [
+            application,
+            ...state.applications.filter((app) => app.id !== application.id),
+          ];
         }
         if (state.selectedJob?.id === action.payload?.jobId) {
           state.selectedJob.myApplication = {
@@ -200,6 +205,7 @@ const recruitmentSlice = createSlice({
         state.applicationsLoading = false;
         state.applications = action.payload.data;
         state.applicationsMeta = action.payload.meta;
+        state.applicationsStatus = action.meta.arg?.status ?? null;
       })
       .addCase(fetchMyApplications.rejected, (state, action) => {
         state.applicationsLoading = false;
@@ -207,9 +213,20 @@ const recruitmentSlice = createSlice({
       })
       .addCase(withdrawApplication.fulfilled, (state, action) => {
         const { jobId } = action.payload;
-        state.applications = state.applications.filter(
-          (app) => (app.job?.id || app.jobId) !== jobId,
-        );
+        const isTarget = (app) => (app.job?.id || app.jobId) === jobId;
+        if (state.applicationsStatus === "applied") {
+          const before = state.applications.length;
+          state.applications = state.applications.filter((app) => !isTarget(app));
+          const removed = before - state.applications.length;
+          state.applicationsMeta.total = Math.max(
+            0,
+            (state.applicationsMeta.total || 0) - removed,
+          );
+        } else {
+          state.applications.forEach((app) => {
+            if (isTarget(app)) app.status = "CANCELLED";
+          });
+        }
         if (state.selectedJob?.id === jobId) {
           state.selectedJob.myApplication = null;
         }

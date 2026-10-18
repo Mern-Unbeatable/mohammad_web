@@ -18,6 +18,12 @@ export const MY_JOB_STATUS_FILTERS = [
   { id: JOB_STATUS.CLOSED, label: "Closed" },
 ];
 
+/** Tabs on "My Applications"; ids are the server `status` filter. */
+export const MY_APPLICATION_FILTERS = [
+  { id: "applied", label: "Applied" },
+  { id: "cancelled", label: "Cancelled" },
+];
+
 export const isJobOpen = (job) => (job?.status ?? JOB_STATUS.OPEN) === JOB_STATUS.OPEN;
 
 /** Detail-page notice for a job that no longer accepts applications. */

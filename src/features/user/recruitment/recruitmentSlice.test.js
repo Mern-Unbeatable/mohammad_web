@@ -82,8 +82,30 @@ describe("applying to the open job", () => {
       ),
     );
     state = reducer(state, withdrawApplication.fulfilled({ jobId: "j1" }, "r3", "j1"));
-    expect(state.applications.map((app) => app.id)).toEqual(["a2"]);
+    expect(state.applications.map((app) => [app.id, app.status])).toEqual([
+      ["a1", "CANCELLED"],
+      ["a2", undefined],
+    ]);
     expect(state.selectedJob.myApplication).toBeNull();
+  });
+
+  it("removes a cancelled application from the Applied tab", () => {
+    let state = reducer(
+      undefined,
+      fetchMyApplications.fulfilled(
+        {
+          data: [
+            { id: "a1", job: { id: "j1" } },
+            { id: "a2", job: { id: "j2" } },
+          ],
+          meta: {},
+        },
+        "r",
+        { status: "applied" },
+      ),
+    );
+    state = reducer(state, withdrawApplication.fulfilled({ jobId: "j1" }, "r2", "j1"));
+    expect(state.applications.map((app) => app.id)).toEqual(["a2"]);
   });
 });
 

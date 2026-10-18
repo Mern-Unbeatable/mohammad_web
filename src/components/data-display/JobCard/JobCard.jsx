@@ -109,8 +109,8 @@ const JobCard = ({
                 disabled={togglingStatus}
                 className={`inline-flex items-center justify-center gap-1.5 rounded-md border px-3 py-2 text-[12px] font-semibold disabled:opacity-60 ${
                   status === JOB_STATUS.OPEN
-                    ? 'border-[#079455] bg-[#079455] text-white hover:bg-[#067647]'
-                    : 'border-[#D92D20] bg-[#D92D20] text-white hover:bg-[#B42318]'
+                    ? 'border-[#D92D20] bg-[#D92D20] text-white hover:bg-[#B42318]'
+                    : 'border-[#079455] bg-[#079455] text-white hover:bg-[#067647]'
                 }`}
               >
                 {togglingStatus ? (
@@ -120,7 +120,7 @@ const JobCard = ({
                 ) : (
                   <LockOpen className="h-3.5 w-3.5" />
                 )}
-                {status === JOB_STATUS.OPEN ? 'Close' : 'Reopen'}
+                {status === JOB_STATUS.OPEN ? 'Close job' : 'Reopen job'}
               </button>
             ) : null}
             <button
