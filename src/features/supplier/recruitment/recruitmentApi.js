@@ -117,6 +117,17 @@ export async function applyToJob(jobId, payload = {}) {
   return unwrapApiData(response) || response;
 }
 
+export async function getJobApplications(jobId) {
+  const response = await crudService.get(
+    API_ENDPOINTS.SUPPLIER.RECRUITMENT.APPLICATIONS(jobId),
+  );
+  const data = unwrapApiData(response);
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data?.data)) return data.data;
+  if (Array.isArray(response?.data)) return response.data;
+  return [];
+}
+
 /** Field name must be `file` (multer upload.single("file")). Returns the public URL. */
 export async function uploadJobImage(file) {
   const formData = new FormData();

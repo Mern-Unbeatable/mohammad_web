@@ -208,7 +208,7 @@ const JobDetailView = () => {
           ) : null}
         </div>
 
-        <aside className="mt-8 flex flex-col gap-4 lg:sticky lg:top-[86px] lg:mt-10 lg:max-h-[calc(100dvh-110px)]">
+        <aside className="mt-8 flex flex-col gap-4 lg:mt-10">
           <div className="shrink-0">
             <JobPosterCard owner={selectedJob.owner} isSelf={isOwner} />
           </div>

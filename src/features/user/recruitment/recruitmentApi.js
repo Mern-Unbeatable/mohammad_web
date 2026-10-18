@@ -103,6 +103,13 @@ export async function applyToJob(jobId, payload = {}) {
   return unwrapApiData(response) || response;
 }
 
+export async function withdrawApplication(jobId) {
+  const response = await crudService.del(
+    API_ENDPOINTS.USER.RECRUITMENT.APPLY(jobId),
+  );
+  return unwrapApiData(response) ?? response;
+}
+
 export async function getMyApplications(params = {}) {
   const query = {
     page: 1,

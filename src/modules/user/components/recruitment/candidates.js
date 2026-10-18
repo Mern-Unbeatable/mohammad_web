@@ -28,6 +28,19 @@ export const toCandidateModel = (
   };
 };
 
+const STATUS_PILL_COLORS = {
+  APPLIED: "bg-secondary text-primary",
+  REVIEWED: "bg-[#FFFAEB] text-[#B54708]",
+  ACCEPTED: "bg-[#ECFDF3] text-[#067647]",
+  REJECTED: "bg-[#FEF3F2] text-[#D92D20]",
+};
+
+/** Pill classes for a job application status. */
+export const applicationStatusClass = (status) =>
+  `inline-flex shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
+    STATUS_PILL_COLORS[status] || STATUS_PILL_COLORS.APPLIED
+  }`;
+
 const appliedTime = (app) =>
   new Date(app.appliedAt || app.createdAt).getTime() || 0;
 

@@ -8,6 +8,7 @@ import {
   applyToJob,
   fetchMyApplications,
   fetchNewApplicationCounts,
+  withdrawApplication,
 } from "./recruitmentThunks";
 
 const initialState = {
@@ -203,6 +204,15 @@ const recruitmentSlice = createSlice({
       .addCase(fetchMyApplications.rejected, (state, action) => {
         state.applicationsLoading = false;
         state.error = action.payload;
+      })
+      .addCase(withdrawApplication.fulfilled, (state, action) => {
+        const { jobId } = action.payload;
+        state.applications = state.applications.filter(
+          (app) => (app.job?.id || app.jobId) !== jobId,
+        );
+        if (state.selectedJob?.id === jobId) {
+          state.selectedJob.myApplication = null;
+        }
       })
       .addCase(fetchNewApplicationCounts.fulfilled, (state, action) => {
         state.newApplications = action.payload;

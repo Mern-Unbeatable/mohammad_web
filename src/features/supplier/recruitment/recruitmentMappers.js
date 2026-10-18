@@ -1,6 +1,10 @@
 /** Map API jobs onto JobCard / JobDetailCard / create form props. */
 
-import { workplaceLabel, workplaceToApi } from "@/shared/constants/jobWorkplace";
+import {
+  DEFAULT_WORKPLACE_TYPE,
+  workplaceLabel,
+  workplaceToApi,
+} from "@/shared/constants/jobWorkplace";
 
 const LEVEL_LABEL = {
   ENTRY_LEVEL: "Entry-level",
@@ -87,6 +91,26 @@ export function toJobCardModel(job) {
 
 export function toJobDetailModel(job) {
   return toJobCardModel(job);
+}
+
+/** Map API job onto SupplierPostJobView form fields. */
+export function jobToFormValues(job) {
+  return {
+    title: job?.title || "",
+    company: job?.company || "",
+    applyLink: job?.applyLink || "",
+    location: job?.location || "",
+    salary: job?.salary || "",
+    employmentType:
+      EMPLOYMENT_LABEL[job?.employmentType] || EMPLOYMENT_TYPE_OPTIONS[0],
+    workplaceType: workplaceLabel(job?.workplaceType) || DEFAULT_WORKPLACE_TYPE,
+    level: LEVEL_LABEL[job?.level] || "Mid-level",
+    description: job?.about || job?.description || "",
+    requirements: Array.isArray(job?.requirements)
+      ? job.requirements.join("\n")
+      : String(job?.requirements || ""),
+    imageUrl: job?.imageUrl || "",
+  };
 }
 
 /**

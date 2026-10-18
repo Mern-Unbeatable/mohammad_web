@@ -52,7 +52,7 @@ const JobPosterCard = ({ owner, isSelf = false, profilePath }) => {
 
       <Link
         to={profileHref}
-        className="mt-4 flex w-full items-center justify-center rounded-lg border border-primary/30 px-4 py-2 text-[13px] font-semibold text-primary transition-colors hover:bg-[#E8F3FB]"
+        className="mt-4 flex w-full items-center justify-center rounded-lg border border-primary/30 bg-[#E8F3FB] px-4 py-2 text-[13px] font-semibold text-primary transition-colors hover:bg-[#D3E8F7]"
       >
         View profile
       </Link>

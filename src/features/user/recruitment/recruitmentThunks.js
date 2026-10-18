@@ -86,6 +86,20 @@ export const applyToJob = createAsyncThunk(
   },
 );
 
+export const withdrawApplication = createAsyncThunk(
+  "userRecruitment/withdrawApplication",
+  async (jobId, { rejectWithValue }) => {
+    try {
+      await recruitmentApi.withdrawApplication(jobId);
+      return { jobId };
+    } catch (err) {
+      return rejectWithValue(
+        recruitmentApi.getApiErrorMessage(err, "Failed to cancel application"),
+      );
+    }
+  },
+);
+
 export const fetchNewApplicationCounts = createAsyncThunk(
   "userRecruitment/fetchNewApplicationCounts",
   async (_arg, { rejectWithValue }) => {

@@ -84,6 +84,11 @@ export const supplierRoutes = {
           handle: { title: 'Post job' },
         },
         {
+          path: 'recruitment/:jobId/edit',
+          element: <SupplierPostJobView />,
+          handle: { title: 'Edit job' },
+        },
+        {
           path: 'recruitment/:jobId',
           element: <SupplierJobDetailView />,
           handle: { title: 'Job detail' },

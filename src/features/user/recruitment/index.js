@@ -26,6 +26,7 @@ export {
   applyToJob,
   fetchMyApplications,
   fetchNewApplicationCounts,
+  withdrawApplication,
 } from "./recruitmentThunks";
 export {
   RECRUITMENT_LEVEL_OPTIONS,

@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { Loader2, Lock, LockOpen, Pencil, Trash2 } from 'lucide-react';
+import { Eye, Loader2, Lock, LockOpen, Pencil, Trash2 } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import CountBadge from '@/components/ui/CountBadge';
@@ -96,8 +96,9 @@ const JobCard = ({
                   ? `View details, ${newApplications} new ${newApplications === 1 ? 'application' : 'applications'}`
                   : undefined
               }
-              className="relative inline-flex items-center justify-center rounded-md bg-green-primary px-3.5 py-2 text-[12px] font-semibold text-white hover:opacity-90"
+              className="relative inline-flex items-center justify-center gap-1.5 rounded-md bg-green-primary px-3.5 py-2 text-[12px] font-semibold text-white hover:opacity-90"
             >
+              <Eye className="h-3.5 w-3.5" />
               View Details
               <CountBadge count={newApplications} className="absolute -right-2 -top-2" />
             </Link>
@@ -106,7 +107,11 @@ const JobCard = ({
                 type="button"
                 onClick={() => onToggleStatus(job)}
                 disabled={togglingStatus}
-                className="inline-flex items-center justify-center gap-1.5 rounded-md border border-[#E4E7EC] bg-white px-3 py-2 text-[12px] font-semibold text-[#475467] hover:bg-[#F9FAFB] disabled:opacity-60"
+                className={`inline-flex items-center justify-center gap-1.5 rounded-md border px-3 py-2 text-[12px] font-semibold disabled:opacity-60 ${
+                  status === JOB_STATUS.OPEN
+                    ? 'border-[#079455] bg-[#079455] text-white hover:bg-[#067647]'
+                    : 'border-[#D92D20] bg-[#D92D20] text-white hover:bg-[#B42318]'
+                }`}
               >
                 {togglingStatus ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />

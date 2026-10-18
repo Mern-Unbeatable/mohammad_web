@@ -8,7 +8,9 @@ import {
   applyToJob,
   fetchJobDetails,
   fetchJobs,
+  fetchMyApplications,
   fetchNewApplicationCounts,
+  withdrawApplication,
 } from "./recruitmentThunks";
 
 describe("new application badge state", () => {
@@ -54,6 +56,34 @@ describe("applying to the open job", () => {
       status: "APPLIED",
       appliedAt: "2026-10-18",
     });
+  });
+
+  it("drops a cancelled application and re-enables applying", () => {
+    let state = reducer(undefined, { type: "@@init" });
+    state = reducer(
+      state,
+      fetchJobDetails.fulfilled(
+        { id: "j1", myApplication: { id: "a1", status: "APPLIED" } },
+        "r",
+        "j1",
+      ),
+    );
+    state = reducer(
+      state,
+      fetchMyApplications.fulfilled(
+        {
+          data: [
+            { id: "a1", job: { id: "j1" } },
+            { id: "a2", job: { id: "j2" } },
+          ],
+          meta: {},
+        },
+        "r2",
+      ),
+    );
+    state = reducer(state, withdrawApplication.fulfilled({ jobId: "j1" }, "r3", "j1"));
+    expect(state.applications.map((app) => app.id)).toEqual(["a2"]);
+    expect(state.selectedJob.myApplication).toBeNull();
   });
 });
 

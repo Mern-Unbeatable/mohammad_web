@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router";
 import { Mail, MapPin, Phone, X } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
+import { applicationStatusClass } from "./candidates";
 
 const InfoRow = ({ icon, label, children }) => (
   <div className="flex items-start gap-3">
@@ -84,7 +85,7 @@ const ApplicantDetailsModal = ({ application, onClose }) => {
                 </p>
               ) : null}
               <div className="mt-2 flex flex-wrap items-center gap-2">
-                <span className="inline-flex rounded-full bg-secondary px-2.5 py-0.5 text-[11px] font-semibold text-primary">
+                <span className={applicationStatusClass(status)}>
                   {status}
                 </span>
                 <span className="text-[12px] text-[#98A2B3]">{appliedLabel}</span>

@@ -29,6 +29,7 @@ export {
   toJobCardModel,
   toJobDetailModel,
   formToCreatePayload,
+  jobToFormValues,
   formatPostedAgo,
 } from "./recruitmentMappers";
 export * as recruitmentApi from "./recruitmentApi";

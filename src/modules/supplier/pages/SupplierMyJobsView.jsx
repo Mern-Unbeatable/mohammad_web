@@ -213,7 +213,7 @@ const SupplierMyJobsView = () => {
                 highlighted={index === 0 && page === 1}
                 detailHref={`${JOB_BASE}/${job.id}`}
                 onDelete={deleting ? undefined : handleDeleteRequest}
-                onEdit={() => navigate(`${JOB_BASE}/${job.id}`)}
+                onEdit={() => navigate(`${JOB_BASE}/${job.id}/edit`)}
                 onToggleStatus={handleToggleStatus}
                 togglingStatus={togglingId === job.id}
               />
@@ -221,7 +221,9 @@ const SupplierMyJobsView = () => {
           ) : (
             <div className="rounded-xl border border-[#E4E7EC] bg-white px-6 py-14 text-center">
               <p className="text-[15px] font-semibold text-deep-blue">
-                {unfiltered ? "No job posts yet" : "No job posts match these filters"}
+                {unfiltered
+                  ? "No job posts yet"
+                  : "No job posts match these filters"}
               </p>
               <p className="mt-2 text-[14px] text-[#64748B]">
                 {unfiltered

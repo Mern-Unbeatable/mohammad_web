@@ -86,7 +86,7 @@ const AdminJobDetailView = () => {
           showApplyButton={Boolean(job.applyLink)}
         />
 
-        <aside className="flex flex-col gap-4 lg:sticky lg:top-6 lg:max-h-[calc(100dvh-120px)]">
+        <aside className="flex flex-col gap-4">
           <div className="shrink-0">
             <JobPosterCard
               owner={selectedJob?.owner}

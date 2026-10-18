@@ -1,19 +1,24 @@
-import { useEffect, useState } from 'react';
-import { NavLink, Link, useLocation, useNavigate } from 'react-router';
-import { Loader2, LogOut, Menu, X } from 'lucide-react';
-import logo from '@/assets/logo.png';
-import Avatar from '@/components/ui/Avatar';
-import CountBadge from '@/components/ui/CountBadge';
-import { useUnreadMessages } from '@/features/messages';
-import { useAuth } from '@/shared/auth/useAuth';
-import { toAccountIdentity } from '@/shared/auth/accountIdentity';
-import { roleLabel as formatRoleLabel } from '@/shared/constants/roles';
-import ScrollToTop from '@/shared/routing/ScrollToTop';
+import { useEffect, useState } from "react";
+import { NavLink, Link, useLocation, useNavigate } from "react-router";
+import { Loader2, LogOut, Menu, Settings, X } from "lucide-react";
+import logo from "@/assets/logo.png";
+import Avatar from "@/components/ui/Avatar";
+import CountBadge from "@/components/ui/CountBadge";
+import { useUnreadMessages } from "@/features/messages";
+import { useAuth } from "@/shared/auth/useAuth";
+import { toAccountIdentity } from "@/shared/auth/accountIdentity";
+import { roleLabel as formatRoleLabel } from "@/shared/constants/roles";
+import ScrollToTop from "@/shared/routing/ScrollToTop";
 
 const SIDEBAR_WIDTH = 260;
 
 /** `badgeCounts` adds role-specific nav badges keyed by `navItems[].badge`. */
-const PanelLayout = ({ navItems, badgeCounts: extraBadgeCounts, children }) => {
+const PanelLayout = ({
+  navItems,
+  badgeCounts: extraBadgeCounts,
+  profilePath,
+  children,
+}) => {
   const { user, role, logout, loggingOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,14 +36,14 @@ const PanelLayout = ({ navItems, badgeCounts: extraBadgeCounts, children }) => {
 
   useEffect(() => {
     if (!sidebarOpen) return undefined;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [sidebarOpen]);
 
   const handleLogout = async () => {
-    if (await logout()) navigate('/login', { replace: true });
+    if (await logout()) navigate("/login", { replace: true });
   };
 
   const closeSidebar = () => setSidebarOpen(false);
@@ -46,9 +51,15 @@ const PanelLayout = ({ navItems, badgeCounts: extraBadgeCounts, children }) => {
   const sidebarContent = (
     <>
       <div className="flex h-16 shrink-0 items-center justify-between border-b border-[#E4E7EC] px-5">
-        <Link to="/" onClick={closeSidebar} className="flex items-center gap-2.5">
+        <Link
+          to="/"
+          onClick={closeSidebar}
+          className="flex items-center gap-2.5"
+        >
           <img src={logo} alt="Lab Unity" className="h-8 w-auto" />
-          <span className="text-[17px] font-bold text-deep-blue">Lab Unity</span>
+          <span className="text-[17px] font-bold text-deep-blue">
+            Lab Unity
+          </span>
         </Link>
         <button
           type="button"
@@ -74,12 +85,15 @@ const PanelLayout = ({ navItems, badgeCounts: extraBadgeCounts, children }) => {
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                     isActive
-                      ? 'border-l-[3px] border-primary bg-secondary pl-[calc(0.75rem-3px)] text-primary'
-                      : 'border-l-[3px] border-transparent text-[#475467] hover:bg-[#F9FAFB] hover:text-deep-blue'
+                      ? "border-l-[3px] border-primary bg-secondary pl-[calc(0.75rem-3px)] text-primary"
+                      : "border-l-[3px] border-transparent text-[#475467] hover:bg-[#F9FAFB] hover:text-deep-blue"
                   }`
                 }
               >
-                <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={1.8} />
+                <Icon
+                  className="h-[18px] w-[18px] shrink-0"
+                  strokeWidth={1.8}
+                />
                 {label}
                 <CountBadge
                   count={badgeCounts[badge]}
@@ -100,24 +114,37 @@ const PanelLayout = ({ navItems, badgeCounts: extraBadgeCounts, children }) => {
             initials={identity.initials}
             size="sm"
           />
-          <div className="min-w-0">
-            <p className="truncate text-[13px] font-semibold text-deep-blue">{identity.name}</p>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[13px] font-semibold text-deep-blue">
+              {identity.name}
+            </p>
             <p className="text-[11px] text-[#64748B]">{roleLabel}</p>
           </div>
+          {profilePath ? (
+            <Link
+              to={profilePath}
+              onClick={closeSidebar}
+              aria-label="Profile settings"
+              title="Profile settings"
+              className="shrink-0 rounded-md p-1.5 text-[#64748B] transition-colors hover:bg-[#F9FAFB] hover:text-primary"
+            >
+              <Settings className="h-[18px] w-[18px]" />
+            </Link>
+          ) : null}
         </div>
         <button
           type="button"
           onClick={handleLogout}
           disabled={loggingOut}
           aria-busy={loggingOut}
-          className="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-[13px] font-semibold text-pink-light transition-colors hover:bg-pink-secondary disabled:cursor-wait disabled:opacity-70"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-100 px-3 py-2 text-[13px] font-semibold text-red-900 transition-colors hover:bg-red-200 disabled:cursor-wait disabled:opacity-70"
         >
           {loggingOut ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
             <LogOut className="h-4 w-4" />
           )}
-          {loggingOut ? 'Logging out…' : 'Log Out'}
+          {loggingOut ? "Logging out…" : "Logout"}
         </button>
       </div>
     </>
@@ -139,7 +166,7 @@ const PanelLayout = ({ navItems, badgeCounts: extraBadgeCounts, children }) => {
       {/* Sidebar — drawer on mobile, fixed on desktop */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 flex flex-col border-r border-[#E4E7EC] bg-white transition-transform duration-300 ease-out lg:translate-x-0 ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
         style={{ width: SIDEBAR_WIDTH }}
       >
@@ -147,7 +174,11 @@ const PanelLayout = ({ navItems, badgeCounts: extraBadgeCounts, children }) => {
       </aside>
 
       {/* Desktop sidebar spacer — keeps layout without duplicate aside */}
-      <div className="hidden shrink-0 lg:block" style={{ width: SIDEBAR_WIDTH }} aria-hidden />
+      <div
+        className="hidden shrink-0 lg:block"
+        style={{ width: SIDEBAR_WIDTH }}
+        aria-hidden
+      />
 
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Mobile top bar */}
@@ -156,7 +187,7 @@ const PanelLayout = ({ navItems, badgeCounts: extraBadgeCounts, children }) => {
             type="button"
             onClick={() => setSidebarOpen(true)}
             className="relative rounded-lg p-2 text-[#64748B] hover:bg-[#F9FAFB]"
-            aria-label={hasBadges ? 'Open menu, unread items' : 'Open menu'}
+            aria-label={hasBadges ? "Open menu, unread items" : "Open menu"}
             aria-expanded={sidebarOpen}
           >
             <Menu className="h-5 w-5" />
@@ -166,7 +197,9 @@ const PanelLayout = ({ navItems, badgeCounts: extraBadgeCounts, children }) => {
           </button>
           <Link to="/" className="flex items-center gap-2">
             <img src={logo} alt="Lab Unity" className="h-7 w-auto" />
-            <span className="text-[15px] font-bold text-deep-blue">Lab Unity</span>
+            <span className="text-[15px] font-bold text-deep-blue">
+              Lab Unity
+            </span>
           </Link>
         </header>
 

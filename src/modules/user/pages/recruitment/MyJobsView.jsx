@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
-import { Eye } from "lucide-react";
+import { Eye, X } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Pagination from "@/components/common/Pagination/Pagination";
 import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
@@ -11,6 +11,7 @@ import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
 import JobCard from "@/components/data-display/JobCard/JobCard";
 import RecruitmentToolbar from "@/modules/user/components/recruitment/RecruitmentToolbar";
 import JobsSectionHeader from "@/modules/user/components/recruitment/JobsSectionHeader";
+import { applicationStatusClass } from "@/modules/user/components/recruitment/candidates";
 import {
   buildMyJobsQuery,
   jobCount,
@@ -22,6 +23,7 @@ import {
   updateJob,
   removeJob,
   fetchMyApplications,
+  withdrawApplication,
   clearRecruitmentError,
   invalidateJobsList,
   jobLeftList,
@@ -35,6 +37,7 @@ import { MY_JOB_STATUS_FILTERS } from "@/shared/constants/jobStatus";
 import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
 
 const JOB_BASE = "/recruitment";
+const CANCELLABLE_STATUSES = new Set(["APPLIED", "REVIEWED"]);
 
 const MyJobsView = () => {
   const dispatch = useDispatch();
@@ -58,6 +61,8 @@ const MyJobsView = () => {
   const [page, setPage] = useState(1);
   const [pendingDelete, setPendingDelete] = useState(null);
   const [togglingId, setTogglingId] = useState(null);
+  const [pendingWithdraw, setPendingWithdraw] = useState(null);
+  const [withdrawing, setWithdrawing] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
@@ -197,6 +202,19 @@ const MyJobsView = () => {
     toast.error(result.payload || "Failed to delete job");
   };
 
+  const handleConfirmWithdraw = async () => {
+    if (!pendingWithdraw?.jobId || withdrawing) return;
+    setWithdrawing(true);
+    const result = await dispatch(withdrawApplication(pendingWithdraw.jobId));
+    setWithdrawing(false);
+    if (withdrawApplication.fulfilled.match(result)) {
+      toast.success("Application cancelled");
+      setPendingWithdraw(null);
+      return;
+    }
+    toast.error(result.payload || "Failed to cancel application");
+  };
+
   return (
     <main className="pt-6 pb-8 sm:pt-8">
       <Container>
@@ -319,7 +337,7 @@ const MyJobsView = () => {
                         .join(" · ") || "—"}
                     </p>
                     <div className="mt-1 flex flex-wrap items-center gap-2">
-                      <span className="inline-flex rounded-full bg-secondary px-2.5 py-0.5 text-[11px] font-semibold text-primary">
+                      <span className={applicationStatusClass(app.status)}>
                         {app.status}
                       </span>
                       <span className="text-[11px] text-[#98A2B3]">
@@ -336,6 +354,18 @@ const MyJobsView = () => {
                       <Eye className="h-3.5 w-3.5" />
                       View
                     </Link>
+                  ) : null}
+                  {app.jobId && CANCELLABLE_STATUSES.has(app.status) ? (
+                    <button
+                      type="button"
+                      onClick={() => setPendingWithdraw(app)}
+                      disabled={withdrawing}
+                      aria-label={`Cancel application for ${app.job?.title || "job posting"}`}
+                      className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-[#FDA29B] px-3 py-1.5 text-[12px] font-semibold text-[#D92D20] transition-colors hover:bg-[#FEF3F2] disabled:opacity-60"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                      Cancel
+                    </button>
                   ) : null}
                 </div>
               ))}
@@ -378,6 +408,30 @@ const MyJobsView = () => {
         confirming={deleting}
         onClose={handleCloseDeleteModal}
         onConfirm={handleConfirmDelete}
+      />
+
+      <ConfirmModal
+        open={Boolean(pendingWithdraw)}
+        title="Cancel application?"
+        description={
+          pendingWithdraw ? (
+            <p className="text-[14px] leading-relaxed text-[#64748B]">
+              Your application for{" "}
+              <span className="font-semibold text-deep-blue">
+                {pendingWithdraw.job?.title || "this job"}
+              </span>{" "}
+              will be withdrawn and the employer will no longer see it. You can
+              apply again while the job is open.
+            </p>
+          ) : null
+        }
+        confirmLabel="Cancel application"
+        cancelLabel="Keep"
+        confirming={withdrawing}
+        onClose={() => {
+          if (!withdrawing) setPendingWithdraw(null);
+        }}
+        onConfirm={handleConfirmWithdraw}
       />
     </main>
   );
