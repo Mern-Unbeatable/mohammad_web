@@ -13,6 +13,9 @@ export {
   clearSelectedJob,
   invalidateJobsList,
   jobLeftList,
+  jobApplicationsSeen,
+  selectNewApplicationTotal,
+  selectNewApplicationsByJob,
 } from "./recruitmentSlice";
 export {
   fetchJobs,
@@ -22,6 +25,7 @@ export {
   removeJob,
   applyToJob,
   fetchMyApplications,
+  fetchNewApplicationCounts,
 } from "./recruitmentThunks";
 export {
   RECRUITMENT_LEVEL_OPTIONS,

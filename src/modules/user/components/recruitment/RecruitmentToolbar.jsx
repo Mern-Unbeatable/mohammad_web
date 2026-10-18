@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { Briefcase, List, Plus, Search } from "lucide-react";
+import CountBadge from "@/components/ui/CountBadge";
 import { levels } from "@/modules/user/data/recruitment";
 import { SEARCH_MAX_LENGTH } from "@/shared/utils/urlFilters";
 
@@ -15,6 +16,7 @@ const RecruitmentToolbar = ({
   basePath = "/recruitment",
   showTitle = true,
   showActions = true,
+  newApplications = 0,
 }) => (
   <div className="space-y-4">
     {(showTitle || showActions) && (
@@ -48,7 +50,12 @@ const RecruitmentToolbar = ({
             </Link>
             <Link
               to={`${basePath}/my-jobs`}
-              className={`${actionBtn} ${
+              aria-label={
+                newApplications
+                  ? `My Job Posts, ${newApplications} new ${newApplications === 1 ? "application" : "applications"}`
+                  : undefined
+              }
+              className={`relative ${actionBtn} ${
                 activeView === "mine"
                   ? "bg-green-secondary text-green-primary"
                   : "border border-green-primary/30 text-green-primary hover:bg-green-secondary"
@@ -56,6 +63,10 @@ const RecruitmentToolbar = ({
             >
               <List className="h-3.5 w-3.5" />
               My Job Posts
+              <CountBadge
+                count={newApplications}
+                className="absolute -right-2 -top-2"
+              />
             </Link>
             <Link
               to={`${basePath}/create`}

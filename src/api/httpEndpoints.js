@@ -262,6 +262,7 @@ export const API_ENDPOINTS = {
       APPLY: (jobId) => `/recruitment/${jobId}/apply`,
       APPLICATIONS: (jobId) => `/recruitment/${jobId}/applications`,
       MY_APPLICATIONS: "/recruitment/applications/me",
+      NEW_APPLICATION_COUNTS: "/recruitment/applications/new-count",
     },
 
     GENERAL: {

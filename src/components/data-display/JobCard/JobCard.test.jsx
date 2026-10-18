@@ -49,6 +49,19 @@ describe("JobCard status handling", () => {
   });
 });
 
+describe("JobCard new applications badge", () => {
+  it("shows the count on my job's View Details button", () => {
+    const html = render({ job: job("OPEN"), variant: "mine", newApplications: 3 });
+    expect(html).toContain("View details, 3 new applications");
+    expect(html).toContain(">3<");
+  });
+
+  it("shows nothing when there are no new applications", () => {
+    const html = render({ job: job("OPEN"), variant: "mine" });
+    expect(html).not.toContain('role="status"');
+  });
+});
+
 describe("JobCard image", () => {
   const withImage = {
     ...job("OPEN"),

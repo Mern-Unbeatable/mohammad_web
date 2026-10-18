@@ -1,6 +1,35 @@
 import { describe, expect, it } from "vitest";
-import reducer, { invalidateJobsList } from "./recruitmentSlice";
-import { applyToJob, fetchJobDetails, fetchJobs } from "./recruitmentThunks";
+import reducer, {
+  invalidateJobsList,
+  jobApplicationsSeen,
+  selectNewApplicationTotal,
+} from "./recruitmentSlice";
+import {
+  applyToJob,
+  fetchJobDetails,
+  fetchJobs,
+  fetchNewApplicationCounts,
+} from "./recruitmentThunks";
+
+describe("new application badge state", () => {
+  const loaded = () =>
+    reducer(
+      undefined,
+      fetchNewApplicationCounts.fulfilled({ total: 3, byJob: { a: 2, b: 1 } }, "r"),
+    );
+
+  it("stores the server counts", () => {
+    const state = loaded();
+    expect(selectNewApplicationTotal({ userRecruitment: state })).toBe(3);
+    expect(state.newApplications.byJob).toEqual({ a: 2, b: 1 });
+  });
+
+  it("clears one job's count when its applicants are opened", () => {
+    const state = reducer(loaded(), jobApplicationsSeen("a"));
+    expect(state.newApplications).toEqual({ total: 1, byJob: { b: 1 } });
+    expect(reducer(state, jobApplicationsSeen("missing")).newApplications.total).toBe(1);
+  });
+});
 
 describe("applying to the open job", () => {
   it("marks the selected job as applied so the button disables", () => {

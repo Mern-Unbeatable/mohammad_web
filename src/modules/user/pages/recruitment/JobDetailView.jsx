@@ -18,6 +18,8 @@ import {
   toJobDetailModel,
   recruitmentApi,
   formatPostedAgo,
+  jobApplicationsSeen,
+  fetchNewApplicationCounts,
 } from "@/features/user/recruitment";
 import NotFound from "@/shared/pages/NotFound";
 import { isJobOpen, jobClosedNotice } from "@/shared/constants/jobStatus";
@@ -97,6 +99,8 @@ const JobDetailView = () => {
             rows: Array.isArray(rows) ? rows : [],
           });
         }
+        dispatch(jobApplicationsSeen(jobId));
+        dispatch(fetchNewApplicationCounts());
       })
       .catch((err) => {
         if (!cancelled) {
@@ -113,7 +117,7 @@ const JobDetailView = () => {
     return () => {
       cancelled = true;
     };
-  }, [jobId, isOwner]);
+  }, [dispatch, jobId, isOwner]);
 
   if (notFoundId === jobId) return <NotFound />;
 
@@ -276,8 +280,13 @@ const JobDetailView = () => {
                           className="self-start"
                         />
                         <div className="min-w-0 flex-1">
-                          <p className="truncate text-[15px] font-semibold text-deep-blue">
-                            {candidate.name}
+                          <p className="flex items-center gap-1.5 text-[15px] font-semibold text-deep-blue">
+                            <span className="truncate">{candidate.name}</span>
+                            {candidate.isNew ? (
+                              <span className="shrink-0 rounded-full bg-[#CC1016] px-1.5 py-px text-[10px] font-bold uppercase text-white">
+                                New
+                              </span>
+                            ) : null}
                           </p>
                           <div className="mt-1 flex flex-wrap items-center gap-2">
                             <span className="inline-flex rounded-full bg-secondary px-2.5 py-0.5 text-[11px] font-semibold text-primary">

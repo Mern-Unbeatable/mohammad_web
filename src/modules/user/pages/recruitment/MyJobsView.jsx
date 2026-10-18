@@ -28,6 +28,8 @@ import {
   levelToApi,
   toJobCardModel,
   formatPostedAgo,
+  selectNewApplicationTotal,
+  selectNewApplicationsByJob,
 } from "@/features/user/recruitment";
 import { MY_JOB_STATUS_FILTERS } from "@/shared/constants/jobStatus";
 import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
@@ -46,6 +48,8 @@ const MyJobsView = () => {
     applicationsLoading,
     error,
   } = useSelector((state) => state.userRecruitment);
+  const newApplications = useSelector(selectNewApplicationTotal);
+  const newApplicationsByJob = useSelector(selectNewApplicationsByJob);
 
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
@@ -197,6 +201,7 @@ const MyJobsView = () => {
     <main className="pt-6 pb-8 sm:pt-8">
       <Container>
         <RecruitmentToolbar
+          newApplications={newApplications}
           query={query}
           onQueryChange={setQuery}
           level={level}
@@ -241,6 +246,7 @@ const MyJobsView = () => {
                 onEdit={() => navigate(`${JOB_BASE}/${job.id}/edit`)}
                 onToggleStatus={handleToggleStatus}
                 togglingStatus={togglingId === job.id}
+                newApplications={newApplicationsByJob[job.id] || 0}
               />
             ))
           ) : (

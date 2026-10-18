@@ -86,6 +86,19 @@ export const applyToJob = createAsyncThunk(
   },
 );
 
+export const fetchNewApplicationCounts = createAsyncThunk(
+  "userRecruitment/fetchNewApplicationCounts",
+  async (_arg, { rejectWithValue }) => {
+    try {
+      return await recruitmentApi.getNewApplicationCounts();
+    } catch (err) {
+      return rejectWithValue(
+        recruitmentApi.getApiErrorMessage(err, "Failed to load new applications"),
+      );
+    }
+  },
+);
+
 export const fetchMyApplications = createAsyncThunk(
   "userRecruitment/fetchMyApplications",
   async (params = {}, { rejectWithValue }) => {

@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import { Loader2, Lock, LockOpen, Pencil, Trash2 } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
+import CountBadge from '@/components/ui/CountBadge';
 import { JOB_STATUS, JOB_STATUS_LABEL } from '@/shared/constants/jobStatus';
 
 const STATUS_BADGE_CLASS = {
@@ -19,6 +20,7 @@ const JobCard = ({
   onEdit,
   onToggleStatus,
   togglingStatus = false,
+  newApplications = 0,
 }) => {
   const href = detailHref || `/recruitment/${job.id}`;
   const status = job.status || JOB_STATUS.OPEN;
@@ -89,9 +91,15 @@ const JobCard = ({
           <>
             <Link
               to={href}
-              className="inline-flex items-center justify-center rounded-md bg-green-primary px-3.5 py-2 text-[12px] font-semibold text-white hover:opacity-90"
+              aria-label={
+                newApplications
+                  ? `View details, ${newApplications} new ${newApplications === 1 ? 'application' : 'applications'}`
+                  : undefined
+              }
+              className="relative inline-flex items-center justify-center rounded-md bg-green-primary px-3.5 py-2 text-[12px] font-semibold text-white hover:opacity-90"
             >
               View Details
+              <CountBadge count={newApplications} className="absolute -right-2 -top-2" />
             </Link>
             {canToggleStatus ? (
               <button

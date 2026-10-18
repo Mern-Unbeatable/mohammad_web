@@ -7,6 +7,7 @@ import {
   removeJob,
   applyToJob,
   fetchMyApplications,
+  fetchNewApplicationCounts,
 } from "./recruitmentThunks";
 
 const initialState = {
@@ -24,6 +25,8 @@ const initialState = {
   deleting: false,
   applying: false,
   error: null,
+  /** Unseen applications on my jobs, for nav / card badges. */
+  newApplications: { total: 0, byJob: {} },
 };
 
 const upsertJob = (state, job) => {
@@ -72,6 +75,14 @@ const recruitmentSlice = createSlice({
     /** A job no longer matches the current list filter (e.g. after closing it). */
     jobLeftList: (state, action) => {
       dropJob(state, action.payload);
+    },
+    /** The owner opened a job's applicants; the server marks them seen too. */
+    jobApplicationsSeen: (state, action) => {
+      const { byJob, total } = state.newApplications;
+      const seen = byJob[action.payload] || 0;
+      if (!seen) return;
+      delete byJob[action.payload];
+      state.newApplications.total = Math.max(0, total - seen);
     },
   },
   extraReducers: (builder) => {
@@ -192,14 +203,23 @@ const recruitmentSlice = createSlice({
       .addCase(fetchMyApplications.rejected, (state, action) => {
         state.applicationsLoading = false;
         state.error = action.payload;
+      })
+      .addCase(fetchNewApplicationCounts.fulfilled, (state, action) => {
+        state.newApplications = action.payload;
       });
   },
 });
+
+export const selectNewApplicationTotal = (state) =>
+  state.userRecruitment.newApplications.total;
+export const selectNewApplicationsByJob = (state) =>
+  state.userRecruitment.newApplications.byJob;
 
 export const {
   clearRecruitmentError,
   clearSelectedJob,
   invalidateJobsList,
   jobLeftList,
+  jobApplicationsSeen,
 } = recruitmentSlice.actions;
 export default recruitmentSlice.reducer;

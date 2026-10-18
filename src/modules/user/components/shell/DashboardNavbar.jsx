@@ -48,6 +48,10 @@ import {
   fetchPendingRequestCount,
   selectPendingRequestCount,
 } from "@/features/user/contacts";
+import {
+  fetchNewApplicationCounts,
+  selectNewApplicationTotal,
+} from "@/features/user/recruitment";
 import { useNotificationBadge } from "@/shared/hooks/useNotificationBadge";
 import { CHAT_BASE_PATHS } from "@/shared/constants/chat";
 
@@ -60,6 +64,12 @@ const userNotificationBadge = {
 const pendingRequestsBadge = {
   fetchCount: fetchPendingRequestCount,
   selectCount: selectPendingRequestCount,
+};
+
+// Applying to a job notifies its owner, so this refreshes on the same events.
+const newApplicationsBadge = {
+  fetchCount: fetchNewApplicationCounts,
+  selectCount: selectNewApplicationTotal,
 };
 
 const iconMap = {
@@ -149,10 +159,15 @@ const DashboardNavbar = () => {
   const { conversations: unreadChats } = useUnreadMessages();
   const unreadNotifications = useNotificationBadge(userNotificationBadge);
   const pendingRequests = useNotificationBadge(pendingRequestsBadge);
+  const newApplications = useNotificationBadge(newApplicationsBadge);
   const badges = {
     contacts: {
       count: pendingRequests,
       label: `${pendingRequests} pending connection ${pendingRequests === 1 ? "request" : "requests"}`,
+    },
+    recruitment: {
+      count: newApplications,
+      label: `${newApplications} new job ${newApplications === 1 ? "application" : "applications"}`,
     },
     messages: {
       count: unreadChats,
@@ -319,10 +334,11 @@ const DashboardNavbar = () => {
             aria-label={
               menuOpen
                 ? "Close menu"
-                : unreadNotifications || pendingRequests
+                : unreadNotifications || pendingRequests || newApplications
                   ? `Open menu, ${[
                       unreadNotifications && badges.notifications.label,
                       pendingRequests && badges.contacts.label,
+                      newApplications && badges.recruitment.label,
                     ]
                       .filter(Boolean)
                       .join(", ")}`
@@ -336,7 +352,8 @@ const DashboardNavbar = () => {
             ) : (
               <Menu className="h-5 w-5" />
             )}
-            {!menuOpen && (unreadNotifications || pendingRequests) ? (
+            {!menuOpen &&
+            (unreadNotifications || pendingRequests || newApplications) ? (
               <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-[#CC1016] ring-2 ring-white sm:right-2 sm:top-2" />
             ) : null}
           </button>

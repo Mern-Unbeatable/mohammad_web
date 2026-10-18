@@ -128,6 +128,18 @@ export async function getJobApplications(jobId) {
   return [];
 }
 
+/** Unseen applications on my jobs: `{ total, byJob: { [jobId]: count } }`. */
+export async function getNewApplicationCounts() {
+  const response = await crudService.get(
+    API_ENDPOINTS.USER.RECRUITMENT.NEW_APPLICATION_COUNTS,
+  );
+  const data = unwrapApiData(response) || response;
+  return {
+    total: Number(data?.total) || 0,
+    byJob: data?.byJob && typeof data.byJob === "object" ? data.byJob : {},
+  };
+}
+
 /** Field name must be `file` (multer upload.single("file")). Returns the public URL. */
 export async function uploadJobImage(file) {
   const formData = new FormData();

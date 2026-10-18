@@ -15,6 +15,7 @@ import {
   invalidateJobsList,
   levelToApi,
   toJobCardModel,
+  selectNewApplicationTotal,
 } from "@/features/user/recruitment";
 import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
 import { usePageParam } from "@/shared/hooks/usePageParam";
@@ -41,6 +42,7 @@ const RecruitmentView = () => {
   const { jobs, jobsMeta, jobsLoading, jobsError, error } = useSelector(
     (state) => state.userRecruitment,
   );
+  const newApplications = useSelector(selectNewApplicationTotal);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const { [LEVEL_PARAM]: level, [SEARCH_PARAM]: search } =
@@ -123,6 +125,7 @@ const RecruitmentView = () => {
     <main className="pt-6 pb-8 sm:pt-8">
       <Container>
         <RecruitmentToolbar
+          newApplications={newApplications}
           query={query}
           onQueryChange={setQuery}
           level={level}
