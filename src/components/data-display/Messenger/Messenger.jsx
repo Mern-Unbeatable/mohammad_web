@@ -1,4 +1,5 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from "react";
+import { Link } from "react-router";
 import {
   ArrowLeft,
   FileText,
@@ -13,24 +14,30 @@ import {
   Send,
   Trash2,
   X,
-} from 'lucide-react';
-import Avatar from '@/components/ui/Avatar';
-import ChatListingCard from './ChatListingCard';
+} from "lucide-react";
+import Avatar from "@/components/ui/Avatar";
+import ChatListingCard from "./ChatListingCard";
 
 const FILE_ACCEPT =
-  'image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,video/mp4,video/quicktime';
+  "image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,video/mp4,video/quicktime";
 
-const isImage = (attachment) => String(attachment?.mimeType || '').startsWith('image/');
+const isImage = (attachment) =>
+  String(attachment?.mimeType || "").startsWith("image/");
 
 const formatSize = (bytes) => {
-  if (!Number.isFinite(bytes) || bytes <= 0) return '';
+  if (!Number.isFinite(bytes) || bytes <= 0) return "";
   if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 };
 
-const ChatAvatar = ({ chat, size = 'md' }) =>
+const ChatAvatar = ({ chat, size = "md" }) =>
   chat.avatar ? (
-    <Avatar src={chat.avatar} alt={chat.name} initials={chat.initials} size={size} />
+    <Avatar
+      src={chat.avatar}
+      alt={chat.name}
+      initials={chat.initials}
+      size={size}
+    />
   ) : (
     <Avatar initials={chat.initials} size={size} className={chat.avatarClass} />
   );
@@ -51,7 +58,7 @@ const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
     type="button"
     onClick={onClick}
     className={`flex w-full items-center gap-3 border-b border-[#E4E7EC] px-4 py-3.5 text-left transition-colors last:border-b-0 xl:border-b-0 xl:py-3 ${
-      active ? 'bg-secondary' : 'bg-white hover:bg-[#F9FAFB]'
+      active ? "bg-secondary" : "bg-white hover:bg-[#F9FAFB]"
     }`}
   >
     <div className="relative shrink-0">
@@ -66,12 +73,15 @@ const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
 
     <div className="min-w-0 flex-1">
       <div className="flex items-center justify-between gap-2">
-        <ChatName chat={chat} className="text-[14px] font-semibold text-deep-blue" />
+        <ChatName
+          chat={chat}
+          className="text-[14px] font-semibold text-deep-blue"
+        />
         <span className="shrink-0 text-[11px] text-[#98A2B3]">{chat.time}</span>
       </div>
       <p
         className={`mt-0.5 truncate text-[12px] ${
-          chat.unread > 0 ? 'font-semibold text-deep-blue' : 'text-[#64748B]'
+          chat.unread > 0 ? "font-semibold text-deep-blue" : "text-[#64748B]"
         }`}
       >
         {chat.preview}
@@ -80,7 +90,7 @@ const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
 
     {chat.unread > 0 ? (
       <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-[#CC1016] px-1.5 text-[10px] font-bold text-white">
-        {chat.unread > 99 ? '99+' : chat.unread}
+        {chat.unread > 99 ? "99+" : chat.unread}
       </span>
     ) : null}
   </button>
@@ -127,12 +137,16 @@ const AttachmentList = ({ attachments, isMe }) => {
             target="_blank"
             rel="noreferrer"
             className={`flex items-center gap-2 rounded-xl px-3 py-2 text-[12px] ${
-              isMe ? 'bg-white/15 text-white hover:bg-white/25' : 'bg-white text-deep-blue hover:bg-[#F9FAFB]'
+              isMe
+                ? "bg-white/15 text-white hover:bg-white/25"
+                : "bg-white text-deep-blue hover:bg-[#F9FAFB]"
             }`}
           >
             <FileText className="h-4 w-4 shrink-0" />
             <span className="min-w-0 flex-1 truncate">{attachment.name}</span>
-            <span className="shrink-0 opacity-70">{formatSize(attachment.size)}</span>
+            <span className="shrink-0 opacity-70">
+              {formatSize(attachment.size)}
+            </span>
           </a>
         ),
       )}
@@ -140,21 +154,29 @@ const AttachmentList = ({ attachments, isMe }) => {
   );
 };
 
-const MessageBubble = ({ message, showAvatar, chat, onDeleteMessage, getListingHref }) => {
-  const isMe = message.from === 'me';
-  const text = message.text || message.body || '';
+const MessageBubble = ({
+  message,
+  showAvatar,
+  chat,
+  onDeleteMessage,
+  getListingHref,
+}) => {
+  const isMe = message.from === "me";
+  const text = message.text || message.body || "";
   const listingCard = message.listing ? (
     <ChatListingCard
       listing={message.listing}
       href={getListingHref?.(message.listing.id)}
-      tone={isMe ? 'me' : 'them'}
-      className={text ? 'mb-1' : ''}
+      tone={isMe ? "me" : "them"}
+      className={text ? "mb-1" : ""}
     />
   ) : null;
   const senderChat = {
     name: message.sender || chat.name,
     avatar: chat.isGroup ? message.senderAvatar : chat.avatar,
-    initials: chat.isGroup ? message.senderInitials || chat.initials : chat.initials,
+    initials: chat.isGroup
+      ? message.senderInitials || chat.initials
+      : chat.initials,
     avatarClass: chat.avatarClass,
   };
 
@@ -162,7 +184,9 @@ const MessageBubble = ({ message, showAvatar, chat, onDeleteMessage, getListingH
     return (
       <div className="group flex flex-col items-end">
         <div className="relative max-w-[min(85%,420px)] sm:max-w-[min(100%,420px)]">
-          {listingCard ? <div className="flex justify-end">{listingCard}</div> : null}
+          {listingCard ? (
+            <div className="flex justify-end">{listingCard}</div>
+          ) : null}
           {text ? (
             <div className="rounded-2xl rounded-br-sm bg-primary px-4 py-2.5 text-[13px] leading-relaxed whitespace-pre-wrap break-words text-white">
               {text}
@@ -180,7 +204,9 @@ const MessageBubble = ({ message, showAvatar, chat, onDeleteMessage, getListingH
             </button>
           ) : null}
         </div>
-        <span className="mt-1 px-1 text-[10px] text-[#98A2B3]">{message.time}</span>
+        <span className="mt-1 px-1 text-[10px] text-[#98A2B3]">
+          {message.time}
+        </span>
       </div>
     );
   }
@@ -194,7 +220,9 @@ const MessageBubble = ({ message, showAvatar, chat, onDeleteMessage, getListingH
       )}
       <div className="max-w-[min(85%,420px)] sm:max-w-[min(100%,420px)]">
         {chat.isGroup && message.sender && showAvatar ? (
-          <p className="mb-1 text-[11px] font-medium text-[#64748B]">{message.sender}</p>
+          <p className="mb-1 text-[11px] font-medium text-[#64748B]">
+            {message.sender}
+          </p>
         ) : null}
         {listingCard}
         {text ? (
@@ -203,16 +231,59 @@ const MessageBubble = ({ message, showAvatar, chat, onDeleteMessage, getListingH
           </div>
         ) : null}
         <AttachmentList attachments={message.attachments} />
-        <span className="mt-1 block px-1 text-[10px] text-[#98A2B3]">{message.time}</span>
+        <span className="mt-1 block px-1 text-[10px] text-[#98A2B3]">
+          {message.time}
+        </span>
       </div>
     </div>
   );
 };
 
+/** Centered group activity line (member added/removed/left, renamed, created) with its date and time. */
+const SystemNotice = ({ message, getProfileHref }) => (
+  <div className="flex flex-col items-center px-2 text-center" role="note">
+    <p className="max-w-[90%] rounded-2xl bg-[#F2F4F7] px-3.5 py-1.5 text-[12px] leading-relaxed text-[#475467] break-words">
+      {message.textParts
+        ? message.textParts.map((part, index) => {
+            if (typeof part === "string") return part;
+            const href = part.userId ? getProfileHref?.(part.userId) : null;
+            return href ? (
+              <Link
+                key={index}
+                to={href}
+                title={`View ${part.text}'s profile`}
+                className="font-medium text-[#344054] hover:text-[#1D4ED8] hover:underline focus-visible:underline focus-visible:outline-none"
+              >
+                {part.text}
+              </Link>
+            ) : (
+              <span key={index} className="font-medium text-[#344054]">
+                {part.text}
+              </span>
+            );
+          })
+        : message.text}
+    </p>
+    {message.eventTime ? (
+      <time
+        dateTime={message.createdAt || undefined}
+        className="mt-1 text-[10px] text-[#98A2B3]"
+      >
+        {message.eventTime}
+      </time>
+    ) : null}
+  </div>
+);
+
 /** Keeps the thread pinned to the newest message, and stable when older ones load. */
 const useThreadScroll = (messages, chatId) => {
   const containerRef = useRef(null);
-  const snapshot = useRef({ chatId: null, firstId: null, lastId: null, height: 0 });
+  const snapshot = useRef({
+    chatId: null,
+    firstId: null,
+    lastId: null,
+    height: 0,
+  });
 
   useLayoutEffect(() => {
     const el = containerRef.current;
@@ -222,7 +293,9 @@ const useThreadScroll = (messages, chatId) => {
     const prev = snapshot.current;
 
     const olderPrepended =
-      prev.chatId === chatId && prev.lastId === lastId && prev.firstId !== firstId;
+      prev.chatId === chatId &&
+      prev.lastId === lastId &&
+      prev.firstId !== firstId;
     if (olderPrepended) {
       el.scrollTop += el.scrollHeight - prev.height;
     } else if (prev.chatId !== chatId || prev.lastId !== lastId) {
@@ -238,16 +311,54 @@ const useThreadScroll = (messages, chatId) => {
  * Two-panel messenger: conversation list + active chat.
  * Parent controls tab, search, draft, attachments and mobile list/chat panel.
  */
+/** Avatar, name and status of the open chat; links to the other member's profile in direct chats. */
+const ChatHeaderIdentity = ({ chat, profileHref }) => {
+  const content = (
+    <>
+      <div className="relative shrink-0">
+        <ChatAvatar chat={chat} />
+        {!chat.isGroup && chat.online ? (
+          <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-green-primary" />
+        ) : null}
+      </div>
+
+      <div className="min-w-0">
+        <ChatName
+          chat={chat}
+          className={`text-[14px] font-semibold text-deep-blue sm:text-[15px] ${
+            profileHref ? "group-hover:text-primary group-hover:underline" : ""
+          }`}
+        />
+        <p className="truncate text-[11px] text-[#64748B] sm:text-[12px]">
+          {!chat.isGroup && chat.online ? "Online" : chat.subtitle}
+        </p>
+      </div>
+    </>
+  );
+
+  return profileHref ? (
+    <Link
+      to={profileHref}
+      title={`View ${chat.name}'s profile`}
+      className="group flex min-w-0 items-center gap-2.5 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 sm:gap-3"
+    >
+      {content}
+    </Link>
+  ) : (
+    <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">{content}</div>
+  );
+};
+
 const Messenger = ({
-  tab = 'messages',
+  tab = "messages",
   onTabChange,
   chats = [],
   activeChat,
   activeChatId,
   onSelectChat,
-  query = '',
+  query = "",
   onSearchChange,
-  draft = '',
+  draft = "",
   onDraftChange,
   onSend,
   sending = false,
@@ -273,14 +384,15 @@ const Messenger = ({
   pendingListing = null,
   onRemovePendingListing,
   getListingHref,
+  getProfileHref,
   seen = false,
-  mobilePanel = 'list',
+  mobilePanel = "list",
   onMobileBack,
-  className = '',
-  heightClass = 'h-[620px]',
+  className = "",
+  heightClass = "h-[620px]",
 }) => {
   const displayChat = activeChat || null;
-  const isMobileChat = mobilePanel === 'chat';
+  const isMobileChat = mobilePanel === "chat";
   const messages = displayChat?.messages || [];
   const threadRef = useThreadScroll(messages, displayChat?.id ?? activeChatId);
   const fileInputRef = useRef(null);
@@ -293,15 +405,18 @@ const Messenger = ({
     !sending &&
     !uploading &&
     !listingLoading &&
-    (draft.trim().length > 0 || attachments.some((a) => a.url) || Boolean(pendingListing));
+    (draft.trim().length > 0 ||
+      attachments.some((a) => a.url) ||
+      Boolean(pendingListing));
 
   const handleFiles = (event) => {
-    if (event.target.files?.length) onAddFiles?.(Array.from(event.target.files));
-    event.target.value = '';
+    if (event.target.files?.length)
+      onAddFiles?.(Array.from(event.target.files));
+    event.target.value = "";
   };
 
   const lastMineIndex = messages.reduce(
-    (found, message, index) => (message.from === 'me' ? index : found),
+    (found, message, index) => (message.from === "me" ? index : found),
     -1,
   );
 
@@ -311,14 +426,14 @@ const Messenger = ({
     >
       <aside
         className={`flex min-h-0 w-full flex-col border-[#E4E7EC] bg-white xl:h-full xl:border-r ${
-          isMobileChat ? 'hidden xl:flex' : 'flex flex-1 xl:flex-none'
+          isMobileChat ? "hidden xl:flex" : "flex flex-1 xl:flex-none"
         }`}
       >
-        <div className="shrink-0 border-b border-[#E4E7EC] p-3 sm:p-4">
+        <div className="shrink-0 border-b border-[#E4E7EC] p-[11px]">
           <div className="flex rounded-xl bg-[#F3F4F6] p-1">
             {[
-              { id: 'messages', label: 'Messages' },
-              { id: 'groups', label: 'Groups' },
+              { id: "messages", label: "Messages" },
+              { id: "groups", label: "Groups" },
             ].map(({ id, label }) => (
               <button
                 key={id}
@@ -326,8 +441,8 @@ const Messenger = ({
                 onClick={() => onTabChange?.(id)}
                 className={`flex-1 rounded-lg px-3 py-2.5 text-[12px] font-semibold transition-all ${
                   tab === id
-                    ? 'bg-white text-primary shadow-sm'
-                    : 'text-[#64748B] hover:text-deep-blue'
+                    ? "bg-white text-primary shadow-sm"
+                    : "text-[#64748B] hover:text-deep-blue"
                 }`}
               >
                 {label}
@@ -382,7 +497,7 @@ const Messenger = ({
                   chat={chat}
                   active={chat.id === activeChatId}
                   onClick={() => onSelectChat?.(chat.id)}
-                  showOnline={showOnlineIndicator && tab === 'messages'}
+                  showOnline={showOnlineIndicator && tab === "messages"}
                 />
               ))}
               {hasMoreChats ? (
@@ -393,7 +508,9 @@ const Messenger = ({
                     disabled={loadingMoreChats}
                     className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-[#E4E7EC] px-4 py-2 text-[12px] font-semibold text-[#475467] hover:bg-[#F9FAFB] disabled:opacity-60"
                   >
-                    {loadingMoreChats ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
+                    {loadingMoreChats ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : null}
                     Load more
                   </button>
                 </div>
@@ -402,10 +519,10 @@ const Messenger = ({
           ) : (
             <p className="px-4 py-10 text-center text-[13px] text-[#64748B]">
               {query
-                ? 'No conversations found.'
-                : tab === 'groups'
-                  ? 'No groups yet. Create one to get started.'
-                  : 'No conversations yet. Start a new message.'}
+                ? "No conversations found."
+                : tab === "groups"
+                  ? "No groups yet. Create one to get started."
+                  : "No conversations yet. Start a new message."}
             </p>
           )}
         </div>
@@ -413,7 +530,7 @@ const Messenger = ({
 
       <section
         className={`flex min-h-0 min-w-0 flex-col bg-white xl:h-full ${
-          mobilePanel === 'list' ? 'hidden xl:flex' : 'flex flex-1 xl:flex-none'
+          mobilePanel === "list" ? "hidden xl:flex" : "flex flex-1 xl:flex-none"
         }`}
       >
         {displayChat ? (
@@ -431,24 +548,14 @@ const Messenger = ({
                   </button>
                 ) : null}
 
-                <div className="relative shrink-0">
-                  <ChatAvatar chat={displayChat} />
-                  {!displayChat.isGroup && displayChat.online ? (
-                    <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-green-primary" />
-                  ) : null}
-                </div>
-
-                <div className="min-w-0">
-                  <ChatName
-                    chat={displayChat}
-                    className="text-[14px] font-semibold text-deep-blue sm:text-[15px]"
-                  />
-                  <p className="truncate text-[11px] text-[#64748B] sm:text-[12px]">
-                    {!displayChat.isGroup && displayChat.online
-                      ? 'Online'
-                      : displayChat.subtitle}
-                  </p>
-                </div>
+                <ChatHeaderIdentity
+                  chat={displayChat}
+                  profileHref={
+                    displayChat.isGroup
+                      ? null
+                      : getProfileHref?.(displayChat.otherUserId) || null
+                  }
+                />
               </div>
 
               <div className="flex shrink-0 items-center gap-0.5">
@@ -488,7 +595,9 @@ const Messenger = ({
                     disabled={olderLoading}
                     className="inline-flex items-center gap-1.5 rounded-full border border-[#E4E7EC] px-3 py-1.5 text-[12px] font-medium text-[#475467] hover:bg-[#F9FAFB] disabled:opacity-60"
                   >
-                    {olderLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
+                    {olderLoading ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : null}
                     Load older messages
                   </button>
                 </div>
@@ -506,8 +615,19 @@ const Messenger = ({
                 messages.map((message, index) => {
                   const prev = messages[index - 1];
                   const showAvatar =
-                    message.from === 'them' &&
-                    (!prev || prev.from !== 'them' || prev.senderId !== message.senderId);
+                    message.from === "them" &&
+                    (!prev ||
+                      prev.from !== "them" ||
+                      prev.senderId !== message.senderId);
+                  if (message.from === "system") {
+                    return (
+                      <SystemNotice
+                        key={message.id}
+                        message={message}
+                        getProfileHref={getProfileHref}
+                      />
+                    );
+                  }
                   return (
                     <div key={message.id}>
                       <MessageBubble
@@ -606,14 +726,16 @@ const Messenger = ({
                   value={draft}
                   onChange={(e) => onDraftChange?.(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
+                    if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
                       if (canSend) onSend?.();
                     }
                   }}
                   maxLength={5000}
                   placeholder={
-                    pendingListing ? 'Ask the seller about this listing...' : 'Write a message...'
+                    pendingListing
+                      ? "Ask the seller about this listing..."
+                      : "Write a message..."
                   }
                   className="min-w-0 flex-1 bg-transparent py-2 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3]"
                 />
@@ -624,7 +746,11 @@ const Messenger = ({
                   disabled={!canSend}
                   className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-[#066BB0] disabled:opacity-50"
                 >
-                  {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                  {sending ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Send className="h-4 w-4" />
+                  )}
                 </button>
               </div>
             </div>
@@ -634,7 +760,9 @@ const Messenger = ({
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-primary">
               <MessageSquare className="h-5 w-5" />
             </span>
-            <p className="text-[14px] font-semibold text-deep-blue">No conversation selected</p>
+            <p className="text-[14px] font-semibold text-deep-blue">
+              No conversation selected
+            </p>
             <p className="max-w-xs text-[13px] text-[#64748B]">
               Pick a conversation from the list, or start a new one.
             </p>

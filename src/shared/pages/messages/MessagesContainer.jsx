@@ -50,6 +50,7 @@ import {
   chatTargetFor,
 } from '@/shared/constants/chat';
 import { marketplaceListingPath } from '@/shared/constants/marketplace';
+import { memberProfilePath } from '@/shared/constants/profile';
 
 const SEARCH_DEBOUNCE_MS = 300;
 /** Fallback refresh while the realtime connection is down. */
@@ -80,7 +81,6 @@ const MessagesContainer = ({
   const { user } = useAuth();
   const currentUserId = user?.id;
   const currentRole = user?.role;
-
   const {
     conversations,
     conversationsMeta,
@@ -187,6 +187,11 @@ const MessagesContainer = ({
 
   const getListingHref = useCallback(
     (listingId) => marketplaceListingPath(currentRole, listingId),
+    [currentRole],
+  );
+
+  const getProfileHref = useCallback(
+    (userId) => memberProfilePath(currentRole, userId),
     [currentRole],
   );
 
@@ -521,6 +526,7 @@ const MessagesContainer = ({
         pendingListing={composeUserId ? null : pendingListing}
         onRemovePendingListing={dropListingParam}
         getListingHref={getListingHref}
+        getProfileHref={getProfileHref}
         mobilePanel={mobilePanel}
         onMobileBack={() => goTo({ section }, { replace: true })}
       />
@@ -573,6 +579,7 @@ const MessagesContainer = ({
         recipients={recipients}
         recipientsLoading={recipientsLoading}
         onSearchRecipients={handleSearchRecipients}
+        getProfileHref={getProfileHref}
         busy={actionLoading}
       />
 

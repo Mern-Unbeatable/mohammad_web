@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
   attachmentSummary,
+  formatEventTime,
   formatMessageTime,
+  joinNames,
+  systemMessageParts,
+  systemMessageText,
   isSeenByOther,
   messagePreview,
   toChatListingModel,
@@ -171,5 +175,78 @@ describe("isSeenByOther", () => {
   it("is false for groups", () => {
     const group = { ...conversation("2026-09-26T11:00:00.000Z"), isGroup: true };
     expect(isSeenByOther(group, messages, "me")).toBe(false);
+  });
+});
+
+describe("group activity notices", () => {
+  const notice = (event, senderId = "nayem") => ({
+    id: "s1",
+    type: "SYSTEM",
+    senderId,
+    sender: "Nayem Islam",
+    body: "server text",
+    event,
+    time: new Date(2026, 9, 18, 11, 37),
+  });
+
+  it("writes events from the viewer's point of view", () => {
+    const added = { action: "added", targetIds: ["anna", "me"], targetNames: ["Anna K", "Élise M"] };
+    expect(systemMessageText(notice(added), "other")).toBe("Nayem Islam added Anna K and Élise M");
+    expect(systemMessageText(notice(added), "me")).toBe("Nayem Islam added Anna K and you");
+    expect(systemMessageText(notice(added, "me"), "me")).toBe("You added Anna K and you");
+
+    const removed = { action: "removed", targetIds: ["me"], targetNames: ["Élise M"] };
+    expect(systemMessageText(notice(removed), "me")).toBe("Nayem Islam removed you");
+    expect(systemMessageText(notice({ action: "left" }), "x")).toBe("Nayem Islam left the group");
+    expect(systemMessageText(notice({ action: "renamed", name: "Mofasa" }, "me"), "me")).toBe(
+      'You renamed the group to "Mofasa"',
+    );
+    expect(
+      systemMessageText(
+        notice({ action: "created", name: "Mofasa", targetIds: ["a", "b", "c", "d"], targetNames: ["A", "B", "C", "D"] }),
+        "x",
+      ),
+    ).toBe('Nayem Islam created the group "Mofasa" and added A, B and 2 others');
+  });
+
+  it("splits notices into linkable name parts, leaving the viewer and overflow as plain text", () => {
+    const added = { action: "added", targetIds: ["anna", "me", "cara", "dan"], targetNames: ["Anna K", "Élise M", "Cara", "Dan"] };
+    expect(systemMessageParts(notice(added), "me")).toEqual([
+      { text: "Nayem Islam", userId: "nayem" },
+      " added ",
+      { text: "Anna K", userId: "anna" },
+      ", ",
+      "you",
+      " and ",
+      "2 others",
+    ]);
+    expect(systemMessageParts(notice({ action: "removed", targetIds: ["anna"], targetNames: ["Anna K"] }, "me"), "me")).toEqual([
+      "You",
+      " removed ",
+      { text: "Anna K", userId: "anna" },
+    ]);
+    expect(toMessageModel(notice({ action: "left" }), "me").textParts).toEqual([
+      { text: "Nayem Islam", userId: "nayem" },
+      " left the group",
+    ]);
+  });
+
+  it("falls back to the stored text for unknown events", () => {
+    expect(systemMessageText(notice({ action: "pinned" }), "x")).toBe("server text");
+  });
+
+  it("maps notices to a system model with date and time", () => {
+    const model = toMessageModel(notice({ action: "left" }, "me"), "me");
+    expect(model).toMatchObject({
+      from: "system",
+      isSystem: true,
+      text: "You left the group",
+      eventTime: "Oct 18, 2026 · 11:37",
+    });
+  });
+
+  it("formats event time and joins names", () => {
+    expect(formatEventTime("bad")).toBe("");
+    expect(joinNames(["A", "B", "C", "D", "E"])).toBe("A, B and 3 others");
   });
 });

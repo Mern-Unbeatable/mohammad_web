@@ -13,7 +13,12 @@ import {
   moderateDeleteMessage,
   selectModerationConversation,
 } from '@/features/admin/messages';
-import { formatBubbleTime, formatMessageTime, isImageAttachment } from '@/features/messages';
+import {
+  formatBubbleTime,
+  formatEventTime,
+  formatMessageTime,
+  isImageAttachment,
+} from '@/features/messages';
 
 const SEARCH_DEBOUNCE_MS = 300;
 
@@ -271,7 +276,14 @@ const ChatModerationPanel = () => {
               ) : messages.length === 0 ? (
                 <p className="py-10 text-center text-[13px] text-[#98A2B3]">No messages.</p>
               ) : (
-                messages.map((message) => (
+                messages.map((message) => message.type === "SYSTEM" ? (
+                  <div key={message.id} className="flex flex-col items-center px-2 py-1.5 text-center" role="note">
+                    <p className="max-w-[90%] rounded-2xl bg-[#F2F4F7] px-3.5 py-1.5 text-[12px] text-[#475467] break-words">
+                      {message.body}
+                    </p>
+                    <span className="mt-1 text-[10px] text-[#98A2B3]">{formatEventTime(message.time)}</span>
+                  </div>
+                ) : (
                   <div key={message.id} className="group flex items-start gap-3 rounded-lg px-2 py-1.5 hover:bg-[#F9FAFB]">
                     <Avatar
                       src={message.senderAvatar}

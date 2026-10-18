@@ -42,6 +42,7 @@ export {
   toMessageModel,
   formatMessageTime,
   formatBubbleTime,
+  formatEventTime,
   attachmentSummary,
   messagePreview,
   toChatListingModel,

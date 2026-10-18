@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Check, Loader2, Search } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
+import { emptyResultsText } from "./recipientPickerText";
 
 const SEARCH_DEBOUNCE_MS = 300;
 
@@ -16,7 +17,7 @@ const RecipientPicker = ({
   onSearch,
   multiple = false,
   excludeIds = [],
-  emptyText = "No contacts found. Connect with people to message them.",
+  emptyText = "No members found.",
 }) => {
   const [query, setQuery] = useState("");
 
@@ -66,7 +67,11 @@ const RecipientPicker = ({
           </li>
         ) : visible.length === 0 ? (
           <li className="px-2 py-6 text-center text-[13px] text-[#64748B]">
-            {emptyText}
+            {emptyResultsText({
+              term: query.trim(),
+              hasHiddenResults: recipients.length > 0,
+              emptyText,
+            })}
           </li>
         ) : (
           visible.map((recipient) => {

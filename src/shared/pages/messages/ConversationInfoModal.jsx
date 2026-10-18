@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
 import { Crown, Loader2, LogOut, Pencil, UserMinus, UserPlus, X } from 'lucide-react';
 import Avatar from '@/components/ui/Avatar';
-import RecipientPicker from '@/shared/pages/messages/RecipientPicker';
+import AddMembersModal from '@/shared/pages/messages/AddMembersModal';
 
 const fieldClass =
   'w-full rounded-lg border border-[#E4E7EC] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10';
@@ -18,12 +19,12 @@ const ConversationInfo = ({
   recipients,
   recipientsLoading,
   onSearchRecipients,
+  getProfileHref,
   busy,
 }) => {
   const [editingName, setEditingName] = useState(false);
   const [name, setName] = useState(conversation.name || '');
   const [adding, setAdding] = useState(false);
-  const [toAdd, setToAdd] = useState([]);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -45,15 +46,6 @@ const ConversationInfo = ({
     }
     const ok = await onRename?.(name.trim());
     if (ok !== false) setEditingName(false);
-  };
-
-  const submitAdd = async () => {
-    if (toAdd.length === 0) return;
-    const ok = await onAddMembers?.(toAdd);
-    if (ok !== false) {
-      setToAdd([]);
-      setAdding(false);
-    }
   };
 
   return (
@@ -134,7 +126,7 @@ const ConversationInfo = ({
             <p className="text-[13px] font-semibold text-deep-blue">
               {isGroup ? 'Members' : 'Participants'}
             </p>
-            {isGroup && isOwner && onAddMembers && !adding ? (
+            {isGroup && isOwner && onAddMembers ? (
               <button
                 type="button"
                 onClick={() => setAdding(true)}
@@ -146,47 +138,13 @@ const ConversationInfo = ({
             ) : null}
           </div>
 
-          {adding ? (
-            <div className="mb-4 rounded-xl border border-[#E4E7EC] p-3">
-              <RecipientPicker
-                multiple
-                recipients={recipients}
-                loading={recipientsLoading}
-                selected={toAdd}
-                onChange={setToAdd}
-                onSearch={onSearchRecipients}
-                excludeIds={memberIds}
-              />
-              <div className="mt-3 flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAdding(false);
-                    setToAdd([]);
-                  }}
-                  className="rounded-lg border border-[#E4E7EC] px-3 py-2 text-[12px] font-semibold text-[#475467]"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={submitAdd}
-                  disabled={busy || toAdd.length === 0}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-[12px] font-semibold text-white disabled:opacity-60"
-                >
-                  {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
-                  Add {toAdd.length || ''}
-                </button>
-              </div>
-            </div>
-          ) : null}
-
           <ul className="space-y-1">
             {members.map((member) => {
               const isSelf = member.id === currentUserId;
-              return (
-                <li key={member.id} className="flex items-center gap-3 rounded-lg px-1 py-2">
-                  <div className="relative">
+              const profileHref = isSelf ? null : getProfileHref?.(member.id) || null;
+              const identity = (
+                <>
+                  <div className="relative shrink-0">
                     <Avatar src={member.avatar} alt={member.name} initials={member.initials} size="sm" />
                     {!isSelf && onlineUserIds?.has(member.id) ? (
                       <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-green-primary" />
@@ -194,7 +152,11 @@ const ConversationInfo = ({
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="flex items-center gap-1.5 truncate text-[14px] font-medium text-deep-blue">
-                      <span className="truncate">
+                      <span
+                        className={`truncate ${
+                          profileHref ? 'group-hover:text-primary group-hover:underline' : ''
+                        }`}
+                      >
                         {member.name}
                         {isSelf ? ' (you)' : ''}
                       </span>
@@ -206,6 +168,21 @@ const ConversationInfo = ({
                       <p className="truncate text-[12px] text-[#64748B]">{member.subtitle}</p>
                     ) : null}
                   </div>
+                </>
+              );
+              return (
+                <li key={member.id} className="flex items-center gap-3 rounded-lg px-1 py-2">
+                  {profileHref ? (
+                    <Link
+                      to={profileHref}
+                      title={`View ${member.name}'s profile`}
+                      className="group flex min-w-0 flex-1 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                    >
+                      {identity}
+                    </Link>
+                  ) : (
+                    <div className="flex min-w-0 flex-1 items-center gap-3">{identity}</div>
+                  )}
                   {isGroup && isOwner && !isSelf && onRemoveMember ? (
                     <button
                       type="button"
@@ -234,6 +211,18 @@ const ConversationInfo = ({
           ) : null}
         </div>
       </div>
+
+      <AddMembersModal
+        open={adding}
+        groupName={conversation.name}
+        memberIds={memberIds}
+        recipients={recipients}
+        recipientsLoading={recipientsLoading}
+        onSearchRecipients={onSearchRecipients}
+        onAdd={onAddMembers}
+        onClose={() => setAdding(false)}
+        busy={busy}
+      />
     </div>
   );
 };
