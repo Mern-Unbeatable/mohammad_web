@@ -33,6 +33,7 @@ const STATUS_PILL_COLORS = {
   REVIEWED: "bg-[#FFFAEB] text-[#B54708]",
   ACCEPTED: "bg-[#ECFDF3] text-[#067647]",
   REJECTED: "bg-[#FEF3F2] text-[#D92D20]",
+  CANCELLED: "bg-[#F2F4F7] text-[#475467]",
 };
 
 /** Pill classes for a job application status. */

@@ -33,7 +33,10 @@ import {
   selectNewApplicationTotal,
   selectNewApplicationsByJob,
 } from "@/features/user/recruitment";
-import { MY_JOB_STATUS_FILTERS } from "@/shared/constants/jobStatus";
+import {
+  MY_APPLICATION_FILTERS,
+  MY_JOB_STATUS_FILTERS,
+} from "@/shared/constants/jobStatus";
 import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
 
 const JOB_BASE = "/recruitment";
@@ -48,6 +51,7 @@ const MyJobsView = () => {
     jobsLoading,
     deleting,
     applications,
+    applicationsMeta,
     applicationsLoading,
     error,
   } = useSelector((state) => state.userRecruitment);
@@ -64,6 +68,7 @@ const MyJobsView = () => {
   const [pendingWithdraw, setPendingWithdraw] = useState(null);
   const [withdrawing, setWithdrawing] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
+  const [applicationFilter, setApplicationFilter] = useState("applied");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -91,8 +96,15 @@ const MyJobsView = () => {
   }, [dispatch, page, debouncedQuery, level, statusFilter, reloadKey]);
 
   useEffect(() => {
-    dispatch(fetchMyApplications({ page: 1, pageSize: 20, sort: "desc" }));
-  }, [dispatch]);
+    dispatch(
+      fetchMyApplications({
+        page: 1,
+        pageSize: 20,
+        sort: "desc",
+        status: applicationFilter,
+      }),
+    );
+  }, [dispatch, applicationFilter]);
 
   useEffect(() => {
     if (error) toast.error(error);
@@ -290,15 +302,24 @@ const MyJobsView = () => {
 
         <section className="mt-10">
           <div className="mb-4">
-            <h2 className="text-[20px] font-bold text-deep-blue">
-              My Applications
-            </h2>
-            <p className="mt-1 text-[14px] text-[#64748B]">
-              Roles you have applied to across the network.
-            </p>
+            <JobsSectionHeader
+              title="My Applications"
+              description="Roles you have applied to across the network."
+              count={jobCount(applicationsLoading, applicationsMeta?.total)}
+              itemName="application"
+            >
+              <SegmentedTabs
+                tabs={MY_APPLICATION_FILTERS}
+                activeTab={applicationFilter}
+                onTabChange={setApplicationFilter}
+                standalone
+                ariaLabel="Filter my applications by status"
+                className="border border-[#E4E7EC]"
+              />
+            </JobsSectionHeader>
           </div>
 
-          {applicationsLoading && !myApplications.length ? (
+          {applicationsLoading ? (
             <CardSkeleton
               variant="application"
               count={3}
@@ -373,7 +394,9 @@ const MyJobsView = () => {
           ) : (
             <div className="rounded-xl border border-dashed border-[#D0D5DD] bg-white px-6 py-10 text-center">
               <p className="text-[14px] text-[#64748B]">
-                You have not applied to any jobs yet.
+                {applicationFilter === "cancelled"
+                  ? "You have no cancelled applications."
+                  : "You have not applied to any jobs yet."}
               </p>
             </div>
           )}

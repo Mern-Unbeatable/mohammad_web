@@ -1,5 +1,11 @@
-/** Title row for the "Public Job Posts" / "My Job Posts" sections. */
-const JobsSectionHeader = ({ title, description, count, children }) => (
+/** Title row for the "Public Job Posts" / "My Job Posts" / "My Applications" sections. */
+const JobsSectionHeader = ({
+  title,
+  description,
+  count,
+  itemName = "job post",
+  children,
+}) => (
   <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
     <div className="min-w-0">
       <h2 className="flex items-baseline gap-1.5 text-[20px] font-bold text-deep-blue">
@@ -7,7 +13,7 @@ const JobsSectionHeader = ({ title, description, count, children }) => (
         {typeof count === "number" ? (
           <span
             className="text-[15px] font-semibold text-pink-light"
-            aria-label={`${count} job ${count === 1 ? "post" : "posts"}`}
+            aria-label={`${count} ${itemName}${count === 1 ? "" : "s"}`}
           >
             ({count})
           </span>

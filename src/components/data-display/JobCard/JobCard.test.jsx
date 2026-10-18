@@ -26,19 +26,21 @@ describe("JobCard status handling", () => {
   it("shows the status and a Close action on my open jobs", () => {
     const html = render({ job: job("OPEN"), variant: "mine", onToggleStatus: () => {} });
     expect(html).toContain(">Open<");
-    expect(html).toContain("Close");
+    expect(html).toContain("Close job");
+    expect(html).toContain("bg-[#D92D20]");
   });
 
-  it("offers Reopen on my closed jobs", () => {
+  it("offers a green Reopen job action on my closed jobs", () => {
     const html = render({ job: job("CLOSED"), variant: "mine", onToggleStatus: () => {} });
     expect(html).toContain(">Closed<");
-    expect(html).toContain("Reopen");
+    expect(html).toContain("Reopen job");
+    expect(html).toContain("bg-[#079455]");
   });
 
   it("does not let owners reopen a job an admin removed", () => {
     const html = render({ job: job("REMOVED"), variant: "mine", onToggleStatus: () => {} });
     expect(html).toContain("Removed by admin");
-    expect(html).not.toContain("Reopen");
+    expect(html).not.toContain("Reopen job");
   });
 
   it("keeps public cards free of status and management actions", () => {
