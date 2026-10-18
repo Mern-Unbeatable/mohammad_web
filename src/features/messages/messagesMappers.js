@@ -125,25 +125,107 @@ export function toConversationModel(conversation, { onlineUserIds } = {}) {
   };
 }
 
+/** Date and time under a group activity notice: "Oct 18, 2026 · 11:37". */
+export function formatEventTime(value) {
+  const date = toDate(value);
+  if (!date) return "";
+  const day = date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  return `${day} · ${clockTime(date)}`;
+}
+
+/** "Anna", "Anna and Ben", "Anna, Ben and Cara", "Anna, Ben and 3 others" (mirrors the server). */
+export function joinNames(names, max = 3) {
+  if (names.length <= 1) return names[0] ?? "";
+  if (names.length <= max) {
+    return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+  }
+  return `${names.slice(0, max - 1).join(", ")} and ${names.length - (max - 1)} others`;
+}
+
+/** `joinNames` over notice parts, keeping each person as its own part so it can be linked. */
+function joinNameParts(people, max = 3) {
+  if (people.length <= 1) return people;
+  const head = people.length <= max ? people.slice(0, -1) : people.slice(0, max - 1);
+  const last =
+    people.length <= max ? people[people.length - 1] : `${people.length - (max - 1)} others`;
+  return [...head.flatMap((person, index) => (index ? [", ", person] : [person])), " and ", last];
+}
+
+/**
+ * Group activity notice from the viewer's point of view, split into parts: plain strings and
+ * `{ text, userId }` for other people's names (the viewer is a plain "You"/"you").
+ */
+export function systemMessageParts(message, currentUserId) {
+  const event = message?.event || {};
+  const isViewer = (id) => Boolean(currentUserId) && id === currentUserId;
+  const actor = isViewer(message?.senderId)
+    ? "You"
+    : message?.sender
+      ? { text: message.sender, userId: message.senderId || null }
+      : "Someone";
+  const targets = joinNameParts(
+    (event.targetIds || []).map((id, index) => {
+      if (isViewer(id)) return "you";
+      const name = event.targetNames?.[index];
+      return name ? { text: name, userId: id } : "a member";
+    }),
+  );
+
+  switch (event.action) {
+    case "created":
+      return targets.length
+        ? [actor, ` created the group "${event.name}" and added `, ...targets]
+        : [actor, ` created the group "${event.name}"`];
+    case "added":
+      return [actor, " added ", ...targets];
+    case "removed":
+      return [actor, " removed ", ...targets];
+    case "left":
+      return [actor, " left the group"];
+    case "renamed":
+      return [actor, ` renamed the group to "${event.name}"`];
+    default:
+      return [message?.body || ""];
+  }
+}
+
+/** Group activity notice from the viewer's point of view ("You added Anna", "Nayem removed you"). */
+export function systemMessageText(message, currentUserId) {
+  return systemMessageParts(message, currentUserId)
+    .map((part) => (typeof part === "string" ? part : part.text))
+    .join("");
+}
+
 /**
  * @param {object} message API or realtime message
  * @param {string} [currentUserId]
  */
 export function toMessageModel(message, currentUserId) {
   if (!message?.id) return null;
+  const isSystem = message.type === "SYSTEM";
   const isMine =
     currentUserId && message.senderId
       ? message.senderId === currentUserId
       : message.from === "me";
-  const body = message.body || "";
+  const textParts = isSystem ? systemMessageParts(message, currentUserId) : null;
+  const body = isSystem
+    ? textParts.map((part) => (typeof part === "string" ? part : part.text)).join("")
+    : message.body || "";
 
   return {
     id: message.id,
     body,
     text: body,
+    textParts,
+    isSystem,
+    eventTime: isSystem ? formatEventTime(message.time) : "",
     attachments: Array.isArray(message.attachments) ? message.attachments : [],
     listing: toChatListingModel(message.listing),
-    from: isMine ? "me" : "them",
+    from: isSystem ? "system" : isMine ? "me" : "them",
     senderId: message.senderId || null,
     sender: typeof message.sender === "string" ? message.sender : null,
     senderAvatar: message.senderAvatar || null,

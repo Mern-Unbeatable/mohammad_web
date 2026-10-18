@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import Card from "@/components/ui/Card";
 import { CardSkeleton } from "@/components/common/Skeleton";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";

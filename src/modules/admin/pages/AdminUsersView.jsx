@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import DataTable from "@/components/data-display/DataTable/DataTable";
 import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";

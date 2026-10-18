@@ -49,6 +49,14 @@ describe("chat routes", () => {
     expect(resolve("/chat/group/g1").matches.at(-2).params).toMatchObject({ groupId: "g1" });
   });
 
+  it.each(["/chat/messages", "/chat/messages/u1", "/chat/group", "/chat/group/g1"])(
+    "gives the %s leaf an explicit empty element so React Router does not warn",
+    (path) => {
+      const leaf = resolve(path).matches.at(-1).route;
+      expect(leaf.element).toBeNull();
+    },
+  );
+
   it("redirects the chat index and unknown chat paths", () => {
     for (const path of ["/chat", "/chat/unknown/x/y", "/admin/chat", "/supplier/chat/nope"]) {
       expect(resolve(path).leafType).toBe(ChatRedirect);

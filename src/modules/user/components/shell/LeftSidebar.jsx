@@ -152,7 +152,7 @@ const TrialCard = ({ user }) => {
           <Crown aria-hidden className="h-4 w-4 text-[#E67E22]" />
           Membership
         </p>
-        <p className="mt-1 text-[12px] text-[#64748B]">
+        <p className="mt-1 text-[12px] text-red-500">
           {user.membershipStatus === "expired"
             ? "Your membership has expired."
             : "Upgrade for full Lab Unity access."}

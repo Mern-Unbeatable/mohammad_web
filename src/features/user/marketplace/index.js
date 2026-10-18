@@ -30,4 +30,5 @@ export {
   toListingDetailModel,
   formatListedAt,
 } from "./marketplaceMappers";
+export { sellerContactLinks, toWhatsAppNumber } from "./sellerContact";
 export * as marketplaceApi from "./marketplaceApi";

@@ -39,6 +39,7 @@ export const initialState = {
   olderLoading: false,
   recipients: [],
   recipientsLoading: false,
+  recipientsRequestId: null,
   onlineUserIds: [],
   sending: false,
   actionLoading: false,
@@ -132,7 +133,12 @@ const messagesSlice = createSlice({
       const conversation = bumpConversation(state, conversationId, message);
       const isActive = state.activeConversationId === conversationId;
       if (isActive) appendMessage(state, message);
-      if (conversation && !isActive && message.senderId !== currentUserId) {
+      if (
+        conversation &&
+        !isActive &&
+        message.senderId !== currentUserId &&
+        message.type !== "SYSTEM"
+      ) {
         if (!conversation.unreadCount) state.unread.conversations += 1;
         conversation.unreadCount = (conversation.unreadCount ?? 0) + 1;
         state.unread.messages += 1;
@@ -257,12 +263,20 @@ const messagesSlice = createSlice({
         state.unread.loaded = true;
       })
 
-      .addCase(fetchRecipients.pending, setPending("recipientsLoading"))
+      .addCase(fetchRecipients.pending, (state, action) => {
+        setPending("recipientsLoading")(state);
+        state.recipientsRequestId = action.meta.requestId;
+      })
+      // Searches race while typing; only the latest one may update the list.
       .addCase(fetchRecipients.fulfilled, (state, action) => {
+        if (state.recipientsRequestId !== action.meta.requestId) return;
         state.recipientsLoading = false;
         state.recipients = action.payload;
       })
-      .addCase(fetchRecipients.rejected, setRejected("recipientsLoading"))
+      .addCase(fetchRecipients.rejected, (state, action) => {
+        if (state.recipientsRequestId !== action.meta.requestId) return;
+        setRejected("recipientsLoading")(state, action);
+      })
 
       .addCase(sendMessage.pending, setPending("sending"))
       .addCase(sendMessage.fulfilled, (state, action) => {

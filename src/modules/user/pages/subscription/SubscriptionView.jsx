@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Check, Clock, Loader2, Mail, RotateCcw, Shield } from 'lucide-react';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import Container from '@/components/ui/Container';
 import Card from '@/components/ui/Card';
 import {
@@ -128,12 +128,12 @@ const SubscriptionView = () => {
         if (confirmCheckout.fulfilled.match(result)) {
           toast.success('Payment successful — membership activated');
         } else {
-          toast.info(
+          toast(
             'Payment received — activating membership. Refresh if status lags.',
           );
         }
       } else if (checkout === 'cancelled') {
-        toast.info('Checkout cancelled — no payment was taken');
+        toast('Checkout cancelled — no payment was taken');
       }
 
       dispatch(fetchMySubscription());
@@ -185,7 +185,7 @@ const SubscriptionView = () => {
 
     const payment = result.payload?.payment;
     if (payment?.checkoutUrl) {
-      toast.info('Redirecting to Stripe Checkout…');
+      toast('Redirecting to Stripe Checkout…');
       window.location.assign(payment.checkoutUrl);
       return;
     }

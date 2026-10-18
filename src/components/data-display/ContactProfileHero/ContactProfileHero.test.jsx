@@ -42,6 +42,16 @@ describe("ContactProfileHero", () => {
     expect(html).toContain(">1</span> connection<");
   });
 
+  it("links Message to the chat when no handler is given", () => {
+    expect(render()).toMatch(/<a[^>]*href="\/chat"[^>]*>.*Message<\/a>/);
+  });
+
+  it("opens a dialog from Message instead of linking when a handler is given", () => {
+    const html = render({ onMessage: () => {} });
+    expect(html).toMatch(/<button type="button" aria-haspopup="dialog"[^>]*>.*Message<\/button>/);
+    expect(html).not.toContain('href="/chat"');
+  });
+
   it("marks connected and pending members on the action button", () => {
     expect(render({ connected: true })).toContain("Connected");
     expect(render({ connected: true })).toContain("lucide-check");

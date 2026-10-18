@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChevronLeft, Loader2 } from 'lucide-react';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import Container from '@/components/ui/Container';
 import Card from '@/components/ui/Card';
 import { JobDetailSkeleton } from '@/components/common/Skeleton';

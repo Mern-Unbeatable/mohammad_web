@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { X, Image, FileText, Loader2 } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import Avatar from "@/components/ui/Avatar";
 import { feedApi, getApiErrorMessage } from "@/features/user/feed";
 import {

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import Container from '@/components/ui/Container';
 import { CardSkeleton } from '@/components/common/Skeleton';
 import ListingCard from '@/components/data-display/ListingCard/ListingCard';

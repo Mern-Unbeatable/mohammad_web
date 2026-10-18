@@ -38,6 +38,7 @@ const initialState = {
   loading: false,
   error: null,
   sessionReady: !tokenService.getToken(),
+  loggingOut: false,
 };
 
 const applyReset = (state) => {
@@ -47,6 +48,7 @@ const applyReset = (state) => {
   state.loading = false;
   state.error = null;
   state.sessionReady = true;
+  state.loggingOut = false;
 };
 
 const authSlice = createSlice({
@@ -135,6 +137,9 @@ const authSlice = createSlice({
         state.sessionReady = true;
       })
       // Logout
+      .addCase(logoutUser.pending, (state) => {
+        state.loggingOut = true;
+      })
       .addCase(logoutUser.fulfilled, (state) => {
         applyReset(state);
       })

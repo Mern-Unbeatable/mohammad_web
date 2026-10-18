@@ -17,7 +17,7 @@ import {
   Video,
   X,
 } from 'lucide-react';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import StatusBadge from '@/components/data-display/DataTable/StatusBadge';
 import AdDetailCard from '@/modules/supplier/components/AdDetailCard';
 import { AD_CATEGORIES, getCategoryById } from '@/modules/supplier/data/advertisements';

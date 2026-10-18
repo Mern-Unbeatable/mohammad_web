@@ -124,7 +124,9 @@ const MessagesPageContent = ({
       pendingListing={pendingListing}
       onAddFiles={onUploadFile ? handleAddFiles : undefined}
       onRemoveAttachment={handleRemoveAttachment}
-      heightClass={isPanel ? 'h-full min-h-0' : 'h-full xl:h-[680px]'}
+      heightClass={
+        isPanel ? 'h-full min-h-0' : 'h-full xl:h-[calc(100dvh-200px)] xl:min-h-[520px]'
+      }
     />
   );
 

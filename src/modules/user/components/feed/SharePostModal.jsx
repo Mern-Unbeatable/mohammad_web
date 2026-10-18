@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Check, Link2, Loader2, Repeat2, Send, X } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { messagesApi } from "@/features/messages";
 import RecipientPicker from "@/shared/pages/messages/RecipientPicker";
 

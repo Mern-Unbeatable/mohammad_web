@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { parseLegacyChatLink, resolveLegacyChatLink } from '@/features/messages';
 import { chatPath } from '@/shared/constants/chat';
 import PageLoadingFallback from '@/shared/routing/PageLoadingFallback';

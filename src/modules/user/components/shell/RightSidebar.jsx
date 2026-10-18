@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useDispatch } from "react-redux";
 import { Briefcase, Check, Clock, ShoppingBag, UserPlus } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import Card from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
 import Badge from "@/components/ui/Badge";

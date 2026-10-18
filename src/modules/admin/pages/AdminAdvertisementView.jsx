@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import DataTable from "@/components/data-display/DataTable/DataTable";
 import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
 import CategoryPill from "@/components/data-display/CategoryPill/CategoryPill";
@@ -85,7 +85,7 @@ const AdminAdvertisementView = () => {
   const handleReview = async (adId, label, rejectionReason) => {
     const apiStatus = statusLabelToReviewApi(label);
     if (!apiStatus) {
-      toast.info("Pending is the default submission state and cannot be set by review.");
+      toast("Pending is the default submission state and cannot be set by review.");
       return;
     }
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { ImagePlus, X } from "lucide-react";
 import Card from "@/components/ui/Card";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";

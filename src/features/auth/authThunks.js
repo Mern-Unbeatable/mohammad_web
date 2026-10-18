@@ -90,13 +90,17 @@ export const refreshSession = createAsyncThunk(
 // ═══════════════════════════════════════════════════════════════════════
 // Logout
 // ═══════════════════════════════════════════════════════════════════════
-export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
-  try {
-    await authApi.logout();
-  } catch {
-    tokenService.clearAuth();
-  }
-});
+export const logoutUser = createAsyncThunk(
+  "auth/logoutUser",
+  async () => {
+    try {
+      await authApi.logout();
+    } catch {
+      tokenService.clearAuth();
+    }
+  },
+  { condition: (_, { getState }) => !getState().auth?.loggingOut },
+);
 
 // ═══════════════════════════════════════════════════════════════════════
 // Forgot / reset password

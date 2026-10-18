@@ -10,6 +10,7 @@ export const categories = [
   'Safety',
   'Consumables',
   'Microscopy',
+  'Other',
 ];
 
 export const conditions = ['New', 'Like New', 'Good', 'Refurbished', 'For Parts'];
