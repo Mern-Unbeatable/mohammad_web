@@ -8,7 +8,7 @@ import Container from "@/components/ui/Container";
 import JobCard from "@/components/data-display/JobCard/JobCard";
 import RecruitmentToolbar from "@/modules/user/components/recruitment/RecruitmentToolbar";
 import JobsSectionHeader from "@/modules/user/components/recruitment/JobsSectionHeader";
-import { jobCountLabel } from "@/modules/user/components/recruitment/jobsSection";
+import { jobCount } from "@/modules/user/components/recruitment/jobsSection";
 import {
   fetchJobs,
   clearRecruitmentError,
@@ -135,9 +135,7 @@ const RecruitmentView = () => {
           <JobsSectionHeader
             title="Public Job Posts"
             description="Open roles posted by other members of the network."
-            countLabel={
-              jobsError ? null : jobCountLabel(showSkeleton, jobsMeta?.total || 0)
-            }
+            count={jobsError ? null : jobCount(showSkeleton, jobsMeta?.total)}
           />
         </div>
 

@@ -6,7 +6,7 @@ import { CardSkeleton } from "@/components/common/Skeleton";
 import JobCard from "@/components/data-display/JobCard/JobCard";
 import RecruitmentToolbar from "@/modules/user/components/recruitment/RecruitmentToolbar";
 import JobsSectionHeader from "@/modules/user/components/recruitment/JobsSectionHeader";
-import { jobCountLabel } from "@/modules/user/components/recruitment/jobsSection";
+import { jobCount } from "@/modules/user/components/recruitment/jobsSection";
 import SupplierRecruitmentActions from "@/modules/supplier/components/SupplierRecruitmentActions";
 import {
   fetchSupplierJobs,
@@ -109,7 +109,7 @@ const SupplierRecruitmentView = () => {
       <JobsSectionHeader
         title="Public Job Posts"
         description="Open roles posted by other members of the network."
-        countLabel={jobCountLabel(jobsLoading, jobsMeta?.total || 0)}
+        count={jobCount(jobsLoading, jobsMeta?.total)}
       />
 
       {jobsLoading ? (

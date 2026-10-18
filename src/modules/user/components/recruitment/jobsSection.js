@@ -1,7 +1,7 @@
 import { JOB_STATUS } from "@/shared/constants/jobStatus";
 
-export const jobCountLabel = (loading, total) =>
-  loading ? "Loading…" : `${total} job post${total === 1 ? "" : "s"}`;
+/** Count shown next to a section title; hidden (null) while loading. */
+export const jobCount = (loading, total) => (loading ? null : total || 0);
 
 /** Query for "My Job Posts"; `status` is a MY_JOB_STATUS_FILTERS id. */
 export const buildMyJobsQuery = ({ page, pageSize, query, level, status }) => {

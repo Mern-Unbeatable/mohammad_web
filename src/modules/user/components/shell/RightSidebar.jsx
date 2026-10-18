@@ -158,23 +158,32 @@ const JobsList = ({ items, loading }) => (
       />
     ) : items.length ? (
       <ul className="divide-y divide-[#E4E7EC]">
-        {items.map(({ id, title, company, location, type, to }) => (
+        {items.map(({ id, title, company, location, type, image, to }) => (
           <li key={id}>
             <Link
               to={to}
-              className="block px-4 py-2 transition-colors hover:bg-[#F9FAFB]"
+              className="flex items-start gap-3 px-4 py-2 transition-colors hover:bg-[#F9FAFB]"
             >
-              <p className="text-[13px] text-deep-blue hover:text-primary">
-                {title}
-              </p>
-              <p className="mt-0.5 text-[12px] text-[#64748B]">
-                {[company, location].filter(Boolean).join(" · ")}
-              </p>
-              {type ? (
-                <Badge variant="fulltime" className="mt-2 normal-case">
-                  {type}
-                </Badge>
+              {image ? (
+                <img
+                  src={image}
+                  alt=""
+                  className="mt-0.5 h-10 w-10 shrink-0 rounded-lg border border-[#EAECF0] object-cover"
+                />
               ) : null}
+              <div className="min-w-0 flex-1">
+                <p className="text-[13px] text-deep-blue hover:text-primary">
+                  {title}
+                </p>
+                <p className="mt-0.5 text-[12px] text-[#64748B]">
+                  {[company, location].filter(Boolean).join(" · ")}
+                </p>
+                {type ? (
+                  <Badge variant="fulltime" className="mt-2 normal-case">
+                    {type}
+                  </Badge>
+                ) : null}
+              </div>
             </Link>
           </li>
         ))}
@@ -279,6 +288,7 @@ const RightSidebar = () => {
             company: job.company || "—",
             location: job.location || "—",
             type: job.employmentType || null,
+            image: job.image || null,
             to: `/recruitment/${job.id}`,
           }));
         setJobs(mapped);

@@ -39,7 +39,9 @@ const JobCard = ({
         ) : null}
         <div className="min-w-0 flex-1">
           <h3 className="text-[15px] font-bold leading-snug text-deep-blue sm:text-[16px] lg:text-[17px]">
-            {job.title}
+            <Link to={href} className="hover:text-primary hover:underline">
+              {job.title}
+            </Link>
           </h3>
           <p className="mt-1 text-[13px] text-[#64748B] sm:text-[14px] lg:text-[15px]">
             {job.company} · {job.location}

@@ -13,7 +13,7 @@ import RecruitmentToolbar from "@/modules/user/components/recruitment/Recruitmen
 import JobsSectionHeader from "@/modules/user/components/recruitment/JobsSectionHeader";
 import {
   buildMyJobsQuery,
-  jobCountLabel,
+  jobCount,
   matchesStatusFilter,
   nextJobStatus,
 } from "@/modules/user/components/recruitment/jobsSection";
@@ -209,7 +209,7 @@ const MyJobsView = () => {
           <JobsSectionHeader
             title="My Job Posts"
             description="Jobs you have posted. Close a role to stop new applications."
-            countLabel={jobCountLabel(jobsLoading, total)}
+            count={jobCount(jobsLoading, total)}
           >
             <SegmentedTabs
               tabs={MY_JOB_STATUS_FILTERS}

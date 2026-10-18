@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildMyJobsQuery,
-  jobCountLabel,
+  jobCount,
   matchesStatusFilter,
   nextJobStatus,
 } from "./jobsSection";
@@ -41,9 +41,9 @@ describe("job status helpers", () => {
     expect(matchesStatusFilter("OPEN", "CLOSED")).toBe(false);
   });
 
-  it("labels counts", () => {
-    expect(jobCountLabel(true, 3)).toBe("Loading…");
-    expect(jobCountLabel(false, 1)).toBe("1 job post");
-    expect(jobCountLabel(false, 4)).toBe("4 job posts");
+  it("hides the title count while loading", () => {
+    expect(jobCount(true, 3)).toBeNull();
+    expect(jobCount(false, 4)).toBe(4);
+    expect(jobCount(false, undefined)).toBe(0);
   });
 });
