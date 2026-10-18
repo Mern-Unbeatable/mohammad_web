@@ -7,6 +7,8 @@ import { CardSkeleton } from "@/components/common/Skeleton";
 import Container from "@/components/ui/Container";
 import JobCard from "@/components/data-display/JobCard/JobCard";
 import RecruitmentToolbar from "@/modules/user/components/recruitment/RecruitmentToolbar";
+import JobsSectionHeader from "@/modules/user/components/recruitment/JobsSectionHeader";
+import { jobCountLabel } from "@/modules/user/components/recruitment/jobsSection";
 import {
   fetchJobs,
   clearRecruitmentError,
@@ -129,7 +131,17 @@ const RecruitmentView = () => {
           basePath={JOB_BASE}
         />
 
-        <div className="mt-6 space-y-4">
+        <div className="mt-6">
+          <JobsSectionHeader
+            title="Public Job Posts"
+            description="Open roles posted by other members of the network."
+            countLabel={
+              jobsError ? null : jobCountLabel(showSkeleton, jobsMeta?.total || 0)
+            }
+          />
+        </div>
+
+        <div className="mt-4 space-y-4">
           {showSkeleton ? (
             <CardSkeleton
               variant="job"

@@ -44,7 +44,7 @@ const RecruitmentToolbar = ({
               }`}
             >
               <Briefcase className="h-3.5 w-3.5" />
-              All Jobs
+              Public Job Posts
             </Link>
             <Link
               to={`${basePath}/my-jobs`}
@@ -55,7 +55,7 @@ const RecruitmentToolbar = ({
               }`}
             >
               <List className="h-3.5 w-3.5" />
-              My Job Post
+              My Job Posts
             </Link>
             <Link
               to={`${basePath}/create`}

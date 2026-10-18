@@ -8,7 +8,12 @@
  */
 
 export { default as userRecruitmentReducer } from "./recruitmentSlice";
-export { clearRecruitmentError, clearSelectedJob, invalidateJobsList } from "./recruitmentSlice";
+export {
+  clearRecruitmentError,
+  clearSelectedJob,
+  invalidateJobsList,
+  jobLeftList,
+} from "./recruitmentSlice";
 export {
   fetchJobs,
   fetchJobDetails,

@@ -1,6 +1,7 @@
 import { Check, MapPin } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
+import FormattedMessage from '@/components/data-display/Messenger/FormattedMessage';
 
 const JobDetailCard = ({ job, applyHref, onApply, showApplyButton = true }) => (
   <>
@@ -35,7 +36,9 @@ const JobDetailCard = ({ job, applyHref, onApply, showApplyButton = true }) => (
 
         <section className="mt-5">
           <h2 className="text-[16px] font-bold text-deep-blue">About this role</h2>
-          <p className="mt-3 text-[14px] leading-[1.7] text-[#475467]">{job.about}</p>
+          <div className="mt-3 space-y-3 text-[14px] leading-[1.7] text-[#475467] [overflow-wrap:anywhere]">
+            <FormattedMessage text={job.about} tone="plain" />
+          </div>
         </section>
 
         <section className="mt-6">

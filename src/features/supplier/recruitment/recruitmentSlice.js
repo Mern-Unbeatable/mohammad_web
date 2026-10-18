@@ -3,6 +3,7 @@ import {
   fetchSupplierJobs,
   fetchSupplierJobDetails,
   createSupplierJob,
+  updateSupplierJob,
   removeSupplierJob,
 } from "./recruitmentThunks";
 
@@ -11,10 +12,31 @@ const initialState = {
   jobsMeta: { page: 1, pageSize: 5, total: 0, totalPages: 1 },
   selectedJob: null,
   jobsLoading: false,
+  jobsRequestId: null,
   selectedJobLoading: false,
   saving: false,
   deleting: false,
   error: null,
+};
+
+const upsertJob = (state, job) => {
+  if (!job?.id) return;
+  const index = state.jobs.findIndex((row) => row.id === job.id);
+  if (index >= 0) state.jobs[index] = job;
+  if (state.selectedJob?.id === job.id) state.selectedJob = job;
+};
+
+const dropJob = (state, jobId) => {
+  const before = state.jobs.length;
+  state.jobs = state.jobs.filter((job) => job.id !== jobId);
+  if (state.jobs.length === before) return;
+  const total = Math.max(0, (state.jobsMeta.total || 0) - 1);
+  const pageSize = state.jobsMeta.pageSize || 1;
+  state.jobsMeta = {
+    ...state.jobsMeta,
+    total,
+    totalPages: Math.max(1, Math.ceil(total / pageSize)),
+  };
 };
 
 const recruitmentSlice = createSlice({
@@ -38,11 +60,16 @@ const recruitmentSlice = createSlice({
       };
       state.error = null;
     },
+    /** A job no longer matches the current list filter (e.g. after closing it). */
+    jobLeftList: (state, action) => {
+      dropJob(state, action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchSupplierJobs.pending, (state) => {
+      .addCase(fetchSupplierJobs.pending, (state, action) => {
         state.jobsLoading = true;
+        state.jobsRequestId = action.meta.requestId;
         state.error = null;
         state.jobs = [];
         state.jobsMeta = {
@@ -52,11 +79,14 @@ const recruitmentSlice = createSlice({
         };
       })
       .addCase(fetchSupplierJobs.fulfilled, (state, action) => {
+        // Ignore responses for a section/page the user has already left.
+        if (action.meta.requestId !== state.jobsRequestId) return;
         state.jobsLoading = false;
         state.jobs = action.payload.data;
         state.jobsMeta = action.payload.meta;
       })
       .addCase(fetchSupplierJobs.rejected, (state, action) => {
+        if (action.meta.requestId !== state.jobsRequestId) return;
         state.jobsLoading = false;
         state.error = action.payload;
       })
@@ -86,15 +116,25 @@ const recruitmentSlice = createSlice({
         state.saving = false;
         state.error = action.payload;
       })
+      .addCase(updateSupplierJob.pending, (state) => {
+        state.saving = true;
+        state.error = null;
+      })
+      .addCase(updateSupplierJob.fulfilled, (state, action) => {
+        state.saving = false;
+        upsertJob(state, action.payload);
+      })
+      .addCase(updateSupplierJob.rejected, (state, action) => {
+        state.saving = false;
+        state.error = action.payload;
+      })
       .addCase(removeSupplierJob.pending, (state) => {
         state.deleting = true;
         state.error = null;
       })
       .addCase(removeSupplierJob.fulfilled, (state, action) => {
         state.deleting = false;
-        state.jobs = state.jobs.filter(
-          (job) => job.id !== action.payload.jobId,
-        );
+        dropJob(state, action.payload.jobId);
         if (state.selectedJob?.id === action.payload.jobId) {
           state.selectedJob = null;
         }
@@ -106,6 +146,10 @@ const recruitmentSlice = createSlice({
   },
 });
 
-export const { clearRecruitmentError, clearSelectedJob, invalidateJobsList } =
-  recruitmentSlice.actions;
+export const {
+  clearRecruitmentError,
+  clearSelectedJob,
+  invalidateJobsList,
+  jobLeftList,
+} = recruitmentSlice.actions;
 export default recruitmentSlice.reducer;

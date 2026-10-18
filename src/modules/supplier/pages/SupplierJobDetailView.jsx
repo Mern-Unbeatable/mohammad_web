@@ -15,6 +15,7 @@ import {
 } from "@/features/supplier/recruitment";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import NotFound from "@/shared/pages/NotFound";
+import { isJobOpen, jobClosedNotice } from "@/shared/constants/jobStatus";
 
 const SupplierJobDetailView = () => {
   const { jobId } = useParams();
@@ -64,6 +65,7 @@ const SupplierJobDetailView = () => {
     Boolean(selectedJob?.owner?.id) &&
     authUser.id === selectedJob.owner.id;
   const applied = appliedJobId === job.id;
+  const isOpen = isJobOpen(job);
 
   const closeApplyForm = () => {
     setShowApplyForm(false);
@@ -107,8 +109,14 @@ const SupplierJobDetailView = () => {
         onApply={
           !isOwner && !job.applyLink ? () => setShowApplyForm(true) : undefined
         }
-        showApplyButton={!isOwner && !applied && !showApplyForm}
+        showApplyButton={!isOwner && isOpen && !applied && !showApplyForm}
       />
+
+      {!isOpen ? (
+        <p className="rounded-lg border border-[#E4E7EC] bg-[#F9FAFB] px-4 py-3 text-[14px] text-[#475467]">
+          {jobClosedNotice(job.status, isOwner)}
+        </p>
+      ) : null}
 
       {applied ? (
         <p className="text-[14px] font-medium text-green-primary">
@@ -116,7 +124,7 @@ const SupplierJobDetailView = () => {
         </p>
       ) : null}
 
-      {!isOwner && showApplyForm ? (
+      {!isOwner && isOpen && showApplyForm ? (
         <Card>
           <form onSubmit={handleApplySubmit} className="space-y-4 p-5 sm:p-6">
             <div>

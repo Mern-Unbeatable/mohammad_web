@@ -34,6 +34,19 @@ const upsertJob = (state, job) => {
   if (state.selectedJob?.id === job.id) state.selectedJob = job;
 };
 
+const dropJob = (state, jobId) => {
+  const before = state.jobs.length;
+  state.jobs = state.jobs.filter((job) => job.id !== jobId);
+  if (state.jobs.length === before) return;
+  const total = Math.max(0, (state.jobsMeta.total || 0) - 1);
+  const pageSize = state.jobsMeta.pageSize || 1;
+  state.jobsMeta = {
+    ...state.jobsMeta,
+    total,
+    totalPages: Math.max(1, Math.ceil(total / pageSize)),
+  };
+};
+
 const recruitmentSlice = createSlice({
   name: "userRecruitment",
   initialState,
@@ -55,6 +68,10 @@ const recruitmentSlice = createSlice({
       };
       state.error = null;
       state.jobsError = null;
+    },
+    /** A job no longer matches the current list filter (e.g. after closing it). */
+    jobLeftList: (state, action) => {
+      dropJob(state, action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -132,9 +149,7 @@ const recruitmentSlice = createSlice({
       })
       .addCase(removeJob.fulfilled, (state, action) => {
         state.deleting = false;
-        state.jobs = state.jobs.filter(
-          (job) => job.id !== action.payload.jobId,
-        );
+        dropJob(state, action.payload.jobId);
         if (state.selectedJob?.id === action.payload.jobId) {
           state.selectedJob = null;
         }
@@ -176,6 +191,10 @@ const recruitmentSlice = createSlice({
   },
 });
 
-export const { clearRecruitmentError, clearSelectedJob, invalidateJobsList } =
-  recruitmentSlice.actions;
+export const {
+  clearRecruitmentError,
+  clearSelectedJob,
+  invalidateJobsList,
+  jobLeftList,
+} = recruitmentSlice.actions;
 export default recruitmentSlice.reducer;

@@ -17,6 +17,7 @@ import {
   formatPostedAgo,
 } from '@/features/user/recruitment';
 import NotFound from '@/shared/pages/NotFound';
+import { isJobOpen, jobClosedNotice } from '@/shared/constants/jobStatus';
 
 const JobDetailView = () => {
   const { jobId } = useParams();
@@ -96,6 +97,7 @@ const JobDetailView = () => {
 
   const job = toJobDetailModel(selectedJob);
   if (!job) return <NotFound />;
+  const isOpen = isJobOpen(job);
 
   const handleApplyClick = () => {
     setShowApplyForm(true);
@@ -139,10 +141,16 @@ const JobDetailView = () => {
           job={job}
           applyHref={!isOwner && job.applyLink ? job.applyLink : undefined}
           onApply={!isOwner && !job.applyLink ? handleApplyClick : undefined}
-          showApplyButton={!isOwner}
+          showApplyButton={!isOwner && isOpen}
         />
 
-        {!isOwner && showApplyForm ? (
+        {!isOpen ? (
+          <p className="mt-5 rounded-lg border border-[#E4E7EC] bg-[#F9FAFB] px-4 py-3 text-[14px] text-[#475467]">
+            {jobClosedNotice(job.status, isOwner)}
+          </p>
+        ) : null}
+
+        {!isOwner && isOpen && showApplyForm ? (
           <Card className="mt-5">
             <form onSubmit={handleApplySubmit} className="space-y-4 p-5 sm:p-6">
               <div>
