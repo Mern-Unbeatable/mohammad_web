@@ -233,6 +233,7 @@ export function toMessageModel(message, currentUserId) {
     senderInitials: message.senderInitials || null,
     time: formatBubbleTime(message.time),
     createdAt: message.time || null,
+    edited: Boolean(message.editedAt),
   };
 }
 

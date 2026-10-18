@@ -145,6 +145,28 @@ describe('Messenger composer and message formatting', () => {
   });
 });
 
+describe('Messenger message editing', () => {
+  const mine = { id: 'm1', from: 'me', text: 'Hello team', time: '12:30', edited: true };
+
+  it('offers edit and delete on your own text messages and labels edited ones', () => {
+    const html = render({
+      activeChat: { ...direct, messages: [mine, { id: 'm2', from: 'them', text: 'Hi', time: '12:31' }] },
+      onEditMessage: () => true,
+      onDeleteMessage: () => {},
+    });
+
+    expect(html.match(/aria-label="Edit message"/g)).toHaveLength(1);
+    expect(html.match(/aria-label="Delete message"/g)).toHaveLength(1);
+    expect(html).toContain('12:30<span class="ml-1">· edited</span>');
+  });
+
+  it('hides the edit action when editing is not available', () => {
+    const html = render({ activeChat: { ...direct, messages: [mine] }, onDeleteMessage: () => {} });
+    expect(html).not.toContain('Edit message');
+    expect(html).toContain('Delete message');
+  });
+});
+
 describe('memberProfilePath', () => {
   it.each([
     ['USER', '/contacts/u1'],

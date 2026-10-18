@@ -4,6 +4,7 @@ import { crudService, tokenService, API_ENDPOINTS } from "@/api";
 
 const REALTIME_EVENTS = [
   "message:new",
+  "message:updated",
   "message:deleted",
   "conversation:new",
   "conversation:updated",

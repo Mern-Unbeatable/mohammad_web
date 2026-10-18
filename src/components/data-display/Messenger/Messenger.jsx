@@ -1,60 +1,35 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import {
   ArrowLeft,
-  Bold,
-  Code,
   FileText,
   Image as ImageIcon,
   Info,
-  Italic,
-  List,
-  ListOrdered,
   Loader2,
   LogOut,
   MessageSquare,
   Paperclip,
+  Pencil,
   Plus,
   Search,
   Send,
-  Strikethrough,
   Trash2,
   X,
 } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
-import { applyComposerFormat, continueList } from "@/features/messages/composerFormat";
+import {
+  MAX_MESSAGE_LENGTH,
+  applyComposerFormat,
+  continueList,
+  formatShortcutFor,
+} from "@/features/messages/composerFormat";
 import ChatListingCard from "./ChatListingCard";
+import EditMessageModal from "./EditMessageModal";
+import FormatToolbar, { ComposerToolButton } from "./FormatToolbar";
 import FormattedMessage from "./FormattedMessage";
 
 const FILE_ACCEPT =
   "image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,video/mp4,video/quicktime";
-
-const MAX_MESSAGE_LENGTH = 5000;
-
-const FORMAT_TOOLS = [
-  { kind: "bold", label: "Bold", shortcut: "Ctrl+B", icon: <Bold className="h-4 w-4" /> },
-  { kind: "italic", label: "Italic", shortcut: "Ctrl+I", icon: <Italic className="h-4 w-4" /> },
-  { kind: "strike", label: "Strikethrough", icon: <Strikethrough className="h-4 w-4" /> },
-  { kind: "code", label: "Inline code", shortcut: "Ctrl+E", icon: <Code className="h-4 w-4" /> },
-  { kind: "bullet", label: "Bulleted list", icon: <List className="h-4 w-4" /> },
-  { kind: "numbered", label: "Numbered list", icon: <ListOrdered className="h-4 w-4" /> },
-];
-
-const FORMAT_SHORTCUTS = { b: "bold", i: "italic", e: "code" };
-
-/** Toolbar button that keeps the textarea's focus and selection while clicked. */
-const ComposerToolButton = ({ label, onClick, className = "", children }) => (
-  <button
-    type="button"
-    onMouseDown={(e) => e.preventDefault()}
-    onClick={onClick}
-    aria-label={label}
-    title={label}
-    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[#64748B] transition-colors hover:bg-[#F2F4F7] hover:text-deep-blue ${className}`}
-  >
-    {children}
-  </button>
-);
 
 const isImage = (attachment) =>
   String(attachment?.mimeType || "").startsWith("image/");
@@ -194,10 +169,17 @@ const MessageBubble = ({
   showAvatar,
   chat,
   onDeleteMessage,
+  onStartEdit,
   getListingHref,
 }) => {
   const isMe = message.from === "me";
   const text = message.text || message.body || "";
+  const timeLabel = (
+    <>
+      {message.time}
+      {message.edited ? <span className="ml-1">· edited</span> : null}
+    </>
+  );
   const listingCard = message.listing ? (
     <ChatListingCard
       listing={message.listing}
@@ -228,20 +210,34 @@ const MessageBubble = ({
             </div>
           ) : null}
           <AttachmentList attachments={message.attachments} isMe />
-          {onDeleteMessage ? (
-            <button
-              type="button"
-              onClick={() => onDeleteMessage(message.id)}
-              aria-label="Delete message"
-              className="absolute -left-8 top-1.5 hidden rounded-md p-1 text-[#98A2B3] hover:bg-[#F9FAFB] hover:text-[#CC1016] group-hover:block [@media(hover:none)]:block"
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-            </button>
+          {onDeleteMessage || (onStartEdit && text) ? (
+            <div className="absolute right-full top-1 mr-1 hidden items-center gap-0.5 group-hover:flex [@media(hover:none)]:flex">
+              {onStartEdit && text ? (
+                <button
+                  type="button"
+                  onClick={onStartEdit}
+                  aria-label="Edit message"
+                  title="Edit"
+                  className="rounded-md p-1 text-[#98A2B3] hover:bg-[#F2F4F7] hover:text-primary"
+                >
+                  <Pencil className="h-3.5 w-3.5" />
+                </button>
+              ) : null}
+              {onDeleteMessage ? (
+                <button
+                  type="button"
+                  onClick={() => onDeleteMessage(message.id)}
+                  aria-label="Delete message"
+                  title="Delete"
+                  className="rounded-md p-1 text-[#98A2B3] hover:bg-[#FEF3F2] hover:text-[#CC1016]"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              ) : null}
+            </div>
           ) : null}
         </div>
-        <span className="mt-1 px-1 text-[10px] text-[#98A2B3]">
-          {message.time}
-        </span>
+        <span className="mt-1 px-1 text-[10px] text-[#98A2B3]">{timeLabel}</span>
       </div>
     );
   }
@@ -266,9 +262,7 @@ const MessageBubble = ({
           </div>
         ) : null}
         <AttachmentList attachments={message.attachments} />
-        <span className="mt-1 block px-1 text-[10px] text-[#98A2B3]">
-          {message.time}
-        </span>
+        <span className="mt-1 block px-1 text-[10px] text-[#98A2B3]">{timeLabel}</span>
       </div>
     </div>
   );
@@ -404,6 +398,7 @@ const Messenger = ({
   onCreateGroup,
   onLeave,
   onDeleteMessage,
+  onEditMessage,
   onOpenInfo,
   loading = false,
   threadLoading = false,
@@ -433,6 +428,14 @@ const Messenger = ({
   const fileInputRef = useRef(null);
   const imageInputRef = useRef(null);
   const composerRef = useRef(null);
+  const [editing, setEditing] = useState({ chatId: null, messageId: null });
+  const editingMessageId =
+    editing.chatId === (displayChat?.id ?? null) ? editing.messageId : null;
+  const setEditingMessageId = (messageId) =>
+    setEditing({ chatId: displayChat?.id ?? null, messageId });
+  const editingMessage = editingMessageId
+    ? messages.find((m) => m.id === editingMessageId && m.from === "me") || null
+    : null;
 
   useLayoutEffect(() => {
     const el = composerRef.current;
@@ -461,7 +464,7 @@ const Messenger = ({
 
   const handleComposerKeyDown = (e) => {
     if (e.nativeEvent.isComposing) return;
-    const shortcut = (e.ctrlKey || e.metaKey) && !e.altKey && FORMAT_SHORTCUTS[e.key.toLowerCase()];
+    const shortcut = formatShortcutFor(e);
     if (shortcut) {
       e.preventDefault();
       applyFormat(shortcut);
@@ -718,6 +721,9 @@ const Messenger = ({
                         showAvatar={showAvatar}
                         chat={displayChat}
                         onDeleteMessage={onDeleteMessage}
+                        onStartEdit={
+                          onEditMessage ? () => setEditingMessageId(message.id) : undefined
+                        }
                         getListingHref={getListingHref}
                       />
                       {seen && index === lastMineIndex ? (
@@ -818,17 +824,7 @@ const Messenger = ({
                       <span className="mx-1 h-5 w-px bg-[#E4E7EC]" aria-hidden="true" />
                     </>
                   ) : null}
-                  <div className="flex min-w-0 items-center gap-0.5 overflow-x-auto [scrollbar-width:none]">
-                    {FORMAT_TOOLS.map(({ kind, label, shortcut, icon }) => (
-                      <ComposerToolButton
-                        key={kind}
-                        label={shortcut ? `${label} (${shortcut})` : label}
-                        onClick={() => applyFormat(kind)}
-                      >
-                        {icon}
-                      </ComposerToolButton>
-                    ))}
-                  </div>
+                  <FormatToolbar onFormat={applyFormat} />
                   <span className="ml-auto hidden shrink-0 whitespace-nowrap pl-2 pr-2 text-[11px] text-[#98A2B3] md:inline">
                     <kbd className="font-sans font-semibold">Shift + Enter</kbd> new line
                   </span>
@@ -872,6 +868,17 @@ const Messenger = ({
           </div>
         )}
       </section>
+
+      <EditMessageModal
+        key={editingMessage?.id || "closed"}
+        open={Boolean(editingMessage)}
+        initialText={editingMessage?.text || editingMessage?.body || ""}
+        canBeEmpty={
+          Boolean(editingMessage?.listing) || editingMessage?.attachments?.length > 0
+        }
+        onSave={(body) => onEditMessage?.(editingMessage.id, body)}
+        onClose={() => setEditingMessageId(null)}
+      />
     </div>
   );
 };

@@ -16,6 +16,7 @@ import {
   conversationRemoved,
   createGroup,
   deleteMessage,
+  editMessage,
   fetchConversation,
   fetchConversations,
   fetchDirectConversation,
@@ -26,6 +27,7 @@ import {
   markConversationRead,
   messageReceived,
   messageRemoved,
+  messageUpdated,
   messagesApi,
   presenceChanged,
   presenceSet,
@@ -291,6 +293,10 @@ const MessagesContainer = ({
         dispatch(markConversationRead(conversationId));
       }
     },
+    'message:updated': (payload) => {
+      dispatch(messageUpdated(payload));
+      dispatch(fetchConversation(payload.conversationId));
+    },
     'message:deleted': (payload) => {
       dispatch(messageRemoved(payload));
       dispatch(fetchConversation(payload.conversationId));
@@ -452,6 +458,17 @@ const MessagesContainer = ({
     return true;
   };
 
+  /** Resolves true when saved, so the bubble can leave edit mode. */
+  const handleEditMessage = async (messageId, body) => {
+    if (!activeConversationId) return false;
+    const result = await dispatch(
+      editMessage({ conversationId: activeConversationId, messageId, body }),
+    );
+    const ok = editMessage.fulfilled.match(result);
+    if (ok) toast.success('Message updated');
+    return ok;
+  };
+
   const handleConfirmDelete = async () => {
     const messageId = pendingDeleteId;
     setPendingDeleteId(null);
@@ -506,6 +523,7 @@ const MessagesContainer = ({
         onCreateGroup={() => setGroupModalOpen(true)}
         onLeave={() => setConfirmLeave(true)}
         onDeleteMessage={setPendingDeleteId}
+        onEditMessage={handleEditMessage}
         onOpenInfo={() => setInfoOpen(true)}
         loading={conversationsLoading}
         threadLoading={messagesLoading}

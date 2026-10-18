@@ -1,6 +1,17 @@
 /** Composer toolbar edits: wrap/unwrap the selection, or toggle list markers on the selected lines. */
 
 const WRAPPERS = { bold: "**", italic: "_", strike: "~~", code: "`" };
+
+export const MAX_MESSAGE_LENGTH = 5000;
+
+/** Ctrl/Cmd + key -> format kind. */
+export const FORMAT_SHORTCUTS = { b: "bold", i: "italic", e: "code" };
+
+/** Format kind for a keydown event's Ctrl/Cmd shortcut, if any. */
+export const formatShortcutFor = (e) =>
+  (e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey
+    ? FORMAT_SHORTCUTS[String(e.key).toLowerCase()] || null
+    : null;
 const BULLET = /^(\s*)[-*•]\s+/;
 const NUMBERED = /^(\s*)\p{Nd}{1,3}[.)]\s+/u;
 
