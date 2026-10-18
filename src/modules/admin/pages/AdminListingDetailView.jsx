@@ -117,7 +117,7 @@ const AdminListingDetailView = () => {
                 <h1 className="text-[24px] font-bold leading-tight text-deep-blue sm:text-[26px]">
                   {listing.title}
                 </h1>
-                <p className="mt-3 max-w-2xl text-[14px] leading-[1.7] text-[#475467]">
+                <p className="mt-3 whitespace-pre-line text-[14px] leading-[1.7] text-[#475467] [overflow-wrap:anywhere]">
                   {listing.description}
                 </p>
               </div>

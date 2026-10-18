@@ -50,6 +50,95 @@ const render = ({ user = { id: ME, role: 'USER' }, selectedListing }) => {
 const sellerProfileHref = (html) =>
   html.match(/href="([^"]*)"[^>]*>View seller profile</)?.[1] ?? null;
 
+const descriptionParagraph = (html) =>
+  html.match(/<p class="([^"]*)">([^<]*Line one[^<]*)<\/p>/) ?? [];
+
+describe('ListingDetailView description', () => {
+  const text =
+    'Line one\nLine two\n\nSecond  paragraph with   spaces\n\n' +
+    `URL: https://example.com/${'a'.repeat(120)}`;
+
+  const render_ = () =>
+    render({
+      selectedListing: { ...listing({ id: OTHER, firstName: 'Ana' }), description: text },
+    });
+
+  it('renders the stored text unchanged as plain text', () => {
+    const [, , rendered] = descriptionParagraph(render_());
+    expect(rendered).toBe(text);
+  });
+
+  it('keeps line and paragraph breaks and wraps long words', () => {
+    const [, className] = descriptionParagraph(render_());
+    expect(className).toContain('whitespace-pre-line');
+    expect(className).toContain('[overflow-wrap:anywhere]');
+  });
+
+  it('uses the full card width', () => {
+    const [, className] = descriptionParagraph(render_());
+    expect(className).not.toContain('max-w-');
+  });
+
+  it('does not interpret markdown or HTML in the description', () => {
+    const html = render({
+      selectedListing: {
+        ...listing({ id: OTHER, firstName: 'Ana' }),
+        description: 'Line one **bold** <b>tag</b>',
+      },
+    });
+    expect(html).toContain('Line one **bold** &lt;b&gt;tag&lt;/b&gt;');
+    expect(html).not.toContain('<strong>');
+  });
+});
+
+describe('ListingDetailView image slider', () => {
+  const withImages = (count) =>
+    render({
+      selectedListing: {
+        ...listing({ id: OTHER, firstName: 'Ana' }),
+        images: Array.from({ length: count }, (_, i) => `https://cdn.example.com/${i}.jpg`),
+      },
+    });
+
+  it('puts every thumbnail in one scrollable row', () => {
+    const html = withImages(5);
+    expect(html).toContain('overflow-x-auto');
+    expect(html).not.toContain('grid grid-cols-4');
+    expect(html.match(/aria-label="View image \d"/g)).toHaveLength(5);
+  });
+
+  it('shows image arrows, a counter and thumbnail arrows when there are more than four', () => {
+    const html = withImages(5);
+    expect(html).toContain('aria-label="Previous image"');
+    expect(html).toContain('aria-label="Next image"');
+    expect(html).toMatch(/>1(?:<!-- -->)? \/ (?:<!-- -->)?5</);
+    expect(html).toContain('aria-label="Scroll thumbnails right"');
+  });
+
+  it('hides thumbnail arrows when all thumbnails fit', () => {
+    const html = withImages(3);
+    expect(html).toContain('aria-label="Next image"');
+    expect(html).not.toContain('Scroll thumbnails');
+  });
+
+  it('offers a full-screen view button on the main image, closed by default', () => {
+    const html = withImages(3);
+    expect(html).toContain('aria-label="View full screen"');
+    expect(html).toContain('group-hover:opacity-100');
+    expect(html).not.toContain('aria-modal="true"');
+  });
+
+  it('has no full-screen button when the listing has no image', () => {
+    expect(withImages(0)).not.toContain('View full screen');
+  });
+
+  it('shows no slider controls for a single image', () => {
+    const html = withImages(1);
+    expect(html).not.toContain('Next image');
+    expect(html).not.toContain('View image');
+  });
+});
+
 describe('ListingDetailView seller profile link', () => {
   it('opens my own profile when I am the seller', () => {
     const html = render({

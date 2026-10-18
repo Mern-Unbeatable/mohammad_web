@@ -1,33 +1,35 @@
-import { useEffect } from 'react';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { useEffect } from "react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 /** Full-screen image overlay; closes on Escape, backdrop click or the X button. */
-const ImageViewer = ({ images, index = 0, onChange, onClose, alt = '' }) => {
+const ImageViewer = ({ images, index = 0, onChange, onClose, alt = "" }) => {
   const count = images.length;
   const go = (step) => onChange?.((index + step + count) % count);
 
   useEffect(() => {
     const handleKey = (event) => {
-      if (event.key === 'Escape') onClose();
-      if (count > 1 && event.key === 'ArrowLeft') onChange?.((index - 1 + count) % count);
-      if (count > 1 && event.key === 'ArrowRight') onChange?.((index + 1) % count);
+      if (event.key === "Escape") onClose();
+      if (count > 1 && event.key === "ArrowLeft")
+        onChange?.((index - 1 + count) % count);
+      if (count > 1 && event.key === "ArrowRight")
+        onChange?.((index + 1) % count);
     };
-    document.addEventListener('keydown', handleKey);
+    document.addEventListener("keydown", handleKey);
     const overflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     return () => {
-      document.removeEventListener('keydown', handleKey);
+      document.removeEventListener("keydown", handleKey);
       document.body.style.overflow = overflow;
     };
   }, [count, index, onChange, onClose]);
 
   return (
     <div
-      className="fixed inset-0 z-[110] flex items-center justify-center bg-black/85 p-4 motion-safe:animate-fade-in"
+      className="fixed inset-0 z-[110] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md motion-safe:animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label={count > 1 ? `Image ${index + 1} of ${count}` : alt || 'Image'}
+      aria-label={count > 1 ? `Image ${index + 1} of ${count}` : alt || "Image"}
     >
       <img
         src={images[index]}
