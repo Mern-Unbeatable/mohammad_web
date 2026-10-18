@@ -1,9 +1,10 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router";
-import { Calendar, ChevronLeft, MapPin, Share2 } from "lucide-react";
+import { useParams } from "react-router";
+import { Calendar, MapPin, Share2 } from "lucide-react";
 import { GeneralPostDetailSkeleton } from "@/components/common/Skeleton";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
+import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
 import NotFound from "@/shared/pages/NotFound";
 import {
   fetchGeneralPostDetails,
@@ -50,13 +51,7 @@ const AdminGeneralPostDetailView = () => {
 
   return (
     <PanelPage>
-      <Link
-        to="/admin/general"
-        className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
-      >
-        <ChevronLeft className="h-4 w-4" />
-        Back to General
-      </Link>
+      <PanelBackButton fallback="/admin/general" />
 
       {post.image ? (
         <img

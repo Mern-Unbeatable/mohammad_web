@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router";
-import { ChevronLeft } from "lucide-react";
+import { useParams } from "react-router";
 import JobDetailCard from "@/components/data-display/JobDetailCard/JobDetailCard";
 import { JobDetailSkeleton } from "@/components/common/Skeleton";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
+import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
 import NotFound from "@/shared/pages/NotFound";
 import JobPosterCard from "@/modules/user/components/recruitment/JobPosterCard";
 import AppliedCandidatesPanel from "@/modules/user/components/recruitment/AppliedCandidatesPanel";
@@ -71,13 +71,7 @@ const AdminJobDetailView = () => {
 
   return (
     <PanelPage>
-      <Link
-        to="/admin/recruitment"
-        className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
-      >
-        <ChevronLeft className="h-4 w-4" />
-        Back to Jobs
-      </Link>
+      <PanelBackButton fallback="/admin/recruitment" />
 
       <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
         <JobDetailCard

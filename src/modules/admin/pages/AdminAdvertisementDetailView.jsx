@@ -1,19 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { toast } from "react-hot-toast";
-import {
-  Ban,
-  Calendar,
-  CheckCircle2,
-  ChevronLeft,
-  Clock3,
-  RefreshCw,
-} from "lucide-react";
+import { Ban, Calendar, CheckCircle2, Clock3, RefreshCw } from "lucide-react";
 import Card from "@/components/ui/Card";
 import RichText from "@/components/data-display/RichText/RichText";
 import { AdvertisementDetailSkeleton } from "@/components/common/Skeleton";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
+import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
 import ReasonModal from "@/modules/admin/components/ReasonModal";
 import {
   fetchAdDetails,
@@ -58,21 +52,31 @@ const AdminAdvertisementDetailView = () => {
   const { adId } = useParams();
   const dispatch = useDispatch();
 
-  const { selectedAd, selectedAdLoading, actionLoading, error } = useSelector(
-    (state) => state.adminAds,
-  );
+  const { selectedAd, actionLoading } = useSelector((state) => state.adminAds);
   const [rejectOpen, setRejectOpen] = useState(false);
+  const [loadError, setLoadError] = useState({ id: null, message: "" });
 
   useEffect(() => {
-    if (adId) {
-      dispatch(fetchAdDetails(adId));
-    }
+    if (!adId) return undefined;
+    let cancelled = false;
+    dispatch(fetchAdDetails(adId)).then((result) => {
+      if (!cancelled && fetchAdDetails.rejected.match(result)) {
+        setLoadError({
+          id: adId,
+          message: result.payload || "Advertisement not found",
+        });
+      }
+    });
     return () => {
+      cancelled = true;
       dispatch(clearSelectedAd());
     };
   }, [dispatch, adId]);
 
-  const ad = useMemo(() => toAdDetailModel(selectedAd), [selectedAd]);
+  const ad = useMemo(
+    () => (selectedAd?.id === adId ? toAdDetailModel(selectedAd) : null),
+    [selectedAd, adId],
+  );
 
   const handleReview = async (label, rejectionReason) => {
     const result = await dispatch(
@@ -89,7 +93,20 @@ const AdminAdvertisementDetailView = () => {
     toast.error(result.payload || "Failed to update advertisement");
   };
 
-  if (selectedAdLoading) {
+  if (!ad && loadError.id === adId) {
+    return (
+      <PanelPage>
+        <PanelBackButton fallback="/admin/advertisement" />
+        <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+          <p className="text-[16px] font-semibold text-deep-blue">
+            {loadError.message}
+          </p>
+        </div>
+      </PanelPage>
+    );
+  }
+
+  if (!ad) {
     return (
       <PanelPage>
         <AdvertisementDetailSkeleton />
@@ -97,19 +114,9 @@ const AdminAdvertisementDetailView = () => {
     );
   }
 
-  if ((error && !selectedAd) || !ad) {
-    return <Navigate to="/admin/advertisement" replace />;
-  }
-
   return (
     <PanelPage>
-      <Link
-        to="/admin/advertisement"
-        className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
-      >
-        <ChevronLeft className="h-4 w-4" />
-        Back to Selection
-      </Link>
+      <PanelBackButton fallback="/admin/advertisement" />
 
       <Card className="overflow-hidden">
         <div className="flex items-start justify-between gap-4 border-b border-[#E4E7EC] px-5 py-4 sm:px-6">

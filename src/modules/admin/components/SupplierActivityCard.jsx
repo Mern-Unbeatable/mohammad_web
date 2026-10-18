@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import {
   Briefcase,
   Eye,
@@ -42,17 +41,25 @@ const capitalize = (text) =>
 const TABS = [
   {
     id: "advertisements",
+    param: "ads",
     label: "Ads",
     icon: Megaphone,
     empty: "No advertisements yet.",
   },
   {
     id: "listings",
+    param: "marketplace",
     label: "Marketplace",
     icon: Store,
     empty: "No marketplace listings yet.",
   },
-  { id: "jobs", label: "Jobs", icon: Briefcase, empty: "No job posts yet." },
+  {
+    id: "jobs",
+    param: "jobs",
+    label: "Jobs",
+    icon: Briefcase,
+    empty: "No job posts yet.",
+  },
 ];
 
 const rowDetails = {
@@ -140,8 +147,23 @@ const ContentRow = ({ item, details }) => (
 
 /** Supplier's ads, listings and jobs for the admin user page. */
 const SupplierActivityCard = ({ content, loading = false }) => {
-  const [activeTab, setActiveTab] = useState("advertisements");
-  const tab = TABS.find((item) => item.id === activeTab);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tab =
+    TABS.find((item) => item.param === searchParams.get("tab")) || TABS[0];
+  const activeTab = tab.id;
+
+  const setActiveTab = (id) => {
+    const next = TABS.find((item) => item.id === id);
+    setSearchParams(
+      (prev) => {
+        const params = new URLSearchParams(prev);
+        if (next === TABS[0]) params.delete("tab");
+        else params.set("tab", next.param);
+        return params;
+      },
+      { replace: true },
+    );
+  };
   const section = content?.[activeTab] || { total: 0, items: [] };
 
   return (

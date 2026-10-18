@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router";
-import { BadgeCheck, ChevronLeft, MessageCircle } from "lucide-react";
+import { BadgeCheck, MessageCircle } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import { ListingDetailSkeleton } from "@/components/common/Skeleton";
 import { formatPrice } from "@/modules/user/data/marketplace";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
+import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
 import NotFound from "@/shared/pages/NotFound";
 import { useAuth } from "@/shared/auth/useAuth";
 import { CHAT_BASE_PATHS, listingChatPath } from "@/shared/constants/chat";
@@ -66,13 +67,7 @@ const AdminListingDetailView = () => {
 
   return (
     <PanelPage>
-      <Link
-        to="/admin/marketplace"
-        className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
-      >
-        <ChevronLeft className="h-4 w-4" />
-        Back to marketplace
-      </Link>
+      <PanelBackButton fallback="/admin/marketplace" />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px] xl:gap-8">
         <div className="min-w-0 space-y-4">

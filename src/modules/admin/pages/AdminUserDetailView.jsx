@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useParams } from "react-router";
-import { Ban, CheckCircle2, ChevronLeft, Loader2 } from "lucide-react";
+import { useParams } from "react-router";
+import { Ban, CheckCircle2, Loader2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import SuspendUserModal from "@/modules/admin/components/SuspendUserModal";
 import Card from "@/components/ui/Card";
@@ -9,6 +9,7 @@ import ProfilePageContent from "@/components/data-display/ProfilePageContent/Pro
 import { ProfilePageSkeleton } from "@/components/common/Skeleton";
 import { SubscriptionDetailsCard } from "@/modules/user/components/profile/ProfileSections";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
+import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
 import { CHAT_BASE_PATHS, chatPath } from "@/shared/constants/chat";
 import { roleLabel } from "@/shared/constants/roles";
 import {
@@ -115,27 +116,6 @@ const AccountDetailsCard = ({ user, updating, onSuspend, onActivate }) => {
   );
 };
 
-const BackLink = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const goBack = () => {
-    if (location.key === "default") navigate("/admin/users");
-    else navigate(-1);
-  };
-
-  return (
-    <button
-      type="button"
-      onClick={goBack}
-      className="inline-flex items-center gap-1.5 rounded-full px-1 py-1 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
-    >
-      <ChevronLeft className="h-4 w-4" />
-      Back
-    </button>
-  );
-};
-
 const AdminUserDetailView = () => {
   const { userId } = useParams();
   const dispatch = useDispatch();
@@ -221,7 +201,7 @@ const AdminUserDetailView = () => {
   if (selectedUserLoading || (!selectedUser && !error)) {
     return (
       <PanelPage>
-        <BackLink />
+        <PanelBackButton fallback="/admin/users" className="py-1" />
         <ProfilePageSkeleton showSubscription sidebar />
       </PanelPage>
     );
@@ -230,7 +210,7 @@ const AdminUserDetailView = () => {
   if (error || !profileUser) {
     return (
       <PanelPage>
-        <BackLink />
+        <PanelBackButton fallback="/admin/users" className="py-1" />
         <div className="rounded-xl bg-white p-8 text-center shadow-sm">
           <p className="text-[16px] font-semibold text-deep-blue">
             {error || "User details not found"}
@@ -246,7 +226,7 @@ const AdminUserDetailView = () => {
 
   return (
     <PanelPage>
-      <BackLink />
+      <PanelBackButton fallback="/admin/users" className="py-1" />
       <ProfilePageContent
         user={profileUser}
         posts={posts}

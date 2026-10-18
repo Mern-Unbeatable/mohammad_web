@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, useNavigate, useParams } from "react-router";
+import { Navigate, useNavigate, useParams } from "react-router";
 import { toast } from "react-hot-toast";
 import {
   AlertTriangle,
   Ban,
   CheckCircle2,
-  ChevronLeft,
   History,
   Shield,
   Trash2,
@@ -20,6 +19,7 @@ import { ReportDetailSkeleton } from "@/components/common/Skeleton";
 import ModerationHistoryModal from "@/modules/admin/components/ModerationHistoryModal";
 import ReasonModal from "@/modules/admin/components/ReasonModal";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
+import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
 import {
   fetchReportDetails,
   clearSelectedReport,
@@ -198,13 +198,7 @@ const AdminReportDetailView = () => {
 
   return (
     <PanelPage>
-      <Link
-        to="/admin/reports"
-        className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
-      >
-        <ChevronLeft className="h-4 w-4" />
-        Back to Reports
-      </Link>
+      <PanelBackButton fallback="/admin/reports" />
 
       <div className="rounded-xl border border-[#FED7AA] bg-[#FFF7ED] px-5 py-4">
         <p className="text-[12px] font-bold uppercase tracking-wide text-[#EA580C]">
