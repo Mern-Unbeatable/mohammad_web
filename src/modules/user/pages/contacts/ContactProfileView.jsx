@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { ChevronLeft } from "lucide-react";
@@ -16,7 +16,10 @@ import {
 } from "@/features/user/contacts";
 import { fetchAuthorPosts, toFeedPostModel } from "@/features/user/feed";
 import NotFound from "@/shared/pages/NotFound";
+import { useAuth } from "@/shared/auth/useAuth";
 import { CHAT_BASE_PATHS, chatPath } from "@/shared/constants/chat";
+import StartConversationModal from "@/shared/pages/messages/StartConversationModal";
+import { useStartConversation } from "@/shared/pages/messages/useStartConversation";
 
 const ContactProfileView = () => {
   const { contactId } = useParams();
@@ -32,8 +35,13 @@ const ContactProfileView = () => {
     authorPostsError,
   } = useSelector((state) => state.userFeed);
 
+  const { user } = useAuth();
+  const startConversation = useStartConversation(CHAT_BASE_PATHS.USER);
   const [reportPost, setReportPost] = useState(null);
   const [notFoundId, setNotFoundId] = useState(null);
+  /** Contact id the message dialog is open for. */
+  const [messageContactId, setMessageContactId] = useState(null);
+  const closeMessage = useCallback(() => setMessageContactId(null), []);
 
   useEffect(() => {
     if (!contactId) return undefined;
@@ -89,6 +97,8 @@ const ContactProfileView = () => {
   const contact = toContactProfileModel(selectedContact);
   if (!contact) return <NotFound />;
 
+  const canMessage = Boolean(contact.id && user?.id && contact.id !== user.id);
+
   const handleConnect = async () => {
     if (contact.connected || contact.pending || connectingId === contact.id) {
       return;
@@ -130,9 +140,19 @@ const ContactProfileView = () => {
             onConnect={handleConnect}
             pending={contact.pending || connectingId === contact.id}
             messageHref={chatPath(CHAT_BASE_PATHS.USER, { id: contact.id })}
+            onMessage={canMessage ? () => setMessageContactId(contact.id) : undefined}
           />
         </Container>
       </main>
+
+      <StartConversationModal
+        open={canMessage && messageContactId === contact.id}
+        title="New message"
+        description={`Start a conversation with ${contact.name}.`}
+        recipient={contact}
+        onClose={closeMessage}
+        onSend={(message) => startConversation({ recipientId: contact.id, message })}
+      />
 
       <ReportPostModal
         open={Boolean(reportPost)}

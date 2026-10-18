@@ -122,7 +122,7 @@ const ContactProfileHero = ({
                 </>
               )}
             </button>
-            {messageHref ? (
+            {messageHref && !onMessage ? (
               <Link
                 to={messageHref}
                 className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md border border-green-primary bg-white px-3.5 py-2 text-[12px] font-semibold text-green-primary transition-colors hover:bg-green-secondary sm:flex-none"
@@ -134,6 +134,7 @@ const ContactProfileHero = ({
               <button
                 type="button"
                 onClick={onMessage}
+                aria-haspopup={onMessage ? "dialog" : undefined}
                 className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md border border-green-primary bg-white px-3.5 py-2 text-[12px] font-semibold text-green-primary transition-colors hover:bg-green-secondary sm:flex-none"
               >
                 <MessageCircle className="h-3.5 w-3.5" />

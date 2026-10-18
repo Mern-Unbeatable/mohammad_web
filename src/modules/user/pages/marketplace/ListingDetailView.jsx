@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   BadgeCheck,
@@ -22,16 +22,11 @@ import {
   toListingDetailModel,
 } from '@/features/user/marketplace';
 import { formatPrice } from '@/modules/user/data/marketplace';
-import { messagesApi } from '@/features/messages';
 import { useAuth } from '@/shared/auth/useAuth';
-import {
-  CHAT_BASE_PATHS,
-  CHAT_SECTIONS,
-  chatPath,
-  chatTargetFor,
-} from '@/shared/constants/chat';
+import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
 import NotFound from '@/shared/pages/NotFound';
-import ContactSellerModal from '@/modules/user/components/marketplace/ContactSellerModal';
+import StartConversationModal from '@/shared/pages/messages/StartConversationModal';
+import { useStartConversation } from '@/shared/pages/messages/useStartConversation';
 
 const SpecTile = ({ label, value }) => (
   <div className="rounded-xl border border-[#E4E7EC] bg-[#F9FAFB] px-4 py-3.5">
@@ -82,7 +77,7 @@ const ImageGallery = ({ images, title, activeImage, onSelect }) => (
 const ListingDetailView = () => {
   const { listingId } = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const startConversation = useStartConversation(CHAT_BASE_PATHS.USER);
   const { user } = useAuth();
   const {
     selectedListing,
@@ -142,20 +137,6 @@ const ListingDetailView = () => {
     if (toggleSaveListing.rejected.match(result)) {
       toast.error(result.payload || 'Failed to update saved listing');
     }
-  };
-
-  /** Reuses (or creates) the 1:1 thread with the seller; throws so the modal can retry. */
-  const handleContactSend = async (message) => {
-    const conversation = await messagesApi.startDirect({
-      participantId: sellerId,
-      message,
-      listingId: listing.id,
-    });
-    const target = chatTargetFor(conversation) || {
-      section: CHAT_SECTIONS.DIRECT,
-      id: sellerId,
-    };
-    navigate(chatPath(CHAT_BASE_PATHS.USER, target));
   };
 
   return (
@@ -286,11 +267,17 @@ const ListingDetailView = () => {
         </div>
       </Container>
 
-      <ContactSellerModal
+      <StartConversationModal
         open={contactListingId === listing.id && Boolean(sellerId) && !isOwnListing}
-        listing={listing}
+        title="Contact seller"
+        description={`Ask ${listing.seller.name} about this listing.`}
+        placeholder="Hi, is this still available?"
+        recipient={listing.seller}
+        listing={listing.raw}
         onClose={closeContact}
-        onSend={handleContactSend}
+        onSend={(message) =>
+          startConversation({ recipientId: sellerId, message, listingId: listing.id })
+        }
       />
     </main>
   );

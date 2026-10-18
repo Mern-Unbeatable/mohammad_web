@@ -1,33 +1,47 @@
-import { useEffect, useRef, useState } from 'react';
-import { AlertCircle, Loader2, Send, X } from 'lucide-react';
-import Avatar from '@/components/ui/Avatar';
-import ChatListingCard from '@/components/data-display/Messenger/ChatListingCard';
-import { getApiErrorMessage } from '@/api';
-import { toChatListingModel } from '@/features/messages';
+import { useEffect, useRef, useState } from "react";
+import { AlertCircle, Loader2, Send, X } from "lucide-react";
+import Avatar from "@/components/ui/Avatar";
+import ChatListingCard from "@/components/data-display/Messenger/ChatListingCard";
+import { getApiErrorMessage } from "@/api";
+import { toChatListingModel } from "@/features/messages";
 
-export const CONTACT_SELLER_MAX_LENGTH = 5000;
+export const START_CONVERSATION_MAX_LENGTH = 5000;
 
 const fieldClass =
-  'w-full rounded-lg border border-[#E4E7EC] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10 disabled:bg-[#F9FAFB]';
+  "w-full rounded-lg border border-[#E4E7EC] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10 disabled:bg-[#F9FAFB]";
+
+/** Profile models fill missing fields with "—"; those are left out. */
+const isShown = (value) =>
+  typeof value === "string" && value.trim() !== "" && value.trim() !== "—";
 
 /**
  * `onSend(message)` must resolve once the message is delivered (the caller
  * navigates away) or throw to keep the form open for a retry.
  */
-const ContactSellerForm = ({ listing, onClose, onSend }) => {
-  const [message, setMessage] = useState('');
+const StartConversationForm = ({
+  recipient,
+  listing = null,
+  title = "New message",
+  description,
+  placeholder = "Write your message...",
+  onClose,
+  onSend,
+}) => {
+  const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const sendingRef = useRef(false);
 
   const body = message.trim();
   const canSubmit = body.length > 0 && !sending;
-  const seller = listing.seller;
-  const subtitle = [seller.title, seller.company].filter((v) => v && v !== '—').join(' · ');
+  const subtitle = [recipient.title, recipient.company]
+    .filter(isShown)
+    .join(" · ");
+  const listingCard = listing ? toChatListingModel(listing) : null;
 
   useEffect(() => {
     const overflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = overflow;
     };
@@ -35,10 +49,10 @@ const ContactSellerForm = ({ listing, onClose, onSend }) => {
 
   useEffect(() => {
     const onKeyDown = (event) => {
-      if (event.key === 'Escape' && !sendingRef.current) onClose();
+      if (event.key === "Escape" && !sendingRef.current) onClose();
     };
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
   const dismiss = () => {
@@ -49,16 +63,21 @@ const ContactSellerForm = ({ listing, onClose, onSend }) => {
     event.preventDefault();
     if (sendingRef.current) return;
     if (!body) {
-      setError('Write a message to the seller.');
+      setError("Write a message first.");
       return;
     }
     sendingRef.current = true;
     setSending(true);
-    setError('');
+    setError("");
     try {
       await onSend(body);
     } catch (err) {
-      setError(getApiErrorMessage(err, 'Could not send your message. Please try again.'));
+      setError(
+        getApiErrorMessage(
+          err,
+          "Could not send your message. Please try again.",
+        ),
+      );
       sendingRef.current = false;
       setSending(false);
     }
@@ -66,7 +85,7 @@ const ContactSellerForm = ({ listing, onClose, onSend }) => {
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-end justify-center bg-black/50 sm:items-center sm:p-4"
+      className="fixed inset-0 z-[200] flex items-end justify-center bg-black/80 sm:items-center sm:p-4"
       onClick={dismiss}
       role="presentation"
     >
@@ -74,20 +93,22 @@ const ContactSellerForm = ({ listing, onClose, onSend }) => {
         className="flex max-h-[92dvh] w-full flex-col rounded-t-2xl bg-white sm:max-w-[480px] sm:rounded-2xl"
         role="dialog"
         aria-modal="true"
-        aria-labelledby="contact-seller-title"
+        aria-labelledby="start-conversation-title"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex shrink-0 items-start justify-between border-b border-[#E4E7EC] px-5 py-4">
           <div>
             <h2
-              id="contact-seller-title"
+              id="start-conversation-title"
               className="text-[17px] font-bold text-deep-blue sm:text-[18px]"
             >
-              Contact seller
+              {title}
             </h2>
-            <p className="mt-1 text-[13px] text-[#64748B] sm:text-[14px]">
-              Ask {seller.name} about this listing.
-            </p>
+            {description ? (
+              <p className="mt-1 text-[13px] text-[#64748B] sm:text-[14px]">
+                {description}
+              </p>
+            ) : null}
           </div>
           <button
             type="button"
@@ -106,43 +127,58 @@ const ContactSellerForm = ({ listing, onClose, onSend }) => {
           noValidate
         >
           <div className="flex items-center gap-3">
-            <Avatar src={seller.avatar} alt={seller.name} initials={seller.initials} size="md" />
+            <Avatar
+              src={recipient.avatar}
+              alt={recipient.name}
+              initials={recipient.initials}
+              size="md"
+            />
             <div className="min-w-0">
-              <p className="truncate text-[14px] font-semibold text-deep-blue">{seller.name}</p>
+              <p className="truncate text-[14px] font-semibold text-deep-blue">
+                {recipient.name}
+              </p>
               {subtitle ? (
-                <p className="truncate text-[12px] text-[#64748B]">{subtitle}</p>
+                <p className="truncate text-[12px] text-[#64748B]">
+                  {subtitle}
+                </p>
               ) : null}
             </div>
           </div>
 
-          <p className="mb-1.5 mt-5 text-[13px] font-semibold text-deep-blue">About this listing</p>
-          <ChatListingCard listing={toChatListingModel(listing.raw)} className="!max-w-none" />
+          {listingCard ? (
+            <>
+              <p className="mb-1.5 mt-5 text-[13px] font-semibold text-deep-blue">
+                About this listing
+              </p>
+              <ChatListingCard listing={listingCard} className="!max-w-none" />
+            </>
+          ) : null}
 
           <label
-            htmlFor="contact-seller-message"
+            htmlFor="start-conversation-message"
             className="mb-1.5 mt-5 block text-[13px] font-semibold text-deep-blue"
           >
             Message<span className="text-pink-light"> *</span>
           </label>
           <textarea
-            id="contact-seller-message"
+            id="start-conversation-message"
             value={message}
             onChange={(event) => {
               setMessage(event.target.value);
-              if (error) setError('');
+              if (error) setError("");
             }}
             rows={4}
-            maxLength={CONTACT_SELLER_MAX_LENGTH}
-            placeholder="Hi, is this still available?"
+            maxLength={START_CONVERSATION_MAX_LENGTH}
+            placeholder={placeholder}
             disabled={sending}
             aria-invalid={Boolean(error)}
-            aria-describedby={error ? 'contact-seller-error' : undefined}
+            aria-describedby={error ? "start-conversation-error" : undefined}
             className={`${fieldClass} resize-y`}
           />
 
           {error ? (
             <p
-              id="contact-seller-error"
+              id="start-conversation-error"
               role="alert"
               className="mt-2 flex items-start gap-1.5 text-[13px] text-[#CC1016]"
             >
@@ -170,7 +206,7 @@ const ContactSellerForm = ({ listing, onClose, onSend }) => {
               ) : (
                 <Send className="h-4 w-4" />
               )}
-              {sending ? 'Sending…' : 'Send Message'}
+              {sending ? "Sending…" : "Send Message"}
             </button>
           </div>
         </form>
@@ -179,8 +215,12 @@ const ContactSellerForm = ({ listing, onClose, onSend }) => {
   );
 };
 
-/** Form state resets on every open because the form remounts. */
-const ContactSellerModal = ({ open, ...props }) =>
-  open ? <ContactSellerForm {...props} /> : null;
+/**
+ * First message to one person — from a profile, or about a marketplace
+ * `listing` (raw API listing). Form state resets on every open because the
+ * form remounts.
+ */
+const StartConversationModal = ({ open, ...props }) =>
+  open ? <StartConversationForm {...props} /> : null;
 
-export default ContactSellerModal;
+export default StartConversationModal;
