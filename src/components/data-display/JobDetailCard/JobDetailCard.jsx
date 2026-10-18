@@ -44,6 +44,9 @@ const JobDetailCard = ({
 
         <div className="mt-4 flex flex-wrap items-center gap-2 border-b border-[#E4E7EC] pb-5">
           <Badge variant="fulltime">{job.employmentType}</Badge>
+          {job.workplaceType ? (
+            <Badge variant="workplace">{job.workplaceType}</Badge>
+          ) : null}
           <Badge variant="post">{job.level}</Badge>
           <span className="inline-flex items-center rounded-full bg-green-secondary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-green-primary">
             {job.salary}

@@ -117,4 +117,19 @@ export async function applyToJob(jobId, payload = {}) {
   return unwrapApiData(response) || response;
 }
 
+/** Field name must be `file` (multer upload.single("file")). Returns the public URL. */
+export async function uploadJobImage(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+  const response = await crudService.upload(
+    API_ENDPOINTS.SUPPLIER.UPLOADS.SINGLE,
+    formData,
+    null,
+    { timeout: 60000 },
+  );
+  const data = unwrapApiData(response) || response;
+  if (!data?.url) throw new Error("Upload did not return a file URL");
+  return data.url;
+}
+
 export { getApiErrorMessage };

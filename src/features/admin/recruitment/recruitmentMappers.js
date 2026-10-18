@@ -1,5 +1,7 @@
 /** Map API enums / fields onto JobCard & JobDetailCard props. */
 
+import { workplaceLabel } from "@/shared/constants/jobWorkplace";
+
 const LEVEL_LABEL = {
   ENTRY_LEVEL: "Entry-level",
   MID_LEVEL: "Mid-level",
@@ -69,6 +71,7 @@ export function toJobCardModel(job) {
     ...job,
     employmentType:
       EMPLOYMENT_LABEL[job.employmentType] || job.employmentType,
+    workplaceType: workplaceLabel(job.workplaceType),
     level: LEVEL_LABEL[job.level] || job.level,
     salary: job.salary || "—",
     postedAgo: formatPostedAgo(job.postedAt),

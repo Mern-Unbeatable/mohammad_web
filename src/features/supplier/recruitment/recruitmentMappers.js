@@ -1,5 +1,7 @@
 /** Map API jobs onto JobCard / JobDetailCard / create form props. */
 
+import { workplaceLabel, workplaceToApi } from "@/shared/constants/jobWorkplace";
+
 const LEVEL_LABEL = {
   ENTRY_LEVEL: "Entry-level",
   MID_LEVEL: "Mid-level",
@@ -72,6 +74,7 @@ export function toJobCardModel(job) {
     ...job,
     employmentType:
       EMPLOYMENT_LABEL[job.employmentType] || job.employmentType,
+    workplaceType: workplaceLabel(job.workplaceType),
     level: LEVEL_LABEL[job.level] || job.level,
     salary: job.salary || "—",
     postedAgo: formatPostedAgo(job.postedAt),
@@ -100,6 +103,7 @@ export function formToCreatePayload(form) {
     company: String(form.company || "").trim(),
     location: String(form.location || "").trim(),
     employmentType: employmentToApi(form.employmentType),
+    workplaceType: workplaceToApi(form.workplaceType),
     level: LEVEL_API[form.level] || "MID_LEVEL",
     about: String(form.description || "").trim(),
     requirements,
@@ -107,6 +111,7 @@ export function formToCreatePayload(form) {
 
   if (form.salary?.trim()) payload.salary = form.salary.trim();
   if (form.applyLink?.trim()) payload.applyLink = form.applyLink.trim();
+  if (form.imageUrl) payload.imageUrl = form.imageUrl;
 
   return payload;
 }
