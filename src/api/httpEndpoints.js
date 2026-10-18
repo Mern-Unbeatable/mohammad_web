@@ -49,6 +49,8 @@ export const API_ENDPOINTS = {
     SEND: (conversationId) => `/messages/${conversationId}/messages`,
     DELETE_MESSAGE: (conversationId, messageId) =>
       `/messages/${conversationId}/messages/${messageId}`,
+    EDIT_MESSAGE: (conversationId, messageId) =>
+      `/messages/${conversationId}/messages/${messageId}`,
     READ: (conversationId) => `/messages/${conversationId}/read`,
     PARTICIPANTS: (conversationId) => `/messages/${conversationId}/participants`,
     PARTICIPANT: (conversationId, userId) =>

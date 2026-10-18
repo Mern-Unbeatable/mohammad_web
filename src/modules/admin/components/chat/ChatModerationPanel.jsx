@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import { ArrowLeft, FileText, Loader2, MessageSquare, Search, Trash2, Users } from 'lucide-react';
 import Avatar from '@/components/ui/Avatar';
 import ConfirmModal from '@/components/common/ConfirmModal/ConfirmModal';
+import FormattedMessage from '@/components/data-display/Messenger/FormattedMessage';
 import {
   clearAdminMessagesError,
   fetchModerationConversation,
@@ -297,9 +298,9 @@ const ChatModerationPanel = () => {
                         <span className="ml-2 text-[#98A2B3]">{formatBubbleTime(message.time)}</span>
                       </p>
                       {message.body ? (
-                        <p className="mt-0.5 whitespace-pre-wrap break-words text-[13px] text-[#334155]">
-                          {message.body}
-                        </p>
+                        <div className="mt-0.5 space-y-1.5 break-words text-[13px] text-[#334155]">
+                          <FormattedMessage text={message.body} tone="plain" />
+                        </div>
                       ) : null}
                       {message.attachments?.length ? (
                         <div className="mt-1 flex flex-wrap gap-2">

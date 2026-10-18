@@ -93,6 +93,12 @@ export async function sendMessage(
   );
 }
 
+export async function editMessage(conversationId, messageId, body) {
+  return unwrapApiData(
+    await crudService.patch(E.EDIT_MESSAGE(conversationId, messageId), { body }),
+  );
+}
+
 export async function deleteMessage(conversationId, messageId) {
   await crudService.del(E.DELETE_MESSAGE(conversationId, messageId));
   return { conversationId, messageId };

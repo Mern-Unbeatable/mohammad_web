@@ -97,6 +97,14 @@ export const sendMessage = createAsyncThunk(
   ),
 );
 
+export const editMessage = createAsyncThunk(
+  "messages/editMessage",
+  withError("Failed to edit message", async ({ conversationId, messageId, body }) => ({
+    conversationId,
+    message: await messagesApi.editMessage(conversationId, messageId, body),
+  })),
+);
+
 export const deleteMessage = createAsyncThunk(
   "messages/deleteMessage",
   withError("Failed to delete message", ({ conversationId, messageId }) =>

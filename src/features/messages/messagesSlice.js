@@ -9,6 +9,7 @@ import {
   startDirect,
   createGroup,
   sendMessage,
+  editMessage,
   deleteMessage,
   leaveConversation,
   renameGroup,
@@ -107,6 +108,15 @@ const setRejected = (key) => (state, action) => {
   state.error = action.payload || action.error?.message || "Something went wrong";
 };
 
+/** Edits only change text and `editedAt`; `from` stays as loaded (it is viewer-relative). */
+const applyMessageEdit = (state, { conversationId, message } = {}) => {
+  if (!message?.id || state.activeConversationId !== conversationId) return;
+  const existing = state.messages.find((m) => m.id === message.id);
+  if (!existing) return;
+  existing.body = message.body;
+  existing.editedAt = message.editedAt ?? null;
+};
+
 const messagesSlice = createSlice({
   name: "messages",
   initialState,
@@ -143,6 +153,10 @@ const messagesSlice = createSlice({
         conversation.unreadCount = (conversation.unreadCount ?? 0) + 1;
         state.unread.messages += 1;
       }
+    },
+    /** Realtime: `message:updated` (an edit by the sender). */
+    messageUpdated: (state, action) => {
+      applyMessageEdit(state, action.payload);
     },
     messageRemoved: (state, action) => {
       const { conversationId, messageId } = action.payload;
@@ -287,6 +301,13 @@ const messagesSlice = createSlice({
       })
       .addCase(sendMessage.rejected, setRejected("sending"))
 
+      .addCase(editMessage.fulfilled, (state, action) => {
+        applyMessageEdit(state, action.payload);
+      })
+      .addCase(editMessage.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+
       .addCase(deleteMessage.fulfilled, (state, action) => {
         const { conversationId, messageId } = action.payload;
         if (state.activeConversationId === conversationId) {
@@ -344,6 +365,7 @@ export const {
   setActiveConversation,
   resetMessages,
   messageReceived,
+  messageUpdated,
   messageRemoved,
   conversationRemoved,
   conversationReadByOther,
