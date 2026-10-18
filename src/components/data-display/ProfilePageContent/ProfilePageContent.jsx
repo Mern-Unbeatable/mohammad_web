@@ -32,6 +32,7 @@ const ProfilePageContent = ({
   postsTitle = "Activity",
   threeColumn = false,
   mainSlot = null,
+  renderActivity,
 }) => {
   const hero = (
     <ProfileHero
@@ -91,7 +92,7 @@ const ProfilePageContent = ({
             </div>
           ) : null}
           <div className="order-3 min-w-0 xl:col-start-2 xl:row-span-3 xl:row-start-1 2xl:row-span-2">
-            {activity}
+            {renderActivity ? renderActivity(activity) : activity}
           </div>
         </div>
       </div>

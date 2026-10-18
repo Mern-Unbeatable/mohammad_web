@@ -18,7 +18,7 @@ import {
   updateUserStatus,
   usersApi,
 } from "@/features/admin/users";
-import SupplierActivityCard from "@/modules/admin/components/SupplierActivityCard";
+import ProfileActivityTabs from "@/modules/admin/components/ProfileActivityTabs";
 import { toProfilePageUser } from "@/features/user/profile";
 import { fetchAuthorPosts, toFeedPostModel } from "@/features/user/feed";
 
@@ -133,13 +133,14 @@ const AdminUserDetailView = () => {
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [contentCache, setContentCache] = useState({ key: null, data: null });
 
+  const userLoaded = selectedUser?.id === userId;
   const isSupplier =
-    selectedUser?.id === userId &&
+    userLoaded &&
     (selectedUser.role === "SUPPLIER" ||
       selectedUser.profileType === "SUPPLIER");
 
   useEffect(() => {
-    if (!isSupplier) return undefined;
+    if (!userLoaded) return undefined;
     let cancelled = false;
     usersApi
       .getUserContent(userId)
@@ -152,7 +153,7 @@ const AdminUserDetailView = () => {
     return () => {
       cancelled = true;
     };
-  }, [isSupplier, userId]);
+  }, [userLoaded, userId]);
 
   useEffect(() => {
     if (userId) dispatch(fetchUserDetails(userId));
@@ -223,6 +224,8 @@ const AdminUserDetailView = () => {
   const isPremium = ["premium", "trial", "cancelled"].includes(
     profileUser.membershipStatus,
   );
+  const contentLoading = contentCache.key !== userId;
+  const content = contentLoading ? null : contentCache.data;
 
   return (
     <PanelPage>
@@ -262,14 +265,21 @@ const AdminUserDetailView = () => {
             }
           />
         }
-        mainSlot={
-          isSupplier ? (
-            <SupplierActivityCard
-              content={contentCache.key === userId ? contentCache.data : null}
-              loading={contentCache.key !== userId}
-            />
-          ) : null
-        }
+        renderActivity={(activity) => (
+          <ProfileActivityTabs
+            posts={activity}
+            postsTotal={
+              isThisAuthor && !authorPostsLoading
+                ? (authorPostsMeta?.total ?? posts.length)
+                : "…"
+            }
+            content={content}
+            contentLoading={contentLoading}
+            kinds={
+              isSupplier ? ["advertisements", "listings", "jobs"] : ["jobs"]
+            }
+          />
+        )}
         postsTitle={null}
         threeColumn
       />
