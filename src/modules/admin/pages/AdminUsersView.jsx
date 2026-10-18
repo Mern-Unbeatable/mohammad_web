@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
+import { Ban, CheckCircle2, Eye } from "lucide-react";
 import DataTable from "@/components/data-display/DataTable/DataTable";
 import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
 import Avatar from "@/components/ui/Avatar";
@@ -208,17 +209,20 @@ const AdminUsersView = () => {
     {
       id: "details",
       label: "See Details",
+      icon: Eye,
       onClick: () => navigate(`/admin/users/${row.id}`),
     },
     {
       id: "active",
       label: "Active",
+      icon: CheckCircle2,
       disabled: () => row.status === "Active",
       onClick: () => handleStatusChange(row.id, "Active"),
     },
     {
       id: "suspend",
       label: "Suspend",
+      icon: Ban,
       variant: "danger",
       disabled: () => row.status === "Suspend" || row.status === "Banned",
       onClick: () => setSuspendTarget(row),

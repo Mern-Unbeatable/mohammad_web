@@ -73,6 +73,7 @@ export const API_ENDPOINTS = {
       LIST: "/users",
       DETAILS: (userId) => `/users/${userId}`,
       STATUS: (userId) => `/users/${userId}/status`,
+      CONTENT: (userId) => `/users/${userId}/content`,
     },
 
     BLOGS: {

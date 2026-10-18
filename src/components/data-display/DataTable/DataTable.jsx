@@ -363,6 +363,9 @@ function ActionMenu({ row, actions }) {
                       : 'text-deep-blue hover:bg-[#F9FAFB]'
                   }`}
                 >
+                  {action.icon ? (
+                    <action.icon className="h-4 w-4 shrink-0" strokeWidth={2} />
+                  ) : null}
                   {action.label}
                 </button>
               ))}

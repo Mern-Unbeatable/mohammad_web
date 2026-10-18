@@ -22,10 +22,12 @@ const ContactProfilePageContent = ({
   onConnect,
   onMessage,
   messageHref = "/chat",
+  showConnect = true,
 }) => (
   <div className="space-y-4">
     <ContactProfileHero
       contact={contact}
+      showConnect={showConnect}
       connected={connected}
       pending={pending}
       onConnect={onConnect}

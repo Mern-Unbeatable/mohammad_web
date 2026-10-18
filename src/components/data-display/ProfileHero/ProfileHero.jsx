@@ -169,13 +169,25 @@ export const ProfessionalInfoCard = ({ user = currentUser, extended = false }) =
   </Card>
 );
 
-export const ContactInfoCard = ({ user = currentUser, showProfessional = false }) => (
-  <Card className="h-full">
-    <div className="border-b border-[#E4E7EC] px-5 py-4 sm:px-6">
-      <h2 className="text-[16px] font-bold text-deep-blue">Contact information</h2>
+/** `narrow` keeps one tile per row from xl up, for side columns. */
+export const ContactInfoCard = ({
+  user = currentUser,
+  showProfessional = false,
+  narrow = false,
+  accent = false,
+}) => (
+  <Card className="h-full overflow-hidden">
+    <div
+      className={`border-b px-5 py-4 sm:px-6 ${accent ? "border-primary bg-primary" : "border-[#E4E7EC]"}`}
+    >
+      <h2 className={`text-[16px] font-bold ${accent ? "text-white" : "text-deep-blue"}`}>
+        Contact information
+      </h2>
     </div>
     <div className="p-4 sm:p-5">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div
+        className={`grid grid-cols-1 gap-3 sm:grid-cols-2 ${narrow ? "xl:grid-cols-1" : ""}`}
+      >
         <InfoTile icon={Building2} label="Laboratory / Company" value={user.company} />
         <InfoTile icon={MapPin} label="Country" value={user.country} />
         <InfoTile icon={Mail} label="Email" value={user.email} />

@@ -30,6 +30,8 @@ const ProfilePageContent = ({
   subscriptionSlot = null,
   sidebarSlot = null,
   postsTitle = 'Activity',
+  threeColumn = false,
+  mainSlot = null,
 }) => {
   const hero = (
     <ProfileHero
@@ -56,6 +58,45 @@ const ProfilePageContent = ({
       className={sidebarSlot ? 'order-3' : ''}
     />
   );
+
+  const infoCards = isPremium ? (
+    <ContactInfoCard user={user} showProfessional narrow accent />
+  ) : (
+    <>
+      <ProfessionalInfoCard user={user} extended />
+      <ContactInfoCard user={user} narrow accent />
+    </>
+  );
+
+  // 2xl: contact info | activity | account cards. xl: all cards left, activity
+  // right so posts keep a feed-like width. Below xl the cards stack.
+  if (threeColumn) {
+    return (
+      <div className="space-y-4">
+        {hero}
+
+        <div className="flex flex-col gap-4 xl:grid xl:grid-cols-[minmax(320px,1fr)_minmax(0,640px)] xl:grid-rows-[auto_auto_1fr] xl:items-start 2xl:grid-cols-[minmax(280px,1fr)_minmax(0,640px)_minmax(300px,1fr)] 2xl:grid-rows-[auto_1fr]">
+          <div className="order-1 space-y-4 xl:col-start-1 xl:row-start-1 2xl:row-span-2">
+            {infoCards}
+          </div>
+          {subscriptionSlot ? (
+            <div className="order-2 xl:col-start-1 xl:row-start-2 2xl:col-start-3 2xl:row-start-1">
+              {subscriptionSlot}
+            </div>
+          ) : null}
+          {sidebarSlot ? (
+            <div className="order-4 xl:col-start-1 xl:row-start-3 2xl:col-start-3 2xl:row-start-2">
+              {sidebarSlot}
+            </div>
+          ) : null}
+          <div className="order-3 min-w-0 space-y-4 xl:col-start-2 xl:row-span-3 xl:row-start-1 2xl:row-span-2">
+            {mainSlot}
+            {activity}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (sidebarSlot) {
     return (
