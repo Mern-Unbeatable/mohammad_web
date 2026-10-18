@@ -56,6 +56,19 @@ export const createSupplierJob = createAsyncThunk(
 // ═══════════════════════════════════════════════════════════════════════
 // Delete job
 // ═══════════════════════════════════════════════════════════════════════
+export const updateSupplierJob = createAsyncThunk(
+  "supplierRecruitment/updateSupplierJob",
+  async ({ jobId, payload }, { rejectWithValue }) => {
+    try {
+      return await recruitmentApi.updateJob(jobId, payload);
+    } catch (err) {
+      return rejectWithValue(
+        recruitmentApi.getApiErrorMessage(err, "Failed to update job"),
+      );
+    }
+  },
+);
+
 export const removeSupplierJob = createAsyncThunk(
   "supplierRecruitment/removeSupplierJob",
   async (jobId, { rejectWithValue }) => {

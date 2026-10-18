@@ -1,6 +1,91 @@
 import { describe, expect, it } from "vitest";
-import reducer, { invalidateJobsList } from "./recruitmentSlice";
-import { fetchJobs } from "./recruitmentThunks";
+import reducer, {
+  invalidateJobsList,
+  jobApplicationsSeen,
+  selectNewApplicationTotal,
+} from "./recruitmentSlice";
+import {
+  applyToJob,
+  fetchJobDetails,
+  fetchJobs,
+  fetchMyApplications,
+  fetchNewApplicationCounts,
+  withdrawApplication,
+} from "./recruitmentThunks";
+
+describe("new application badge state", () => {
+  const loaded = () =>
+    reducer(
+      undefined,
+      fetchNewApplicationCounts.fulfilled({ total: 3, byJob: { a: 2, b: 1 } }, "r"),
+    );
+
+  it("stores the server counts", () => {
+    const state = loaded();
+    expect(selectNewApplicationTotal({ userRecruitment: state })).toBe(3);
+    expect(state.newApplications.byJob).toEqual({ a: 2, b: 1 });
+  });
+
+  it("clears one job's count when its applicants are opened", () => {
+    const state = reducer(loaded(), jobApplicationsSeen("a"));
+    expect(state.newApplications).toEqual({ total: 1, byJob: { b: 1 } });
+    expect(reducer(state, jobApplicationsSeen("missing")).newApplications.total).toBe(1);
+  });
+});
+
+describe("applying to the open job", () => {
+  it("marks the selected job as applied so the button disables", () => {
+    let state = reducer(undefined, { type: "@@init" });
+    state = reducer(
+      state,
+      fetchJobDetails.fulfilled({ id: "j1", myApplication: null }, "r", "j1"),
+    );
+    state = reducer(
+      state,
+      applyToJob.fulfilled(
+        {
+          jobId: "j1",
+          application: { id: "a1", status: "APPLIED", createdAt: "2026-10-18" },
+        },
+        "r2",
+        { jobId: "j1" },
+      ),
+    );
+    expect(state.selectedJob.myApplication).toEqual({
+      id: "a1",
+      status: "APPLIED",
+      appliedAt: "2026-10-18",
+    });
+  });
+
+  it("drops a cancelled application and re-enables applying", () => {
+    let state = reducer(undefined, { type: "@@init" });
+    state = reducer(
+      state,
+      fetchJobDetails.fulfilled(
+        { id: "j1", myApplication: { id: "a1", status: "APPLIED" } },
+        "r",
+        "j1",
+      ),
+    );
+    state = reducer(
+      state,
+      fetchMyApplications.fulfilled(
+        {
+          data: [
+            { id: "a1", job: { id: "j1" } },
+            { id: "a2", job: { id: "j2" } },
+          ],
+          meta: {},
+        },
+        "r2",
+      ),
+    );
+    state = reducer(state, withdrawApplication.fulfilled({ jobId: "j1" }, "r3", "j1"));
+    expect(state.applications.map((app) => app.id)).toEqual(["a2"]);
+    expect(state.selectedJob.myApplication).toBeNull();
+  });
+});
 
 const initial = reducer(undefined, { type: "@@init" });
 const page = (n) => ({

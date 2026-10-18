@@ -20,7 +20,7 @@ const SupplierRecruitmentActions = ({
       }`}
     >
       <Briefcase className="h-3.5 w-3.5" />
-      All Jobs
+      Public Job Posts
     </Link>
     <Link
       to={myJobsHref}
@@ -31,7 +31,7 @@ const SupplierRecruitmentActions = ({
       }`}
     >
       <List className="h-3.5 w-3.5" />
-      My Job Post
+      My Job Posts
     </Link>
     <Link
       to={createHref}

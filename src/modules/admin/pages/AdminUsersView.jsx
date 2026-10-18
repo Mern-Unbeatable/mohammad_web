@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { toast } from "react-hot-toast";
+import { Ban, CheckCircle2, Eye } from "lucide-react";
 import DataTable from "@/components/data-display/DataTable/DataTable";
 import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
+import Avatar from "@/components/ui/Avatar";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
 import SuspendUserModal from "@/modules/admin/components/SuspendUserModal";
@@ -17,6 +19,12 @@ const USER_TABS = [
   { id: "user", label: "Users" },
   { id: "supplier", label: "Supplier" },
 ];
+
+const TAB_IDS = USER_TABS.map((t) => t.id);
+const PLAN_VALUES = ["all", "monthly", "yearly", "free"];
+const STATUS_VALUES = ["all", "active", "suspend", "banned"];
+
+const pick = (value, allowed) => (allowed.includes(value) ? value : "all");
 
 /** Build list query matching server adminUserListQuerySchema */
 const buildUsersQuery = ({ page, tab, statusFilter, planFilter, search }) => {
@@ -48,24 +56,61 @@ const AdminUsersView = () => {
     (state) => state.adminUsers,
   );
 
-  const [tab, setTab] = useState("all");
-  const [page, setPage] = useState(1);
-  const [planFilter, setPlanFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tab = pick(searchParams.get("tab"), TAB_IDS);
+  const page = Math.max(1, Number.parseInt(searchParams.get("page"), 10) || 1);
+  const planFilter = pick(searchParams.get("plan"), PLAN_VALUES);
+  const statusFilter = pick(searchParams.get("status"), STATUS_VALUES);
+  const debouncedSearch = searchParams.get("q") || "";
+
+  const [search, setSearch] = useState(debouncedSearch);
+  const [syncedSearch, setSyncedSearch] = useState(debouncedSearch);
   const [suspendTarget, setSuspendTarget] = useState(null);
+
+  if (syncedSearch !== debouncedSearch) {
+    setSyncedSearch(debouncedSearch);
+    setSearch(debouncedSearch);
+  }
 
   const isSupplierTab = tab === "supplier";
 
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search), 350);
-    return () => clearTimeout(timer);
-  }, [search]);
+  /** Merges `changes` into the URL; "all"/empty values and page 1 are dropped. */
+  const updateParams = (changes) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      Object.entries(changes).forEach(([key, value]) => {
+        if (
+          value == null ||
+          value === "" ||
+          value === "all" ||
+          (key === "page" && Number(value) <= 1)
+        ) {
+          next.delete(key);
+        } else {
+          next.set(key, String(value));
+        }
+      });
+      return next;
+    });
+  };
 
   useEffect(() => {
-    setPage(1);
-  }, [debouncedSearch]);
+    const q = search.trim();
+    if (q === debouncedSearch) return undefined;
+    const timer = setTimeout(() => {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          if (q) next.set("q", q);
+          else next.delete("q");
+          next.delete("page");
+          return next;
+        },
+        { replace: true },
+      );
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [search, debouncedSearch, setSearchParams]);
 
   useEffect(() => {
     dispatch(
@@ -105,6 +150,7 @@ const AdminUsersView = () => {
       return {
         id: u.id,
         userName: rawName,
+        avatar: u.profile?.avatar || "",
         userType: u.profileType || u.profile?.title || "Laboratory",
         company: u.profile?.company || u.profile?.country || "N/A",
         role: u.role || "USER",
@@ -122,10 +168,7 @@ const AdminUsersView = () => {
   }, [users]);
 
   const handleTabChange = (nextTab) => {
-    setTab(nextTab);
-    setPage(1);
-    setPlanFilter("all");
-    setStatusFilter("all");
+    updateParams({ tab: nextTab, page: 1, plan: "all", status: "all" });
   };
 
   const refetch = () => {
@@ -166,7 +209,17 @@ const AdminUsersView = () => {
 
   const userColumns = useMemo(() => {
     const base = [
-      { key: "userName", header: "User Name", className: "font-semibold" },
+      {
+        key: "userName",
+        header: "User Name",
+        className: "font-semibold",
+        render: (value, row) => (
+          <div className="flex items-center gap-3">
+            <Avatar src={row.avatar} alt={value} size="sm" />
+            <span className="truncate">{value}</span>
+          </div>
+        ),
+      },
       { key: "userType", header: "User Type" },
       { key: "company", header: "Company/Organization" },
       { key: "role", header: "Role" },
@@ -196,17 +249,20 @@ const AdminUsersView = () => {
     {
       id: "details",
       label: "See Details",
+      icon: Eye,
       onClick: () => navigate(`/admin/users/${row.id}`),
     },
     {
       id: "active",
       label: "Active",
+      icon: CheckCircle2,
       disabled: () => row.status === "Active",
       onClick: () => handleStatusChange(row.id, "Active"),
     },
     {
       id: "suspend",
       label: "Suspend",
+      icon: Ban,
       variant: "danger",
       disabled: () => row.status === "Suspend" || row.status === "Banned",
       onClick: () => setSuspendTarget(row),
@@ -226,10 +282,7 @@ const AdminUsersView = () => {
               { value: "yearly", label: "Yearly" },
               { value: "free", label: "Free" },
             ],
-            onChange: (value) => {
-              setPlanFilter(value);
-              setPage(1);
-            },
+            onChange: (value) => updateParams({ plan: value, page: 1 }),
           },
         ]),
     {
@@ -241,10 +294,7 @@ const AdminUsersView = () => {
         { value: "suspend", label: "Suspended" },
         { value: "banned", label: "Banned" },
       ],
-      onChange: (value) => {
-        setStatusFilter(value);
-        setPage(1);
-      },
+      onChange: (value) => updateParams({ status: value, page: 1 }),
     },
   ];
 
@@ -284,7 +334,7 @@ const AdminUsersView = () => {
           page: usersMeta.page || page,
           pageSize: usersMeta.pageSize || PAGE_SIZE,
           total: usersMeta.total || 0,
-          onPageChange: setPage,
+          onPageChange: (nextPage) => updateParams({ page: nextPage }),
         }}
       />
 

@@ -66,6 +66,14 @@ export async function getUserById(userId) {
 // ═══════════════════════════════════════════════════════════════════════
 // User status
 // ═══════════════════════════════════════════════════════════════════════
+/** `{ advertisements, listings, jobs }`, each `{ total, items }`. */
+export async function getUserContent(userId) {
+  const response = await crudService.get(
+    API_ENDPOINTS.ADMIN.USERS.CONTENT(userId),
+  );
+  return unwrapApiData(response) || response;
+}
+
 export async function patchUserStatus(userId, status, reason) {
   const response = await crudService.patch(
     API_ENDPOINTS.ADMIN.USERS.STATUS(userId),

@@ -73,6 +73,7 @@ export const API_ENDPOINTS = {
       LIST: "/users",
       DETAILS: (userId) => `/users/${userId}`,
       STATUS: (userId) => `/users/${userId}/status`,
+      CONTENT: (userId) => `/users/${userId}/content`,
     },
 
     BLOGS: {
@@ -164,6 +165,7 @@ export const API_ENDPOINTS = {
       DETAILS: (jobId) => `/recruitment/${jobId}`,
       UPDATE: (jobId) => `/recruitment/${jobId}`,
       DELETE: (jobId) => `/recruitment/${jobId}`,
+      APPLY: (jobId) => `/recruitment/${jobId}/apply`,
       APPLICATIONS: (jobId) => `/recruitment/${jobId}/applications`,
     },
 
@@ -261,6 +263,7 @@ export const API_ENDPOINTS = {
       APPLY: (jobId) => `/recruitment/${jobId}/apply`,
       APPLICATIONS: (jobId) => `/recruitment/${jobId}/applications`,
       MY_APPLICATIONS: "/recruitment/applications/me",
+      NEW_APPLICATION_COUNTS: "/recruitment/applications/new-count",
     },
 
     GENERAL: {

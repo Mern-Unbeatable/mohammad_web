@@ -33,7 +33,9 @@ const ActivitySection = ({
   onLoadMore,
 }) => (
   <section className={className}>
-    <h2 className="mb-4 px-1 text-[18px] font-bold text-deep-blue">{title}</h2>
+    {title ? (
+      <h2 className="mb-4 px-1 text-[18px] font-bold text-deep-blue">{title}</h2>
+    ) : null}
     <div className="space-y-4">
       {loading && !posts.length ? (
         <CardSkeleton variant="feedPost" count={2} className="space-y-4" />

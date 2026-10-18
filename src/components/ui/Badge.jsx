@@ -4,6 +4,7 @@ const variants = {
   sponsored: "border border-green-primary/30 bg-white text-green-primary",
   post: "bg-[#F3F4F6] text-[#64748B]",
   fulltime: "bg-secondary text-primary",
+  workplace: "bg-[#F4F3FF] text-[#5925DC]",
   promo: "bg-[#FDF0F6] text-pink-light",
 };
 

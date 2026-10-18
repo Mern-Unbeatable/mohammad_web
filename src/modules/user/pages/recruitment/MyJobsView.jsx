@@ -1,65 +1,94 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
+import { Eye, X } from "lucide-react";
 import Container from "@/components/ui/Container";
+import Pagination from "@/components/common/Pagination/Pagination";
+import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
 import { CardSkeleton } from "@/components/common/Skeleton";
 import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
 import JobCard from "@/components/data-display/JobCard/JobCard";
 import RecruitmentToolbar from "@/modules/user/components/recruitment/RecruitmentToolbar";
+import JobsSectionHeader from "@/modules/user/components/recruitment/JobsSectionHeader";
+import { applicationStatusClass } from "@/modules/user/components/recruitment/candidates";
+import {
+  buildMyJobsQuery,
+  jobCount,
+  matchesStatusFilter,
+  nextJobStatus,
+} from "@/modules/user/components/recruitment/jobsSection";
 import {
   fetchJobs,
+  updateJob,
   removeJob,
   fetchMyApplications,
+  withdrawApplication,
   clearRecruitmentError,
+  invalidateJobsList,
+  jobLeftList,
   levelToApi,
   toJobCardModel,
   formatPostedAgo,
+  selectNewApplicationTotal,
+  selectNewApplicationsByJob,
 } from "@/features/user/recruitment";
+import { MY_JOB_STATUS_FILTERS } from "@/shared/constants/jobStatus";
 import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
 
 const JOB_BASE = "/recruitment";
-
-const buildMyJobsQuery = ({ query, level }) => {
-  const params = {
-    page: 1,
-    pageSize: 50,
-    sort: "desc",
-    mine: true,
-  };
-  const q = query?.trim();
-  if (q) params.search = q;
-  const levelApi = levelToApi(level);
-  if (levelApi) params.level = levelApi;
-  return params;
-};
+const CANCELLABLE_STATUSES = new Set(["APPLIED", "REVIEWED"]);
 
 const MyJobsView = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
     jobs,
+    jobsMeta,
     jobsLoading,
     deleting,
     applications,
     applicationsLoading,
     error,
   } = useSelector((state) => state.userRecruitment);
+  const newApplications = useSelector(selectNewApplicationTotal);
+  const newApplicationsByJob = useSelector(selectNewApplicationsByJob);
 
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [level, setLevel] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [page, setPage] = useState(1);
   const [pendingDelete, setPendingDelete] = useState(null);
+  const [togglingId, setTogglingId] = useState(null);
+  const [pendingWithdraw, setPendingWithdraw] = useState(null);
+  const [withdrawing, setWithdrawing] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedQuery(query), 350);
+    const timer = setTimeout(() => {
+      if (query === debouncedQuery) return;
+      dispatch(invalidateJobsList());
+      setDebouncedQuery(query);
+      setPage(1);
+    }, 350);
     return () => clearTimeout(timer);
-  }, [query]);
+  }, [query, debouncedQuery, dispatch]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(clearRecruitmentError());
-    dispatch(fetchJobs(buildMyJobsQuery({ query: debouncedQuery, level })));
-  }, [dispatch, debouncedQuery, level]);
+    dispatch(
+      fetchJobs(
+        buildMyJobsQuery({
+          page,
+          pageSize: LIST_PAGE_SIZE,
+          query: debouncedQuery,
+          level: levelToApi(level),
+          status: statusFilter,
+        }),
+      ),
+    );
+  }, [dispatch, page, debouncedQuery, level, statusFilter, reloadKey]);
 
   useEffect(() => {
     dispatch(fetchMyApplications({ page: 1, pageSize: 20, sort: "desc" }));
@@ -93,6 +122,61 @@ const MyJobsView = () => {
     [applications],
   );
 
+  const total = jobsMeta?.total || 0;
+  const totalPages = Math.max(1, jobsMeta?.totalPages || 1);
+
+  // Call once a job has left this page. If it was the last one, step back
+  // when the page no longer exists, otherwise refetch to pull in later posts.
+  const refillPageIfEmptied = () => {
+    if (filtered.length > 1) return;
+    const remainingPages = Math.max(1, Math.ceil((total - 1) / LIST_PAGE_SIZE));
+    dispatch(invalidateJobsList());
+    if (page > remainingPages) setPage(remainingPages);
+    else setReloadKey((key) => key + 1);
+  };
+
+  const unfiltered =
+    statusFilter === "all" && !debouncedQuery.trim() && level === "All";
+
+  const resetToFirstPage = () => {
+    dispatch(invalidateJobsList());
+    setPage(1);
+  };
+
+  const handleLevelChange = (next) => {
+    if (next === level) return;
+    resetToFirstPage();
+    setLevel(next);
+  };
+
+  const handleStatusChange = (next) => {
+    if (next === statusFilter) return;
+    resetToFirstPage();
+    setStatusFilter(next);
+  };
+
+  const handlePageChange = (next) => {
+    if (next === page) return;
+    dispatch(invalidateJobsList());
+    setPage(next);
+  };
+
+  const handleToggleStatus = async (job) => {
+    if (togglingId) return;
+    const status = nextJobStatus(job);
+    setTogglingId(job.id);
+    const result = await dispatch(
+      updateJob({ jobId: job.id, payload: { status } }),
+    );
+    setTogglingId(null);
+    if (!updateJob.fulfilled.match(result)) return;
+    toast.success(status === "OPEN" ? "Job reopened" : "Job closed");
+    if (!matchesStatusFilter(statusFilter, status)) {
+      dispatch(jobLeftList(job.id));
+      refillPageIfEmptied();
+    }
+  };
+
   const handleDeleteRequest = (id) => {
     if (deleting) return;
     const job = filtered.find((item) => item.id === id);
@@ -112,27 +196,59 @@ const MyJobsView = () => {
     if (removeJob.fulfilled.match(result)) {
       toast.success("Job deleted");
       setPendingDelete(null);
+      refillPageIfEmptied();
       return;
     }
     toast.error(result.payload || "Failed to delete job");
+  };
+
+  const handleConfirmWithdraw = async () => {
+    if (!pendingWithdraw?.jobId || withdrawing) return;
+    setWithdrawing(true);
+    const result = await dispatch(withdrawApplication(pendingWithdraw.jobId));
+    setWithdrawing(false);
+    if (withdrawApplication.fulfilled.match(result)) {
+      toast.success("Application cancelled");
+      setPendingWithdraw(null);
+      return;
+    }
+    toast.error(result.payload || "Failed to cancel application");
   };
 
   return (
     <main className="pt-6 pb-8 sm:pt-8">
       <Container>
         <RecruitmentToolbar
+          newApplications={newApplications}
           query={query}
           onQueryChange={setQuery}
           level={level}
-          onLevelChange={setLevel}
+          onLevelChange={handleLevelChange}
           activeView="mine"
           basePath={JOB_BASE}
         />
 
-        <div className="mt-6 space-y-4">
+        <div className="mt-6">
+          <JobsSectionHeader
+            title="My Job Posts"
+            description="Jobs you have posted. Close a role to stop new applications."
+            count={jobCount(jobsLoading, total)}
+          >
+            <SegmentedTabs
+              tabs={MY_JOB_STATUS_FILTERS}
+              activeTab={statusFilter}
+              onTabChange={handleStatusChange}
+              standalone
+              ariaLabel="Filter my job posts by status"
+              className="border border-[#E4E7EC]"
+            />
+          </JobsSectionHeader>
+        </div>
+
+        <div className="mt-4 space-y-4">
           {jobsLoading ? (
             <CardSkeleton
-              variant="job"
+              variant="myJob"
               count={LIST_PAGE_SIZE}
               className="space-y-4"
             />
@@ -142,23 +258,35 @@ const MyJobsView = () => {
                 key={job.id}
                 job={job}
                 variant="mine"
-                highlighted={index === 0}
+                highlighted={index === 0 && page === 1}
                 detailHref={`${JOB_BASE}/${job.id}`}
                 onDelete={deleting ? undefined : handleDeleteRequest}
                 onEdit={() => navigate(`${JOB_BASE}/${job.id}/edit`)}
+                onToggleStatus={handleToggleStatus}
+                togglingStatus={togglingId === job.id}
+                newApplications={newApplicationsByJob[job.id] || 0}
               />
             ))
           ) : (
             <div className="rounded-xl border border-[#E4E7EC] bg-white px-6 py-14 text-center">
               <p className="text-[15px] font-semibold text-deep-blue">
-                No job posts yet
+                {unfiltered ? "No job posts yet" : "No job posts match these filters"}
               </p>
               <p className="mt-2 text-[14px] text-[#64748B]">
-                Post your first role to reach qualified laboratory professionals.
+                {unfiltered
+                  ? "Post your first role to reach qualified laboratory professionals."
+                  : "Try a different search, level or status."}
               </p>
             </div>
           )}
         </div>
+
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          className="mt-8"
+        />
 
         <section className="mt-10">
           <div className="mb-4">
@@ -181,30 +309,35 @@ const MyJobsView = () => {
               {myApplications.map((app) => (
                 <div
                   key={app.id}
-                  className="rounded-xl border border-[#E4E7EC] bg-white px-5 py-4"
+                  className="flex items-center gap-3 rounded-xl border border-[#E4E7EC] bg-white px-4 py-3"
                 >
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="min-w-0">
-                      {app.jobId ? (
-                        <Link
-                          to={`${JOB_BASE}/${app.jobId}`}
-                          className="text-[15px] font-semibold text-primary hover:underline"
-                        >
-                          {app.job?.title || "Job posting"}
-                        </Link>
-                      ) : (
-                        <p className="text-[15px] font-semibold text-deep-blue">
-                          {app.job?.title || "Job posting"}
-                        </p>
-                      )}
-                      <p className="mt-0.5 text-[13px] text-[#64748B]">
-                        {[app.job?.company, app.job?.location]
-                          .filter(Boolean)
-                          .join(" · ") || "—"}
+                  {app.job?.image ? (
+                    <img
+                      src={app.job.image}
+                      alt=""
+                      className="w-16 shrink-0 self-stretch rounded-lg border border-[#E4E7EC] bg-white object-contain p-1"
+                    />
+                  ) : null}
+                  <div className="min-w-0 flex-1">
+                    {app.jobId ? (
+                      <Link
+                        to={`${JOB_BASE}/${app.jobId}`}
+                        className="block truncate text-[15px] font-semibold text-deep-blue hover:text-primary hover:underline"
+                      >
+                        {app.job?.title || "Job posting"}
+                      </Link>
+                    ) : (
+                      <p className="truncate text-[15px] font-semibold text-deep-blue">
+                        {app.job?.title || "Job posting"}
                       </p>
-                    </div>
-                    <div className="flex shrink-0 flex-col items-start gap-1 sm:items-end">
-                      <span className="inline-flex rounded-full bg-secondary px-2.5 py-0.5 text-[11px] font-semibold text-primary">
+                    )}
+                    <p className="mt-0.5 truncate text-[13px] text-[#64748B]">
+                      {[app.job?.company, app.job?.location]
+                        .filter(Boolean)
+                        .join(" · ") || "—"}
+                    </p>
+                    <div className="mt-1 flex flex-wrap items-center gap-2">
+                      <span className={applicationStatusClass(app.status)}>
                         {app.status}
                       </span>
                       <span className="text-[11px] text-[#98A2B3]">
@@ -212,6 +345,28 @@ const MyJobsView = () => {
                       </span>
                     </div>
                   </div>
+                  {app.jobId ? (
+                    <Link
+                      to={`${JOB_BASE}/${app.jobId}`}
+                      aria-label={`View ${app.job?.title || "job posting"}`}
+                      className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-primary/30 px-3 py-1.5 text-[12px] font-semibold text-primary transition-colors hover:bg-[#E8F3FB]"
+                    >
+                      <Eye className="h-3.5 w-3.5" />
+                      View
+                    </Link>
+                  ) : null}
+                  {app.jobId && CANCELLABLE_STATUSES.has(app.status) ? (
+                    <button
+                      type="button"
+                      onClick={() => setPendingWithdraw(app)}
+                      disabled={withdrawing}
+                      aria-label={`Cancel application for ${app.job?.title || "job posting"}`}
+                      className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-[#FDA29B] px-3 py-1.5 text-[12px] font-semibold text-[#D92D20] transition-colors hover:bg-[#FEF3F2] disabled:opacity-60"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                      Cancel
+                    </button>
+                  ) : null}
                 </div>
               ))}
             </div>
@@ -253,6 +408,30 @@ const MyJobsView = () => {
         confirming={deleting}
         onClose={handleCloseDeleteModal}
         onConfirm={handleConfirmDelete}
+      />
+
+      <ConfirmModal
+        open={Boolean(pendingWithdraw)}
+        title="Cancel application?"
+        description={
+          pendingWithdraw ? (
+            <p className="text-[14px] leading-relaxed text-[#64748B]">
+              Your application for{" "}
+              <span className="font-semibold text-deep-blue">
+                {pendingWithdraw.job?.title || "this job"}
+              </span>{" "}
+              will be withdrawn and the employer will no longer see it. You can
+              apply again while the job is open.
+            </p>
+          ) : null
+        }
+        confirmLabel="Cancel application"
+        cancelLabel="Keep"
+        confirming={withdrawing}
+        onClose={() => {
+          if (!withdrawing) setPendingWithdraw(null);
+        }}
+        onConfirm={handleConfirmWithdraw}
       />
     </main>
   );

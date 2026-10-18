@@ -7,12 +7,15 @@ import { CardSkeleton } from "@/components/common/Skeleton";
 import Container from "@/components/ui/Container";
 import JobCard from "@/components/data-display/JobCard/JobCard";
 import RecruitmentToolbar from "@/modules/user/components/recruitment/RecruitmentToolbar";
+import JobsSectionHeader from "@/modules/user/components/recruitment/JobsSectionHeader";
+import { jobCount } from "@/modules/user/components/recruitment/jobsSection";
 import {
   fetchJobs,
   clearRecruitmentError,
   invalidateJobsList,
   levelToApi,
   toJobCardModel,
+  selectNewApplicationTotal,
 } from "@/features/user/recruitment";
 import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
 import { usePageParam } from "@/shared/hooks/usePageParam";
@@ -39,6 +42,7 @@ const RecruitmentView = () => {
   const { jobs, jobsMeta, jobsLoading, jobsError, error } = useSelector(
     (state) => state.userRecruitment,
   );
+  const newApplications = useSelector(selectNewApplicationTotal);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const { [LEVEL_PARAM]: level, [SEARCH_PARAM]: search } =
@@ -121,6 +125,7 @@ const RecruitmentView = () => {
     <main className="pt-6 pb-8 sm:pt-8">
       <Container>
         <RecruitmentToolbar
+          newApplications={newApplications}
           query={query}
           onQueryChange={setQuery}
           level={level}
@@ -129,7 +134,15 @@ const RecruitmentView = () => {
           basePath={JOB_BASE}
         />
 
-        <div className="mt-6 space-y-4">
+        <div className="mt-6">
+          <JobsSectionHeader
+            title="Public Job Posts"
+            description="Open roles posted by other members of the network."
+            count={jobsError ? null : jobCount(showSkeleton, jobsMeta?.total)}
+          />
+        </div>
+
+        <div className="mt-4 space-y-4">
           {showSkeleton ? (
             <CardSkeleton
               variant="job"

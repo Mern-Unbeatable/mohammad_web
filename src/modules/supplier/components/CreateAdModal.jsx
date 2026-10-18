@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import StatusBadge from '@/components/data-display/DataTable/StatusBadge';
+import RichTextArea from '@/components/forms/RichTextArea/RichTextArea';
 import AdDetailCard from '@/modules/supplier/components/AdDetailCard';
 import { AD_CATEGORIES, getCategoryById } from '@/modules/supplier/data/advertisements';
 import {
@@ -628,17 +629,17 @@ const DetailsStep = ({ categoryId, form, onChange }) => {
         <label htmlFor="description" className={labelClass}>
           Description <span className="text-pink-light">*</span>
         </label>
-        <textarea
+        <RichTextArea
           id="description"
           value={form.description}
-          onChange={(e) => onChange('description', e.target.value)}
-          rows={4}
+          onChange={(next) => onChange('description', next)}
+          rows={5}
+          maxLength={5000}
           placeholder={
             isWebinar
               ? 'Describe your advertisement in detail. Explain the key benefits and features of your webinar or event.'
               : 'Describe your product, service, or event...'
           }
-          className={fieldClass}
         />
       </div>
     </div>

@@ -27,6 +27,7 @@ const ContactProfileHero = ({
   onMessage,
   messageHref,
   coverPhoto,
+  showConnect = true,
 }) => {
   const [failedCover, setFailedCover] = useState(null);
   const cover = coverPhoto || contact.coverPhoto;
@@ -95,33 +96,35 @@ const ContactProfileHero = ({
           </div>
 
           <div className="flex w-full shrink-0 gap-2 sm:w-auto lg:pt-1">
-            <button
-              type="button"
-              onClick={onConnect}
-              disabled={connected || pending}
-              className={`inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-3.5 py-2 text-[12px] font-semibold transition-colors sm:flex-none ${
-                connected || pending
-                  ? "bg-green-secondary text-green-primary"
-                  : "bg-primary text-white hover:bg-[#066BB0]"
-              }`}
-            >
-              {connected ? (
-                <>
-                  <Check className="h-3.5 w-3.5" />
-                  Connected
-                </>
-              ) : pending ? (
-                <>
-                  <Clock className="h-3.5 w-3.5" />
-                  Pending
-                </>
-              ) : (
-                <>
-                  <UserPlus className="h-3.5 w-3.5" />
-                  Connect
-                </>
-              )}
-            </button>
+            {showConnect ? (
+              <button
+                type="button"
+                onClick={onConnect}
+                disabled={connected || pending}
+                className={`inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-3.5 py-2 text-[12px] font-semibold transition-colors sm:flex-none ${
+                  connected || pending
+                    ? "bg-green-secondary text-green-primary"
+                    : "bg-primary text-white hover:bg-[#066BB0]"
+                }`}
+              >
+                {connected ? (
+                  <>
+                    <Check className="h-3.5 w-3.5" />
+                    Connected
+                  </>
+                ) : pending ? (
+                  <>
+                    <Clock className="h-3.5 w-3.5" />
+                    Pending
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="h-3.5 w-3.5" />
+                    Connect
+                  </>
+                )}
+              </button>
+            ) : null}
             {messageHref && !onMessage ? (
               <Link
                 to={messageHref}

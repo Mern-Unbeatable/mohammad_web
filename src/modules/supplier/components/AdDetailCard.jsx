@@ -1,5 +1,6 @@
 import { Calendar, RefreshCw } from 'lucide-react';
 import Card from '@/components/ui/Card';
+import RichText from '@/components/data-display/RichText/RichText';
 import { PostActions, PostStats } from '@/modules/user/components/feed/PostActionsBar';
 
 const AdDetailCard = ({
@@ -39,9 +40,10 @@ const AdDetailCard = ({
         <h1 className="text-[20px] font-bold leading-tight text-deep-blue sm:text-[22px] lg:text-[24px]">
           {ad.title}
         </h1>
-        <p className="mt-3 text-[14px] leading-relaxed text-[#475467] sm:text-[15px]">
-          {ad.description}
-        </p>
+        <RichText
+          text={ad.description}
+          className="mt-3 text-[14px] leading-relaxed text-[#475467] sm:text-[15px]"
+        />
       </div>
 
       {ad.image ? (

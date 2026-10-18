@@ -27,7 +27,12 @@ const emptySubscription = {
   paymentMethod: '—',
 };
 
-export const SubscriptionDetailsCard = ({ subscription }) => {
+/** `manageable` shows the cancel action, which acts on the signed-in account. */
+export const SubscriptionDetailsCard = ({
+  subscription,
+  manageable = true,
+  accent = false,
+}) => {
   const dispatch = useDispatch();
   const { saving } = useSelector((state) => state.userSubscriptions);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -65,10 +70,16 @@ export const SubscriptionDetailsCard = ({ subscription }) => {
   };
 
   return (
-    <Card className="h-full">
-      <div className="flex items-center gap-2 border-b border-[#E4E7EC] px-5 py-4 sm:px-6">
+    <Card className="h-full overflow-hidden">
+      <div
+        className={`flex items-center gap-2 border-b px-5 py-4 sm:px-6 ${
+          accent ? 'border-primary bg-primary' : 'border-[#E4E7EC]'
+        }`}
+      >
         <span className="text-[16px] text-[#E67E22]">👑</span>
-        <h2 className="text-[16px] font-bold text-deep-blue">Subscription Details</h2>
+        <h2 className={`text-[16px] font-bold ${accent ? 'text-white' : 'text-deep-blue'}`}>
+          Subscription Details
+        </h2>
       </div>
 
       <dl className="divide-y divide-[#E4E7EC] px-5 sm:px-6">
@@ -104,21 +115,23 @@ export const SubscriptionDetailsCard = ({ subscription }) => {
         ))}
       </dl>
 
-      <div className="border-t border-[#E4E7EC] px-5 py-4 sm:px-6">
-        <button
-          type="button"
-          onClick={() => setConfirmOpen(true)}
-          disabled={!canCancel || saving}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-primary px-4 py-2.5 text-[13px] font-semibold text-primary transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {details.cancelAtPeriodEnd
-            ? 'Cancellation scheduled'
-            : 'Cancel Subscription'}
-        </button>
-      </div>
+      {manageable ? (
+        <div className="border-t border-[#E4E7EC] px-5 py-4 sm:px-6">
+          <button
+            type="button"
+            onClick={() => setConfirmOpen(true)}
+            disabled={!canCancel || saving}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-primary px-4 py-2.5 text-[13px] font-semibold text-primary transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {details.cancelAtPeriodEnd
+              ? 'Cancellation scheduled'
+              : 'Cancel Subscription'}
+          </button>
+        </div>
+      ) : null}
 
       <CancelSubscriptionModal
-        open={confirmOpen}
+        open={manageable && confirmOpen}
         isTrial={statusKey === 'TRIAL'}
         saving={saving}
         onClose={() => {

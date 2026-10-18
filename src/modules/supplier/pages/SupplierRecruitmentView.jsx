@@ -5,6 +5,8 @@ import Pagination from "@/components/common/Pagination/Pagination";
 import { CardSkeleton } from "@/components/common/Skeleton";
 import JobCard from "@/components/data-display/JobCard/JobCard";
 import RecruitmentToolbar from "@/modules/user/components/recruitment/RecruitmentToolbar";
+import JobsSectionHeader from "@/modules/user/components/recruitment/JobsSectionHeader";
+import { jobCount } from "@/modules/user/components/recruitment/jobsSection";
 import SupplierRecruitmentActions from "@/modules/supplier/components/SupplierRecruitmentActions";
 import {
   fetchSupplierJobs,
@@ -102,6 +104,12 @@ const SupplierRecruitmentView = () => {
         basePath={JOB_BASE}
         showTitle={false}
         showActions={false}
+      />
+
+      <JobsSectionHeader
+        title="Public Job Posts"
+        description="Open roles posted by other members of the network."
+        count={jobCount(jobsLoading, jobsMeta?.total)}
       />
 
       {jobsLoading ? (

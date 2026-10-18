@@ -15,7 +15,11 @@ const supplierNotificationBadge = {
 const SupplierLayout = () => {
   const unreadNotifications = useNotificationBadge(supplierNotificationBadge);
   return (
-    <PanelLayout navItems={supplierNavItems} badgeCounts={{ unreadNotifications }}>
+    <PanelLayout
+      navItems={supplierNavItems}
+      badgeCounts={{ unreadNotifications }}
+      profilePath="/supplier/profile"
+    >
       <Outlet />
     </PanelLayout>
   );

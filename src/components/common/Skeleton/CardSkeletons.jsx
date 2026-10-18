@@ -1,3 +1,4 @@
+import { createElement } from 'react';
 import Card from '@/components/ui/Card';
 import Skeleton from './Skeleton';
 
@@ -37,24 +38,39 @@ export const ListingCardSkeleton = () => (
   </Card>
 );
 
-/** Matches JobCard layout */
-export const JobCardSkeleton = () => (
+/** Matches JobCard layout; `mine` adds the status badge and owner actions. */
+export const JobCardSkeleton = ({ mine = false }) => (
   <Card className="p-4 sm:p-5">
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <div className="min-w-0 flex-1 space-y-2">
-        <Skeleton className="h-5 w-3/4 max-w-md" />
-        <Skeleton className="h-4 w-1/2 max-w-xs" />
-        <div className="mt-3 flex flex-wrap gap-2">
-          <Skeleton className="h-5 w-16" rounded="full" />
-          <Skeleton className="h-5 w-14" rounded="full" />
-          <Skeleton className="h-5 w-20" rounded="full" />
-          <Skeleton className="h-4 w-16" />
+      <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
+        <Skeleton className="h-14 w-14 shrink-0 sm:h-16 sm:w-16" rounded="xl" />
+        <div className="min-w-0 flex-1 space-y-2">
+          <Skeleton className="h-5 w-3/4 max-w-md" />
+          <Skeleton className="h-4 w-1/2 max-w-xs" />
+          <div className="mt-3 flex flex-wrap gap-2">
+            {mine ? <Skeleton className="h-5 w-14" rounded="full" /> : null}
+            <Skeleton className="h-5 w-16" rounded="full" />
+            <Skeleton className="h-5 w-14" rounded="full" />
+            <Skeleton className="h-5 w-20" rounded="full" />
+            <Skeleton className="h-4 w-16" />
+          </div>
         </div>
       </div>
-      <Skeleton className="h-9 w-28 shrink-0" />
+      {mine ? (
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <Skeleton className="h-9 w-[104px]" />
+          <Skeleton className="h-9 w-[78px]" />
+          <Skeleton className="h-9 w-9" />
+          <Skeleton className="h-9 w-9" />
+        </div>
+      ) : (
+        <Skeleton className="h-9 w-28 shrink-0" />
+      )}
     </div>
   </Card>
 );
+
+export const MyJobCardSkeleton = () => <JobCardSkeleton mine />;
 
 /** Matches GeneralPostCard layout */
 export const GeneralPostCardSkeleton = () => (
@@ -165,26 +181,29 @@ export const SidebarListingRowSkeleton = () => (
 
 /** Matches RightSidebar job row */
 export const SidebarJobRowSkeleton = () => (
-  <li className="px-4 py-3">
-    <Skeleton className="h-3.5 w-4/5" />
-    <Skeleton className="mt-1.5 h-3 w-3/5" />
-    <Skeleton className="mt-2 h-5 w-16" rounded="full" />
+  <li className="flex items-start gap-3 px-4 py-3">
+    <Skeleton className="h-10 w-10 shrink-0" rounded="lg" />
+    <div className="min-w-0 flex-1">
+      <Skeleton className="h-3.5 w-4/5" />
+      <Skeleton className="mt-1.5 h-3 w-3/5" />
+      <Skeleton className="mt-2 h-5 w-16" rounded="full" />
+    </div>
   </li>
 );
 
 /** Matches My Applications row on MyJobsView */
 export const ApplicationRowSkeleton = () => (
-  <div className="rounded-xl border border-[#E4E7EC] bg-white px-5 py-4">
-    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-      <div className="min-w-0 flex-1 space-y-2">
-        <Skeleton className="h-4 w-48" />
-        <Skeleton className="h-3.5 w-40" />
-      </div>
-      <div className="flex shrink-0 flex-col items-start gap-1.5 sm:items-end">
+  <div className="flex items-center gap-3 rounded-xl border border-[#E4E7EC] bg-white px-4 py-3">
+    <Skeleton className="w-16 shrink-0 self-stretch" rounded="lg" />
+    <div className="min-w-0 flex-1 space-y-2">
+      <Skeleton className="h-4 w-48" />
+      <Skeleton className="h-3.5 w-40" />
+      <div className="flex items-center gap-2">
         <Skeleton className="h-5 w-16" rounded="full" />
         <Skeleton className="h-3 w-20" />
       </div>
     </div>
+    <Skeleton className="h-8 w-[68px] shrink-0" rounded="md" />
   </div>
 );
 
@@ -515,6 +534,52 @@ export const JobDetailSkeleton = () => (
     </Card>
     <Skeleton className="h-10 w-48" />
   </div>
+);
+
+/** Matches JobPosterCard ("Posted by") */
+export const JobPosterCardSkeleton = () => (
+  <div className="rounded-xl border border-[#E4E7EC] bg-white p-4">
+    <Skeleton className="h-5 w-24" />
+    <div className="mt-3 flex items-start gap-3">
+      <Skeleton className="h-11 w-11 shrink-0" rounded="full" />
+      <div className="min-w-0 flex-1 space-y-2 pt-0.5">
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-3.5 w-44" />
+        <Skeleton className="h-3 w-24" />
+      </div>
+    </div>
+    <Skeleton className="mt-4 h-9 w-full" rounded="lg" />
+  </div>
+);
+
+/** Matches a row in the job owner's "Applied Candidates" list */
+export const CandidateRowSkeleton = () => (
+  <div className="flex items-center gap-3 rounded-xl border border-[#E4E7EC] bg-white px-4 py-3">
+    <Skeleton className="h-9 w-9 shrink-0 self-start" rounded="full" />
+    <div className="min-w-0 flex-1 space-y-2">
+      <Skeleton className="h-4 w-28" />
+      <div className="flex items-center gap-2">
+        <Skeleton className="h-5 w-16" rounded="full" />
+        <Skeleton className="h-3 w-20" />
+      </div>
+    </div>
+    <Skeleton className="h-8 w-[68px] shrink-0" rounded="md" />
+  </div>
+);
+
+/**
+ * Full job detail page: job card on the left, "Posted by" on the right.
+ * Render inside the same grid container as JobDetailView.
+ */
+export const JobDetailPageSkeleton = () => (
+  <>
+    <div className="min-w-0">
+      <JobDetailSkeleton />
+    </div>
+    <aside className="mt-8 lg:mt-10" aria-busy="true" aria-live="polite">
+      <JobPosterCardSkeleton />
+    </aside>
+  </>
 );
 
 /** Matches GeneralPostDetailView layout */
@@ -875,6 +940,7 @@ const CARD_SKELETONS = {
   contact: ContactCardSkeleton,
   listing: ListingCardSkeleton,
   job: JobCardSkeleton,
+  myJob: MyJobCardSkeleton,
   generalPost: GeneralPostCardSkeleton,
   blogGrid: BlogGridCardSkeleton,
   blogHub: BlogHubCardSkeleton,
@@ -883,6 +949,8 @@ const CARD_SKELETONS = {
   sidebarListing: SidebarListingRowSkeleton,
   sidebarJob: SidebarJobRowSkeleton,
   application: ApplicationRowSkeleton,
+  candidate: CandidateRowSkeleton,
+  jobPoster: JobPosterCardSkeleton,
   reportRow: ReportRowSkeleton,
   notification: NotificationRowSkeleton,
   profileHero: ProfileHeroSkeleton,
@@ -914,37 +982,25 @@ export function CardSkeleton({
   count = 1,
   className = '',
   itemClassName = '',
-  as: As = 'div',
+  as = 'div',
 }) {
   const Comp = CARD_SKELETONS[variant];
   if (!Comp) return null;
 
-  if (count <= 1) {
-    return (
-      <As className={className || undefined} aria-busy="true" aria-live="polite">
-        {itemClassName ? (
-          <div className={itemClassName}>
-            <Comp />
-          </div>
-        ) : (
-          <Comp />
-        )}
-      </As>
-    );
-  }
+  const items = Array.from({ length: Math.max(1, count) }, (_, i) =>
+    itemClassName ? (
+      <div key={i} className={itemClassName}>
+        <Comp />
+      </div>
+    ) : (
+      <Comp key={i} />
+    ),
+  );
 
-  return (
-    <As className={className || undefined} aria-busy="true" aria-live="polite">
-      {Array.from({ length: count }, (_, i) =>
-        itemClassName ? (
-          <div key={i} className={itemClassName}>
-            <Comp />
-          </div>
-        ) : (
-          <Comp key={i} />
-        ),
-      )}
-    </As>
+  return createElement(
+    as,
+    { className: className || undefined, 'aria-busy': 'true', 'aria-live': 'polite' },
+    items,
   );
 }
 

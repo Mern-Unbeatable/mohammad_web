@@ -1,5 +1,11 @@
 /** Map API jobs onto JobCard / JobDetailCard / create form props. */
 
+import {
+  DEFAULT_WORKPLACE_TYPE,
+  workplaceLabel,
+  workplaceToApi,
+} from "@/shared/constants/jobWorkplace";
+
 const LEVEL_LABEL = {
   ENTRY_LEVEL: "Entry-level",
   MID_LEVEL: "Mid-level",
@@ -72,6 +78,7 @@ export function toJobCardModel(job) {
     ...job,
     employmentType:
       EMPLOYMENT_LABEL[job.employmentType] || job.employmentType,
+    workplaceType: workplaceLabel(job.workplaceType),
     level: LEVEL_LABEL[job.level] || job.level,
     salary: job.salary || "—",
     postedAgo: formatPostedAgo(job.postedAt || job.createdAt),
@@ -96,9 +103,11 @@ export function jobToFormValues(job) {
       location: "",
       salary: "",
       employmentType: EMPLOYMENT_TYPE_OPTIONS[0],
+      workplaceType: DEFAULT_WORKPLACE_TYPE,
       level: RECRUITMENT_LEVEL_OPTIONS[2] || RECRUITMENT_LEVEL_OPTIONS[1],
       description: "",
       requirements: "",
+      imageUrl: "",
     };
   }
 
@@ -112,6 +121,7 @@ export function jobToFormValues(job) {
       EMPLOYMENT_LABEL[job.employmentType] ||
       job.employmentType ||
       EMPLOYMENT_TYPE_OPTIONS[0],
+    workplaceType: workplaceLabel(job.workplaceType) || DEFAULT_WORKPLACE_TYPE,
     level:
       LEVEL_LABEL[job.level] ||
       job.level ||
@@ -121,6 +131,7 @@ export function jobToFormValues(job) {
     requirements: Array.isArray(job.requirements)
       ? job.requirements.join("\n")
       : String(job.requirements || ""),
+    imageUrl: job.imageUrl || "",
   };
 }
 
@@ -138,6 +149,7 @@ export function formToCreatePayload(form) {
     company: String(form.company || "").trim(),
     location: String(form.location || "").trim(),
     employmentType: employmentToApi(form.employmentType),
+    workplaceType: workplaceToApi(form.workplaceType),
     level: LEVEL_API[form.level] || "MID_LEVEL",
     about: String(form.description || "").trim(),
     requirements,
@@ -145,6 +157,7 @@ export function formToCreatePayload(form) {
 
   if (form.salary?.trim()) payload.salary = form.salary.trim();
   if (form.applyLink?.trim()) payload.applyLink = form.applyLink.trim();
+  if (form.imageUrl) payload.imageUrl = form.imageUrl;
 
   return payload;
 }

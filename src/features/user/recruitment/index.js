@@ -8,7 +8,15 @@
  */
 
 export { default as userRecruitmentReducer } from "./recruitmentSlice";
-export { clearRecruitmentError, clearSelectedJob, invalidateJobsList } from "./recruitmentSlice";
+export {
+  clearRecruitmentError,
+  clearSelectedJob,
+  invalidateJobsList,
+  jobLeftList,
+  jobApplicationsSeen,
+  selectNewApplicationTotal,
+  selectNewApplicationsByJob,
+} from "./recruitmentSlice";
 export {
   fetchJobs,
   fetchJobDetails,
@@ -17,6 +25,8 @@ export {
   removeJob,
   applyToJob,
   fetchMyApplications,
+  fetchNewApplicationCounts,
+  withdrawApplication,
 } from "./recruitmentThunks";
 export {
   RECRUITMENT_LEVEL_OPTIONS,
