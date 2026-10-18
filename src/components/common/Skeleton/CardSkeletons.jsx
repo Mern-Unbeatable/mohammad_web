@@ -1,3 +1,4 @@
+import { createElement } from 'react';
 import Card from '@/components/ui/Card';
 import Skeleton from './Skeleton';
 
@@ -37,24 +38,36 @@ export const ListingCardSkeleton = () => (
   </Card>
 );
 
-/** Matches JobCard layout */
-export const JobCardSkeleton = () => (
+/** Matches JobCard layout; `mine` adds the status badge and owner actions. */
+export const JobCardSkeleton = ({ mine = false }) => (
   <Card className="p-4 sm:p-5">
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0 flex-1 space-y-2">
         <Skeleton className="h-5 w-3/4 max-w-md" />
         <Skeleton className="h-4 w-1/2 max-w-xs" />
         <div className="mt-3 flex flex-wrap gap-2">
+          {mine ? <Skeleton className="h-5 w-14" rounded="full" /> : null}
           <Skeleton className="h-5 w-16" rounded="full" />
           <Skeleton className="h-5 w-14" rounded="full" />
           <Skeleton className="h-5 w-20" rounded="full" />
           <Skeleton className="h-4 w-16" />
         </div>
       </div>
-      <Skeleton className="h-9 w-28 shrink-0" />
+      {mine ? (
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <Skeleton className="h-9 w-[104px]" />
+          <Skeleton className="h-9 w-[78px]" />
+          <Skeleton className="h-9 w-9" />
+          <Skeleton className="h-9 w-9" />
+        </div>
+      ) : (
+        <Skeleton className="h-9 w-28 shrink-0" />
+      )}
     </div>
   </Card>
 );
+
+export const MyJobCardSkeleton = () => <JobCardSkeleton mine />;
 
 /** Matches GeneralPostCard layout */
 export const GeneralPostCardSkeleton = () => (
@@ -875,6 +888,7 @@ const CARD_SKELETONS = {
   contact: ContactCardSkeleton,
   listing: ListingCardSkeleton,
   job: JobCardSkeleton,
+  myJob: MyJobCardSkeleton,
   generalPost: GeneralPostCardSkeleton,
   blogGrid: BlogGridCardSkeleton,
   blogHub: BlogHubCardSkeleton,
@@ -914,37 +928,25 @@ export function CardSkeleton({
   count = 1,
   className = '',
   itemClassName = '',
-  as: As = 'div',
+  as = 'div',
 }) {
   const Comp = CARD_SKELETONS[variant];
   if (!Comp) return null;
 
-  if (count <= 1) {
-    return (
-      <As className={className || undefined} aria-busy="true" aria-live="polite">
-        {itemClassName ? (
-          <div className={itemClassName}>
-            <Comp />
-          </div>
-        ) : (
-          <Comp />
-        )}
-      </As>
-    );
-  }
+  const items = Array.from({ length: Math.max(1, count) }, (_, i) =>
+    itemClassName ? (
+      <div key={i} className={itemClassName}>
+        <Comp />
+      </div>
+    ) : (
+      <Comp key={i} />
+    ),
+  );
 
-  return (
-    <As className={className || undefined} aria-busy="true" aria-live="polite">
-      {Array.from({ length: count }, (_, i) =>
-        itemClassName ? (
-          <div key={i} className={itemClassName}>
-            <Comp />
-          </div>
-        ) : (
-          <Comp key={i} />
-        ),
-      )}
-    </As>
+  return createElement(
+    as,
+    { className: className || undefined, 'aria-busy': 'true', 'aria-live': 'polite' },
+    items,
   );
 }
 

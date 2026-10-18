@@ -224,7 +224,7 @@ const MyJobsView = () => {
         <div className="mt-4 space-y-4">
           {jobsLoading ? (
             <CardSkeleton
-              variant="job"
+              variant="myJob"
               count={LIST_PAGE_SIZE}
               className="space-y-4"
             />

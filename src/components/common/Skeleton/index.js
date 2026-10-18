@@ -6,6 +6,7 @@ export {
   ContactCardSkeleton,
   ListingCardSkeleton,
   JobCardSkeleton,
+  MyJobCardSkeleton,
   GeneralPostCardSkeleton,
   BlogGridCardSkeleton,
   BlogHubCardSkeleton,

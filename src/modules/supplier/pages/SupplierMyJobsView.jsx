@@ -198,7 +198,7 @@ const SupplierMyJobsView = () => {
 
       {jobsLoading ? (
         <CardSkeleton
-          variant="job"
+          variant="myJob"
           count={LIST_PAGE_SIZE}
           className="space-y-4"
         />
