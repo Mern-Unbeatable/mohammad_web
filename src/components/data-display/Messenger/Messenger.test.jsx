@@ -157,6 +157,8 @@ describe('Messenger message editing', () => {
 
     expect(html.match(/aria-label="Edit message"/g)).toHaveLength(1);
     expect(html.match(/aria-label="Delete message"/g)).toHaveLength(1);
+    // Copy is offered on every text message, yours and theirs.
+    expect(html.match(/aria-label="Copy message"/g)).toHaveLength(2);
     expect(html).toContain('12:30<span class="ml-1">· edited</span>');
   });
 

@@ -1,7 +1,10 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router";
+import { toast } from "react-hot-toast";
 import {
   ArrowLeft,
+  Check,
+  Copy,
   FileText,
   Image as ImageIcon,
   Info,
@@ -164,6 +167,41 @@ const AttachmentList = ({ attachments, isMe }) => {
   );
 };
 
+const messageActionClass =
+  "rounded-md p-1 text-[#98A2B3] transition-colors hover:bg-[#F2F4F7]";
+
+/** Copies the message text as written (formatting marks included, so it re-pastes formatted). */
+const CopyMessageButton = ({ text }) => {
+  const [copied, setCopied] = useState(false);
+  const timerRef = useRef(null);
+
+  useEffect(() => () => clearTimeout(timerRef.current), []);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      toast.success("Message copied");
+      clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => setCopied(false), 1500);
+    } catch {
+      toast.error("Could not copy the message");
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={copy}
+      aria-label={copied ? "Copied" : "Copy message"}
+      title={copied ? "Copied" : "Copy"}
+      className={`${messageActionClass} ${copied ? "text-green-primary" : "hover:text-deep-blue"}`}
+    >
+      {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+    </button>
+  );
+};
+
 const MessageBubble = ({
   message,
   showAvatar,
@@ -210,15 +248,16 @@ const MessageBubble = ({
             </div>
           ) : null}
           <AttachmentList attachments={message.attachments} isMe />
-          {onDeleteMessage || (onStartEdit && text) ? (
+          {text || onDeleteMessage ? (
             <div className="absolute right-full top-1 mr-1 hidden items-center gap-0.5 group-hover:flex [@media(hover:none)]:flex">
+              {text ? <CopyMessageButton text={text} /> : null}
               {onStartEdit && text ? (
                 <button
                   type="button"
                   onClick={onStartEdit}
                   aria-label="Edit message"
                   title="Edit"
-                  className="rounded-md p-1 text-[#98A2B3] hover:bg-[#F2F4F7] hover:text-primary"
+                  className={`${messageActionClass} hover:text-primary`}
                 >
                   <Pencil className="h-3.5 w-3.5" />
                 </button>
@@ -229,7 +268,7 @@ const MessageBubble = ({
                   onClick={() => onDeleteMessage(message.id)}
                   aria-label="Delete message"
                   title="Delete"
-                  className="rounded-md p-1 text-[#98A2B3] hover:bg-[#FEF3F2] hover:text-[#CC1016]"
+                  className="rounded-md p-1 text-[#98A2B3] transition-colors hover:bg-[#FEF3F2] hover:text-[#CC1016]"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                 </button>
@@ -242,23 +281,31 @@ const MessageBubble = ({
     );
   }
 
+  const showName = chat.isGroup && message.sender && showAvatar;
   return (
-    <div className="flex items-end gap-2">
+    <div className="flex items-start gap-2">
       {showAvatar ? (
-        <ChatAvatar chat={senderChat} size="sm" />
+        <div className="shrink-0 pt-0.5">
+          <ChatAvatar chat={senderChat} size="sm" />
+        </div>
       ) : (
         <div className="w-9 shrink-0" aria-hidden="true" />
       )}
-      <div className="max-w-[min(85%,560px)] sm:max-w-[min(100%,560px)]">
-        {chat.isGroup && message.sender && showAvatar ? (
-          <p className="mb-1 text-[11px] font-medium text-[#64748B]">
+      <div className="min-w-0 max-w-[min(85%,560px)] sm:max-w-[min(100%,560px)]">
+        {showName ? (
+          <p className="mb-1 flex h-4 items-center text-[12px] font-semibold text-[#475467]">
             {message.sender}
           </p>
         ) : null}
         {listingCard}
         {text ? (
-          <div className="space-y-1.5 rounded-2xl rounded-bl-sm bg-[#E8ECF0] px-4 py-2.5 text-[13px] leading-relaxed break-words text-[#334155]">
-            <FormattedMessage text={text} tone="them" />
+          <div className="group relative">
+            <div className="space-y-1.5 rounded-2xl rounded-bl-sm bg-[#E8ECF0] px-4 py-2.5 text-[13px] leading-relaxed break-words text-[#334155]">
+              <FormattedMessage text={text} tone="them" />
+            </div>
+            <div className="absolute left-full top-1 ml-1 hidden items-center group-hover:flex [@media(hover:none)]:flex">
+              <CopyMessageButton text={text} />
+            </div>
           </div>
         ) : null}
         <AttachmentList attachments={message.attachments} />
