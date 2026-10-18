@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router';
 import { ArrowLeft, Check, Copy, Mail, ShieldAlert } from 'lucide-react';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { SUPPORT_CONTACT } from '@/shared/constants/support';
 
 const buildMailto = ({ email, reason }) => {

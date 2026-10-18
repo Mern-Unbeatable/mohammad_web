@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { FileText, ImagePlus, Newspaper, Paperclip, X } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import Avatar from "@/components/ui/Avatar";
 import { generalApi } from "@/features/user/general";
 import { useAuth } from "@/shared/auth/useAuth";

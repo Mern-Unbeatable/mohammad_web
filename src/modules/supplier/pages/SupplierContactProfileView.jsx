@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { ChevronLeft } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import ContactProfilePageContent from "@/components/data-display/ContactProfilePageContent/ContactProfilePageContent";
 import { ContactProfilePageSkeleton } from "@/components/common/Skeleton";
 import ReportPostModal from "@/modules/user/components/feed/ReportPostModal";

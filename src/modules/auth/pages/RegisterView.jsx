@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { IoIosArrowDown } from "react-icons/io";
 import { Loader2, ShieldCheck } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useAuth } from "@/shared/auth/useAuth";
 import { getSafeRedirectPath } from "@/shared/routing/safeRedirect";
 import { PRIVACY_PATH, TERMS_PATH } from "@/shared/constants/legal";

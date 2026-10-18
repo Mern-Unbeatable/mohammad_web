@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import logo from "@/assets/logo.png";
 import Avatar from "@/components/ui/Avatar";
 import Container from "@/components/ui/Container";

@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { toUpdatePostPayload, updatePost } from "@/features/user/feed";
 
 /** Edit-post modal state and save flow shared by the feed and profile pages. */

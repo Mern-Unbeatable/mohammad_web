@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { Calendar, ChevronLeft, MapPin, Share2 } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import { GeneralPostDetailSkeleton } from "@/components/common/Skeleton";
 import NotFound from "@/shared/pages/NotFound";
@@ -61,7 +61,7 @@ const SupplierGeneralPostDetailView = () => {
       await navigator.clipboard.writeText(window.location.href);
       toast.success("Link copied");
     } catch {
-      toast.info(window.location.href);
+      toast(window.location.href);
     }
   };
 

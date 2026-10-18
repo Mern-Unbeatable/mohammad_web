@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate, useParams } from "react-router";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import {
   AlertTriangle,
   Ban,

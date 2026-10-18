@@ -25,6 +25,17 @@ const ConversationInfo = ({
   const [editingName, setEditingName] = useState(false);
   const [name, setName] = useState(conversation.name || '');
   const [adding, setAdding] = useState(false);
+  const [removingId, setRemovingId] = useState(null);
+
+  const removeMember = async (userId) => {
+    if (removingId) return;
+    setRemovingId(userId);
+    try {
+      await onRemoveMember?.(userId);
+    } finally {
+      setRemovingId(null);
+    }
+  };
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -186,12 +197,23 @@ const ConversationInfo = ({
                   {isGroup && isOwner && !isSelf && onRemoveMember ? (
                     <button
                       type="button"
-                      onClick={() => onRemoveMember(member.id)}
-                      disabled={busy}
-                      aria-label={`Remove ${member.name}`}
-                      className="rounded-md p-1.5 text-[#98A2B3] hover:bg-[#FEF3F2] hover:text-[#CC1016] disabled:opacity-60"
+                      onClick={() => removeMember(member.id)}
+                      disabled={busy || Boolean(removingId)}
+                      aria-busy={removingId === member.id}
+                      aria-label={
+                        removingId === member.id ? `Removing ${member.name}` : `Remove ${member.name}`
+                      }
+                      className={`rounded-md p-1.5 hover:bg-[#FEF3F2] hover:text-[#CC1016] disabled:cursor-not-allowed ${
+                        removingId === member.id
+                          ? 'bg-[#FEF3F2] text-[#CC1016] disabled:cursor-wait'
+                          : 'text-[#98A2B3] disabled:opacity-60'
+                      }`}
                     >
-                      <UserMinus className="h-4 w-4" />
+                      {removingId === member.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <UserMinus className="h-4 w-4" />
+                      )}
                     </button>
                   ) : null}
                 </li>

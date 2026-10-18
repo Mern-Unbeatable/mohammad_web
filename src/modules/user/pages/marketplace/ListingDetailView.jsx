@@ -13,7 +13,7 @@ import {
   UserRound,
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import Container from '@/components/ui/Container';
 import Avatar from '@/components/ui/Avatar';
 import Card from '@/components/ui/Card';

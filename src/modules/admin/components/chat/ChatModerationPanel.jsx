@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { ArrowLeft, FileText, Loader2, MessageSquare, Search, Trash2, Users } from 'lucide-react';
 import Avatar from '@/components/ui/Avatar';
 import ConfirmModal from '@/components/common/ConfirmModal/ConfirmModal';

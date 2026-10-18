@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { ChevronLeft } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import Card from "@/components/ui/Card";
 import {
   createSupplierJob,

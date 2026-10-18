@@ -8,7 +8,7 @@ import {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Clock, Handshake, UserCheck, Users } from "lucide-react";
 import Pagination from "@/components/common/Pagination/Pagination";
 import { CardSkeleton } from "@/components/common/Skeleton";

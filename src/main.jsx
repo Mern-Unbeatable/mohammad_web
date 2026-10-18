@@ -1,8 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "react-hot-toast";
 import { store } from "./app/store";
 import "./api/registerSessionBridge";
 import App from "./App";
@@ -15,17 +14,13 @@ createRoot(document.getElementById("root")).render(
       <AuthSessionBridge>
         <App />
       </AuthSessionBridge>
-      <ToastContainer
-        position="top-right"
-        autoClose={4000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
+      <Toaster
+        position="bottom-right"
+        containerStyle={{ zIndex: 9999 }}
+        toastOptions={{
+          duration: 4000,
+          style: { fontSize: "14px", maxWidth: "420px" },
+        }}
       />
     </Provider>
   </StrictMode>,

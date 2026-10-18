@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import {
   loginUser,
   registerUser,
@@ -81,7 +81,7 @@ export const useAuth = () => {
   const logout = async () => {
     const resultAction = await dispatch(logoutUser());
     if (resultAction.meta?.condition) return false;
-    toast.info("Logged out successfully");
+    toast("Logged out successfully");
     return true;
   };
 

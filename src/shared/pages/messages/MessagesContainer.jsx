@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { LogOut } from 'lucide-react';
 import ConfirmModal from '@/components/common/ConfirmModal/ConfirmModal';
 import MessagesPageContent from '@/shared/pages/messages/MessagesPageContent';
@@ -303,7 +303,7 @@ const MessagesContainer = ({
     },
     'conversation:removed': ({ conversationId }) => {
       if (conversationId === activeConversationId) {
-        toast.info('This conversation is no longer available');
+        toast('This conversation is no longer available');
         setInfoOpen(false);
         goTo({ section }, { replace: true });
       }
@@ -447,6 +447,7 @@ const MessagesContainer = ({
   const handleCreateGroup = async ({ name, members }) => {
     const result = await dispatch(createGroup({ name, participantIds: members }));
     if (!createGroup.fulfilled.match(result)) return false;
+    toast.success(`Group "${name}" created`);
     openFreshThread(result.payload);
     return true;
   };
@@ -455,7 +456,8 @@ const MessagesContainer = ({
     const messageId = pendingDeleteId;
     setPendingDeleteId(null);
     if (!activeConversationId || !messageId) return;
-    await dispatch(deleteMessage({ conversationId: activeConversationId, messageId }));
+    const result = await dispatch(deleteMessage({ conversationId: activeConversationId, messageId }));
+    if (deleteMessage.fulfilled.match(result)) toast.success('Message deleted');
   };
 
   const handleConfirmLeave = async () => {
@@ -469,10 +471,16 @@ const MessagesContainer = ({
     }
   };
 
-  const runGroupAction = async (thunk, arg) => {
+  /** Failures are toasted from the slice error; `successMessage` is toasted on success. */
+  const runGroupAction = async (thunk, arg, successMessage) => {
     const result = await dispatch(thunk(arg));
-    return thunk.fulfilled.match(result);
+    const ok = thunk.fulfilled.match(result);
+    if (ok && successMessage) toast.success(successMessage);
+    return ok;
   };
+
+  const memberName = (userId) =>
+    activeModel?.participants?.find((member) => member.id === userId)?.name || 'Member';
 
   const hasMoreChats =
     (conversationsMeta?.page ?? 1) < (conversationsMeta?.totalPages ?? 1);
@@ -561,19 +569,25 @@ const MessagesContainer = ({
         onlineUserIds={onlineSet}
         onClose={() => setInfoOpen(false)}
         onRename={(name) =>
-          runGroupAction(renameGroup, { conversationId: activeConversationId, name })
+          runGroupAction(
+            renameGroup,
+            { conversationId: activeConversationId, name },
+            'Group renamed',
+          )
         }
         onAddMembers={(participantIds) =>
-          runGroupAction(addParticipants, {
-            conversationId: activeConversationId,
-            participantIds,
-          })
+          runGroupAction(
+            addParticipants,
+            { conversationId: activeConversationId, participantIds },
+            participantIds.length === 1 ? 'Member added' : `${participantIds.length} members added`,
+          )
         }
         onRemoveMember={(userId) =>
-          runGroupAction(removeParticipant, {
-            conversationId: activeConversationId,
-            userId,
-          })
+          runGroupAction(
+            removeParticipant,
+            { conversationId: activeConversationId, userId },
+            `${memberName(userId)} removed from the group`,
+          )
         }
         onLeave={() => setConfirmLeave(true)}
         recipients={recipients}

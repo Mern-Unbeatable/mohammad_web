@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router';
 import { AlertCircle, ArrowLeft, CheckCircle2, Loader2, RefreshCw } from 'lucide-react';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { useAuth } from '@/shared/auth/useAuth';
 import { PasswordField, PasswordStrength } from '@/modules/auth/components/AuthFormFields';
 import { isStrongPassword } from '@/modules/auth/utils/passwordRules';

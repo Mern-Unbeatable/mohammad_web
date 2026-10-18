@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { ChevronLeft, ImagePlus, Loader2, X } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import Container from "@/components/ui/Container";
 import Card from "@/components/ui/Card";
 import {
@@ -189,7 +189,7 @@ const CreateListingView = () => {
     }
 
     if (files.length > remaining) {
-      toast.info(`Only ${remaining} more photo(s) can be added`);
+      toast(`Only ${remaining} more photo(s) can be added`);
     }
     if (next.length) {
       setPhotos((prev) => [...prev, ...next]);

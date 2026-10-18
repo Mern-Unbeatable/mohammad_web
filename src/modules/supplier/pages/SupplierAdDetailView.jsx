@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, Navigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertTriangle, ChevronLeft } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import AdDetailCard from "@/modules/supplier/components/AdDetailCard";
 import { AdvertisementDetailSkeleton } from "@/components/common/Skeleton";
 import PostComments from "@/modules/user/components/feed/PostComments";

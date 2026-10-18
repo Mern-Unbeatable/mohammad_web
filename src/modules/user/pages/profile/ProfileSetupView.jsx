@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader2 } from 'lucide-react';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import Container from '@/components/ui/Container';
 import ProfileSetupForm from '@/components/forms/ProfileSetupForm/ProfileSetupForm';
 import { profileCountries } from '@/modules/user/data/subscription';

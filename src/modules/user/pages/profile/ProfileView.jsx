@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import Container from "@/components/ui/Container";
 import { ProfilePageSkeleton } from "@/components/common/Skeleton";
 import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
