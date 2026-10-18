@@ -82,8 +82,11 @@ const rowDetails = {
   }),
 };
 
+const GRID_CLASS =
+  "grid grid-cols-1 gap-3 p-4 sm:px-6 md:grid-cols-2 2xl:grid-cols-3";
+
 const ContentRow = ({ item, details }) => (
-  <li className="flex items-center gap-3 px-5 py-3.5 sm:px-6">
+  <li className="flex items-center gap-3 rounded-xl border border-[#E4E7EC] p-3 transition-colors hover:border-primary/40">
     {item.imageUrl ? (
       <img
         src={item.imageUrl}
@@ -187,11 +190,11 @@ const SupplierActivityCard = ({ content, loading = false }) => {
       </div>
 
       {loading ? (
-        <ul className="divide-y divide-[#E4E7EC]">
+        <ul className={GRID_CLASS}>
           {[0, 1, 2].map((key) => (
             <li
               key={key}
-              className="flex items-center gap-3 px-5 py-3.5 sm:px-6"
+              className="flex items-center gap-3 rounded-xl border border-[#E4E7EC] p-3"
             >
               <span className="h-12 w-12 shrink-0 animate-pulse rounded-lg bg-[#E4E7EC]" />
               <span className="flex-1 space-y-2">
@@ -203,7 +206,7 @@ const SupplierActivityCard = ({ content, loading = false }) => {
         </ul>
       ) : section.items.length ? (
         <>
-          <ul className="divide-y divide-[#E4E7EC]">
+          <ul className={GRID_CLASS}>
             {section.items.map((item) => (
               <ContentRow
                 key={item.id}
