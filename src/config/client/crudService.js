@@ -1,4 +1,4 @@
-import axiosInstance from './axiosInstance';
+import { axiosInstance } from './instances';
 
 /**
  * Reusable Production-Level CRUD Service

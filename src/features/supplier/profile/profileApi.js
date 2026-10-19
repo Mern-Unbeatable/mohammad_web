@@ -3,9 +3,9 @@ import {
   API_ENDPOINTS,
   unwrapApiData,
   getApiErrorMessage,
-} from "@/api";
-import { unwrapUser } from "@/api/unwrapApiData";
-import { tokenService } from "@/api/cookies";
+  unwrapUser,
+  tokenService,
+} from "@/config";
 
 /**
  * Supplier profile HTTP helpers — no Redux. Used by profileThunks.

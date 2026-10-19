@@ -3,7 +3,7 @@ import {
   API_ENDPOINTS,
   unwrapApiData,
   getApiErrorMessage,
-} from "@/api";
+} from "@/config";
 
 /**
  * User reports HTTP helpers — no Redux. Used by reportsThunks.

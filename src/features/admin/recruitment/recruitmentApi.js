@@ -3,7 +3,7 @@ import {
   API_ENDPOINTS,
   unwrapApiData,
   getApiErrorMessage,
-} from "@/api";
+} from "@/config";
 
 /**
  * Admin recruitment HTTP helpers — no Redux. Used by recruitmentThunks.

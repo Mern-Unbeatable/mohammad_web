@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserProfile, setSessionReady } from "@/features/auth";
-import { tokenService } from "@/api/cookies";
+import { tokenService } from "@/config";
 import AppBootLoadingScreen from "@/shared/ui/AppBootLoadingScreen";
 
 /**

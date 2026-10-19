@@ -1,7 +1,7 @@
-import { store } from "@/app/store";
-import { router } from "@/app/router/index.jsx";
+import { store } from "@/store/store";
+import { router } from "@/store/router/index.jsx";
 import { resetAuth, tokenRefreshed } from "@/features/auth";
-import { registerSessionBridge } from "@/api/sessionBridge";
+import { registerSessionBridge } from "@/config";
 
 /**
  * Wires Redux + router into the axios session bridge (once at app boot).

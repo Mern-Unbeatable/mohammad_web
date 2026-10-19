@@ -3,7 +3,7 @@ import {
   API_ENDPOINTS,
   unwrapApiData,
   getApiErrorMessage,
-} from "@/api";
+} from "@/config";
 import { unwrapSubscribePayload } from "./subscriptionsMappers";
 
 /**

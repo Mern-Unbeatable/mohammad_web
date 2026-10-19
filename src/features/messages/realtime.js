@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import { crudService, tokenService, API_ENDPOINTS } from "@/api";
+import { crudService, tokenService, API_ENDPOINTS } from "@/config";
 
 const REALTIME_EVENTS = [
   "message:new",
