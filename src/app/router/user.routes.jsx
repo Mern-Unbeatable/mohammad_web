@@ -3,7 +3,7 @@ import RequireRole from '@/shared/auth/RequireRole';
 import { USER_ROLES } from '@/shared/constants/roles';
 import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
 import { lazyPage } from '@/shared/routing/lazyPage';
-import UserDashboardLayout from '@/modules/user/layout/UserDashboardLayout';
+import UserLayout from '@/modules/user/layout/UserLayout';
 import { buildChatRoute, legacyChatRoute } from './chat.routes';
 
 const FeedView = lazyPage(() => import('@/modules/user/pages/feed/FeedView'));
@@ -35,7 +35,7 @@ export const userRoutes = {
   handle: { requiredRole: USER_ROLES.USER, audience: 'user' },
   children: [
     {
-      element: <UserDashboardLayout />,
+      element: <UserLayout />,
       children: [
         { path: '/feed', element: <FeedView />, handle: { title: 'Feed' } },
         { path: '/search', element: <SearchView />, handle: { title: 'Search' } },

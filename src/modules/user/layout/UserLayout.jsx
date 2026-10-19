@@ -1,15 +1,15 @@
-import { useEffect } from 'react';
-import { Outlet } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
-import DashboardNavbar from '@/modules/user/components/shell/DashboardNavbar';
-import MobileBottomNav from '@/modules/user/components/shell/MobileBottomNav';
-import { FeedActionsProvider } from '@/modules/user/context/FeedActionsContext';
-import { LayoutChromeProvider } from '@/shared/context/LayoutChromeContext';
-import AppFooter from '@/shared/layout/FooterLayout';
-import ScrollToTop from '@/shared/routing/ScrollToTop';
-import { fetchUserProfile } from '@/features/user/profile';
+import { useEffect } from "react";
+import { Outlet } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import DashboardNavbar from "@/modules/user/components/shell/DashboardNavbar";
+import MobileBottomNav from "@/modules/user/components/shell/MobileBottomNav";
+import { FeedActionsProvider } from "@/modules/user/context/FeedActionsContext";
+import { LayoutChromeProvider } from "@/shared/context/LayoutChromeContext";
+import AppFooter from "@/shared/layout/FooterLayout";
+import ScrollToTop from "@/shared/routing/ScrollToTop";
+import { fetchUserProfile } from "@/features/user/profile";
 
-const UserDashboardLayout = () => {
+const UserLayout = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userProfile.user);
 
@@ -36,4 +36,4 @@ const UserDashboardLayout = () => {
   );
 };
 
-export default UserDashboardLayout;
+export default UserLayout;
