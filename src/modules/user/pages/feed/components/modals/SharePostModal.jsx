@@ -4,6 +4,7 @@ import { Check, Link2, Loader2, Repeat2, Send, X } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { messagesApi } from "@/features/messages";
 import RecipientPicker from "@/shared/pages/messages/RecipientPicker";
+import { MAX_POST_LENGTH } from "../../constants";
 
 const shareOptions = [
   {
@@ -19,8 +20,6 @@ const shareOptions = [
     color: "text-[#475467]",
   },
 ];
-
-const CAPTION_MAX = 5000;
 
 const SharePostModal = ({
   open,
@@ -41,6 +40,14 @@ const SharePostModal = ({
   const [composing, setComposing] = useState(false);
   const [caption, setCaption] = useState("");
   const latestSearch = useRef(0);
+  const closeTimer = useRef(null);
+
+  useEffect(() => () => clearTimeout(closeTimer.current), []);
+
+  const closeAfter = (ms) => {
+    clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(onClose, ms);
+  };
 
   useEffect(() => {
     if (!open) return undefined;
@@ -82,10 +89,11 @@ const SharePostModal = ({
     try {
       await navigator.clipboard.writeText(postUrl);
     } catch {
-      // fallback for non-secure contexts
+      toast.error("Couldn't copy the link");
+      return;
     }
     setCopied(true);
-    setTimeout(onClose, 1200);
+    closeAfter(1200);
   };
 
   const handleRepostOption = async () => {
@@ -111,7 +119,7 @@ const SharePostModal = ({
         message: `Shared a post with you: ${postUrl}`,
       });
       setSentTo(selectedRecipient.name);
-      setTimeout(onClose, 1400);
+      closeAfter(1400);
     } catch (error) {
       toast.error(messagesApi.getApiErrorMessage(error, "Failed to send post"));
     } finally {
@@ -223,7 +231,7 @@ const SharePostModal = ({
                 id="repost-caption"
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
-                maxLength={CAPTION_MAX}
+                maxLength={MAX_POST_LENGTH}
                 rows={3}
                 disabled={reposting}
                 placeholder="Say something about this (optional)"
@@ -231,7 +239,7 @@ const SharePostModal = ({
               />
               <div className="mt-2 flex items-center justify-between gap-3">
                 <span className="text-[12px] text-[#98A2B3]">
-                  {caption.length}/{CAPTION_MAX}
+                  {caption.length}/{MAX_POST_LENGTH}
                 </span>
                 <button
                   type="button"

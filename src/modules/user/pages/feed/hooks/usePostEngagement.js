@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import { reactToPost } from "@/features/user/feed";
 import {
-  nextReactionTotal,
+  applyReaction,
   normalizeReaction,
-  reactionFromResponse,
-  toApiReaction,
+  planReaction,
+  reconcileReaction,
+  rollbackReaction,
 } from "../utils/reactions";
 
 const engagementFrom = (post) => ({
@@ -24,6 +25,8 @@ export function usePostEngagement(post) {
   const dispatch = useDispatch();
   const [syncedPost, setSyncedPost] = useState(post);
   const [state, setState] = useState(() => engagementFrom(post));
+  /** The server toggles reactions, so overlapping requests could leave it out of sync with the UI. */
+  const reacting = useRef(false);
 
   if (post !== syncedPost) {
     setSyncedPost(post);
@@ -35,39 +38,24 @@ export function usePostEngagement(post) {
   const setComments = (updater) =>
     setState((prev) => ({ ...prev, comments: updater(prev.comments) }));
 
-  const react = async (id) => {
+  const react = async (pickedId) => {
     const previous = state;
-    const nextId = previous.reactionId === id ? null : id;
-    setState((prev) => ({
-      ...prev,
-      reactionId: nextId,
-      stats: {
-        ...prev.stats,
-        reactions: nextReactionTotal(prev.stats.reactions, prev.reactionId, nextId),
-      },
-    }));
+    const { nextId, apiType } = planReaction(previous.reactionId, pickedId);
+    if (reacting.current || !apiType) return;
+    reacting.current = true;
+    setState((prev) => applyReaction(prev, nextId));
 
-    const result = await dispatch(
-      reactToPost({
-        postId: post.id,
-        type: toApiReaction(nextId || previous.reactionId),
-      }),
-    );
-    if (reactToPost.rejected.match(result)) {
-      setState(previous);
-      toast.error(result.payload || "Failed to update reaction");
-      return;
+    try {
+      const result = await dispatch(reactToPost({ postId: post.id, type: apiType }));
+      if (reactToPost.rejected.match(result)) {
+        setState((prev) => rollbackReaction(prev, previous));
+        toast.error(result.payload || "Failed to update reaction");
+        return;
+      }
+      setState((prev) => reconcileReaction(prev, result.payload?.data));
+    } finally {
+      reacting.current = false;
     }
-
-    const data = result.payload?.data;
-    if (!data) return;
-    const serverTotal = data.reactionCount ?? data.stats?.reactions;
-    setState((prev) => ({
-      ...prev,
-      reactionId: reactionFromResponse(data) ?? null,
-      stats: serverTotal != null ? { ...prev.stats, reactions: serverTotal } : prev.stats,
-      reactionCounts: data.reactionCounts || prev.reactionCounts,
-    }));
   };
 
   return { ...state, react, setStats, setComments };

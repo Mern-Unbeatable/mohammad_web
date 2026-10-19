@@ -65,8 +65,9 @@ feed/
 │
 ├── utils/
 │   ├── commentTree.js        findComment, findRootId, updateComment, removeComment, selectPreview
-│   ├── reactions.js          UI ↔ API reaction mapping (incl. legacy ids), totals
+│   ├── reactions.js          UI ↔ API reaction mapping, optimistic apply / rollback / reconcile
 │   ├── mentions.js           @mention highlighting and mentionFromName
+│   ├── postDraft.js          Composer rules: image picking, change detection, labels, upload merge
 │   ├── postPayload.js        Composer output → create-post API payload
 │   ├── postTypeOptions.js    Post type options for the composer
 │   ├── authorProfileHref.js  Profile URL for an author
@@ -76,6 +77,9 @@ feed/
     ├── FeedPost.edit.test.jsx
     ├── FeedPost.repost.test.jsx
     ├── PostComments.test.jsx
+    ├── commentTree.test.js
+    ├── reactions.test.js
+    ├── postDraft.test.js
     └── mentions.test.js
 ```
 
@@ -153,4 +157,4 @@ with their callers (profiles, supplier ads, activity section).
 ## Possible next steps
 
 - Split `SharePostModal.jsx` (repost form vs. share options).
-- Add unit tests for `utils/commentTree.js`, `utils/reactions.js` and `usePostDraft`.
+- See `docs/audits/feed-module-audit.md` for the audit findings and open risks.

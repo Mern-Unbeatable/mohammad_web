@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import { createPost } from "@/features/user/feed";
-import { useFeedActions } from "@/modules/user/context/FeedActionsContext";
+import { useFeedActions } from "@/modules/user/context/useFeedActions";
 import { DEFAULT_POST_OPTION } from "../utils/postTypeOptions";
 import { toCreatePostPayload } from "../utils/postPayload";
 
@@ -23,9 +23,10 @@ export function useCreatePost({ onPublished } = {}) {
 
   const closeCreatePost = useCallback(() => setOpen(false), []);
 
-  useEffect(() => {
-    registerOpenCreatePost(() => openCreatePost());
-  }, [registerOpenCreatePost, openCreatePost]);
+  useEffect(
+    () => registerOpenCreatePost(() => openCreatePost()),
+    [registerOpenCreatePost, openCreatePost],
+  );
 
   const publish = async (values) => {
     const result = await dispatch(createPost(toCreatePostPayload(values)));

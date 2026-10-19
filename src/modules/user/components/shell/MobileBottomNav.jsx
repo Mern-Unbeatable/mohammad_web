@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import CountBadge from '@/components/ui/CountBadge';
 import { selectUserUnreadNotificationCount } from '@/features/user/notifications';
 import { selectPendingRequestCount } from '@/features/user/contacts';
-import { useFeedActions } from '@/modules/user/context/FeedActionsContext';
+import { useFeedActions } from '@/modules/user/context/useFeedActions';
 import { useLayoutChrome } from '@/shared/context/LayoutChromeContext';
 
 const tabs = [
