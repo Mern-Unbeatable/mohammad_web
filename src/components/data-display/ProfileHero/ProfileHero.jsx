@@ -61,6 +61,7 @@ const ProfileHero = ({
   user = currentUser,
   editHref = '/profile/edit',
   messageHref,
+  onMessage,
   showMessage = false,
   showEdit = true,
 }) => {
@@ -130,7 +131,17 @@ const ProfileHero = ({
           </div>
 
           <div className="flex gap-2 lg:mt-1">
-            {showMessage && messageHref ? (
+            {showMessage && onMessage ? (
+              <button
+                type="button"
+                onClick={onMessage}
+                aria-haspopup="dialog"
+                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md border border-primary px-3.5 py-2 text-[12px] font-semibold text-primary hover:bg-secondary sm:flex-none"
+              >
+                <MessageCircle className="h-3.5 w-3.5" />
+                Message
+              </button>
+            ) : showMessage && messageHref ? (
               <Link
                 to={messageHref}
                 className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md border border-primary px-3.5 py-2 text-[12px] font-semibold text-primary hover:bg-secondary sm:flex-none"

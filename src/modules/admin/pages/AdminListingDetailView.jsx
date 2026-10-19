@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router";
 import { BadgeCheck, MessageCircle } from "lucide-react";
@@ -11,7 +11,9 @@ import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
 import NotFound from "@/shared/pages/NotFound";
 import { useAuth } from "@/shared/auth/useAuth";
-import { CHAT_BASE_PATHS, listingChatPath } from "@/shared/constants/chat";
+import { CHAT_BASE_PATHS } from "@/shared/constants/chat";
+import StartConversationModal from "@/shared/pages/messages/StartConversationModal";
+import { useStartConversation } from "@/shared/pages/messages/useStartConversation";
 import {
   fetchListingDetails,
   clearSelectedListing,
@@ -30,6 +32,9 @@ const AdminListingDetailView = () => {
   const dispatch = useDispatch();
   const { user } = useAuth();
   const [activeImage, setActiveImage] = useState(0);
+  const [contactListingId, setContactListingId] = useState(null);
+  const closeContact = useCallback(() => setContactListingId(null), []);
+  const startConversation = useStartConversation(CHAT_BASE_PATHS.ADMIN);
 
   const { selectedListing, selectedListingLoading, error } = useSelector(
     (state) => state.adminMarketplace,
@@ -64,6 +69,7 @@ const AdminListingDetailView = () => {
   if ((error && !selectedListing) || !listing) return <NotFound />;
 
   const images = listing.images?.length ? listing.images : [listing.image];
+  const canContact = Boolean(listing.seller.id) && listing.seller.id !== user?.id;
 
   return (
     <PanelPage>
@@ -139,14 +145,16 @@ const AdminListingDetailView = () => {
               Excl. VAT · Collection or delivery
             </p>
 
-            {listing.seller.id && listing.seller.id !== user?.id ? (
-              <Link
-                to={listingChatPath(CHAT_BASE_PATHS.ADMIN, listing.seller.id, listing.id)}
+            {canContact ? (
+              <button
+                type="button"
+                onClick={() => setContactListingId(listing.id)}
+                aria-haspopup="dialog"
                 className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#066BB0]"
               >
                 <MessageCircle className="h-4 w-4" />
                 Contact seller
-              </Link>
+              </button>
             ) : null}
 
             <div className="mt-5 flex items-center gap-2 border-t border-[#E4E7EC] pt-4 text-[12px] text-[#64748B]">
@@ -189,6 +197,23 @@ const AdminListingDetailView = () => {
           </div>
         </aside>
       </div>
+
+      <StartConversationModal
+        open={canContact && contactListingId === listing.id}
+        title="Contact seller"
+        description={`Ask ${listing.seller.name} about this listing.`}
+        placeholder="Hi, is this still available?"
+        recipient={listing.seller}
+        listing={selectedListing}
+        onClose={closeContact}
+        onSend={(message) =>
+          startConversation({
+            recipientId: listing.seller.id,
+            message,
+            listingId: listing.id,
+          })
+        }
+      />
     </PanelPage>
   );
 };

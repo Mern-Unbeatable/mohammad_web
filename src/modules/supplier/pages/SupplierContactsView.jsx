@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import { Clock, Handshake, UserCheck, Users } from "lucide-react";
@@ -11,10 +11,13 @@ import {
   acceptConnection,
   clearContactsError,
   invalidateContactsList,
+  fetchPendingRequestCount,
+  selectPendingRequestCount,
   COUNTRY_OPTIONS,
   toContactCardModel,
 } from "@/features/supplier/contacts";
 import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
+import CountBadge from "@/components/ui/CountBadge";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
 import { GRID_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
@@ -24,42 +27,10 @@ const PROFILE_BASE = "/supplier/contacts";
 const DEFAULT_COUNTRY = "All countries";
 
 const FILTER_TABS = [
-  {
-    id: "people",
-    label: (
-      <span className="inline-flex items-center gap-1.5">
-        <Users aria-hidden className="hidden h-4 w-4 shrink-0 sm:block" />
-        People
-      </span>
-    ),
-  },
-  {
-    id: "pending",
-    label: (
-      <span className="inline-flex items-center gap-1.5">
-        <Clock aria-hidden className="hidden h-4 w-4 shrink-0 sm:block" />
-        Pending
-      </span>
-    ),
-  },
-  {
-    id: "requests",
-    label: (
-      <span className="inline-flex items-center gap-1.5">
-        <UserCheck aria-hidden className="hidden h-4 w-4 shrink-0 sm:block" />
-        Confirm
-      </span>
-    ),
-  },
-  {
-    id: "connected",
-    label: (
-      <span className="inline-flex items-center gap-1.5">
-        <Handshake aria-hidden className="hidden h-4 w-4 shrink-0 sm:block" />
-        Connected
-      </span>
-    ),
-  },
+  { id: "people", label: "People", icon: Users },
+  { id: "pending", label: "Pending", icon: Clock },
+  { id: "requests", label: "Confirm", icon: UserCheck },
+  { id: "connected", label: "Connected", icon: Handshake },
 ];
 
 const EMPTY_MESSAGES = {
@@ -118,6 +89,33 @@ const SupplierContactsView = () => {
     acceptingId,
     error,
   } = useSelector((state) => state.supplierContacts);
+  const pendingRequests = useSelector(selectPendingRequestCount);
+  const filterTabs = useMemo(
+    () =>
+      FILTER_TABS.map((tab) => {
+        const Icon = tab.icon;
+        return {
+          id: tab.id,
+          label: (
+            <span className="inline-flex items-center gap-1.5">
+              <Icon aria-hidden className="hidden h-4 w-4 shrink-0 sm:block" />
+              {tab.label}
+              {tab.id === "requests" && pendingRequests > 0 && (
+                <CountBadge
+                  count={pendingRequests}
+                  label={`${plural(pendingRequests, "request")} to confirm`}
+                />
+              )}
+            </span>
+          ),
+        };
+      }),
+    [pendingRequests],
+  );
+
+  useEffect(() => {
+    dispatch(fetchPendingRequestCount());
+  }, [dispatch]);
 
   const [filter, setFilter] = useState("people");
   const [query, setQuery] = useState("");
@@ -137,19 +135,26 @@ const SupplierContactsView = () => {
     return () => clearTimeout(timer);
   }, [query, debouncedQuery, dispatch]);
 
+  const contactsQuery = useMemo(
+    () =>
+      buildContactsQuery({
+        page,
+        search: debouncedQuery,
+        country,
+        filter,
+      }),
+    [page, debouncedQuery, country, filter],
+  );
+
+  const latestQueryRef = useRef(contactsQuery);
+  useEffect(() => {
+    latestQueryRef.current = contactsQuery;
+  }, [contactsQuery]);
+
   useLayoutEffect(() => {
     dispatch(clearContactsError());
-    dispatch(
-      fetchContactsList(
-        buildContactsQuery({
-          page,
-          search: debouncedQuery,
-          country,
-          filter,
-        }),
-      ),
-    );
-  }, [dispatch, page, debouncedQuery, country, filter]);
+    dispatch(fetchContactsList(contactsQuery));
+  }, [dispatch, contactsQuery]);
 
   useEffect(() => {
     if (error) toast.error(error);
@@ -186,6 +191,22 @@ const SupplierContactsView = () => {
     setPage(next);
   };
 
+  // The acted-on card is already gone; refetch so the next member fills this page.
+  const refreshInBackground = async () => {
+    const query = latestQueryRef.current;
+    const result = await dispatch(
+      fetchContactsList({ ...query, background: true }),
+    );
+    const lastPage = Number(result.payload?.meta?.totalPages) || 1;
+    if (
+      fetchContactsList.fulfilled.match(result) &&
+      latestQueryRef.current === query &&
+      query.page > lastPage
+    ) {
+      setPage(lastPage);
+    }
+  };
+
   const handleConnect = async (id) => {
     const card = cards.find((c) => c.id === id);
     if (!card || card.connected || card.pending || connectingId === id) return;
@@ -193,6 +214,7 @@ const SupplierContactsView = () => {
     const result = await dispatch(requestContactConnection(id));
     if (requestContactConnection.fulfilled.match(result)) {
       toast.success("Connection request sent");
+      refreshInBackground();
     }
   };
 
@@ -202,6 +224,7 @@ const SupplierContactsView = () => {
     const result = await dispatch(acceptConnection(connectionId));
     if (acceptConnection.fulfilled.match(result)) {
       toast.success("Connection confirmed");
+      refreshInBackground();
     }
   };
 
@@ -214,7 +237,7 @@ const SupplierContactsView = () => {
 
       <div className="flex flex-col gap-3 lg:flex-row-reverse lg:items-center lg:justify-between">
         <SegmentedTabs
-          tabs={FILTER_TABS}
+          tabs={filterTabs}
           activeTab={filter}
           onTabChange={handleFilterChange}
           standalone

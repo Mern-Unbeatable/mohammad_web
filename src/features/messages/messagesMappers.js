@@ -99,12 +99,18 @@ export function toChatListingModel(listing) {
   };
 }
 
-export function toConversationModel(conversation, { onlineUserIds } = {}) {
+export function toConversationModel(
+  conversation,
+  { onlineUserIds, currentUserId } = {},
+) {
   if (!conversation?.id) return null;
-  const online =
-    !conversation.isGroup &&
-    Boolean(conversation.otherUserId) &&
-    Boolean(onlineUserIds?.has?.(conversation.otherUserId));
+  const isOnline = (id) => Boolean(id && onlineUserIds?.has?.(id));
+  // A group counts as online when any other member is.
+  const online = conversation.isGroup
+    ? (conversation.participants || []).some(
+        (member) => member?.id !== currentUserId && isOnline(member?.id),
+      )
+    : isOnline(conversation.otherUserId);
 
   return {
     id: conversation.id,

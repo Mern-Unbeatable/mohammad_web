@@ -42,6 +42,7 @@ import {
   toConversationModel,
   toMessageModel,
   useMessagesSocket,
+  useTypingEmitter,
 } from '@/features/messages';
 import { marketplaceApi } from '@/features/user/marketplace';
 import {
@@ -58,6 +59,8 @@ const SEARCH_DEBOUNCE_MS = 300;
 /** Fallback refresh while the realtime connection is down. */
 const POLL_INTERVAL_MS = 20000;
 const DESKTOP_QUERY = '(min-width: 1280px)';
+/** Hides "typing..." if the sender's "stopped" event never arrives. */
+const TYPING_EXPIRY_MS = 6000;
 
 const tabForSection = (section) => (section === CHAT_SECTIONS.GROUP ? 'groups' : 'messages');
 const sectionForTab = (tab) => (tab === 'groups' ? CHAT_SECTIONS.GROUP : CHAT_SECTIONS.DIRECT);
@@ -116,6 +119,43 @@ const MessagesContainer = ({
   const type = typeForTab(tab);
   const socketRef = useRef(null);
   const hasConnectedRef = useRef(false);
+  /** `{ [conversationId]: userId[] }` of other members currently typing. */
+  const [typingByConversation, setTypingByConversation] = useState({});
+  const typingTimersRef = useRef(new Map());
+
+  const updateTypingList = useCallback((conversationId, userId, typing) => {
+    setTypingByConversation((prev) => {
+      const current = prev[conversationId] || [];
+      const has = current.includes(userId);
+      if (typing === has) return prev;
+      const next = typing ? [...current, userId] : current.filter((id) => id !== userId);
+      return { ...prev, [conversationId]: next };
+    });
+  }, []);
+
+  const setTyping = useCallback(
+    (conversationId, userId, typing) => {
+      const key = `${conversationId}:${userId}`;
+      clearTimeout(typingTimersRef.current.get(key));
+      typingTimersRef.current.delete(key);
+      if (typing) {
+        typingTimersRef.current.set(
+          key,
+          setTimeout(() => {
+            typingTimersRef.current.delete(key);
+            updateTypingList(conversationId, userId, false);
+          }, TYPING_EXPIRY_MS),
+        );
+      }
+      updateTypingList(conversationId, userId, typing);
+    },
+    [updateTypingList],
+  );
+
+  useEffect(() => {
+    const timers = typingTimersRef.current;
+    return () => timers.forEach(clearTimeout);
+  }, []);
 
   useEffect(() => () => dispatch(resetMessages()), [dispatch]);
 
@@ -282,6 +322,7 @@ const MessagesContainer = ({
       hasConnectedRef.current = true;
     },
     'message:new': ({ conversationId, message }) => {
+      if (message?.senderId) setTyping(conversationId, message.senderId, false);
       const known = conversations.some((c) => c.id === conversationId);
       dispatch(messageReceived({ conversationId, message, currentUserId }));
       if (!known) dispatch(fetchConversation(conversationId));
@@ -316,8 +357,21 @@ const MessagesContainer = ({
       dispatch(conversationRemoved(conversationId));
     },
     'conversation:read': (payload) => dispatch(conversationReadByOther(payload)),
-    'presence:update': (payload) => dispatch(presenceChanged(payload)),
+    'presence:update': (payload) => {
+      dispatch(presenceChanged(payload));
+      if (payload?.online === false) {
+        Object.keys(typingByConversation).forEach((conversationId) =>
+          setTyping(conversationId, payload.userId, false),
+        );
+      }
+    },
+    typing: ({ conversationId, userId, typing } = {}) => {
+      if (!conversationId || !userId || userId === currentUserId) return;
+      setTyping(conversationId, userId, Boolean(typing));
+    },
   });
+
+  const typingEmitter = useTypingEmitter(socketRef, activeConversationId);
 
   useEffect(() => {
     if (connected) return undefined;
@@ -330,9 +384,16 @@ const MessagesContainer = ({
     (activeDetail?.id === activeConversationId ? activeDetail : null);
 
   const presenceKey = useMemo(() => {
-    const ids = new Set(
-      conversations.filter((c) => !c.isGroup && c.otherUserId).map((c) => c.otherUserId),
-    );
+    const ids = new Set();
+    conversations.forEach((c) => {
+      if (!c.isGroup) {
+        if (c.otherUserId) ids.add(c.otherUserId);
+        return;
+      }
+      (c.participants || []).forEach((p) => {
+        if (p?.id && p.id !== currentUserId) ids.add(p.id);
+      });
+    });
     (activeRaw?.participants || []).forEach((p) => {
       if (p.id !== currentUserId) ids.add(p.id);
     });
@@ -355,9 +416,20 @@ const MessagesContainer = ({
   const chats = useMemo(
     () =>
       conversations
-        .map((c) => toConversationModel(c, { onlineUserIds: onlineSet }))
-        .filter(Boolean),
-    [conversations, onlineSet],
+        .map((c) => toConversationModel(c, { onlineUserIds: onlineSet, currentUserId }))
+        .filter(Boolean)
+        .map((chat) => {
+          const typingIds = typingByConversation[chat.id] || [];
+          if (typingIds.length === 0) return chat;
+          return {
+            ...chat,
+            typingNames: typingIds.map(
+              (userId) =>
+                chat.participants?.find((member) => member.id === userId)?.name || 'Someone',
+            ),
+          };
+        }),
+    [conversations, onlineSet, currentUserId, typingByConversation],
   );
 
   const messageModels = useMemo(
@@ -366,9 +438,15 @@ const MessagesContainer = ({
   );
 
   const activeModel = activeRaw
-    ? toConversationModel(activeRaw, { onlineUserIds: onlineSet })
+    ? toConversationModel(activeRaw, { onlineUserIds: onlineSet, currentUserId })
     : null;
-  const activeChat = activeModel ? { ...activeModel, messages: messageModels } : null;
+  const typingNames = (typingByConversation[activeConversationId] || []).map(
+    (userId) =>
+      activeModel?.participants?.find((member) => member.id === userId)?.name || 'Someone',
+  );
+  const activeChat = activeModel
+    ? { ...activeModel, messages: messageModels, typingNames }
+    : null;
   const seen = isSeenByOther(activeRaw, messageModels, currentUserId);
 
   const composeUserId =
@@ -407,6 +485,7 @@ const MessagesContainer = ({
 
   const handleSend = async ({ body, attachments, listingId }) => {
     if (!activeConversationId) return false;
+    typingEmitter.stop();
     const result = await dispatch(
       sendMessage({ conversationId: activeConversationId, body, attachments, listingId }),
     );
@@ -515,6 +594,8 @@ const MessagesContainer = ({
         query={query}
         onSearchChange={setQuery}
         onSend={handleSend}
+        onTyping={typingEmitter.notify}
+        onTypingStop={typingEmitter.stop}
         sending={sending}
         onUploadFile={handleUploadFile}
         showNewMessageButton={tab === 'messages'}

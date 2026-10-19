@@ -57,6 +57,18 @@ describe("ProfileHero", () => {
     expect(html).toContain("Free trial member");
   });
 
+  it("opens a dialog from Message instead of linking when a handler is given", () => {
+    const html = render({
+      showMessage: true,
+      messageHref: "/chat",
+      onMessage: () => {},
+      showEdit: false,
+    });
+
+    expect(html).toMatch(/<button type="button" aria-haspopup="dialog"[^>]*>.*Message<\/button>/);
+    expect(html).not.toContain('href="/chat"');
+  });
+
   it("shows Message with an icon when enabled", () => {
     const html = render({ showMessage: true, messageHref: "/chat", showEdit: false });
 

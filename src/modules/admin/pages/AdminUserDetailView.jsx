@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { Ban, CheckCircle2, Loader2 } from "lucide-react";
@@ -11,6 +11,9 @@ import { SubscriptionDetailsCard } from "@/modules/user/components/profile/Profi
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
 import { CHAT_BASE_PATHS, chatPath } from "@/shared/constants/chat";
+import { useAuth } from "@/shared/auth/useAuth";
+import StartConversationModal from "@/shared/pages/messages/StartConversationModal";
+import { useStartConversation } from "@/shared/pages/messages/useStartConversation";
 import { roleLabel } from "@/shared/constants/roles";
 import {
   fetchUserDetails,
@@ -132,6 +135,11 @@ const AdminUserDetailView = () => {
   const [suspendOpen, setSuspendOpen] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [contentCache, setContentCache] = useState({ key: null, data: null });
+  const { user: authUser } = useAuth();
+  const startConversation = useStartConversation(CHAT_BASE_PATHS.ADMIN);
+  /** User id the message dialog is open for. */
+  const [messageUserId, setMessageUserId] = useState(null);
+  const closeMessage = useCallback(() => setMessageUserId(null), []);
 
   const userLoaded = selectedUser?.id === userId;
   const isSupplier =
@@ -224,6 +232,7 @@ const AdminUserDetailView = () => {
   const isPremium = ["premium", "trial", "cancelled"].includes(
     profileUser.membershipStatus,
   );
+  const canMessage = Boolean(userId && authUser?.id && userId !== authUser.id);
   const contentLoading = contentCache.key !== userId;
   const content = contentLoading ? null : contentCache.data;
 
@@ -248,6 +257,7 @@ const AdminUserDetailView = () => {
         showEdit={false}
         showMessage
         messageHref={chatPath(CHAT_BASE_PATHS.ADMIN, { id: userId })}
+        onMessage={canMessage ? () => setMessageUserId(userId) : undefined}
         subscriptionSlot={
           <SubscriptionDetailsCard
             subscription={profileUser.subscription}
@@ -289,6 +299,15 @@ const AdminUserDetailView = () => {
         userName={profileUser.name}
         onClose={() => setSuspendOpen(false)}
         onConfirm={(reason) => changeStatus("SUSPENDED", reason)}
+      />
+
+      <StartConversationModal
+        open={canMessage && messageUserId === userId}
+        title="New message"
+        description={`Start a conversation with ${profileUser.name}.`}
+        recipient={profileUser}
+        onClose={closeMessage}
+        onSend={(message) => startConversation({ recipientId: userId, message })}
       />
     </PanelPage>
   );

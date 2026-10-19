@@ -51,7 +51,7 @@ export {
   isImageAttachment,
   isSeenByOther,
 } from "./messagesMappers";
-export { useMessagesSocket, queryPresence } from "./realtime";
+export { useMessagesSocket, useTypingEmitter, queryPresence } from "./realtime";
 export { useUnreadMessages } from "./useUnreadMessages";
 export {
   parseLegacyChatLink,

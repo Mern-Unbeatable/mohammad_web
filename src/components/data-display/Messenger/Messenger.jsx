@@ -20,6 +20,7 @@ import {
   X,
 } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
+import Dots from "@/components/ui/Dots";
 import {
   MAX_MESSAGE_LENGTH,
   applyComposerFormat,
@@ -66,6 +67,33 @@ const ChatName = ({ chat, className }) => (
   </span>
 );
 
+const PresenceDot = ({ online }) => (
+  <span
+    className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${
+      online ? "bg-green-primary" : "bg-[#98A2B3]"
+    }`}
+    aria-label={online ? "Online" : "Offline"}
+  />
+);
+
+const typingLabelFor = (chat) => {
+  const names = chat.typingNames || [];
+  if (names.length === 0) return null;
+  if (!chat.isGroup) return "typing";
+  if (names.length === 1) return `${names[0]} is typing`;
+  return `${names.length} people are typing`;
+};
+
+const TypingText = ({ label, className = "" }) => (
+  <p
+    className={`flex min-w-0 items-baseline gap-1 font-medium text-green-primary ${className}`}
+    aria-live="polite"
+  >
+    <span className="truncate">{label}</span>
+    <Dots className="w-3.5 shrink-0" label={null} aria-hidden="true" />
+  </p>
+);
+
 const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
   <button
     type="button"
@@ -76,12 +104,7 @@ const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
   >
     <div className="relative shrink-0">
       <ChatAvatar chat={chat} />
-      {showOnline && chat.online ? (
-        <span
-          className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-green-primary"
-          aria-label="Online"
-        />
-      ) : null}
+      {showOnline ? <PresenceDot online={chat.online} /> : null}
     </div>
 
     <div className="min-w-0 flex-1">
@@ -92,13 +115,17 @@ const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
         />
         <span className="shrink-0 text-[11px] text-[#98A2B3]">{chat.time}</span>
       </div>
-      <p
-        className={`mt-0.5 truncate text-[12px] ${
-          chat.unread > 0 ? "font-semibold text-deep-blue" : "text-[#64748B]"
-        }`}
-      >
-        {chat.preview}
-      </p>
+      {typingLabelFor(chat) ? (
+        <TypingText label={typingLabelFor(chat)} className="mt-0.5 text-[12px]" />
+      ) : (
+        <p
+          className={`mt-0.5 truncate text-[12px] ${
+            chat.unread > 0 ? "font-semibold text-deep-blue" : "text-[#64748B]"
+          }`}
+        >
+          {chat.preview}
+        </p>
+      )}
     </div>
 
     {chat.unread > 0 ? (
@@ -389,13 +416,12 @@ const useThreadScroll = (messages, chatId) => {
  */
 /** Avatar, name and status of the open chat; links to the other member's profile in direct chats. */
 const ChatHeaderIdentity = ({ chat, profileHref }) => {
+  const typingLabel = typingLabelFor(chat);
   const content = (
     <>
       <div className="relative shrink-0">
         <ChatAvatar chat={chat} />
-        {!chat.isGroup && chat.online ? (
-          <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-green-primary" />
-        ) : null}
+        <PresenceDot online={chat.online} />
       </div>
 
       <div className="min-w-0">
@@ -405,9 +431,13 @@ const ChatHeaderIdentity = ({ chat, profileHref }) => {
             profileHref ? "group-hover:text-primary group-hover:underline" : ""
           }`}
         />
-        <p className="truncate text-[11px] text-[#64748B] sm:text-[12px]">
-          {!chat.isGroup && chat.online ? "Online" : chat.subtitle}
-        </p>
+        {typingLabel ? (
+          <TypingText label={typingLabel} className="text-[11px] sm:text-[12px]" />
+        ) : (
+          <p className="truncate text-[11px] text-[#64748B] sm:text-[12px]">
+            {!chat.isGroup && chat.online ? "Online" : chat.subtitle}
+          </p>
+        )}
       </div>
     </>
   );
@@ -630,7 +660,7 @@ const Messenger = ({
                   chat={chat}
                   active={chat.id === activeChatId}
                   onClick={() => onSelectChat?.(chat.id)}
-                  showOnline={showOnlineIndicator && tab === "messages"}
+                  showOnline={showOnlineIndicator}
                 />
               ))}
               {hasMoreChats ? (
