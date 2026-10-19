@@ -23,6 +23,7 @@ import Container from "@/components/ui/Container";
 import CountBadge from "@/components/ui/CountBadge";
 import { useAuth } from "@/shared/auth/useAuth";
 import ProfileDropdown from "./ProfileDropdown";
+import NotificationsHoverMenu from "./NotificationsHoverMenu";
 import { navItems } from "@/modules/user/data/dashboard";
 import SearchTabs from "@/modules/user/components/search/SearchTabs";
 import SearchResultsList from "@/modules/user/components/search/SearchResultsList";
@@ -398,7 +399,7 @@ const DashboardNavbar = () => {
             {navItems.map(({ id, label, icon, to }) => {
               const Icon = iconMap[icon];
               const active = isNavActive({ id, to });
-              return (
+              const link = (
                 <Link
                   key={id}
                   to={to}
@@ -418,6 +419,11 @@ const DashboardNavbar = () => {
                   </span>
                   <span>{label}</span>
                 </Link>
+              );
+              return id === "notifications" ? (
+                <NotificationsHoverMenu key={id}>{link}</NotificationsHoverMenu>
+              ) : (
+                link
               );
             })}
           </nav>
