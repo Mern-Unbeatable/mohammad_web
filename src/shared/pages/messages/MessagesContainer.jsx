@@ -384,9 +384,16 @@ const MessagesContainer = ({
     (activeDetail?.id === activeConversationId ? activeDetail : null);
 
   const presenceKey = useMemo(() => {
-    const ids = new Set(
-      conversations.filter((c) => !c.isGroup && c.otherUserId).map((c) => c.otherUserId),
-    );
+    const ids = new Set();
+    conversations.forEach((c) => {
+      if (!c.isGroup) {
+        if (c.otherUserId) ids.add(c.otherUserId);
+        return;
+      }
+      (c.participants || []).forEach((p) => {
+        if (p?.id && p.id !== currentUserId) ids.add(p.id);
+      });
+    });
     (activeRaw?.participants || []).forEach((p) => {
       if (p.id !== currentUserId) ids.add(p.id);
     });
@@ -409,7 +416,7 @@ const MessagesContainer = ({
   const chats = useMemo(
     () =>
       conversations
-        .map((c) => toConversationModel(c, { onlineUserIds: onlineSet }))
+        .map((c) => toConversationModel(c, { onlineUserIds: onlineSet, currentUserId }))
         .filter(Boolean)
         .map((chat) => {
           const typingIds = typingByConversation[chat.id] || [];
@@ -422,7 +429,7 @@ const MessagesContainer = ({
             ),
           };
         }),
-    [conversations, onlineSet, typingByConversation],
+    [conversations, onlineSet, currentUserId, typingByConversation],
   );
 
   const messageModels = useMemo(
@@ -431,7 +438,7 @@ const MessagesContainer = ({
   );
 
   const activeModel = activeRaw
-    ? toConversationModel(activeRaw, { onlineUserIds: onlineSet })
+    ? toConversationModel(activeRaw, { onlineUserIds: onlineSet, currentUserId })
     : null;
   const typingNames = (typingByConversation[activeConversationId] || []).map(
     (userId) =>

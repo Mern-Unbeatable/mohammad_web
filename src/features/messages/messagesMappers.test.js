@@ -63,9 +63,19 @@ describe("toConversationModel", () => {
     expect(toConversationModel(base).online).toBe(false);
   });
 
-  it("never marks groups online", () => {
-    const group = { ...base, isGroup: true };
-    expect(toConversationModel(group, { onlineUserIds: new Set(["u2"]) }).online).toBe(false);
+  it("marks a group online when any other member is online", () => {
+    const group = {
+      ...base,
+      isGroup: true,
+      otherUserId: null,
+      participants: [{ id: "me" }, { id: "u2" }, { id: "u3" }],
+    };
+    const model = (online) =>
+      toConversationModel(group, { onlineUserIds: new Set(online), currentUserId: "me" });
+
+    expect(model(["u3"]).online).toBe(true);
+    expect(model([]).online).toBe(false);
+    expect(model(["me"]).online).toBe(false);
   });
 
   it("flags direct chats with an admin", () => {

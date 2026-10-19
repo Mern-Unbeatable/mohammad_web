@@ -104,7 +104,7 @@ const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
   >
     <div className="relative shrink-0">
       <ChatAvatar chat={chat} />
-      {showOnline && !chat.isGroup ? <PresenceDot online={chat.online} /> : null}
+      {showOnline ? <PresenceDot online={chat.online} /> : null}
     </div>
 
     <div className="min-w-0 flex-1">
@@ -421,7 +421,7 @@ const ChatHeaderIdentity = ({ chat, profileHref }) => {
     <>
       <div className="relative shrink-0">
         <ChatAvatar chat={chat} />
-        {!chat.isGroup ? <PresenceDot online={chat.online} /> : null}
+        <PresenceDot online={chat.online} />
       </div>
 
       <div className="min-w-0">
@@ -660,7 +660,7 @@ const Messenger = ({
                   chat={chat}
                   active={chat.id === activeChatId}
                   onClick={() => onSelectChat?.(chat.id)}
-                  showOnline={showOnlineIndicator && tab === "messages"}
+                  showOnline={showOnlineIndicator}
                 />
               ))}
               {hasMoreChats ? (
