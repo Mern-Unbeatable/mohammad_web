@@ -35,11 +35,11 @@ export const currentUser = {
 
 export const navItems = [
   { id: 'home', label: 'Home', icon: 'home', to: '/feed' },
-  { id: 'contacts', label: 'Contacts', icon: 'contacts', to: '/contacts' },
   { id: 'marketplace', label: 'Marketplace', icon: 'marketplace', to: '/marketplace' },
   { id: 'recruitment', label: 'Recruitment', icon: 'recruitment', to: '/recruitment' },
   { id: 'general', label: 'General', icon: 'general', to: '/general' },
   { id: 'blogs', label: 'Blogs', icon: 'blogs', to: '/blogs' },
+  { id: 'contacts', label: 'Contacts', icon: 'contacts', to: '/contacts' },
   { id: 'messages', label: 'Messages', icon: 'messages', to: '/chat' },
   { id: 'notifications', label: 'Notifications', icon: 'notifications', to: '/notifications' },
 ];

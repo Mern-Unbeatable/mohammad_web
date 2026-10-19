@@ -1,10 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { CreditCard, Loader2, LogOut, User } from 'lucide-react';
-import { Link, useNavigate } from 'react-router';
-import Avatar from '@/components/ui/Avatar';
-import { useAuth } from '@/shared/auth/useAuth';
-import { toProfilePageUser } from '@/features/user/profile';
+import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import {
+  Clock,
+  CreditCard,
+  Crown,
+  Loader2,
+  LogOut,
+  Sparkles,
+  User,
+} from "lucide-react";
+import { Link, useNavigate } from "react-router";
+import Avatar from "@/components/ui/Avatar";
+import { useAuth } from "@/shared/auth/useAuth";
+import { toProfilePageUser } from "@/features/user/profile";
+
+const ViewPlansLink = ({ onClick }) => (
+  <Link
+    to="/subscription"
+    onClick={onClick}
+    className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-md border border-primary py-2 text-[13px] font-semibold text-primary transition-colors hover:bg-secondary"
+  >
+    <Crown aria-hidden className="h-4 w-4" />
+    View plans
+  </Link>
+);
 
 const ProfileDropdown = () => {
   const { logout, loggingOut } = useAuth();
@@ -24,31 +43,33 @@ const ProfileDropdown = () => {
     };
 
     const handleEscape = (event) => {
-      if (event.key === 'Escape') setOpen(false);
+      if (event.key === "Escape") setOpen(false);
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEscape);
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
     };
   }, [open, loggingOut]);
 
   const close = () => setOpen(false);
 
   const handleLogout = async () => {
-    if (await logout()) navigate('/login', { replace: true });
+    if (await logout()) navigate("/login", { replace: true });
   };
 
-  const displayName = profile?.name || 'Member';
-  const subtitle = [profile?.title, profile?.company].filter(Boolean).join(' · ');
-  const isTrial = profile?.membershipStatus === 'trial';
+  const displayName = profile?.name || "Member";
+  const subtitle = [profile?.title, profile?.company]
+    .filter(Boolean)
+    .join(" · ");
+  const isTrial = profile?.membershipStatus === "trial";
   const showUpgrade =
     !profile?.isActive ||
-    profile?.membershipStatus === 'expired' ||
-    profile?.membershipStatus === 'free';
+    profile?.membershipStatus === "expired" ||
+    profile?.membershipStatus === "free";
 
   return (
     <div ref={rootRef} className="relative shrink-0">
@@ -63,7 +84,7 @@ const ProfileDropdown = () => {
         <Avatar
           src={profile?.avatar}
           alt={displayName}
-          initials={profile?.initials || 'MB'}
+          initials={profile?.initials || "MB"}
           size="sm"
           className="bg-[#FEF3C7] text-[#B45309]"
         />
@@ -72,10 +93,12 @@ const ProfileDropdown = () => {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-[calc(100%+10px)] z-[80] w-[290px] overflow-hidden rounded-xl border border-[#E4E7EC] bg-white shadow-[0_8px_24px_rgba(15,23,42,0.12)]"
+          className="absolute right-0 top-[calc(100%+10px)] z-[80] w-[320px] max-w-[calc(100vw-24px)] overflow-hidden rounded-xl border border-[#E4E7EC] bg-white shadow-xl"
         >
           <div className="border-b border-[#E4E7EC] px-4 py-4">
-            <p className="text-[15px] font-bold text-deep-blue">{displayName}</p>
+            <p className="text-[15px] font-bold text-deep-blue">
+              {displayName}
+            </p>
             {subtitle ? (
               <p className="mt-1 text-[12px] leading-snug text-[#64748B]">
                 {subtitle}
@@ -85,35 +108,30 @@ const ProfileDropdown = () => {
 
           {isTrial ? (
             <div className="border-b border-[#E4E7EC] px-4 py-3">
-              <div className="rounded-lg bg-[#FEF9E6] px-3.5 py-3">
-                <p className="text-[13px] font-semibold text-deep-blue">
-                  Free trial · {profile.trialDaysLeft} days left
+              <div className="flex items-center justify-between gap-2">
+                <p className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-deep-blue">
+                  <Sparkles aria-hidden className="h-4 w-4 text-[#B8860B]" />
+                  Free trial
                 </p>
-                <Link
-                  to="/subscription"
-                  onClick={close}
-                  className="mt-1 inline-block text-[12px] font-semibold text-primary hover:underline"
-                >
-                  View membership plans
-                </Link>
+                <span className="inline-flex items-center gap-1 text-[12px] text-[#64748B]">
+                  <Clock aria-hidden className="h-3.5 w-3.5" />
+                  {profile.trialDaysLeft} days left
+                </span>
               </div>
+              <ViewPlansLink onClick={close} />
             </div>
           ) : showUpgrade ? (
             <div className="border-b border-[#E4E7EC] px-4 py-3">
-              <div className="rounded-lg bg-[#F9FAFB] px-3.5 py-3">
-                <p className="text-[13px] font-semibold text-deep-blue">
-                  {profile?.membershipStatus === 'expired'
-                    ? 'Membership expired'
-                    : 'Unlock full access'}
-                </p>
-                <Link
-                  to="/subscription"
-                  onClick={close}
-                  className="mt-1 inline-block text-[12px] font-semibold text-primary hover:underline"
-                >
-                  View membership plans
-                </Link>
-              </div>
+              <p className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-deep-blue">
+                <Crown aria-hidden className="h-4 w-4 text-[#E67E22]" />
+                Membership
+              </p>
+              <p className="mt-1 text-[12px] text-red-500">
+                {profile?.membershipStatus === "expired"
+                  ? "Your membership has expired."
+                  : "Upgrade for full Lab Unity access."}
+              </p>
+              <ViewPlansLink onClick={close} />
             </div>
           ) : null}
 
@@ -125,19 +143,11 @@ const ProfileDropdown = () => {
                 onClick={close}
                 className="flex items-center gap-3 px-4 py-2.5 text-[13px] font-medium text-[#475467] transition-colors hover:bg-[#F9FAFB]"
               >
-                <User className="h-[18px] w-[18px] text-[#64748B]" strokeWidth={1.8} />
+                <User
+                  className="h-[18px] w-[18px] text-[#64748B]"
+                  strokeWidth={1.8}
+                />
                 Profile
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/subscription"
-                role="menuitem"
-                onClick={close}
-                className="flex items-center gap-3 px-4 py-2.5 text-[13px] font-medium text-[#475467] transition-colors hover:bg-[#F9FAFB]"
-              >
-                <CreditCard className="h-[18px] w-[18px] text-[#64748B]" strokeWidth={1.8} />
-                Subscription
               </Link>
             </li>
           </ul>
@@ -152,11 +162,14 @@ const ProfileDropdown = () => {
               className="flex w-full items-center gap-3 bg-[#FEF2F2] px-4 py-3 text-[13px] font-semibold text-[#DC2626] transition-colors hover:bg-[#FEE2E2] disabled:cursor-wait disabled:opacity-70"
             >
               {loggingOut ? (
-                <Loader2 className="h-[18px] w-[18px] animate-spin" strokeWidth={1.8} />
+                <Loader2
+                  className="h-[18px] w-[18px] animate-spin"
+                  strokeWidth={1.8}
+                />
               ) : (
                 <LogOut className="h-[18px] w-[18px]" strokeWidth={1.8} />
               )}
-              {loggingOut ? 'Logging out…' : 'Log out'}
+              {loggingOut ? "Logging out…" : "Log out"}
             </button>
           </div>
         </div>
