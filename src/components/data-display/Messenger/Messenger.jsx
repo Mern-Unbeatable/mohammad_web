@@ -20,6 +20,7 @@ import {
   X,
 } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
+import Dots from "@/components/ui/Dots";
 import {
   MAX_MESSAGE_LENGTH,
   applyComposerFormat,
@@ -75,6 +76,24 @@ const PresenceDot = ({ online }) => (
   />
 );
 
+const typingLabelFor = (chat) => {
+  const names = chat.typingNames || [];
+  if (names.length === 0) return null;
+  if (!chat.isGroup) return "typing";
+  if (names.length === 1) return `${names[0]} is typing`;
+  return `${names.length} people are typing`;
+};
+
+const TypingText = ({ label, className = "" }) => (
+  <p
+    className={`flex min-w-0 items-baseline gap-1 font-medium text-green-primary ${className}`}
+    aria-live="polite"
+  >
+    <span className="truncate">{label}</span>
+    <Dots className="w-3.5 shrink-0" label={null} aria-hidden="true" />
+  </p>
+);
+
 const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
   <button
     type="button"
@@ -96,13 +115,17 @@ const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
         />
         <span className="shrink-0 text-[11px] text-[#98A2B3]">{chat.time}</span>
       </div>
-      <p
-        className={`mt-0.5 truncate text-[12px] ${
-          chat.unread > 0 ? "font-semibold text-deep-blue" : "text-[#64748B]"
-        }`}
-      >
-        {chat.preview}
-      </p>
+      {typingLabelFor(chat) ? (
+        <TypingText label={typingLabelFor(chat)} className="mt-0.5 text-[12px]" />
+      ) : (
+        <p
+          className={`mt-0.5 truncate text-[12px] ${
+            chat.unread > 0 ? "font-semibold text-deep-blue" : "text-[#64748B]"
+          }`}
+        >
+          {chat.preview}
+        </p>
+      )}
     </div>
 
     {chat.unread > 0 ? (
@@ -392,14 +415,6 @@ const useThreadScroll = (messages, chatId) => {
  * Parent controls tab, search, draft, attachments and mobile list/chat panel.
  */
 /** Avatar, name and status of the open chat; links to the other member's profile in direct chats. */
-const typingLabelFor = (chat) => {
-  const names = chat.typingNames || [];
-  if (names.length === 0) return null;
-  if (!chat.isGroup) return "typing...";
-  if (names.length === 1) return `${names[0]} is typing...`;
-  return `${names.length} people are typing...`;
-};
-
 const ChatHeaderIdentity = ({ chat, profileHref }) => {
   const typingLabel = typingLabelFor(chat);
   const content = (
@@ -417,12 +432,7 @@ const ChatHeaderIdentity = ({ chat, profileHref }) => {
           }`}
         />
         {typingLabel ? (
-          <p
-            className="truncate text-[11px] font-medium text-green-primary sm:text-[12px]"
-            aria-live="polite"
-          >
-            {typingLabel}
-          </p>
+          <TypingText label={typingLabel} className="text-[11px] sm:text-[12px]" />
         ) : (
           <p className="truncate text-[11px] text-[#64748B] sm:text-[12px]">
             {!chat.isGroup && chat.online ? "Online" : chat.subtitle}

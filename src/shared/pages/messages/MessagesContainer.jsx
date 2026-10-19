@@ -410,8 +410,19 @@ const MessagesContainer = ({
     () =>
       conversations
         .map((c) => toConversationModel(c, { onlineUserIds: onlineSet }))
-        .filter(Boolean),
-    [conversations, onlineSet],
+        .filter(Boolean)
+        .map((chat) => {
+          const typingIds = typingByConversation[chat.id] || [];
+          if (typingIds.length === 0) return chat;
+          return {
+            ...chat,
+            typingNames: typingIds.map(
+              (userId) =>
+                chat.participants?.find((member) => member.id === userId)?.name || 'Someone',
+            ),
+          };
+        }),
+    [conversations, onlineSet, typingByConversation],
   );
 
   const messageModels = useMemo(
