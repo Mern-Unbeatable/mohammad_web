@@ -12,9 +12,11 @@ export {
   clearContactsError,
   clearSelectedContact,
   invalidateContactsList,
+  selectPendingRequestCount,
 } from "./contactsSlice";
 export {
   fetchContactsList,
+  fetchPendingRequestCount,
   fetchContactDetails,
   requestContactConnection,
   acceptConnection,
