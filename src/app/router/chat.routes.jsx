@@ -1,6 +1,6 @@
-import ChatRedirect from '@/shared/layout/ChatLayout/ChatRedirect';
-import LegacyChatRedirect from '@/shared/layout/ChatLayout/LegacyChatRedirect';
-import { CHAT_SECTIONS, toRoleChatPath } from '@/shared/constants/chat';
+import ChatRedirect from "@/shared/layout/ChatLayout/ChatRedirect";
+import LegacyChatRedirect from "@/shared/layout/ChatLayout/LegacyChatRedirect";
+import { CHAT_SECTIONS, toRoleChatPath } from "@/shared/constants/chat";
 
 const { DIRECT, GROUP } = CHAT_SECTIONS;
 
@@ -16,27 +16,22 @@ export const chatSectionRoutes = [
   { path: `${GROUP}/:groupId`, element: null, handle: { chatSection: GROUP } },
 ];
 
-/**
- * Chat subtree for a role:
- *   <base>                     → redirect (also upgrades legacy `?conversation=` links)
- *   <base>/messages[/:userId]  → inbox layout, direct chats
- *   <base>/group[/:groupId]    → inbox layout, group chats
- *   <base>/<extraRoutes>       → e.g. admin moderation
- *   <base>/*                   → redirect
- * `shell` wraps every chat page (defaults to a bare outlet); `inbox` is the
- * persistent layout for the section routes. Access is guarded by the
- * enclosing role subtree; `roleRedirect` sends other roles to their own chat.
- */
-export function buildChatRoute({ path, basePath, shell, inbox, extraRoutes = [] }) {
+export function buildChatRoute({
+  path,
+  basePath,
+  shell,
+  inbox,
+  extraRoutes = [],
+}) {
   return {
     path,
     ...(shell ? { element: shell } : {}),
-    handle: { title: 'Chat', chatBase: basePath, roleRedirect: toRoleChatPath },
+    handle: { title: "Chat", chatBase: basePath, roleRedirect: toRoleChatPath },
     children: [
       { index: true, element: <ChatRedirect /> },
       { element: inbox, children: chatSectionRoutes },
       ...extraRoutes,
-      { path: '*', element: <ChatRedirect /> },
+      { path: "*", element: <ChatRedirect /> },
     ],
   };
 }

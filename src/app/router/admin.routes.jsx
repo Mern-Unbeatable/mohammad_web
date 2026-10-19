@@ -2,7 +2,7 @@ import RequireRole from '@/shared/auth/RequireRole';
 import { USER_ROLES } from '@/shared/constants/roles';
 import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
 import { lazyPage } from '@/shared/routing/lazyPage';
-import AdminLayout from '@/modules/admin/layout/AdminLayout';
+import AdminLayout from '@/layouts/AdminLayout';
 import PanelNotFound from '@/shared/pages/PanelNotFound';
 import { buildChatRoute } from './chat.routes';
 

@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import { matchRoutes } from "react-router";
 import ChatRedirect from "@/shared/layout/ChatLayout/ChatRedirect";
 import LegacyChatRedirect from "@/shared/layout/ChatLayout/LegacyChatRedirect";
-import { userRoutes } from "./user.routes";
-import { adminRoutes } from "./admin.routes";
-import { supplierRoutes } from "./supplier.routes";
+import { userRoutes } from "../user.routes";
+import { adminRoutes } from "../admin.routes";
+import { supplierRoutes } from "../supplier.routes";
 
 const routes = [userRoutes, adminRoutes, supplierRoutes];
 
