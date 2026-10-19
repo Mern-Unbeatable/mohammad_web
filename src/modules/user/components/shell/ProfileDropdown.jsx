@@ -93,7 +93,7 @@ const ProfileDropdown = () => {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-[calc(100%+10px)] z-[80] w-[320px] max-w-[calc(100vw-24px)] overflow-hidden rounded-xl border border-[#E4E7EC] bg-white shadow-xl"
+          className="absolute right-0 top-[calc(100%+10px)] z-[80] origin-top-right motion-safe:animate-dropdown-in w-[320px] max-w-[calc(100vw-24px)] overflow-hidden rounded-xl border border-[#E4E7EC] bg-white shadow-xl"
         >
           <div className="border-b border-[#E4E7EC] px-4 py-4">
             <p className="text-[15px] font-bold text-deep-blue">
