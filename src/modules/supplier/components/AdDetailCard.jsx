@@ -1,7 +1,7 @@
 import { Calendar, RefreshCw } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import RichText from '@/components/data-display/RichText/RichText';
-import { PostActions, PostStats } from '@/modules/user/components/feed/PostActionsBar';
+import { PostActions, PostStats } from '@/modules/user/pages/feed';
 
 const AdDetailCard = ({
   ad,

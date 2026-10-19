@@ -94,7 +94,7 @@ const TypingText = ({ label, className = "" }) => (
   </p>
 );
 
-const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
+export const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
   <button
     type="button"
     onClick={onClick}
@@ -108,13 +108,10 @@ const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
     </div>
 
     <div className="min-w-0 flex-1">
-      <div className="flex items-center justify-between gap-2">
-        <ChatName
-          chat={chat}
-          className="text-[14px] font-semibold text-deep-blue"
-        />
-        <span className="shrink-0 text-[11px] text-[#98A2B3]">{chat.time}</span>
-      </div>
+      <ChatName
+        chat={chat}
+        className="text-[14px] font-semibold text-deep-blue"
+      />
       {typingLabelFor(chat) ? (
         <TypingText label={typingLabelFor(chat)} className="mt-0.5 text-[12px]" />
       ) : (
@@ -128,11 +125,14 @@ const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
       )}
     </div>
 
-    {chat.unread > 0 ? (
-      <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-[#CC1016] px-1.5 text-[10px] font-bold text-white">
-        {chat.unread > 99 ? "99+" : chat.unread}
-      </span>
-    ) : null}
+    <div className="flex shrink-0 flex-col items-end gap-1 self-stretch py-0.5">
+      <span className="text-[11px] text-[#98A2B3]">{chat.time}</span>
+      {chat.unread > 0 ? (
+        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#CC1016] px-1.5 text-[10px] font-bold text-white">
+          {chat.unread > 99 ? "99+" : chat.unread}
+        </span>
+      ) : null}
+    </div>
   </button>
 );
 

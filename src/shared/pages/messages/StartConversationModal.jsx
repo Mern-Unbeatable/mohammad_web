@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { AlertCircle, Loader2, Send, X } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import ChatListingCard from "@/components/data-display/Messenger/ChatListingCard";
-import { getApiErrorMessage } from "@/api";
+import { getApiErrorMessage } from "@/config";
 import { toChatListingModel } from "@/features/messages";
 
 export const START_CONVERSATION_MAX_LENGTH = 5000;

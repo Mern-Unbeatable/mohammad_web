@@ -1,8 +1,7 @@
 import { Activity } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import { CardSkeleton } from '@/components/common/Skeleton';
-import FeedPost from '@/modules/user/components/feed/FeedPost';
-import LoadMorePosts from '@/modules/user/components/feed/LoadMorePosts';
+import { FeedPost, LoadMorePosts } from '@/modules/user/pages/feed';
 
 const EmptyActivity = ({ name }) => (
   <Card>

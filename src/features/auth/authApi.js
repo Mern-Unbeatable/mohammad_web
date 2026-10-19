@@ -1,8 +1,12 @@
-import { API_ENDPOINTS } from "@/api/httpEndpoints";
-import { tokenService } from "@/api/cookies";
-import { unwrapApiData, unwrapUser } from "@/api/unwrapApiData";
-import { getApiErrorMessage } from "@/api/httpError";
-import axiosInstance, { bareAuthClient } from "@/api/axiosInstance";
+import {
+  API_ENDPOINTS,
+  axiosInstance,
+  bareAuthClient,
+  getApiErrorMessage,
+  tokenService,
+  unwrapApiData,
+  unwrapUser,
+} from "@/config";
 
 /**
  * Auth HTTP helpers — no Redux. Used by thunks.

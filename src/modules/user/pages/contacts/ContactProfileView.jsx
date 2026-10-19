@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 import Container from "@/components/ui/Container";
 import { ContactProfilePageSkeleton } from "@/components/common/Skeleton";
 import ContactProfilePageContent from "@/components/data-display/ContactProfilePageContent/ContactProfilePageContent";
-import ReportPostModal from "@/modules/user/components/feed/ReportPostModal";
+import { ReportPostModal } from "@/modules/user/pages/feed";
 import {
   fetchContactDetails,
   requestContactConnection,

@@ -9,6 +9,33 @@ const TYPE_LABEL = {
   suppliers: "suppliers",
 };
 
+/** Only http(s) and same-origin paths may be rendered as `src` / `href`. */
+export const isSafeMediaUrl = (value) =>
+  typeof value === "string" && /^(https?:\/\/|\/(?!\/))/i.test(value.trim());
+
+/** File name from a URL; malformed %-escapes must not throw while rendering. */
+const fileNameFromUrl = (url) => {
+  const last = String(url).split(/[?#]/)[0].split("/").pop() || "";
+  try {
+    return decodeURIComponent(last) || "Document";
+  } catch {
+    return last || "Document";
+  }
+};
+
+const toAttachmentModel = (post) => {
+  if (post.attachment) {
+    const { url } = post.attachment;
+    return { ...post.attachment, url: isSafeMediaUrl(url) ? url : null };
+  }
+  if (!isSafeMediaUrl(post.documentUrl)) return null;
+  return {
+    name: post.documentName || fileNameFromUrl(post.documentUrl),
+    meta: post.documentMeta || "Document",
+    url: post.documentUrl,
+  };
+};
+
 const initialsFromName = (name = "") =>
   name
     .split(" ")
@@ -121,7 +148,7 @@ export function toFeedPostModel(post) {
 
   const shareCount = post.stats?.shares ?? post.shareCount ?? 0;
 
-  const images = getPostImageUrls(post);
+  const images = getPostImageUrls(post).filter(isSafeMediaUrl);
 
   return {
     id: post.id,
@@ -133,19 +160,7 @@ export function toFeedPostModel(post) {
     content: post.content || post.body || post.text || "",
     images,
     image: images[0] || null,
-    attachment: post.attachment
-      ? post.attachment
-      : post.documentUrl
-        ? {
-            name:
-              post.documentName ||
-              decodeURIComponent(
-                String(post.documentUrl).split("/").pop() || "Document",
-              ),
-            meta: post.documentMeta || "Document",
-            url: post.documentUrl,
-          }
-        : null,
+    attachment: toAttachmentModel(post),
     stats: {
       reactions: reactionCount,
       comments: commentCount,

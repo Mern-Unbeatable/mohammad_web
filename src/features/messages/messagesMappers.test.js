@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   attachmentSummary,
+  formatBubbleTime,
   formatEventTime,
   formatMessageTime,
   joinNames,
@@ -16,26 +17,38 @@ import {
 const now = new Date(2026, 8, 26, 15, 0, 0);
 
 describe("formatMessageTime", () => {
-  it("returns clock time for today", () => {
-    expect(formatMessageTime(new Date(2026, 8, 26, 9, 5), now)).toBe("09:05");
+  it("returns a 12-hour clock time for today", () => {
+    expect(formatMessageTime(new Date(2026, 8, 26, 9, 5), now)).toBe("9:05AM");
+    expect(formatMessageTime(new Date(2026, 8, 26, 12, 0), now)).toBe("12:00PM");
   });
 
-  it("returns Yesterday for the previous day", () => {
-    expect(formatMessageTime(new Date(2026, 8, 25, 23, 0), now)).toBe("Yesterday");
+  it("returns days for the last week, counting calendar days", () => {
+    expect(formatMessageTime(new Date(2026, 8, 25, 23, 0), now)).toBe("1d");
+    expect(formatMessageTime(new Date(2026, 8, 20, 12, 0), now)).toBe("6d");
   });
 
-  it("returns a weekday within the last week", () => {
-    expect(formatMessageTime(new Date(2026, 8, 22, 12, 0), now)).toBe("Tue");
+  it("returns weeks within the last year", () => {
+    expect(formatMessageTime(new Date(2026, 8, 19), now)).toBe("1 week");
+    expect(formatMessageTime(new Date(2026, 7, 3), now)).toBe("7 weeks");
   });
 
-  it("returns month/day for older dates and adds the year when different", () => {
-    expect(formatMessageTime(new Date(2026, 7, 3), now)).toBe("Aug 3");
-    expect(formatMessageTime(new Date(2025, 7, 3), now)).toBe("Aug 3, 2025");
+  it("returns years for a year or more", () => {
+    expect(formatMessageTime(new Date(2025, 8, 26), now)).toBe("1y");
+    expect(formatMessageTime(new Date(2023, 7, 3), now)).toBe("3y");
   });
 
   it("returns an empty string for missing or invalid values", () => {
     expect(formatMessageTime(null, now)).toBe("");
     expect(formatMessageTime("not-a-date", now)).toBe("");
+  });
+});
+
+describe("formatBubbleTime", () => {
+  it("keeps day names with a 12-hour clock under bubbles", () => {
+    expect(formatBubbleTime(new Date(2026, 8, 26, 14, 5), now)).toBe("2:05PM");
+    expect(formatBubbleTime(new Date(2026, 8, 25, 12, 0), now)).toBe(
+      "Yesterday 12:00PM",
+    );
   });
 });
 
@@ -251,7 +264,7 @@ describe("group activity notices", () => {
       from: "system",
       isSystem: true,
       text: "You left the group",
-      eventTime: "Oct 18, 2026 · 11:37",
+      eventTime: "Oct 18, 2026 · 11:37AM",
     });
   });
 
