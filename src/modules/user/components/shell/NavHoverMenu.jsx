@@ -64,7 +64,7 @@ const NavHoverMenu = ({
         <div
           role="dialog"
           aria-label={title}
-          className="absolute right-0 top-[calc(100%+8px)] z-[80] w-[360px] max-w-[calc(100vw-24px)] overflow-hidden rounded-xl border border-[#E4E7EC] bg-white shadow-[0_8px_24px_rgba(15,23,42,0.12)]"
+          className="absolute right-0 top-[calc(100%+8px)] z-[80] origin-top-right motion-safe:animate-dropdown-in w-[360px] max-w-[calc(100vw-24px)] overflow-hidden rounded-xl border border-[#E4E7EC] bg-white shadow-[0_8px_24px_rgba(15,23,42,0.12)]"
         >
           <div className="border-b border-[#E4E7EC] px-4 py-3">
             <p className="text-[15px] font-bold text-deep-blue">{title}</p>
