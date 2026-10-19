@@ -24,6 +24,7 @@ import CountBadge from "@/components/ui/CountBadge";
 import { useAuth } from "@/shared/auth/useAuth";
 import ProfileDropdown from "./ProfileDropdown";
 import NotificationsHoverMenu from "./NotificationsHoverMenu";
+import MessagesHoverMenu from "./MessagesHoverMenu";
 import { navItems } from "@/modules/user/data/dashboard";
 import SearchTabs from "@/modules/user/components/search/SearchTabs";
 import SearchResultsList from "@/modules/user/components/search/SearchResultsList";
@@ -420,11 +421,15 @@ const DashboardNavbar = () => {
                   <span>{label}</span>
                 </Link>
               );
-              return id === "notifications" ? (
-                <NotificationsHoverMenu key={id}>{link}</NotificationsHoverMenu>
-              ) : (
-                link
-              );
+              if (id === "notifications") {
+                return (
+                  <NotificationsHoverMenu key={id}>{link}</NotificationsHoverMenu>
+                );
+              }
+              if (id === "messages") {
+                return <MessagesHoverMenu key={id}>{link}</MessagesHoverMenu>;
+              }
+              return link;
             })}
           </nav>
 

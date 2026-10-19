@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 import { CardSkeleton } from "@/components/common/Skeleton";
 import {
@@ -10,10 +10,9 @@ import {
 } from "@/features/user/notifications";
 import { resolveNotificationLink } from "@/features/messages";
 import { CHAT_BASE_PATHS } from "@/shared/constants/chat";
+import NavHoverMenu from "./NavHoverMenu";
 
 const PREVIEW_LIMIT = 6;
-const OPEN_DELAY_MS = 120;
-const CLOSE_DELAY_MS = 200;
 
 const PreviewItem = ({ item, onOpen }) => {
   const Icon = item.icon;
@@ -49,17 +48,13 @@ const PreviewItem = ({ item, onOpen }) => {
   );
 };
 
-/** Hover/focus preview of the latest notifications around the navbar link. */
+/** Latest notifications on hover; the wrapped link still opens the full page. */
 const NotificationsHoverMenu = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
-  const timerRef = useRef(null);
   const requestRef = useRef(0);
-
-  useEffect(() => () => clearTimeout(timerRef.current), []);
 
   const loadPreview = async () => {
     const requestId = ++requestRef.current;
@@ -83,27 +78,7 @@ const NotificationsHoverMenu = ({ children }) => {
     }
   };
 
-  const show = () => {
-    clearTimeout(timerRef.current);
-    if (open) return;
-    timerRef.current = setTimeout(() => {
-      setOpen(true);
-      loadPreview();
-    }, OPEN_DELAY_MS);
-  };
-
-  const hide = () => {
-    clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => setOpen(false), CLOSE_DELAY_MS);
-  };
-
-  const close = () => {
-    clearTimeout(timerRef.current);
-    setOpen(false);
-  };
-
-  const handleOpenItem = async (item) => {
-    close();
+  const openItem = async (item) => {
     if (item.unread) {
       setItems((prev) =>
         prev.map((row) => (row.id === item.id ? { ...row, unread: false } : row)),
@@ -123,66 +98,36 @@ const NotificationsHoverMenu = ({ children }) => {
   };
 
   return (
-    <div
-      className="relative"
-      onMouseEnter={show}
-      onMouseLeave={hide}
-      onFocus={show}
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) hide();
-      }}
-      onKeyDown={(event) => {
-        if (event.key === "Escape") close();
-      }}
-      onClick={(event) => {
-        if (event.target.closest("a")) close();
-      }}
+    <NavHoverMenu
+      title="Notifications"
+      footerLabel="See all notifications"
+      footerTo="/notifications"
+      onOpen={loadPreview}
+      body={
+        loading && items.length === 0 ? (
+          <CardSkeleton
+            variant="notification"
+            count={3}
+            as="ul"
+            className="divide-y divide-[#E4E7EC]"
+          />
+        ) : items.length === 0 ? (
+          <p className="px-4 py-8 text-center text-[13px] text-[#64748B]">
+            No notifications yet.
+          </p>
+        ) : (
+          <ul className="divide-y divide-[#E4E7EC]">
+            {items.map((item) => (
+              <li key={item.id}>
+                <PreviewItem item={item} onOpen={openItem} />
+              </li>
+            ))}
+          </ul>
+        )
+      }
     >
       {children}
-
-      {open ? (
-        <div
-          role="dialog"
-          aria-label="Recent notifications"
-          className="absolute right-0 top-[calc(100%+8px)] z-[80] w-[360px] max-w-[calc(100vw-24px)] overflow-hidden rounded-xl border border-[#E4E7EC] bg-white shadow-[0_8px_24px_rgba(15,23,42,0.12)]"
-        >
-          <div className="flex items-center justify-between border-b border-[#E4E7EC] px-4 py-3">
-            <p className="text-[15px] font-bold text-deep-blue">Notifications</p>
-          </div>
-
-          <div className="max-h-[min(420px,calc(100dvh-10rem))] overflow-y-auto overscroll-contain">
-            {loading && items.length === 0 ? (
-              <CardSkeleton
-                variant="notification"
-                count={3}
-                as="ul"
-                className="divide-y divide-[#E4E7EC]"
-              />
-            ) : items.length === 0 ? (
-              <p className="px-4 py-8 text-center text-[13px] text-[#64748B]">
-                No notifications yet.
-              </p>
-            ) : (
-              <ul className="divide-y divide-[#E4E7EC]">
-                {items.map((item) => (
-                  <li key={item.id}>
-                    <PreviewItem item={item} onOpen={handleOpenItem} />
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          <Link
-            to="/notifications"
-            onClick={close}
-            className="block border-t border-[#E4E7EC] px-4 py-2.5 text-center text-[13px] font-semibold text-primary hover:bg-[#F9FAFB]"
-          >
-            See all notifications
-          </Link>
-        </div>
-      ) : null}
-    </div>
+    </NavHoverMenu>
   );
 };
 

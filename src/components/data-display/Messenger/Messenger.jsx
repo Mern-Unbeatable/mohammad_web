@@ -94,7 +94,7 @@ const TypingText = ({ label, className = "" }) => (
   </p>
 );
 
-const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
+export const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
   <button
     type="button"
     onClick={onClick}

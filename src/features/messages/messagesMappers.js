@@ -12,20 +12,44 @@ const sameDay = (a, b) =>
   a.getMonth() === b.getMonth() &&
   a.getDate() === b.getDate();
 
+/** 12-hour clock without the space: 9:05AM, 12:00PM. */
 const clockTime = (date) =>
-  date.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
+  date
+    .toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+    .replace(/\s/g, "");
 
-/** Short relative label for conversation lists: 14:05, Yesterday, Mon, Sep 3, Sep 3, 2025. */
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+const startOfDay = (date) => {
+  const day = new Date(date);
+  day.setHours(0, 0, 0, 0);
+  return day;
+};
+
+/** Short relative label for conversation lists: 12:00PM, 1d, 1 week, 3 weeks, 1y. */
 export function formatMessageTime(value, now = new Date()) {
   const date = toDate(value);
   if (!date) return "";
 
-  if (sameDay(date, now)) return clockTime(date);
+  const days = Math.max(
+    0,
+    Math.round((startOfDay(now) - startOfDay(date)) / MS_PER_DAY),
+  );
+  if (days === 0) return clockTime(date);
+  if (days < 7) return `${days}d`;
+  if (days < 365) {
+    const weeks = Math.floor(days / 7);
+    return `${weeks} ${weeks === 1 ? "week" : "weeks"}`;
+  }
+  return `${Math.floor(days / 365)}y`;
+}
 
+/** Day part of a bubble label: Yesterday, Mon, Sep 3, Sep 3, 2025. */
+const bubbleDayLabel = (date, now) => {
   const yesterday = new Date(now);
   yesterday.setDate(now.getDate() - 1);
   if (sameDay(date, yesterday)) return "Yesterday";
@@ -42,14 +66,14 @@ export function formatMessageTime(value, now = new Date()) {
     day: "numeric",
     ...(date.getFullYear() === now.getFullYear() ? {} : { year: "numeric" }),
   });
-}
+};
 
 /** Label under a message bubble: clock time today, otherwise day + time. */
 export function formatBubbleTime(value, now = new Date()) {
   const date = toDate(value);
   if (!date) return "";
   if (sameDay(date, now)) return clockTime(date);
-  return `${formatMessageTime(date, now)} ${clockTime(date)}`;
+  return `${bubbleDayLabel(date, now)} ${clockTime(date)}`;
 }
 
 export function attachmentSummary(attachments = []) {
