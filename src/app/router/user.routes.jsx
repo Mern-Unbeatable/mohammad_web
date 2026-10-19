@@ -3,7 +3,7 @@ import RequireRole from '@/shared/auth/RequireRole';
 import { USER_ROLES } from '@/shared/constants/roles';
 import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
 import { lazyPage } from '@/shared/routing/lazyPage';
-import UserLayout from '@/modules/user/layout/UserLayout';
+import UserLayout from '@/layouts/UserLayout';
 import { buildChatRoute, legacyChatRoute } from './chat.routes';
 
 const FeedView = lazyPage(() => import('@/modules/user/pages/feed/FeedView'));
