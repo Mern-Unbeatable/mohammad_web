@@ -66,6 +66,15 @@ const ChatName = ({ chat, className }) => (
   </span>
 );
 
+const PresenceDot = ({ online }) => (
+  <span
+    className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${
+      online ? "bg-green-primary" : "bg-[#98A2B3]"
+    }`}
+    aria-label={online ? "Online" : "Offline"}
+  />
+);
+
 const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
   <button
     type="button"
@@ -76,12 +85,7 @@ const ConversationItem = ({ chat, active, onClick, showOnline = false }) => (
   >
     <div className="relative shrink-0">
       <ChatAvatar chat={chat} />
-      {showOnline && chat.online ? (
-        <span
-          className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-green-primary"
-          aria-label="Online"
-        />
-      ) : null}
+      {showOnline && !chat.isGroup ? <PresenceDot online={chat.online} /> : null}
     </div>
 
     <div className="min-w-0 flex-1">
@@ -393,9 +397,7 @@ const ChatHeaderIdentity = ({ chat, profileHref }) => {
     <>
       <div className="relative shrink-0">
         <ChatAvatar chat={chat} />
-        {!chat.isGroup && chat.online ? (
-          <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-green-primary" />
-        ) : null}
+        {!chat.isGroup ? <PresenceDot online={chat.online} /> : null}
       </div>
 
       <div className="min-w-0">
