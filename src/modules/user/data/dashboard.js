@@ -39,8 +39,8 @@ export const navItems = [
   { id: 'marketplace', label: 'Marketplace', icon: 'marketplace', to: '/marketplace' },
   { id: 'recruitment', label: 'Recruitment', icon: 'recruitment', to: '/recruitment' },
   { id: 'general', label: 'General', icon: 'general', to: '/general' },
-  { id: 'messages', label: 'Messages', icon: 'messages', to: '/chat' },
   { id: 'blogs', label: 'Blogs', icon: 'blogs', to: '/blogs' },
+  { id: 'messages', label: 'Messages', icon: 'messages', to: '/chat' },
   { id: 'notifications', label: 'Notifications', icon: 'notifications', to: '/notifications' },
 ];
 
