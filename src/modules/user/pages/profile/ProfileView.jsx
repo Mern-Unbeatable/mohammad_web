@@ -6,8 +6,7 @@ import Container from "@/components/ui/Container";
 import { ProfilePageSkeleton } from "@/components/common/Skeleton";
 import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
 import ProfilePageContent from "@/components/data-display/ProfilePageContent/ProfilePageContent";
-import ReportPostModal from "@/modules/user/components/feed/ReportPostModal";
-import CreatePostModal from "@/modules/user/components/feed/CreatePostModal";
+import { CreatePostModal, ReportPostModal } from "@/modules/user/pages/feed";
 import { usePostEditor } from "@/modules/user/hooks/usePostEditor";
 import {
   SubscriptionDetailsCard,

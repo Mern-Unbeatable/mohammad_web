@@ -1,9 +1,10 @@
 import { Ban } from 'lucide-react';
 import Avatar from '@/components/ui/Avatar';
 import ExpandableText from '@/components/common/ExpandableText/ExpandableText';
-import { AttachmentCard, PostMeta } from './FeedShared';
-import PostImageGallery from './PostImageGallery';
+import AttachmentCard from './AttachmentCard';
 import AuthorLink from './AuthorLink';
+import PostImageGallery from './PostImageGallery';
+import PostMeta from './PostMeta';
 
 const RepostedPostCard = ({ post }) => {
   if (!post) {

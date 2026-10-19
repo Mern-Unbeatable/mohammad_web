@@ -2,10 +2,7 @@ import { MessageCircle, Share2 } from "lucide-react";
 import { getReaction } from "@/modules/user/data/reactions";
 import ReactionButton from "./ReactionButton";
 
-export const PostStats = ({ stats, reactionId, reactionCounts }) => {
-  const selected = getReaction(reactionId);
-  const reactionLabel = selected ? ` · You reacted with ${selected.emoji}` : "";
-
+export const PostStats = ({ stats, reactionCounts }) => {
   const topEmojis = reactionCounts
     ? Object.entries(reactionCounts)
         .filter(([, count]) => count > 0)

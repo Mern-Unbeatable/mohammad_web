@@ -176,7 +176,8 @@ const SharePostModal = ({
           )}
 
           <div className="mb-4 space-y-1">
-            {shareOptions.map(({ id, label, icon: Icon, color }) => {
+            {shareOptions.map(({ id, label, icon, color }) => {
+              const Icon = icon;
               const isRepost = id === "repost";
               const unavailable =
                 isRepost && !shared ? repostUnavailableReason : null;

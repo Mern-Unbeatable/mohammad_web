@@ -6,19 +6,16 @@ import Card from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
 import Badge from "@/components/ui/Badge";
 import ExpandableText from "@/components/common/ExpandableText/ExpandableText";
-import {
-  AttachmentCard,
-  PostMeta,
-  PostStats,
-  PostActions,
-} from "./FeedShared";
-import PostComments from "./PostComments";
-import SharePostModal from "./SharePostModal";
-import RepostedPostCard from "./RepostedPostCard";
-import PostImageGallery from "./PostImageGallery";
-import OwnerActionsMenu from "./OwnerActionsMenu";
-import FullCommentsModal from "./FullCommentsModal";
+import PostComments from "../comments/PostComments";
+import FullCommentsModal from "../comments/FullCommentsModal";
+import SharePostModal from "../modals/SharePostModal";
+import AttachmentCard from "./AttachmentCard";
 import AuthorLink from "./AuthorLink";
+import OwnerActionsMenu from "./OwnerActionsMenu";
+import { PostActions, PostStats } from "./PostActionsBar";
+import PostImageGallery from "./PostImageGallery";
+import PostMeta from "./PostMeta";
+import RepostedPostCard from "./RepostedPostCard";
 import {
   addComment,
   editComment,

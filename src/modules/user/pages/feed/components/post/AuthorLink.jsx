@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router";
-import { authorProfileHref } from "./authorProfileHref";
+import { authorProfileHref } from "../../utils/authorProfileHref";
 
 /**
  * Wraps an author's avatar or name in a link to their profile. Pass `decorative`

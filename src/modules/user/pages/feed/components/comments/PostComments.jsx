@@ -4,8 +4,8 @@ import { MdThumbUpAlt, MdThumbUpOffAlt } from "react-icons/md";
 import Avatar from "@/components/ui/Avatar";
 import ExpandableText from "@/components/common/ExpandableText/ExpandableText";
 import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
-import { MENTION_HIGHLIGHT } from "./mentions";
-import OwnerActionsMenu from "./OwnerActionsMenu";
+import { MENTION_HIGHLIGHT } from "../../utils/mentions";
+import OwnerActionsMenu from "../post/OwnerActionsMenu";
 
 const LINE = "bg-[#D0D5DD]";
 const SPINE_X = 18;
@@ -424,12 +424,6 @@ const CommentItem = ({
   );
 };
 
-const countAll = (list = []) =>
-  list.reduce(
-    (sum, c) => sum + 1 + (Array.isArray(c.replies) ? c.replies.length : 0),
-    0,
-  );
-
 /**
  * The oldest `limit` top-level comments, plus the newest `pinned` ones so a
  * comment just posted from the preview doesn't vanish past the cut.
@@ -604,10 +598,6 @@ const PostComments = ({
 
   return (
     <div className="border-t border-[#E4E7EC] p-3 sm:p-4">
-      {/* <p className="mb-4 text-[14px] font-bold text-deep-blue">
-        Comments ({countAll(comments)})
-      </p> */}
-
       <div className="mb-4 flex gap-2.5 sm:gap-3">
         <Avatar
           src={currentUser?.avatar}

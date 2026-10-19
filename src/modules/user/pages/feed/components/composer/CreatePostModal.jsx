@@ -7,7 +7,7 @@ import {
   DEFAULT_POST_OPTION,
   POST_TYPE_OPTIONS,
   getPostTypeOption,
-} from "./postTypeOptions";
+} from "../../utils/postTypeOptions";
 
 const IMAGE_ACCEPT = "image/jpeg,image/png,image/webp,image/gif";
 const DOCUMENT_ACCEPT =

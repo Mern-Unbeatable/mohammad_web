@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import PostComments from "./PostComments";
+import PostComments from "../components/comments/PostComments";
 
 const comment = (id, authorId, overrides = {}) => ({
   id,

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { splitHighlights } from '@/components/common/ExpandableText/splitHighlights';
-import { MENTION_PATTERN } from './mentions';
+import { MENTION_PATTERN } from '../utils/mentions';
 
 const mentions = (text) =>
   splitHighlights(text, MENTION_PATTERN)

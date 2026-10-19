@@ -5,7 +5,7 @@ import { AlertTriangle, ChevronLeft } from "lucide-react";
 import { toast } from "react-hot-toast";
 import AdDetailCard from "@/modules/supplier/components/AdDetailCard";
 import { AdvertisementDetailSkeleton } from "@/components/common/Skeleton";
-import PostComments from "@/modules/user/components/feed/PostComments";
+import { PostComments } from "@/modules/user/pages/feed";
 import {
   fetchSupplierAdDetails,
   clearSelectedSupplierAd,
