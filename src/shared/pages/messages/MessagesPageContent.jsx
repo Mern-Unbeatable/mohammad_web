@@ -20,6 +20,8 @@ const MessagesPageContent = ({
   activeChatId,
   mobilePanel = 'list',
   onSend,
+  onTyping,
+  onTypingStop,
   onUploadFile,
   pendingListing = null,
   ...messengerProps
@@ -57,7 +59,11 @@ const MessagesPageContent = ({
     };
   }, [mobilePanel, setBottomNavHidden, isPanel]);
 
-  const setDraft = (value) => setDrafts((prev) => ({ ...prev, [chatKey]: value }));
+  const setDraft = (value) => {
+    setDrafts((prev) => ({ ...prev, [chatKey]: value }));
+    if (value.trim()) onTyping?.();
+    else onTypingStop?.();
+  };
 
   const updateAttachment = (key, localId, patch) =>
     setPending((prev) => ({

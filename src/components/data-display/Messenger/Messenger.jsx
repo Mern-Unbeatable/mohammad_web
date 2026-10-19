@@ -392,7 +392,16 @@ const useThreadScroll = (messages, chatId) => {
  * Parent controls tab, search, draft, attachments and mobile list/chat panel.
  */
 /** Avatar, name and status of the open chat; links to the other member's profile in direct chats. */
+const typingLabelFor = (chat) => {
+  const names = chat.typingNames || [];
+  if (names.length === 0) return null;
+  if (!chat.isGroup) return "typing...";
+  if (names.length === 1) return `${names[0]} is typing...`;
+  return `${names.length} people are typing...`;
+};
+
 const ChatHeaderIdentity = ({ chat, profileHref }) => {
+  const typingLabel = typingLabelFor(chat);
   const content = (
     <>
       <div className="relative shrink-0">
@@ -407,9 +416,18 @@ const ChatHeaderIdentity = ({ chat, profileHref }) => {
             profileHref ? "group-hover:text-primary group-hover:underline" : ""
           }`}
         />
-        <p className="truncate text-[11px] text-[#64748B] sm:text-[12px]">
-          {!chat.isGroup && chat.online ? "Online" : chat.subtitle}
-        </p>
+        {typingLabel ? (
+          <p
+            className="truncate text-[11px] font-medium text-green-primary sm:text-[12px]"
+            aria-live="polite"
+          >
+            {typingLabel}
+          </p>
+        ) : (
+          <p className="truncate text-[11px] text-[#64748B] sm:text-[12px]">
+            {!chat.isGroup && chat.online ? "Online" : chat.subtitle}
+          </p>
+        )}
       </div>
     </>
   );

@@ -11,6 +11,7 @@ const REALTIME_EVENTS = [
   "conversation:removed",
   "conversation:read",
   "presence:update",
+  "typing",
   "notification:new",
   "notification:updated",
 ];
@@ -130,6 +131,55 @@ export function useMessagesSocket(handlers) {
   }, []);
 
   return { connected };
+}
+
+/** Re-sends "typing" at most this often while the user keeps typing. */
+const TYPING_THROTTLE_MS = 3000;
+/** Sends "stopped" after this long without a keystroke. */
+const TYPING_IDLE_MS = 4000;
+
+/**
+ * Tells the other participants of `conversationId` that the user is typing.
+ * Returns `{ notify, stop }`: call `notify` on every keystroke and `stop`
+ * after sending or leaving the conversation.
+ */
+export function useTypingEmitter(socketRef, conversationId) {
+  const stateRef = useRef({ lastSent: 0, idleTimer: null, active: false });
+
+  const send = (typing) => {
+    const instance = socketRef.current;
+    if (!conversationId || !instance?.connected) return;
+    instance.emit("typing", { conversationId, typing });
+  };
+
+  const stop = () => {
+    const state = stateRef.current;
+    if (state.idleTimer) clearTimeout(state.idleTimer);
+    state.idleTimer = null;
+    if (state.active) send(false);
+    state.active = false;
+    state.lastSent = 0;
+  };
+
+  const notify = () => {
+    const state = stateRef.current;
+    const now = Date.now();
+    if (!state.active || now - state.lastSent >= TYPING_THROTTLE_MS) {
+      send(true);
+      state.active = true;
+      state.lastSent = now;
+    }
+    if (state.idleTimer) clearTimeout(state.idleTimer);
+    state.idleTimer = setTimeout(stop, TYPING_IDLE_MS);
+  };
+
+  const stopRef = useRef(stop);
+  useEffect(() => {
+    stopRef.current = stop;
+  });
+  useEffect(() => () => stopRef.current(), [conversationId]);
+
+  return { notify, stop };
 }
 
 /** Asks the server which of `userIds` are online (limited to conversation partners). */
