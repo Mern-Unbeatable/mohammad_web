@@ -1,23 +1,56 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchContactsList,
+  fetchPendingRequestCount,
   fetchContactDetails,
   requestContactConnection,
   acceptConnection,
   declineConnection,
   removeConnection,
 } from "./contactsThunks";
+import { logoutUser } from "../../auth/authThunks";
+
+/** Unfiltered Confirm list, whose total is the badge count. */
+const isIncomingRequestsQuery = (params) =>
+  params?.status === "pending" &&
+  params?.direction === "incoming" &&
+  !params.search &&
+  !params.country;
+
+const decrementPendingRequests = (state) => {
+  state.pendingRequestCount = Math.max(0, state.pendingRequestCount - 1);
+};
 
 const initialState = {
+  pendingRequestCount: 0,
+  pendingCountRequestId: null,
   contacts: [],
   contactsMeta: { page: 1, pageSize: 8, total: 0, totalPages: 1 },
   selectedContact: null,
   contactsLoading: false,
+  contactsRequestId: null,
   selectedContactLoading: false,
   connectingId: null,
   acceptingId: null,
   actionLoading: false,
   error: null,
+};
+
+/** Remove cards that no longer belong in the current tab and keep paging in sync. */
+const dropFromList = (state, shouldDrop) => {
+  const kept = state.contacts.filter((c) => !shouldDrop(c));
+  const removed = state.contacts.length - kept.length;
+  state.contacts = kept;
+  if (removed === 0 || !(state.contactsMeta?.total > 0)) return;
+  const total = Math.max(0, state.contactsMeta.total - removed);
+  state.contactsMeta = {
+    ...state.contactsMeta,
+    total,
+    totalPages: Math.max(
+      1,
+      Math.ceil(total / (state.contactsMeta.pageSize || 1)),
+    ),
+  };
 };
 
 const markPendingOnContact = (contact, addresseeId) => {
@@ -65,7 +98,15 @@ const contactsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchContactsList.pending, (state) => {
+      .addCase(fetchContactsList.pending, (state, action) => {
+        if (action.meta.arg?.background) {
+          // A page/filter load already in flight wins over a refresh.
+          if (!state.contactsLoading) {
+            state.contactsRequestId = action.meta.requestId;
+          }
+          return;
+        }
+        state.contactsRequestId = action.meta.requestId;
         state.contactsLoading = true;
         state.error = null;
         state.contacts = [];
@@ -76,11 +117,26 @@ const contactsSlice = createSlice({
         };
       })
       .addCase(fetchContactsList.fulfilled, (state, action) => {
+        // Ignore responses for a page/filter the user has already left.
+        if (action.meta.requestId !== state.contactsRequestId) return;
         state.contactsLoading = false;
         state.contacts = action.payload.data;
         state.contactsMeta = action.payload.meta;
+        if (isIncomingRequestsQuery(action.meta.arg)) {
+          state.pendingRequestCount = Number(action.payload.meta?.total) || 0;
+        }
+      })
+      .addCase(fetchPendingRequestCount.pending, (state, action) => {
+        state.pendingCountRequestId = action.meta.requestId;
+      })
+      .addCase(fetchPendingRequestCount.fulfilled, (state, action) => {
+        if (state.pendingCountRequestId !== action.meta.requestId) return;
+        state.pendingRequestCount = action.payload;
       })
       .addCase(fetchContactsList.rejected, (state, action) => {
+        if (action.meta.requestId !== state.contactsRequestId) return;
+        // Keep the visible page if only a background refresh failed.
+        if (action.meta.arg?.background) return;
         state.contactsLoading = false;
         state.error = action.payload;
       })
@@ -103,9 +159,8 @@ const contactsSlice = createSlice({
       .addCase(requestContactConnection.fulfilled, (state, action) => {
         state.connectingId = null;
         const { addresseeId } = action.payload;
-        state.contacts = state.contacts.map((c) =>
-          markPendingOnContact(c, addresseeId),
-        );
+        // Only People shows Connect; a sent request moves the member to Pending.
+        dropFromList(state, (c) => c.id === addresseeId);
         state.selectedContact = markPendingOnContact(
           state.selectedContact,
           addresseeId,
@@ -123,16 +178,13 @@ const contactsSlice = createSlice({
       .addCase(acceptConnection.fulfilled, (state, action) => {
         state.actionLoading = false;
         state.acceptingId = null;
+        decrementPendingRequests(state);
         const { connectionId } = action.payload;
-        state.contacts = state.contacts.filter(
-          (c) => c.connectionId !== connectionId && c.id !== connectionId,
+        // Drop from the Confirm inbox; the member now belongs in Connected.
+        dropFromList(
+          state,
+          (c) => c.connectionId === connectionId || c.id === connectionId,
         );
-        if (state.contactsMeta?.total > 0) {
-          state.contactsMeta = {
-            ...state.contactsMeta,
-            total: Math.max(0, state.contactsMeta.total - 1),
-          };
-        }
         state.selectedContact = applyConnectionStatus(
           state.selectedContact,
           connectionId,
@@ -150,6 +202,7 @@ const contactsSlice = createSlice({
       })
       .addCase(declineConnection.fulfilled, (state, action) => {
         state.actionLoading = false;
+        decrementPendingRequests(state);
         const { connectionId } = action.payload;
         state.contacts = state.contacts.filter(
           (c) => c.connectionId !== connectionId && c.id !== connectionId,
@@ -185,6 +238,12 @@ const contactsSlice = createSlice({
       .addCase(removeConnection.rejected, (state, action) => {
         state.actionLoading = false;
         state.error = action.payload;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.pendingRequestCount = 0;
+      })
+      .addCase(logoutUser.rejected, (state) => {
+        state.pendingRequestCount = 0;
       });
   },
 });
@@ -194,4 +253,7 @@ export const {
   clearSelectedContact,
   invalidateContactsList,
 } = contactsSlice.actions;
+
+export const selectPendingRequestCount = (state) =>
+  state.supplierContacts.pendingRequestCount ?? 0;
 export default contactsSlice.reducer;
