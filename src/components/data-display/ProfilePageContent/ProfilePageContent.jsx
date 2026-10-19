@@ -27,6 +27,7 @@ const ProfilePageContent = ({
   showEdit = true,
   showMessage = false,
   messageHref = "/chat",
+  onMessage,
   subscriptionSlot = null,
   sidebarSlot = null,
   postsTitle = "Activity",
@@ -41,6 +42,7 @@ const ProfilePageContent = ({
       showEdit={showEdit}
       showMessage={showMessage}
       messageHref={messageHref}
+      onMessage={onMessage}
     />
   );
 
