@@ -8,6 +8,7 @@ loading lives in `@/features/dash/supplier/*` (Redux slices and thunks).
 
 ```
 supplier/
+<<<<<<< HEAD
 ├── ads/                                     Full feature layout; see ads/doc/STRUCTURE.md
 │   ├── pages/        SupplierAdsView, SupplierAdDetailView
 │   ├── components/   list/ (AdsTable, AdCell), detail/ (AdDetailCard, RejectionNotice, BackToAdsLink, AdComments)
@@ -46,6 +47,34 @@ supplier/
 │   ├── utils/        generalQueries, postForm
 │   ├── constant/ test/ doc/
 │   └── index.js                             Public API: GENERAL_PATH, generalPostPath
+=======
+├── ads/
+│   ├── pages/
+│   │   ├── SupplierAdsView.jsx              Ad list with status tabs, create-ad modal
+│   │   └── SupplierAdDetailView.jsx         Ad detail, preview card, comments
+│   ├── components/
+│   │   └── AdDetailCard.jsx                 Ad card (detail page and create-ad preview)
+│   └── index.js                             Public API: AdDetailCard
+│
+├── blogs/pages/
+│   ├── SupplierBlogsView.jsx                Blog hub with search
+│   └── SupplierBlogDetailView.jsx           Article page
+│
+├── contacts/pages/
+│   ├── SupplierContactsView.jsx             Directory with filters and pagination
+│   └── SupplierContactProfileView.jsx       Member profile
+│
+├── dashboard/pages/
+│   └── SupplierDashboardView.jsx            KPI cards and charts
+│
+├── general/pages/
+│   ├── SupplierGeneralView.jsx              Browse general posts
+│   ├── SupplierMyGeneralPostsView.jsx       Own posts with edit / delete
+│   └── SupplierGeneralPostDetailView.jsx    Post page
+│
+├── marketplace/pages/
+│   └── SupplierListingsView.jsx             Listings page
+>>>>>>> 5ed086633093a351eba3113c20868e8c97f1f83a
 │
 ├── messages/pages/
 │   └── SupplierMessagesView.jsx             Chat layout (supplier variant)
@@ -53,6 +82,7 @@ supplier/
 ├── notifications/pages/
 │   └── SupplierNotificationsView.jsx        Notification list
 │
+<<<<<<< HEAD
 ├── profile/                                 See profile/doc/STRUCTURE.md
 │   ├── pages/        SupplierProfileView (reuses user ProfileSetupForm)
 │   ├── hooks/        useSupplierProfile
@@ -67,6 +97,22 @@ supplier/
 │   ├── utils/        applications, jobForm
 │   ├── constant/ test/ doc/
 │   └── index.js                             Public API: JOB_BASE, MY_JOBS_PATH, jobDetailPath
+=======
+├── profile/pages/
+│   └── SupplierProfileView.jsx              Profile form (reuses user ProfileSetupForm)
+│
+├── recruitment/
+│   ├── pages/
+│   │   ├── SupplierRecruitmentView.jsx      Public job posts
+│   │   ├── SupplierMyJobsView.jsx           Own job posts
+│   │   ├── SupplierJobDetailView.jsx        Job detail and applying
+│   │   └── SupplierPostJobView.jsx          Create / edit job
+│   └── components/
+│       └── SupplierRecruitmentActions.jsx   Browse / My jobs / Post job buttons
+│
+├── config/
+│   └── nav.js                               Sidebar items (used by layouts/SupplierLayout)
+>>>>>>> 5ed086633093a351eba3113c20868e8c97f1f83a
 │
 ├── data/
 │   ├── advertisements.js                    AD_CATEGORIES, getCategoryById (used by CreateAdModal) + demo ad rows
@@ -80,9 +126,14 @@ supplier/
 - Routes (`shared/router/routes/supplier.routes.jsx`) lazy-load
   `@/modules/dash/supplier/<feature>/pages/<View>` directly.
 - Code outside supplier imports `@/modules/dash/supplier/ads` (index) for
+<<<<<<< HEAD
   `AdDetailCard`, and `data/advertisements` for ad categories.
 - The sidebar items (`supplierNavItems`) live in
   `@/components/navigation/navbar/nav.js`, used by `layouts/SupplierLayout`.
+=======
+  `AdDetailCard`, `config/nav` for the sidebar, and `data/advertisements` for
+  ad categories.
+>>>>>>> 5ed086633093a351eba3113c20868e8c97f1f83a
 - Supplier pages reuse user features through their public indexes:
   `@/modules/dash/user/{feed,general,recruitment,profile}`.
 

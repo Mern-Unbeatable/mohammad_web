@@ -11,7 +11,11 @@ import {
 } from "@/modules/dash/user/recruitment";
 import RecruitmentHeader from "../components/layout/RecruitmentHeader";
 import { usePublicJobs } from "../hooks/usePublicJobs";
-import { RECRUITMENT_VIEW, VIEW_MODE_STORAGE_KEY, jobDetailPath } from "../constant/constants";
+import {
+  RECRUITMENT_VIEW,
+  VIEW_MODE_STORAGE_KEY,
+  jobDetailPath,
+} from "../constant/constants";
 
 const SupplierRecruitmentView = () => {
   const jobs = usePublicJobs();
