@@ -1,5 +1,6 @@
 import Card from '@/components/ui/Card';
 import Skeleton from '@/components/loader/Skeleton';
+import SkeletonField from '@/components/loader/primitives/SkeletonField';
 
 /** Matches ProfileSetupForm */
 const ProfileSetupFormSkeleton = () => (
@@ -20,43 +21,19 @@ const ProfileSetupFormSkeleton = () => (
     </div>
     <div className="space-y-5 px-5 py-6 sm:px-8 sm:py-8">
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Skeleton className="h-3.5 w-20" />
-          <Skeleton className="h-10 w-full" />
-        </div>
-        <div className="space-y-2">
-          <Skeleton className="h-3.5 w-20" />
-          <Skeleton className="h-10 w-full" />
-        </div>
+        <SkeletonField labelWidth="w-20" />
+        <SkeletonField labelWidth="w-20" />
       </div>
-      <div className="space-y-2">
-        <Skeleton className="h-3.5 w-32" />
-        <Skeleton className="h-10 w-full" />
+      <SkeletonField labelWidth="w-32" />
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <SkeletonField labelWidth="w-36" />
+        <SkeletonField labelWidth="w-16" />
       </div>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Skeleton className="h-3.5 w-36" />
-          <Skeleton className="h-10 w-full" />
-        </div>
-        <div className="space-y-2">
-          <Skeleton className="h-3.5 w-16" />
-          <Skeleton className="h-10 w-full" />
-        </div>
+        <SkeletonField labelWidth="w-14" />
+        <SkeletonField labelWidth="w-24" />
       </div>
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Skeleton className="h-3.5 w-14" />
-          <Skeleton className="h-10 w-full" />
-        </div>
-        <div className="space-y-2">
-          <Skeleton className="h-3.5 w-24" />
-          <Skeleton className="h-10 w-full" />
-        </div>
-      </div>
-      <div className="space-y-2">
-        <Skeleton className="h-3.5 w-40" />
-        <Skeleton className="h-28 w-full" />
-      </div>
+      <SkeletonField labelWidth="w-40" inputClassName="h-28 w-full" />
       <Skeleton className="h-10 w-32" />
     </div>
   </Card>

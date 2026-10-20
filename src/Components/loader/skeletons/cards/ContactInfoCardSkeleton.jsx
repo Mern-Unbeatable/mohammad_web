@@ -1,5 +1,6 @@
 import Card from '@/components/ui/Card';
 import Skeleton from '@/components/loader/Skeleton';
+import SkeletonText from '@/components/loader/primitives/SkeletonText';
 
 /** Matches ContactInfoCard (+ optional professional block) */
 const ContactInfoCardSkeleton = ({ showProfessional = false }) => (
@@ -23,11 +24,7 @@ const ContactInfoCardSkeleton = ({ showProfessional = false }) => (
       {showProfessional ? (
         <div className="mt-5 border-t border-[#E4E7EC] pt-5">
           <Skeleton className="mb-3 h-4 w-44" />
-          <div className="space-y-2">
-            <Skeleton className="h-3.5 w-full" />
-            <Skeleton className="h-3.5 w-full" />
-            <Skeleton className="h-3.5 w-4/5" />
-          </div>
+          <SkeletonText className="space-y-2" widths={['w-full', 'w-full', 'w-4/5']} />
         </div>
       ) : null}
     </div>

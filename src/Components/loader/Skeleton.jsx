@@ -1,24 +1,26 @@
-/**
- * Primitive pulse block. Compose card skeletons from this — do not duplicate.
- */
-const Skeleton = ({ className = '', rounded = 'md' }) => {
-  const radius =
-    rounded === 'full'
-      ? 'rounded-full'
-      : rounded === 'xl'
-        ? 'rounded-xl'
-        : rounded === 'lg'
-          ? 'rounded-lg'
-          : rounded === 'none'
-            ? 'rounded-none'
-            : 'rounded-md';
-
-  return (
-    <div
-      className={`animate-pulse bg-[#E4E7EC] ${radius} ${className}`}
-      aria-hidden
-    />
-  );
+const RADIUS = {
+  none: 'rounded-none',
+  sm: 'rounded',
+  md: 'rounded-md',
+  lg: 'rounded-lg',
+  xl: 'rounded-xl',
+  full: 'rounded-full',
 };
+
+const TONE = {
+  default: 'bg-[#E4E7EC]',
+  muted: 'bg-[#EEF2F6]',
+};
+
+/**
+ * Primitive pulse block. Compose every skeleton from this — do not duplicate.
+ * `rounded`: none | sm | md | lg | xl | full. `tone`: default | muted.
+ */
+const Skeleton = ({ className = '', rounded = 'md', tone = 'default' }) => (
+  <div
+    className={`animate-pulse ${TONE[tone] ?? TONE.default} ${RADIUS[rounded] ?? RADIUS.md} ${className}`}
+    aria-hidden
+  />
+);
 
 export default Skeleton;

@@ -2,6 +2,10 @@ export { default } from './Skeleton';
 export { default as Skeleton } from './Skeleton';
 export { CardSkeleton, CARD_SKELETONS } from './CardSkeleton';
 
+// primitives
+export { default as SkeletonText } from './primitives/SkeletonText';
+export { default as SkeletonField } from './primitives/SkeletonField';
+
 // skeletons/cards
 export { default as BlogGridCardSkeleton } from './skeletons/cards/BlogGridCardSkeleton';
 export { default as BlogHubCardSkeleton } from './skeletons/cards/BlogHubCardSkeleton';
@@ -52,5 +56,6 @@ export { default as ReportDetailSkeleton } from './skeletons/pages/ReportDetailS
 export { default as AppBootLoadingScreen } from './screens/AppBootLoadingScreen';
 export { default as PageLoadingFallback } from './fallbacks/PageLoadingFallback';
 export { default as SessionCheckingFallback } from './fallbacks/SessionCheckingFallback';
+export { default as LoadingCard } from './spinners/LoadingCard';
 export { default as ListingFormLoading } from './spinners/ListingFormLoading';
 export { default as ProfileSetupLoading } from './spinners/ProfileSetupLoading';

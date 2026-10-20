@@ -1,4 +1,5 @@
 import Skeleton from '@/components/loader/Skeleton';
+import SkeletonText from '@/components/loader/primitives/SkeletonText';
 
 /** Matches BlogDetailView / SupplierBlogDetailView */
 const BlogDetailSkeleton = () => (
@@ -16,15 +17,10 @@ const BlogDetailSkeleton = () => (
         <Skeleton className="h-3 w-16" />
       </div>
       <Skeleton className="aspect-[16/9] w-full" rounded="xl" />
-      <div className="space-y-3 pt-2">
-        <Skeleton className="h-3.5 w-full" />
-        <Skeleton className="h-3.5 w-full" />
-        <Skeleton className="h-3.5 w-full" />
-        <Skeleton className="h-3.5 w-5/6" />
-        <Skeleton className="h-3.5 w-4/5" />
-        <Skeleton className="h-3.5 w-full" />
-        <Skeleton className="h-3.5 w-3/4" />
-      </div>
+      <SkeletonText
+        className="space-y-3 pt-2"
+        widths={['w-full', 'w-full', 'w-full', 'w-5/6', 'w-4/5', 'w-full', 'w-3/4']}
+      />
     </article>
     <aside className="min-w-0">
       <Skeleton className="mb-4 h-3 w-28" />

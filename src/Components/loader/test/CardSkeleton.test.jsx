@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { CardSkeleton } from "./CardSkeleton";
+import { CardSkeleton } from "../CardSkeleton";
 
 const countCards = (html) => (html.match(/class="[^"]*p-4 sm:p-5/g) || []).length;
 

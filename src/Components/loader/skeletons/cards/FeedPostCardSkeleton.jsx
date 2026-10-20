@@ -1,5 +1,6 @@
 import Card from '@/components/ui/Card';
 import Skeleton from '@/components/loader/Skeleton';
+import SkeletonText from '@/components/loader/primitives/SkeletonText';
 
 /** Matches FeedPost card layout */
 const FeedPostCardSkeleton = () => (
@@ -16,11 +17,7 @@ const FeedPostCardSkeleton = () => (
       </div>
       <Skeleton className="h-5 w-5 shrink-0" rounded="full" />
     </div>
-    <div className="space-y-2 px-4 pb-3">
-      <Skeleton className="h-3.5 w-full" />
-      <Skeleton className="h-3.5 w-full" />
-      <Skeleton className="h-3.5 w-3/4" />
-    </div>
+    <SkeletonText className="space-y-2 px-4 pb-3" widths={['w-full', 'w-full', 'w-3/4']} />
     <Skeleton className="mx-4 mb-3 aspect-[16/9] w-[calc(100%-2rem)]" rounded="lg" />
     <div className="flex items-center justify-between border-t border-[#E4E7EC] px-4 py-3">
       <Skeleton className="h-4 w-24" />
