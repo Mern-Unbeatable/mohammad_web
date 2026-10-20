@@ -20,7 +20,7 @@ import {
   updateUserStatus,
   usersApi,
 } from "@/features/dash/admin/users";
-import ProfileActivityTabs from "@/modules/dash/admin/components/ProfileActivityTabs";
+import ProfileActivityTabs from "../components/ProfileActivityTabs";
 import { toProfilePageUser } from "@/features/dash/user/profile";
 import { fetchAuthorPosts, toFeedPostModel } from "@/features/dash/user/feed";
 import { formatDate as formatSharedDate } from "@/shared/utils/dates/date";

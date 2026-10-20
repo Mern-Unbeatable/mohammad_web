@@ -4,7 +4,7 @@ import Card from "@/components/ui/Card";
 import {
   ActivityItems,
   ActivityTabBar,
-} from "@/modules/dash/admin/components/ActivityItems";
+} from "./ActivityItems";
 
 const CONTENT_TABS = {
   advertisements: {
