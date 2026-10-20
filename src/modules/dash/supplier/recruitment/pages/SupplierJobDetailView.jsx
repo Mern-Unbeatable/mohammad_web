@@ -1,63 +1,70 @@
 import { useParams } from "react-router";
 import JobDetailCard from "@/components/data-display/JobDetailCard/JobDetailCard";
-import { JobDetailSkeleton } from "@/components/loader";
+import { JobDetailPageSkeleton } from "@/components/loader";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import NotFound from "@/modules/error/NotFound";
-import { AppliedCandidatesPanel, JobPosterCard } from "@/modules/dash/user/recruitment";
+import { toJobDetailModel } from "@/features/dash/supplier/recruitment";
+import { isJobOpen, jobClosedNotice } from "@/features/recruitment/jobStatus";
+import {
+  AppliedCandidatesPanel,
+  ApplyForm,
+  JobPosterCard,
+} from "@/modules/dash/user/recruitment";
 import { contactProfilePath } from "@/modules/dash/supplier/contacts";
 import { PROFILE_PATH } from "@/modules/dash/supplier/profile";
-import { isJobOpen } from "@/features/recruitment/jobStatus";
 import BackLink from "../components/layout/BackLink";
-import ApplyForm from "../components/detail/ApplyForm";
-import JobNotices from "../components/detail/JobNotices";
 import { useJobDetail } from "../hooks/useJobDetail";
 import { useApplyToJob } from "../hooks/useApplyToJob";
 import { JOB_BASE, editJobPath } from "../constant/constants";
 
+const PAGE_LAYOUT =
+  "lg:grid lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-6";
+
 const SupplierJobDetailView = () => {
   const { jobId } = useParams();
   const detail = useJobDetail(jobId);
-  const apply = useApplyToJob(detail.job?.id);
-  const { job, isOwner } = detail;
+  const apply = useApplyToJob(jobId);
 
   if (detail.notFound) return <NotFound />;
 
   if (detail.loading) {
     return (
       <PanelPage>
-        <JobDetailSkeleton />
+        <div className={PAGE_LAYOUT}>
+          <JobDetailPageSkeleton />
+        </div>
       </PanelPage>
     );
   }
 
+  const job = toJobDetailModel(detail.selectedJob);
   if (!job) return <NotFound />;
-
-  const applied = apply.justApplied || detail.alreadyApplied;
+  const { isOwner } = detail;
   const isOpen = isJobOpen(job);
+  const alreadyApplied = Boolean(detail.selectedJob.myApplication);
 
   return (
     <PanelPage>
-      <BackLink to={JOB_BASE}>Back to Jobs</BackLink>
+      <div className={PAGE_LAYOUT}>
+        <div className="min-w-0">
+          <BackLink to={JOB_BASE}>Back to Jobs</BackLink>
 
-      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
-        <div className="min-w-0 space-y-4">
           <JobDetailCard
             job={job}
             applyHref={!isOwner && job.applyLink ? job.applyLink : undefined}
             onApply={!isOwner && !job.applyLink ? apply.openForm : undefined}
-            showApplyButton={!isOwner && (isOpen || applied) && !apply.open}
-            applied={applied}
+            showApplyButton={!isOwner && (isOpen || alreadyApplied)}
+            applied={alreadyApplied}
             editHref={isOwner ? editJobPath(job.id) : undefined}
           />
 
-          <JobNotices
-            status={job.status}
-            isOpen={isOpen}
-            isOwner={isOwner}
-            justApplied={apply.justApplied}
-          />
+          {!isOpen ? (
+            <p className="mt-5 rounded-lg border border-[#E4E7EC] bg-[#F9FAFB] px-4 py-3 text-[14px] text-[#475467]">
+              {jobClosedNotice(job.status, isOwner)}
+            </p>
+          ) : null}
 
-          {!isOwner && isOpen && !applied && apply.open ? (
+          {!isOwner && isOpen && !alreadyApplied && apply.open ? (
             <ApplyForm
               coverLetter={apply.coverLetter}
               onCoverLetterChange={apply.setCoverLetter}
@@ -68,14 +75,15 @@ const SupplierJobDetailView = () => {
           ) : null}
         </div>
 
-        <aside className="flex flex-col gap-4">
+        <aside className="mt-8 flex flex-col gap-4 lg:mt-10">
           <div className="shrink-0">
             <JobPosterCard
-              owner={detail.owner}
+              owner={detail.selectedJob.owner}
               isSelf={isOwner}
               profilePath={isOwner ? () => PROFILE_PATH : contactProfilePath}
             />
           </div>
+
           {isOwner ? (
             <AppliedCandidatesPanel
               applications={detail.applications}

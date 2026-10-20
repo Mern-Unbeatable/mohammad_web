@@ -1,5 +1,3 @@
-import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
-
 /* ---------- Routes ---------- */
 
 export const JOB_BASE = "/supplier/recruitment";
@@ -8,15 +6,23 @@ export const CREATE_JOB_PATH = `${JOB_BASE}/create`;
 export const jobDetailPath = (id) => `${JOB_BASE}/${id}`;
 export const editJobPath = (id) => `${JOB_BASE}/${id}/edit`;
 
-/* ---------- Lists ---------- */
+/* ---------- Public job posts ---------- */
 
 /** `activeView` for the header actions. */
 export const RECRUITMENT_VIEW = { BROWSE: "browse", MINE: "mine" };
 
-export const JOBS_PAGE_SIZE = LIST_PAGE_SIZE;
+/** Divisible by the 2- and 3-column grid so pages have no gaps. */
+export const PUBLIC_JOBS_PAGE_SIZE = 6;
+
+export const VIEW_MODE_STORAGE_KEY = "supplier.recruitment.publicJobs.viewMode";
+
 export const SEARCH_DEBOUNCE_MS = 350;
-export const DEFAULT_LEVEL = "All";
-export const DEFAULT_STATUS_FILTER = "all";
+
+/* ---------- My applications ---------- */
+
+export const MY_APPLICATIONS_PAGE_SIZE = 20;
+
+/* ---------- Header ---------- */
 
 export const RECRUITMENT_TITLE = "Recruitment";
 export const RECRUITMENT_SUBTITLE =

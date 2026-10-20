@@ -5,6 +5,7 @@ import { MemoryRouter, Route, Routes } from "react-router";
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "@/features/auth";
 import { supplierRecruitmentReducer } from "@/features/dash/supplier/recruitment";
+import { jobClosedNotice } from "@/features/recruitment/jobStatus";
 import SupplierRecruitmentView from "../pages/SupplierRecruitmentView";
 import SupplierMyJobsView from "../pages/SupplierMyJobsView";
 import SupplierJobDetailView from "../pages/SupplierJobDetailView";
@@ -27,6 +28,7 @@ const render = (
       },
       supplierRecruitment: {
         ...supplierRecruitmentReducer(undefined, { type: "@@init" }),
+        jobsLoading: false,
         ...state,
       },
     },
@@ -53,29 +55,62 @@ const job = (id, extra = {}) => ({
 });
 
 describe("SupplierRecruitmentView", () => {
-  it("renders the header actions and public jobs linking to supplier routes", () => {
+  it("renders the view tabs, filters, layout toggle and supplier job links", () => {
     const html = render(<SupplierRecruitmentView />, {
-      state: { jobs: [job("j1")], jobsMeta: { total: 1, totalPages: 1 } },
+      state: { jobs: [job("j1")], jobsMeta: { page: 1, total: 1, totalPages: 1 } },
     });
     expect(html).toContain("Public Job Posts");
     expect(html).toContain('href="/supplier/recruitment/my-jobs"');
-    expect(html).toContain('href="/supplier/recruitment/create"');
     expect(html).toContain('href="/supplier/recruitment/j1"');
+    expect(html).toContain("All job types");
+    expect(html).toContain("All workplaces");
+    expect(html).toContain('aria-label="Grid view"');
+  });
+
+  it("reads filters from the URL", () => {
+    const html = render(<SupplierRecruitmentView />, {
+      path: "/supplier/recruitment?q=assay",
+    });
+    expect(html).toContain('value="assay"');
   });
 
   it("shows the empty state without jobs", () => {
     expect(render(<SupplierRecruitmentView />)).toContain("No jobs found");
   });
+
+  it("offers a retry when loading failed", () => {
+    const html = render(<SupplierRecruitmentView />, { state: { jobsError: "boom" } });
+    expect(html).toContain("Try again");
+  });
 });
 
 describe("SupplierMyJobsView", () => {
-  it("shows the unfiltered empty state", () => {
-    const html = render(<SupplierMyJobsView />, {
+  const renderMine = (state) =>
+    render(<SupplierMyJobsView />, {
       path: "/supplier/recruitment/my-jobs",
       route: "/supplier/recruitment/my-jobs",
+      state,
     });
+
+  it("shows the empty state, Post Job and My Applications", () => {
+    const html = renderMine();
     expect(html).toContain("My Job Posts");
     expect(html).toContain("No job posts yet");
+    expect(html).toContain('href="/supplier/recruitment/create"');
+    expect(html).toContain("My Applications");
+  });
+
+  it("badges My Job Posts with unseen applications", () => {
+    const html = renderMine({ newApplications: { total: 2, byJob: { j1: 2 } } });
+    expect(html).toContain("My Job Posts, 2 new applications");
+  });
+
+  it("links applications to supplier job pages", () => {
+    const html = renderMine({
+      applications: [{ id: "a1", status: "APPLIED", job: job("j7") }],
+      applicationsMeta: { total: 1 },
+    });
+    expect(html).toContain('href="/supplier/recruitment/j7"');
   });
 });
 
@@ -98,15 +133,21 @@ describe("SupplierJobDetailView", () => {
     const html = renderDetail(job("j1", { owner: { id: ME, firstName: "Me" } }));
     expect(html).toContain('href="/supplier/recruitment/j1/edit"');
   });
+
+  it("explains a closed job", () => {
+    const html = renderDetail(job("j1", { status: "CLOSED" }));
+    expect(html).toContain(jobClosedNotice("CLOSED", false));
+  });
 });
 
 describe("SupplierPostJobView", () => {
-  it("renders the create form", () => {
+  it("renders the create form with a link back to my jobs", () => {
     const html = render(<SupplierPostJobView />, {
       path: "/supplier/recruitment/create",
       route: "/supplier/recruitment/create",
     });
     expect(html).toContain("Post a Job");
     expect(html).toContain("Publish Job");
+    expect(html).toContain("Back to my jobs");
   });
 });

@@ -65,7 +65,7 @@ export function toJobCardModel(job) {
     workplaceType: workplaceLabel(job.workplaceType),
     level: LEVEL_LABEL[job.level] || job.level,
     salary: job.salary || "—",
-    postedAgo: formatPostedAgo(job.postedAt),
+    postedAgo: formatPostedAgo(job.postedAt || job.createdAt),
     image: job.imageUrl || job.image || PLACEHOLDER_IMAGE,
     about: job.about || "",
     requirements: Array.isArray(job.requirements) ? job.requirements : [],
@@ -79,21 +79,43 @@ export function toJobDetailModel(job) {
 
 /** Map API job onto SupplierPostJobView form fields. */
 export function jobToFormValues(job) {
+  if (!job) {
+    return {
+      title: "",
+      company: "",
+      applyLink: "",
+      location: "",
+      salary: "",
+      employmentType: EMPLOYMENT_TYPE_OPTIONS[0],
+      workplaceType: DEFAULT_WORKPLACE_TYPE,
+      level: RECRUITMENT_LEVEL_OPTIONS[2] || RECRUITMENT_LEVEL_OPTIONS[1],
+      description: "",
+      requirements: "",
+      imageUrl: "",
+    };
+  }
+
   return {
-    title: job?.title || "",
-    company: job?.company || "",
-    applyLink: job?.applyLink || "",
-    location: job?.location || "",
-    salary: job?.salary || "",
+    title: job.title || "",
+    company: job.company || "",
+    applyLink: job.applyLink || "",
+    location: job.location || "",
+    salary: job.salary || "",
     employmentType:
-      EMPLOYMENT_LABEL[job?.employmentType] || EMPLOYMENT_TYPE_OPTIONS[0],
-    workplaceType: workplaceLabel(job?.workplaceType) || DEFAULT_WORKPLACE_TYPE,
-    level: LEVEL_LABEL[job?.level] || "Mid-level",
-    description: job?.about || job?.description || "",
-    requirements: Array.isArray(job?.requirements)
+      EMPLOYMENT_LABEL[job.employmentType] ||
+      job.employmentType ||
+      EMPLOYMENT_TYPE_OPTIONS[0],
+    workplaceType: workplaceLabel(job.workplaceType) || DEFAULT_WORKPLACE_TYPE,
+    level:
+      LEVEL_LABEL[job.level] ||
+      job.level ||
+      RECRUITMENT_LEVEL_OPTIONS[2] ||
+      RECRUITMENT_LEVEL_OPTIONS[1],
+    description: job.about || job.description || "",
+    requirements: Array.isArray(job.requirements)
       ? job.requirements.join("\n")
-      : String(job?.requirements || ""),
-    imageUrl: job?.imageUrl || "",
+      : String(job.requirements || ""),
+    imageUrl: job.imageUrl || "",
   };
 }
 

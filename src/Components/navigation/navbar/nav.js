@@ -14,7 +14,7 @@ export const supplierNavItems = [
   { to: '/supplier', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/supplier/ads', label: 'My Ads', icon: Megaphone },
   { to: '/supplier/contacts', label: 'Contacts', icon: Users },
-  { to: '/supplier/recruitment', label: 'Recruitment', icon: Briefcase },
+  { to: '/supplier/recruitment', label: 'Recruitment', icon: Briefcase, badge: 'newApplications' },
   { to: '/supplier/general', label: 'General', icon: Newspaper },
   { to: '/supplier/chat', label: 'Messages', icon: MessageSquare, badge: 'unreadMessages' },
   { to: '/supplier/blogs', label: 'Blogs', icon: FileText },

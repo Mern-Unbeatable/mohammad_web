@@ -14,6 +14,7 @@ const MyApplicationsSection = ({
   onFilterChange,
   withdrawing,
   onWithdraw,
+  jobHref,
 }) => (
   <section className="mt-10">
     <div className="mb-4">
@@ -44,6 +45,7 @@ const MyApplicationsSection = ({
             app={app}
             withdrawing={withdrawing}
             onWithdraw={onWithdraw}
+            jobHref={jobHref}
           />
         ))}
       </div>

@@ -1,9 +1,18 @@
 import { describe, expect, it } from "vitest";
-import reducer, { jobLeftList } from "./recruitmentSlice";
+import reducer, {
+  jobApplicationsSeen,
+  jobLeftList,
+  selectSupplierNewApplicationTotal,
+} from "./recruitmentSlice";
 import {
+  applyToSupplierJob,
+  fetchSupplierJobDetails,
   fetchSupplierJobs,
+  fetchSupplierMyApplications,
+  fetchSupplierNewApplicationCounts,
   removeSupplierJob,
   updateSupplierJob,
+  withdrawSupplierApplication,
 } from "./recruitmentThunks";
 
 const initial = reducer(undefined, { type: "@@init" });
@@ -58,6 +67,43 @@ describe("supplier recruitment list state", () => {
     );
     expect(state.jobs.map((job) => job.id)).toEqual(["b"]);
     expect(state.jobsMeta.total).toBe(1);
+  });
+
+  it("marks the selected job as applied", () => {
+    let state = reducer(initial, fetchSupplierJobDetails.fulfilled({ id: "j1" }, "d", "j1"));
+    state = reducer(
+      state,
+      applyToSupplierJob.fulfilled(
+        { jobId: "j1", application: { id: "a1", status: "APPLIED" } },
+        "a",
+        {},
+      ),
+    );
+    expect(state.selectedJob.myApplication).toMatchObject({ id: "a1", status: "APPLIED" });
+    expect(state.applying).toBe(false);
+  });
+
+  it("drops a withdrawn application from the Applied tab", () => {
+    let state = reducer(
+      initial,
+      fetchSupplierMyApplications.fulfilled(
+        { data: [{ id: "a1", jobId: "j1" }], meta: { total: 1 } },
+        "m",
+        { status: "applied" },
+      ),
+    );
+    state = reducer(state, withdrawSupplierApplication.fulfilled({ jobId: "j1" }, "w", "j1"));
+    expect(state.applications).toEqual([]);
+    expect(state.applicationsMeta.total).toBe(0);
+  });
+
+  it("subtracts a job's unseen applications once they are seen", () => {
+    let state = reducer(
+      initial,
+      fetchSupplierNewApplicationCounts.fulfilled({ total: 3, byJob: { a: 2, b: 1 } }, "c"),
+    );
+    state = reducer(state, jobApplicationsSeen("a"));
+    expect(selectSupplierNewApplicationTotal({ supplierRecruitment: state })).toBe(1);
   });
 
   it("ignores removals of jobs that are not listed", () => {

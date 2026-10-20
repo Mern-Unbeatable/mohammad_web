@@ -81,3 +81,59 @@ export const removeSupplierJob = createAsyncThunk(
     }
   },
 );
+
+export const applyToSupplierJob = createAsyncThunk(
+  "supplierRecruitment/applyToSupplierJob",
+  async ({ jobId, coverLetter }, { rejectWithValue }) => {
+    try {
+      const payload = {};
+      if (coverLetter != null) payload.coverLetter = coverLetter;
+      const application = await recruitmentApi.applyToJob(jobId, payload);
+      return { jobId, application };
+    } catch (err) {
+      return rejectWithValue(
+        recruitmentApi.getApiErrorMessage(err, "Failed to apply to job"),
+      );
+    }
+  },
+);
+
+export const withdrawSupplierApplication = createAsyncThunk(
+  "supplierRecruitment/withdrawSupplierApplication",
+  async (jobId, { rejectWithValue }) => {
+    try {
+      await recruitmentApi.withdrawApplication(jobId);
+      return { jobId };
+    } catch (err) {
+      return rejectWithValue(
+        recruitmentApi.getApiErrorMessage(err, "Failed to cancel application"),
+      );
+    }
+  },
+);
+
+export const fetchSupplierNewApplicationCounts = createAsyncThunk(
+  "supplierRecruitment/fetchSupplierNewApplicationCounts",
+  async (_arg, { rejectWithValue }) => {
+    try {
+      return await recruitmentApi.getNewApplicationCounts();
+    } catch (err) {
+      return rejectWithValue(
+        recruitmentApi.getApiErrorMessage(err, "Failed to load new applications"),
+      );
+    }
+  },
+);
+
+export const fetchSupplierMyApplications = createAsyncThunk(
+  "supplierRecruitment/fetchSupplierMyApplications",
+  async (params = {}, { rejectWithValue }) => {
+    try {
+      return await recruitmentApi.getMyApplications(params);
+    } catch (err) {
+      return rejectWithValue(
+        recruitmentApi.getApiErrorMessage(err, "Failed to load applications"),
+      );
+    }
+  },
+);

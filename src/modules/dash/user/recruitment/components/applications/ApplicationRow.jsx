@@ -4,7 +4,7 @@ import { CANCELLABLE_APPLICATION_STATUSES, jobDetailPath } from "../../constant/
 import { applicationStatusClass } from "../../utils/candidates";
 
 /** One of the caller's applications: job, status, View and Cancel. */
-const ApplicationRow = ({ app, withdrawing, onWithdraw }) => {
+const ApplicationRow = ({ app, withdrawing, onWithdraw, jobHref = jobDetailPath }) => {
   const title = app.job?.title || "Job posting";
 
   return (
@@ -19,7 +19,7 @@ const ApplicationRow = ({ app, withdrawing, onWithdraw }) => {
       <div className="min-w-0 flex-1">
         {app.jobId ? (
           <Link
-            to={jobDetailPath(app.jobId)}
+            to={jobHref(app.jobId)}
             className="block truncate text-[15px] font-semibold text-deep-blue hover:text-primary hover:underline"
           >
             {title}
@@ -37,7 +37,7 @@ const ApplicationRow = ({ app, withdrawing, onWithdraw }) => {
       </div>
       {app.jobId ? (
         <Link
-          to={jobDetailPath(app.jobId)}
+          to={jobHref(app.jobId)}
           aria-label={`View ${app.job?.title || "job posting"}`}
           className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-primary/30 px-3 py-1.5 text-[12px] font-semibold text-primary transition-colors hover:bg-[#E8F3FB]"
         >

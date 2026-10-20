@@ -4,6 +4,7 @@ import BackLink from "../components/layout/BackLink";
 import JobFormLoading from "../components/form/JobFormLoading";
 import JobFormCard from "../components/form/JobFormCard";
 import { useJobForm } from "../hooks/useJobForm";
+import { MY_JOBS_PATH } from "../constant/constants";
 
 const SupplierPostJobView = () => {
   const { jobId } = useParams();
@@ -11,9 +12,7 @@ const SupplierPostJobView = () => {
 
   return (
     <PanelPage width="small">
-      <BackLink to={jobForm.backHref}>
-        {jobForm.isEdit ? "Back to my jobs" : "Back to Jobs"}
-      </BackLink>
+      <BackLink to={MY_JOBS_PATH}>Back to my jobs</BackLink>
 
       {jobForm.loadingJob ? (
         <JobFormLoading />
@@ -22,7 +21,7 @@ const SupplierPostJobView = () => {
           isEdit={jobForm.isEdit}
           form={jobForm.form}
           saving={jobForm.saving}
-          cancelHref={jobForm.backHref}
+          cancelHref={MY_JOBS_PATH}
           onFieldChange={jobForm.fieldChange}
           onSubmit={jobForm.submit}
           onImageChange={jobForm.setImageUrl}

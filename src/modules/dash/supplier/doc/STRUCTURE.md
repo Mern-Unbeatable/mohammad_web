@@ -62,9 +62,9 @@ supplier/
 │
 ├── recruitment/                             Full feature layout; see recruitment/doc/STRUCTURE.md
 │   ├── pages/        SupplierRecruitmentView, SupplierMyJobsView, SupplierJobDetailView, SupplierPostJobView
-│   ├── components/   layout/ (RecruitmentHeader, RecruitmentActions, BackLink), jobs/ (PublicJobsList, MyJobsList, JobsEmptyState, DeleteJobModal), detail/ (ApplyForm, JobNotices), form/ (JobFormCard, JobFormLoading)
-│   ├── hooks/        useJobSearch, useJobsList, usePublicJobs, useMyJobs, useJobDetail, useApplyToJob, useJobForm
-│   ├── utils/        jobsQuery, jobForm
+│   ├── components/   layout/ (RecruitmentHeader, RecruitmentActions, BackLink), form/ (JobFormCard, JobFormLoading)
+│   ├── hooks/        usePublicJobs, useMyJobs, useMyApplications, useJobDetail, useApplyToJob, useJobForm
+│   ├── utils/        applications, jobForm
 │   ├── constant/ test/ doc/
 │   └── index.js                             Public API: JOB_BASE, MY_JOBS_PATH, jobDetailPath
 │

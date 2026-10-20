@@ -1,38 +1,21 @@
 import { describe, expect, it } from "vitest";
-import { buildJobsQuery, isUnfiltered, pagesAfterRemoval } from "../utils/jobsQuery";
+import { toApplicationModel } from "../utils/applications";
 import { JOB_LEVEL_OPTIONS, emptyJobForm, jobPayloadError } from "../utils/jobForm";
-import { JOBS_PAGE_SIZE } from "../constant/constants";
 
-describe("buildJobsQuery", () => {
-  it("sends only paging for a blank search and All levels", () => {
-    expect(buildJobsQuery({ page: 2, query: "  ", level: "All" })).toEqual({
-      page: 2,
-      pageSize: JOBS_PAGE_SIZE,
-      sort: "desc",
+describe("toApplicationModel", () => {
+  it("maps the job and falls back to jobId and PENDING", () => {
+    const row = toApplicationModel({ id: "a1", jobId: "j9", createdAt: null });
+    expect(row).toMatchObject({ id: "a1", status: "PENDING", job: null, jobId: "j9" });
+  });
+
+  it("takes the id from the nested job", () => {
+    const row = toApplicationModel({
+      id: "a2",
+      status: "APPLIED",
+      job: { id: "j1", title: "QC Analyst" },
     });
-  });
-
-  it("adds a trimmed search", () => {
-    expect(buildJobsQuery({ page: 1, query: " qc ", level: "All" }).search).toBe("qc");
-  });
-});
-
-describe("isUnfiltered", () => {
-  const base = { statusFilter: "all", query: "", level: "All" };
-
-  it("is true only without status, search and level", () => {
-    expect(isUnfiltered(base)).toBe(true);
-    expect(isUnfiltered({ ...base, statusFilter: "OPEN" })).toBe(false);
-    expect(isUnfiltered({ ...base, query: "lab" })).toBe(false);
-    expect(isUnfiltered({ ...base, level: "Senior" })).toBe(false);
-  });
-});
-
-describe("pagesAfterRemoval", () => {
-  it("counts the pages left after removing one job, at least 1", () => {
-    expect(pagesAfterRemoval(JOBS_PAGE_SIZE + 1)).toBe(1);
-    expect(pagesAfterRemoval(JOBS_PAGE_SIZE + 2)).toBe(2);
-    expect(pagesAfterRemoval(0)).toBe(1);
+    expect(row.jobId).toBe("j1");
+    expect(row.job.title).toBe("QC Analyst");
   });
 });
 

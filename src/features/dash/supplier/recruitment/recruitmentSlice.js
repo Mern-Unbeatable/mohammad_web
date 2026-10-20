@@ -5,24 +5,38 @@ import {
   createSupplierJob,
   updateSupplierJob,
   removeSupplierJob,
+  applyToSupplierJob,
+  fetchSupplierMyApplications,
+  fetchSupplierNewApplicationCounts,
+  withdrawSupplierApplication,
 } from "./recruitmentThunks";
 
 const initialState = {
   jobs: [],
   jobsMeta: { page: 1, pageSize: 5, total: 0, totalPages: 1 },
   selectedJob: null,
-  jobsLoading: false,
+  applications: [],
+  applicationsMeta: { page: 1, pageSize: 10, total: 0, totalPages: 1 },
+  /** Status filter of the loaded applications page (`applied` | `cancelled` | null). */
+  applicationsStatus: null,
+  jobsLoading: true,
   jobsRequestId: null,
+  jobsError: null,
   selectedJobLoading: false,
+  applicationsLoading: false,
   saving: false,
   deleting: false,
+  applying: false,
   error: null,
+  /** Unseen applications on my jobs, for nav / card badges. */
+  newApplications: { total: 0, byJob: {} },
 };
 
 const upsertJob = (state, job) => {
   if (!job?.id) return;
   const index = state.jobs.findIndex((row) => row.id === job.id);
   if (index >= 0) state.jobs[index] = job;
+  else state.jobs = [job, ...state.jobs];
   if (state.selectedJob?.id === job.id) state.selectedJob = job;
 };
 
@@ -49,7 +63,7 @@ const recruitmentSlice = createSlice({
     clearSelectedJob: (state) => {
       state.selectedJob = null;
     },
-    /** Sync: show job skeletons before paint when filter/search changes */
+    /** Sync: show job skeletons before paint when filter/page/search changes */
     invalidateJobsList: (state) => {
       state.jobsLoading = true;
       state.jobs = [];
@@ -59,10 +73,19 @@ const recruitmentSlice = createSlice({
         totalPages: 1,
       };
       state.error = null;
+      state.jobsError = null;
     },
     /** A job no longer matches the current list filter (e.g. after closing it). */
     jobLeftList: (state, action) => {
       dropJob(state, action.payload);
+    },
+    /** The owner opened a job's applicants; the server marks them seen too. */
+    jobApplicationsSeen: (state, action) => {
+      const { byJob, total } = state.newApplications;
+      const seen = byJob[action.payload] || 0;
+      if (!seen) return;
+      delete byJob[action.payload];
+      state.newApplications.total = Math.max(0, total - seen);
     },
   },
   extraReducers: (builder) => {
@@ -71,6 +94,7 @@ const recruitmentSlice = createSlice({
         state.jobsLoading = true;
         state.jobsRequestId = action.meta.requestId;
         state.error = null;
+        state.jobsError = null;
         state.jobs = [];
         state.jobsMeta = {
           ...state.jobsMeta,
@@ -79,7 +103,7 @@ const recruitmentSlice = createSlice({
         };
       })
       .addCase(fetchSupplierJobs.fulfilled, (state, action) => {
-        // Ignore responses for a section/page the user has already left.
+        // Ignore responses for a page/filter the user has already left.
         if (action.meta.requestId !== state.jobsRequestId) return;
         state.jobsLoading = false;
         state.jobs = action.payload.data;
@@ -89,6 +113,7 @@ const recruitmentSlice = createSlice({
         if (action.meta.requestId !== state.jobsRequestId) return;
         state.jobsLoading = false;
         state.error = action.payload;
+        state.jobsError = action.payload || "Failed to load jobs";
       })
       .addCase(fetchSupplierJobDetails.pending, (state) => {
         state.selectedJobLoading = true;
@@ -108,8 +133,12 @@ const recruitmentSlice = createSlice({
       })
       .addCase(createSupplierJob.fulfilled, (state, action) => {
         state.saving = false;
+        upsertJob(state, action.payload);
         if (action.payload?.id) {
-          state.jobs = [action.payload, ...state.jobs];
+          state.jobsMeta = {
+            ...state.jobsMeta,
+            total: (state.jobsMeta.total || 0) + 1,
+          };
         }
       })
       .addCase(createSupplierJob.rejected, (state, action) => {
@@ -142,14 +171,82 @@ const recruitmentSlice = createSlice({
       .addCase(removeSupplierJob.rejected, (state, action) => {
         state.deleting = false;
         state.error = action.payload;
+      })
+      .addCase(applyToSupplierJob.pending, (state) => {
+        state.applying = true;
+        state.error = null;
+      })
+      .addCase(applyToSupplierJob.fulfilled, (state, action) => {
+        state.applying = false;
+        const application = action.payload?.application;
+        if (application) {
+          state.applications = [
+            application,
+            ...state.applications.filter((app) => app.id !== application.id),
+          ];
+        }
+        if (state.selectedJob?.id === action.payload?.jobId) {
+          state.selectedJob.myApplication = {
+            id: application?.id ?? null,
+            status: application?.status ?? "APPLIED",
+            appliedAt: application?.createdAt ?? new Date().toISOString(),
+          };
+        }
+      })
+      .addCase(applyToSupplierJob.rejected, (state, action) => {
+        state.applying = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchSupplierMyApplications.pending, (state) => {
+        state.applicationsLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchSupplierMyApplications.fulfilled, (state, action) => {
+        state.applicationsLoading = false;
+        state.applications = action.payload.data;
+        state.applicationsMeta = action.payload.meta;
+        state.applicationsStatus = action.meta.arg?.status ?? null;
+      })
+      .addCase(fetchSupplierMyApplications.rejected, (state, action) => {
+        state.applicationsLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(withdrawSupplierApplication.fulfilled, (state, action) => {
+        const { jobId } = action.payload;
+        const isTarget = (app) => (app.job?.id || app.jobId) === jobId;
+        if (state.applicationsStatus === "applied") {
+          const before = state.applications.length;
+          state.applications = state.applications.filter((app) => !isTarget(app));
+          const removed = before - state.applications.length;
+          state.applicationsMeta.total = Math.max(
+            0,
+            (state.applicationsMeta.total || 0) - removed,
+          );
+        } else {
+          state.applications.forEach((app) => {
+            if (isTarget(app)) app.status = "CANCELLED";
+          });
+        }
+        if (state.selectedJob?.id === jobId) {
+          state.selectedJob.myApplication = null;
+        }
+      })
+      .addCase(fetchSupplierNewApplicationCounts.fulfilled, (state, action) => {
+        state.newApplications = action.payload;
       });
   },
 });
+
+export const selectSupplierNewApplicationTotal = (state) =>
+  state.supplierRecruitment.newApplications.total;
+export const selectSupplierNewApplicationsByJob = (state) =>
+  state.supplierRecruitment.newApplications.byJob;
 
 export const {
   clearRecruitmentError,
   clearSelectedJob,
   invalidateJobsList,
   jobLeftList,
+  jobApplicationsSeen,
 } = recruitmentSlice.actions;
 export default recruitmentSlice.reducer;

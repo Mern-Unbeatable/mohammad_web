@@ -15,6 +15,8 @@ const MyJobList = ({
   togglingId,
   onToggleStatus,
   onDelete,
+  jobHref = jobDetailPath,
+  editHref = editJobPath,
 }) => {
   const navigate = useNavigate();
 
@@ -45,9 +47,9 @@ const MyJobList = ({
           job={job}
           variant="mine"
           highlighted={index === 0 && page === 1}
-          detailHref={jobDetailPath(job.id)}
+          detailHref={jobHref(job.id)}
           onDelete={deleting ? undefined : onDelete}
-          onEdit={() => navigate(editJobPath(job.id))}
+          onEdit={() => navigate(editHref(job.id))}
           onToggleStatus={onToggleStatus}
           togglingStatus={togglingId === job.id}
           newApplications={newApplicationsByJob[job.id] || 0}

@@ -5,32 +5,30 @@ import {
   fetchSupplierJobDetails,
   clearSelectedJob,
   clearRecruitmentError,
-  toJobDetailModel,
   recruitmentApi,
+  jobApplicationsSeen,
+  fetchSupplierNewApplicationCounts,
 } from "@/features/dash/supplier/recruitment";
 
-/** Loads a job by id; for the owner it also loads the applications. */
-export const useJobDetail = (jobId) => {
+/**
+ * Loads a job by id. For the owner it also loads the applications and marks
+ * them as seen.
+ */
+export function useJobDetail(jobId) {
   const dispatch = useDispatch();
   const { selectedJob, selectedJobLoading, error } = useSelector(
     (state) => state.supplierRecruitment,
   );
   const authUser = useSelector((state) => state.auth.user);
-  /** Job id whose fetch was rejected; any other id is not (yet) known to be missing. */
-  const [missingId, setMissingId] = useState(null);
-  const [appsCache, setAppsCache] = useState({ key: null, rows: [] });
 
-  const isOwner =
-    Boolean(authUser?.id) &&
-    Boolean(selectedJob?.owner?.id) &&
-    selectedJob?.id === jobId &&
-    authUser.id === selectedJob.owner.id;
+  const [notFoundId, setNotFoundId] = useState(null);
+  const [appsCache, setAppsCache] = useState({ key: null, rows: [] });
 
   useEffect(() => {
     if (!jobId) return undefined;
     dispatch(clearRecruitmentError());
     dispatch(fetchSupplierJobDetails(jobId)).then((result) => {
-      if (fetchSupplierJobDetails.rejected.match(result)) setMissingId(jobId);
+      if (fetchSupplierJobDetails.rejected.match(result)) setNotFoundId(jobId);
     });
     return () => {
       dispatch(clearSelectedJob());
@@ -41,33 +39,45 @@ export const useJobDetail = (jobId) => {
     if (error && !selectedJobLoading) toast.error(error);
   }, [error, selectedJobLoading]);
 
+  const isOwner =
+    Boolean(authUser?.id) &&
+    Boolean(selectedJob?.owner?.id) &&
+    authUser.id === selectedJob.owner.id;
+
   useEffect(() => {
-    if (!isOwner || !jobId) return undefined;
+    if (!jobId || !isOwner) return undefined;
+
     let cancelled = false;
     recruitmentApi
       .getJobApplications(jobId)
       .then((rows) => {
-        if (!cancelled) setAppsCache({ key: jobId, rows });
+        if (!cancelled) {
+          setAppsCache({ key: jobId, rows: Array.isArray(rows) ? rows : [] });
+        }
+        dispatch(jobApplicationsSeen(jobId));
+        dispatch(fetchSupplierNewApplicationCounts());
       })
-      .catch(() => {
-        if (!cancelled) setAppsCache({ key: jobId, rows: [] });
+      .catch((err) => {
+        if (!cancelled) {
+          setAppsCache({ key: jobId, rows: [] });
+          toast.error(
+            recruitmentApi.getApiErrorMessage?.(err, "Failed to load applications") ||
+              "Failed to load applications",
+          );
+        }
       });
+
     return () => {
       cancelled = true;
     };
-  }, [isOwner, jobId]);
-
-  const loading = selectedJobLoading || (!selectedJob && !error);
-  const applicationsLoaded = appsCache.key === jobId;
+  }, [dispatch, jobId, isOwner]);
 
   return {
-    notFound: Boolean(jobId) && missingId === jobId,
-    loading,
-    job: loading ? null : toJobDetailModel(selectedJob),
-    owner: selectedJob?.owner,
-    alreadyApplied: Boolean(selectedJob?.myApplication),
+    selectedJob,
+    notFound: notFoundId === jobId,
+    loading: selectedJobLoading || (!selectedJob && !error),
     isOwner,
-    applications: applicationsLoaded ? appsCache.rows : [],
-    applicationsLoading: !applicationsLoaded,
+    applications: isOwner && appsCache.key === jobId ? appsCache.rows : [],
+    applicationsLoading: isOwner && appsCache.key !== jobId,
   };
-};
+}

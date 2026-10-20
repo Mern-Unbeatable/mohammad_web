@@ -8,7 +8,15 @@ const LAYOUT_CLASS = {
 };
 
 /** Loading / error / empty states and the public job cards in list or grid layout. */
-const PublicJobList = ({ items, page, viewMode, loading, error, onRetry }) => {
+const PublicJobList = ({
+  items,
+  page,
+  viewMode,
+  loading,
+  error,
+  onRetry,
+  jobHref = jobDetailPath,
+}) => {
   const layoutClass = LAYOUT_CLASS[viewMode] || LAYOUT_CLASS[VIEW_MODE.LIST];
 
   if (loading) {
@@ -53,7 +61,7 @@ const PublicJobList = ({ items, page, viewMode, loading, error, onRetry }) => {
           job={job}
           layout={viewMode}
           highlighted={index === 0 && page === 1}
-          detailHref={jobDetailPath(job.id)}
+          detailHref={jobHref(job.id)}
         />
       ))}
     </div>

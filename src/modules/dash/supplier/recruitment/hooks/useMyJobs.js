@@ -1,6 +1,5 @@
-import { useLayoutEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import {
   fetchSupplierJobs,
@@ -9,31 +8,42 @@ import {
   clearRecruitmentError,
   invalidateJobsList,
   jobLeftList,
-  levelToApi,
+  toJobCardModel,
+  selectSupplierNewApplicationsByJob,
 } from "@/features/dash/supplier/recruitment";
 import {
   buildMyJobsQuery,
-  jobCount,
   matchesStatusFilter,
   nextJobStatus,
 } from "@/modules/dash/user/recruitment";
-import { isUnfiltered, pagesAfterRemoval } from "../utils/jobsQuery";
-import { DEFAULT_STATUS_FILTER, JOBS_PAGE_SIZE, editJobPath } from "../constant/constants";
-import { useJobSearch } from "./useJobSearch";
-import { useJobsList } from "./useJobsList";
+import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
+import { SEARCH_DEBOUNCE_MS } from "../constant/constants";
 
-/** My Job Posts: filters, status tabs, open / close toggle, edit and delete. */
-export const useMyJobs = () => {
+/** The caller's own job posts: search, status tab, paging, open/close and delete. */
+export function useMyJobs() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const search = useJobSearch();
-  const { items, loading, deleting, total, totalPages } = useJobsList();
-  const { page, setPage, debouncedQuery, level } = search;
+  const { jobs, jobsMeta, jobsLoading, deleting, error } = useSelector(
+    (state) => state.supplierRecruitment,
+  );
+  const newApplicationsByJob = useSelector(selectSupplierNewApplicationsByJob);
 
-  const [statusFilter, setStatusFilter] = useState(DEFAULT_STATUS_FILTER);
-  const [pendingDelete, setPendingDelete] = useState(null);
-  const [togglingId, setTogglingId] = useState(null);
+  const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [page, setPage] = useState(1);
   const [reloadKey, setReloadKey] = useState(0);
+  const [togglingId, setTogglingId] = useState(null);
+  const [pendingDelete, setPendingDelete] = useState(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (query === debouncedQuery) return;
+      dispatch(invalidateJobsList());
+      setDebouncedQuery(query);
+      setPage(1);
+    }, SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [query, debouncedQuery, dispatch]);
 
   useLayoutEffect(() => {
     dispatch(clearRecruitmentError());
@@ -41,29 +51,47 @@ export const useMyJobs = () => {
       fetchSupplierJobs(
         buildMyJobsQuery({
           page,
-          pageSize: JOBS_PAGE_SIZE,
+          pageSize: LIST_PAGE_SIZE,
           query: debouncedQuery,
-          level: levelToApi(level),
           status: statusFilter,
         }),
       ),
     );
-  }, [dispatch, page, debouncedQuery, level, statusFilter, reloadKey]);
+  }, [dispatch, page, debouncedQuery, statusFilter, reloadKey]);
+
+  useEffect(() => {
+    if (error) toast.error(error);
+  }, [error]);
+
+  const items = useMemo(
+    () => (jobs || []).map(toJobCardModel).filter(Boolean),
+    [jobs],
+  );
+
+  const total = jobsMeta?.total || 0;
+  const totalPages = Math.max(1, jobsMeta?.totalPages || 1);
 
   // Call once a job has left this page. If it was the last one, step back
   // when the page no longer exists, otherwise refetch to pull in later posts.
   const refillPageIfEmptied = () => {
     if (items.length > 1) return;
-    const remainingPages = pagesAfterRemoval(total);
+    const remainingPages = Math.max(1, Math.ceil((total - 1) / LIST_PAGE_SIZE));
     dispatch(invalidateJobsList());
     if (page > remainingPages) setPage(remainingPages);
     else setReloadKey((key) => key + 1);
   };
 
-  const changeStatus = (next) => {
+  const changeStatusFilter = (next) => {
     if (next === statusFilter) return;
-    search.resetToFirstPage();
+    dispatch(invalidateJobsList());
+    setPage(1);
     setStatusFilter(next);
+  };
+
+  const changePage = (next) => {
+    if (next === page) return;
+    dispatch(invalidateJobsList());
+    setPage(next);
   };
 
   const toggleStatus = async (job) => {
@@ -83,18 +111,15 @@ export const useMyJobs = () => {
   const requestDelete = (id) => {
     if (deleting) return;
     const job = items.find((item) => item.id === id);
-    if (!job) return;
-    setPendingDelete(job);
+    if (job) setPendingDelete(job);
   };
 
   const cancelDelete = () => {
-    if (deleting) return;
-    setPendingDelete(null);
+    if (!deleting) setPendingDelete(null);
   };
 
   const confirmDelete = async () => {
     if (!pendingDelete?.id || deleting) return;
-
     const result = await dispatch(removeSupplierJob(pendingDelete.id));
     if (removeSupplierJob.fulfilled.match(result)) {
       toast.success("Job deleted");
@@ -106,26 +131,24 @@ export const useMyJobs = () => {
   };
 
   return {
-    query: search.query,
-    setQuery: search.setQuery,
-    level,
-    changeLevel: search.changeLevel,
-    statusFilter,
-    changeStatus,
-    page,
-    changePage: search.changePage,
-    totalPages,
     items,
-    loading,
-    count: jobCount(loading, total),
-    unfiltered: isUnfiltered({ statusFilter, query: debouncedQuery, level }),
-    deleting,
+    total,
+    page,
+    totalPages,
+    loading: jobsLoading,
+    unfiltered: statusFilter === "all" && !debouncedQuery.trim(),
+    newApplicationsByJob,
+    changePage,
+    query,
+    setQuery,
+    statusFilter,
+    changeStatusFilter,
     togglingId,
     toggleStatus,
-    editJob: (id) => navigate(editJobPath(id)),
+    deleting,
     pendingDelete,
     requestDelete,
     cancelDelete,
     confirmDelete,
   };
-};
+}

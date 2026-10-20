@@ -9,7 +9,7 @@ import {
   jobToFormValues,
   recruitmentApi,
 } from "@/features/dash/supplier/recruitment";
-import { JOB_BASE, MY_JOBS_PATH } from "../constant/constants";
+import { MY_JOBS_PATH } from "../constant/constants";
 import { emptyJobForm, jobPayloadError } from "../utils/jobForm";
 
 /** Create (no `jobId`) or edit a job post; returns to My Job Posts on success. */
@@ -89,7 +89,6 @@ export const useJobForm = (jobId) => {
     form,
     loadingJob,
     saving,
-    backHref: isEdit ? MY_JOBS_PATH : JOB_BASE,
     fieldChange,
     setImageUrl,
     uploadImage,
