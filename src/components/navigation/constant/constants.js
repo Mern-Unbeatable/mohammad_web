@@ -78,3 +78,16 @@ export const PEOPLE_FETCH_SIZE = 12;
 export const DEFAULT_TRIAL_DAYS = 90;
 
 export const AVATAR_ACCENT_CLASS = 'bg-[#FEF3C7] text-[#B45309]';
+
+/** Public (marketing) navbar: in-page sections of the home page. */
+export const PUBLIC_NAV_LINKS = [
+  { label: 'Platform', sectionId: 'platform', active: true },
+  { label: 'Community', sectionId: 'community' },
+  { label: 'Marketplace', sectionId: 'marketplace' },
+];
+
+/** Section the logo scrolls to when already on the home page. */
+export const PUBLIC_TOP_SECTION = 'platform';
+
+export const PUBLIC_PRIMARY_LINK_CLASS =
+  'rounded-full bg-primary px-6 py-2.5 text-[14px] font-medium leading-none text-white transition-opacity hover:opacity-90 xl:px-8 xl:py-3 xl:text-[15px]';

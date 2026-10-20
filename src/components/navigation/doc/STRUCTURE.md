@@ -1,8 +1,9 @@
 # Navigation structure
 
-App chrome: the user dashboard's top navbar (search, nav links, hover
-previews, profile menu, mobile drawer), mobile bottom nav and the feed's
-left/right sidebars; the supplier / admin panel shell; and the site footer.
+App chrome: the public (marketing) navbar; the user dashboard's top navbar
+(search, nav links, hover previews, profile menu, mobile drawer), mobile
+bottom nav and the feed's left/right sidebars; the supplier / admin panel
+shell; and the site footer.
 Rendered by `layouts/*Layout.jsx`, `modules/dash/user/feed/FeedView`
 (sidebars) and the supplier / admin pages (panel page frame).
 
@@ -12,6 +13,8 @@ components/navigation/
 ├── constant/constants.js        # nav items, bottom tabs, quick links, paths,
 │                                # search / hover / preview / sidebar limits
 ├── components/
+│   ├── public-navbar/           # PublicNavbar, PublicMobileMenu, PublicAuthActions
+│   │                            # (home + legal pages, via layouts/RootLayout)
 │   ├── navbar/                  # DashboardNavbar, MobileHeader, DesktopHeader,
 │   │                            # DesktopNavLinks, NavSearchField, SearchDropdown,
 │   │                            # MobileMenuDrawer
@@ -34,7 +37,9 @@ components/navigation/
 │   ├── useHoverMenu.js          # delayed hover open/close
 │   ├── useMessagesPreview.js
 │   ├── useNotificationsPreview.js
-│   └── useRightSidebar.js       # people / listings / jobs + Connect
+│   ├── useRightSidebar.js       # people / listings / jobs + Connect
+│   ├── usePublicNavbar.js       # public navbar: mobile menu, section scroll / `/#section` navigation
+│   └── usePublicAuthActions.js  # public navbar: auth state, logout back to `/`
 ├── panel/                       # supplier / admin panel chrome
 │   ├── PanelLayout.jsx          # sidebar, top bar, account menu
 │   ├── PanelPage.jsx            # page frame (width + theme)
@@ -50,6 +55,7 @@ components/navigation/
 
 | Export | Used by |
 |---|---|
+| `PublicNavbar` | `layouts/RootLayout` |
 | `DashboardNavbar`, `MobileBottomNav` | `layouts/UserLayout` |
 | `LeftSidebar`, `RightSidebar` | `modules/dash/user/feed/FeedView` |
 

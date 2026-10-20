@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router';
-import NavbarLayout from '@/modules/public/layout/NavbarLayout';
+import { PublicNavbar } from '@/components/navigation';
 import AppFooter from '@/components/navigation/footer/AppFooter';
 import ScrollToTop from '@/components/common/scrolls/ScrollToTop';
 
@@ -7,7 +7,7 @@ const RootLayout = () => (
   <>
     <ScrollToTop />
     <header>
-      <NavbarLayout />
+      <PublicNavbar />
     </header>
     <main>
       <Outlet />
