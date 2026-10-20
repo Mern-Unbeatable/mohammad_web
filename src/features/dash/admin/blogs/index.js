@@ -14,4 +14,9 @@ export {
   updateBlogPost,
   removeBlogPost,
 } from "./blogsThunks";
+export {
+  BLOG_CATEGORY_OPTIONS,
+  formatBlogDate,
+  toBlogCardModel,
+} from "./blogsMappers";
 export * as blogsApi from "./blogsApi";
