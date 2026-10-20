@@ -4,11 +4,21 @@ import { JOB_STATUS } from "@/shared/constants/jobStatus";
 export const jobCount = (loading, total) => (loading ? null : total || 0);
 
 /** Query for "My Job Posts"; `status` is a MY_JOB_STATUS_FILTERS id. */
-export const buildMyJobsQuery = ({ page, pageSize, query, level, status }) => {
+export const buildMyJobsQuery = ({
+  page,
+  pageSize,
+  query,
+  level,
+  employmentType,
+  workplaceType,
+  status,
+}) => {
   const params = { page, pageSize, sort: "desc", mine: true };
   const q = query?.trim();
   if (q) params.search = q;
   if (level) params.level = level;
+  if (employmentType) params.employmentType = employmentType;
+  if (workplaceType) params.workplaceType = workplaceType;
   if (status && status !== "all") params.status = status;
   return params;
 };

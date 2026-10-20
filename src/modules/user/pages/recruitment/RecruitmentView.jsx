@@ -8,32 +8,47 @@ import Container from "@/components/ui/Container";
 import JobCard from "@/components/data-display/JobCard/JobCard";
 import RecruitmentToolbar from "@/modules/user/components/recruitment/RecruitmentToolbar";
 import JobsSectionHeader from "@/modules/user/components/recruitment/JobsSectionHeader";
+import ViewModeToggle from "@/modules/user/components/recruitment/ViewModeToggle";
+import { VIEW_MODE, useViewMode } from "@/modules/user/components/recruitment/viewMode";
 import { jobCount } from "@/modules/user/components/recruitment/jobsSection";
 import {
   fetchJobs,
   clearRecruitmentError,
   invalidateJobsList,
   levelToApi,
+  employmentToApi,
   toJobCardModel,
   selectNewApplicationTotal,
 } from "@/features/user/recruitment";
-import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
 import { usePageParam } from "@/shared/hooks/usePageParam";
+import { workplaceToApi } from "@/shared/constants/jobWorkplace";
 import { SEARCH_PARAM } from "@/shared/utils/urlFilters";
-import { LEVEL_PARAM, recruitmentFilters } from "./recruitmentUrlFilters";
+import {
+  ALL_OPTION,
+  EMPLOYMENT_FILTER_OPTIONS,
+  EMPLOYMENT_PARAM,
+  LEVEL_PARAM,
+  WORKPLACE_FILTER_OPTIONS,
+  WORKPLACE_PARAM,
+  publicJobFilters,
+} from "./recruitmentUrlFilters";
 
 const JOB_BASE = "/recruitment";
+const VIEW_MODE_STORAGE_KEY = "recruitment.publicJobs.viewMode";
+const JOBS_PAGE_SIZE = 6;
 
-const buildJobsQuery = ({ page, query, level }) => {
+const buildJobsQuery = ({ page, query, level, employmentType, workplaceType }) => {
   const params = {
     page,
-    pageSize: LIST_PAGE_SIZE,
+    pageSize: JOBS_PAGE_SIZE,
     sort: "desc",
   };
   const q = query?.trim();
   if (q) params.search = q;
   const levelApi = levelToApi(level);
   if (levelApi) params.level = levelApi;
+  if (employmentType !== ALL_OPTION) params.employmentType = employmentToApi(employmentType);
+  if (workplaceType !== ALL_OPTION) params.workplaceType = workplaceToApi(workplaceType);
   return params;
 };
 
@@ -45,9 +60,18 @@ const RecruitmentView = () => {
   const newApplications = useSelector(selectNewApplicationTotal);
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const { [LEVEL_PARAM]: level, [SEARCH_PARAM]: search } =
-    recruitmentFilters.read(searchParams);
+  const {
+    [LEVEL_PARAM]: level,
+    [EMPLOYMENT_PARAM]: employmentType,
+    [WORKPLACE_PARAM]: workplaceType,
+    [SEARCH_PARAM]: search,
+  } = publicJobFilters.read(searchParams);
   const [page, setPage] = usePageParam();
+  const [viewMode, setViewMode] = useViewMode(VIEW_MODE_STORAGE_KEY);
+  const isGrid = viewMode === VIEW_MODE.GRID;
+  const listClassName = isGrid
+    ? "grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3"
+    : "space-y-4";
 
   const [query, setQuery] = useState(search);
   const [syncedSearch, setSyncedSearch] = useState(search);
@@ -60,13 +84,13 @@ const RecruitmentView = () => {
   const updateFilters = useCallback(
     (changes, { replace = false } = {}) => {
       dispatch(invalidateJobsList());
-      setSearchParams((prev) => recruitmentFilters.apply(prev, changes), { replace });
+      setSearchParams((prev) => publicJobFilters.apply(prev, changes), { replace });
     },
     [dispatch, setSearchParams],
   );
 
   useEffect(() => {
-    const next = recruitmentFilters.normalize(searchParams);
+    const next = publicJobFilters.normalize(searchParams);
     if (next) setSearchParams(next, { replace: true });
   }, [searchParams, setSearchParams]);
 
@@ -81,8 +105,12 @@ const RecruitmentView = () => {
 
   const loadJobs = useCallback(() => {
     dispatch(clearRecruitmentError());
-    dispatch(fetchJobs(buildJobsQuery({ page, query: search, level })));
-  }, [dispatch, page, search, level]);
+    dispatch(
+      fetchJobs(
+        buildJobsQuery({ page, query: search, level, employmentType, workplaceType }),
+      ),
+    );
+  }, [dispatch, page, search, level, employmentType, workplaceType]);
 
   // Run before paint so skeletons replace stale cards immediately on filter/page change
   useLayoutEffect(() => {
@@ -116,6 +144,16 @@ const RecruitmentView = () => {
     updateFilters({ [LEVEL_PARAM]: value });
   };
 
+  const handleEmploymentTypeChange = (value) => {
+    if (value === employmentType) return;
+    updateFilters({ [EMPLOYMENT_PARAM]: value });
+  };
+
+  const handleWorkplaceTypeChange = (value) => {
+    if (value === workplaceType) return;
+    updateFilters({ [WORKPLACE_PARAM]: value });
+  };
+
   const handlePageChange = (next) => {
     if (next === page) return;
     setPage(next);
@@ -130,6 +168,12 @@ const RecruitmentView = () => {
           onQueryChange={setQuery}
           level={level}
           onLevelChange={handleLevelChange}
+          employmentType={employmentType}
+          employmentOptions={EMPLOYMENT_FILTER_OPTIONS}
+          onEmploymentTypeChange={handleEmploymentTypeChange}
+          workplaceType={workplaceType}
+          workplaceOptions={WORKPLACE_FILTER_OPTIONS}
+          onWorkplaceTypeChange={handleWorkplaceTypeChange}
           activeView="browse"
           basePath={JOB_BASE}
         />
@@ -139,15 +183,17 @@ const RecruitmentView = () => {
             title="Public Job Posts"
             description="Open roles posted by other members of the network."
             count={jobsError ? null : jobCount(showSkeleton, jobsMeta?.total)}
-          />
+          >
+            <ViewModeToggle value={viewMode} onChange={setViewMode} />
+          </JobsSectionHeader>
         </div>
 
-        <div className="mt-4 space-y-4">
+        <div className="mt-4">
           {showSkeleton ? (
             <CardSkeleton
-              variant="job"
-              count={LIST_PAGE_SIZE}
-              className="space-y-4"
+              variant={isGrid ? "jobGrid" : "job"}
+              count={JOBS_PAGE_SIZE}
+              className={listClassName}
             />
           ) : jobsError ? (
             <div className="rounded-xl border border-dashed border-[#D0D5DD] bg-white px-6 py-14 text-center">
@@ -163,21 +209,24 @@ const RecruitmentView = () => {
               </button>
             </div>
           ) : pageItems.length ? (
-            pageItems.map((job, index) => (
-              <JobCard
-                key={job.id}
-                job={job}
-                highlighted={index === 0 && page === 1}
-                detailHref={`${JOB_BASE}/${job.id}`}
-              />
-            ))
+            <div className={listClassName}>
+              {pageItems.map((job, index) => (
+                <JobCard
+                  key={job.id}
+                  job={job}
+                  layout={viewMode}
+                  highlighted={index === 0 && page === 1}
+                  detailHref={`${JOB_BASE}/${job.id}`}
+                />
+              ))}
+            </div>
           ) : (
             <div className="rounded-xl border border-dashed border-[#D0D5DD] bg-white px-6 py-14 text-center">
               <p className="text-[15px] font-semibold text-deep-blue">
                 No jobs found
               </p>
               <p className="mt-2 text-[14px] text-[#64748B]">
-                Try a different search or level filter.
+                Try a different search or filter.
               </p>
             </div>
           )}

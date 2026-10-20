@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
-import { Eye, X } from "lucide-react";
+import { Eye, Plus, X } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Pagination from "@/components/common/Pagination/Pagination";
 import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
@@ -27,7 +27,6 @@ import {
   clearRecruitmentError,
   invalidateJobsList,
   jobLeftList,
-  levelToApi,
   toJobCardModel,
   formatPostedAgo,
   selectNewApplicationTotal,
@@ -60,7 +59,6 @@ const MyJobsView = () => {
 
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [level, setLevel] = useState("All");
   const [statusFilter, setStatusFilter] = useState("all");
   const [page, setPage] = useState(1);
   const [pendingDelete, setPendingDelete] = useState(null);
@@ -88,12 +86,11 @@ const MyJobsView = () => {
           page,
           pageSize: LIST_PAGE_SIZE,
           query: debouncedQuery,
-          level: levelToApi(level),
           status: statusFilter,
         }),
       ),
     );
-  }, [dispatch, page, debouncedQuery, level, statusFilter, reloadKey]);
+  }, [dispatch, page, debouncedQuery, statusFilter, reloadKey]);
 
   useEffect(() => {
     dispatch(
@@ -147,18 +144,11 @@ const MyJobsView = () => {
     else setReloadKey((key) => key + 1);
   };
 
-  const unfiltered =
-    statusFilter === "all" && !debouncedQuery.trim() && level === "All";
+  const unfiltered = statusFilter === "all" && !debouncedQuery.trim();
 
   const resetToFirstPage = () => {
     dispatch(invalidateJobsList());
     setPage(1);
-  };
-
-  const handleLevelChange = (next) => {
-    if (next === level) return;
-    resetToFirstPage();
-    setLevel(next);
   };
 
   const handleStatusChange = (next) => {
@@ -234,8 +224,16 @@ const MyJobsView = () => {
           newApplications={newApplications}
           query={query}
           onQueryChange={setQuery}
-          level={level}
-          onLevelChange={handleLevelChange}
+          filters={
+            <SegmentedTabs
+              tabs={MY_JOB_STATUS_FILTERS}
+              activeTab={statusFilter}
+              onTabChange={handleStatusChange}
+              standalone
+              ariaLabel="Filter my job posts by status"
+              className="shrink-0 self-start border border-[#E4E7EC] sm:self-auto"
+            />
+          }
           activeView="mine"
           basePath={JOB_BASE}
         />
@@ -246,14 +244,13 @@ const MyJobsView = () => {
             description="Jobs you have posted. Close a role to stop new applications."
             count={jobCount(jobsLoading, total)}
           >
-            <SegmentedTabs
-              tabs={MY_JOB_STATUS_FILTERS}
-              activeTab={statusFilter}
-              onTabChange={handleStatusChange}
-              standalone
-              ariaLabel="Filter my job posts by status"
-              className="border border-[#E4E7EC]"
-            />
+            <Link
+              to={`${JOB_BASE}/create`}
+              className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-md bg-primary px-3 py-2 text-[12px] font-semibold text-white transition-colors hover:bg-[#066BB0] sm:self-auto"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Post Job
+            </Link>
           </JobsSectionHeader>
         </div>
 
@@ -287,7 +284,7 @@ const MyJobsView = () => {
               <p className="mt-2 text-[14px] text-[#64748B]">
                 {unfiltered
                   ? "Post your first role to reach qualified laboratory professionals."
-                  : "Try a different search, level or status."}
+                  : "Try a different search or status."}
               </p>
             </div>
           )}

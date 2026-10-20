@@ -27,6 +27,17 @@ describe("buildMyJobsQuery", () => {
       }),
     ).toMatchObject({ search: "lab", level: "SENIOR", status: "CLOSED" });
   });
+
+  it("adds employment and workplace type when set", () => {
+    expect(
+      buildMyJobsQuery({
+        page: 1,
+        pageSize: 5,
+        employmentType: "CONTRACT",
+        workplaceType: "REMOTE",
+      }),
+    ).toMatchObject({ employmentType: "CONTRACT", workplaceType: "REMOTE" });
+  });
 });
 
 describe("job status helpers", () => {

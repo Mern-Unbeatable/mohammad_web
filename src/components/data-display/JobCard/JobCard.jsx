@@ -14,6 +14,7 @@ const STATUS_BADGE_CLASS = {
 const JobCard = ({
   job,
   variant = 'browse',
+  layout = 'list',
   highlighted = false,
   detailHref,
   onDelete,
@@ -27,10 +28,17 @@ const JobCard = ({
   const canToggleStatus =
     variant === 'mine' && onToggleStatus && status !== JOB_STATUS.REMOVED;
   const showImage = Boolean(job.image);
+  const grid = layout === 'grid';
 
   return (
-  <Card className={`p-4 sm:p-5 ${highlighted ? 'border-[#E67E22]' : ''}`}>
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+  <Card className={`p-4 sm:p-5 ${grid ? 'h-full' : ''} ${highlighted ? 'border-[#E67E22]' : ''}`}>
+    <div
+      className={
+        grid
+          ? 'flex h-full flex-col gap-4'
+          : 'flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'
+      }
+    >
       <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
         {showImage ? (
           <img
@@ -70,7 +78,7 @@ const JobCard = ({
         </div>
       </div>
 
-      <div className="flex shrink-0 flex-wrap items-center gap-2">
+      <div className={`flex shrink-0 flex-wrap items-center gap-2 ${grid ? 'mt-auto' : ''}`}>
         {variant === 'admin' ? (
           <>
             <button
@@ -143,7 +151,7 @@ const JobCard = ({
         ) : (
           <Link
             to={href}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-3.5 py-2 text-[12px] font-semibold text-white hover:bg-[#066BB0]"
+            className={`inline-flex items-center justify-center rounded-md bg-primary px-3.5 py-2 text-[12px] font-semibold text-white hover:bg-[#066BB0] ${grid ? 'w-full' : ''}`}
           >
             View Details
           </Link>

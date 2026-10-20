@@ -85,15 +85,24 @@ describe("RecruitmentView pagination", () => {
   it("restores the level and search from the URL", () => {
     const html = render("/recruitment?page=2&level=Senior&q=chemist", loadedPage(2));
 
-    expect(html).toMatch(/aria-pressed="true"[^>]*>Senior</);
-    expect(html).toMatch(/aria-pressed="false"[^>]*>All</);
+    expect(html).toMatch(/value="Senior" selected=""/);
     expect(html).toContain('value="chemist"');
     expect(html).toContain('aria-label="Page 2" aria-current="page"');
   });
 
-  it("falls back to All for an unknown level", () => {
-    const html = render("/recruitment?level=Director", loadedPage(1));
-    expect(html).toMatch(/aria-pressed="true"[^>]*>All</);
+  it("restores the employment and workplace type from the URL", () => {
+    const html = render("/recruitment?type=Contract&workplace=Remote", loadedPage(1));
+
+    expect(html).toMatch(/value="Contract" selected=""/);
+    expect(html).toMatch(/value="Remote" selected=""/);
+  });
+
+  it("falls back to All for unknown filter values", () => {
+    const html = render(
+      "/recruitment?level=Director&type=Freelance&workplace=Moon",
+      loadedPage(1),
+    );
+    expect(html.match(/value="All" selected=""/g)).toHaveLength(3);
   });
 
   it("shows an error state with a retry when the list fails", () => {
