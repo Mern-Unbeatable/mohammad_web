@@ -8,24 +8,23 @@ State and HTTP live in the Redux layer at `@/features/auth`; route guards
 ```
 modules/auth/
 ├── index.js                      # public API (see below); pages are not exported
-├── pages/                        # imported directly by shared/router/routes/auth.routes.jsx
-│   ├── LoginView.jsx
-│   ├── RegisterView.jsx
-│   ├── ForgotPasswordView.jsx
-│   ├── ResetPasswordView.jsx
-│   └── ContactSupportView.jsx
+├── login/                        # pages/LoginView, components/SuspensionNotice
+├── register/                     # pages/RegisterView, components/SelectField, constant/
+├── forgot-password/              # full feature layout; see forgot-password/doc/STRUCTURE.md
+├── reset-password/               # full feature layout; see reset-password/doc/STRUCTURE.md
+├── contact-support/              # pages/ContactSupportView
 ├── components/
-│   └── AuthFormFields.jsx        # PasswordField, PasswordStrength (built on @/components/form-controls, variant "auth")
-├── hooks/
-│   └── useAuth.js                # user, role, homePath + login / register / logout / password actions
-├── session/
+│   ├── AuthFormFields.jsx        # PasswordField, PasswordStrength (built on @/components/form-controls, variant "auth")
+│   ├── BackToSignIn.jsx          # "← Back to Sign In" link (forgot-password, reset-password)
 │   └── AuthSessionBridge.jsx     # boot: revalidates the token via /auth/me, shows boot screen
-├── utils/                        # pure
-│   ├── accountIdentity.js        # user → { name, initials, avatar }
-│   └── passwordRules.js          # password strength checks
 ├── test/
 └── doc/STRUCTURE.md
 ```
+
+Each page is imported directly by `shared/router/routes/auth.routes.jsx`
+(`@/modules/auth/<feature>/pages/<View>`). `useAuth` lives in
+`@/shared/hooks/useAuth`; `accountIdentity` and `passwordRules` live in
+`@/shared/utils/auth/`.
 
 ## Public API (`@/modules/auth`)
 
