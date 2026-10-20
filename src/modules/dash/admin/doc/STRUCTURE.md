@@ -17,14 +17,13 @@ admin/
 │   ├── constant/ test/ doc/
 │   └── index.js                             Public API: PERIOD, PERIOD_OPTIONS, filterChartData, buildSeries, yearOptions
 │
-├── users/
-│   ├── pages/
-│   │   ├── AdminUsersView.jsx               User list (/admin/users)
-│   │   └── AdminUserDetailView.jsx          User detail (/admin/users/:userId)
-│   └── components/
-│       ├── SubscriptionPill.jsx             Plan badge in the user table
-│       ├── ProfileActivityTabs.jsx          Activity tabs on the user detail page
-│       └── ActivityItems.jsx                Rows used by ProfileActivityTabs
+├── users/                                   Full feature layout; see users/doc/STRUCTURE.md
+│   ├── pages/        AdminUsersView (/admin/users), AdminUserDetailView (/admin/users/:userId)
+│   ├── components/   list/ (userColumns, SubscriptionPill), detail/ (AccountDetailsCard, ProfileActivityTabs), activity/ (ActivityTabBar, ActivityItems, ContentRow)
+│   ├── hooks/        useAdminUsers, useAdminUserDetail, useActivityTab
+│   ├── utils/        usersList, userDetail, activity
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: USERS_PATH, userDetailPath
 │
 ├── recruitment/                             Full feature layout; see recruitment/doc/STRUCTURE.md
 │   ├── pages/        AdminRecruitmentView (/admin/recruitment), AdminJobDetailView (/admin/recruitment/:jobId)
@@ -107,7 +106,7 @@ admin/
 │   └── index.js                             Public API: PROFILE_PATH
 │
 ├── data/
-│   ├── users.js                             SUBSCRIPTION_PILL_STYLES (used by SubscriptionPill) + unused demo rows
+│   ├── users.js                             Demo data — not imported anywhere
 │   ├── reports.js                           Demo data — not imported anywhere
 │   ├── advertisements.js                    Demo data — not imported anywhere
 │   └── settings.js                          Deprecated re-export of @/features/dash/admin/settings — not imported anywhere
@@ -121,13 +120,12 @@ admin/
   `@/modules/dash/admin/<feature>/pages/<View>` directly.
 - The sidebar items (`adminNavItems`) live in
   `@/components/navigation/navbar/nav.js`, used by `layouts/AdminLayout`.
-- Nothing outside admin imports admin files. Every feature except `users/`
-  has an `index.js`. `statistics/` imports chart helpers and overview pieces
+- Nothing outside admin imports admin files. Every feature has an
+  `index.js`. `users/` imports detail paths from the `ads/`, `marketplace/`
+  and `recruitment/` indexes. `statistics/` imports chart helpers and overview pieces
   from the `dashboard/` index.
 
-## Not done yet
+## Status
 
-The `hooks/`, `utils/`, `constant/`, `test/` and `doc/` split has been
-applied to every feature except `users/`, which still holds its own state and
-effects: `AdminUsersView` (351 lines) and `AdminUserDetailView` (309). The
-unused files in `data/` can be deleted.
+Every feature now has the `hooks/`, `utils/`, `constant/`, `test/` and `doc/`
+split. Nothing imports the files in `data/` any more, so they can be deleted.
