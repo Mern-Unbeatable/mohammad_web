@@ -119,10 +119,10 @@ export const leaveConversation = createAsyncThunk(
   ),
 );
 
-export const renameGroup = createAsyncThunk(
-  "messages/renameGroup",
-  withError("Failed to rename group", ({ conversationId, name }) =>
-    messagesApi.renameGroup(conversationId, name),
+export const updateGroup = createAsyncThunk(
+  "messages/updateGroup",
+  withError("Failed to update group", ({ conversationId, changes }) =>
+    messagesApi.updateGroup(conversationId, changes),
   ),
 );
 

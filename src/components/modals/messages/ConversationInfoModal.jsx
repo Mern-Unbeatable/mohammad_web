@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router';
-import { Crown, Loader2, LogOut, Pencil, UserMinus, UserPlus, X } from 'lucide-react';
+import { toast } from 'react-hot-toast';
+import { Camera, Crown, Loader2, LogOut, Pencil, UserMinus, UserPlus, X } from 'lucide-react';
 import Avatar from '@/components/ui/Avatar';
 import AddMembersModal from '@/components/modals/messages/AddMembersModal';
 import { Input } from '@/components/form-controls';
 import { useBodyScrollLock } from '@/shared/hooks/useBodyScrollLock';
+
+const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 
 const ConversationInfo = ({
   conversation,
@@ -12,6 +15,7 @@ const ConversationInfo = ({
   onlineUserIds,
   onClose,
   onRename,
+  onChangePhoto,
   onAddMembers,
   onRemoveMember,
   onLeave,
@@ -25,6 +29,8 @@ const ConversationInfo = ({
   const [name, setName] = useState(conversation.name || '');
   const [adding, setAdding] = useState(false);
   const [removingId, setRemovingId] = useState(null);
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const photoInputRef = useRef(null);
 
   const removeMember = async (userId) => {
     if (removingId) return;
@@ -40,8 +46,42 @@ const ConversationInfo = ({
 
   const isGroup = conversation.isGroup;
   const isOwner = conversation.myRole === 'OWNER';
-  const members = conversation.participants || [];
+  const members = [...(conversation.participants || [])].sort(
+    (a, b) => Number(b.role === 'OWNER') - Number(a.role === 'OWNER'),
+  );
   const memberIds = members.map((m) => m.id);
+
+  const canEditPhoto = isGroup && isOwner && Boolean(onChangePhoto);
+
+  const changePhoto = async (file) => {
+    if (photoBusy) return;
+    setPhotoBusy(true);
+    try {
+      await onChangePhoto(file);
+    } finally {
+      setPhotoBusy(false);
+    }
+  };
+
+  const pickPhoto = (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please choose an image file');
+      return;
+    }
+    if (file.size > MAX_PHOTO_BYTES) {
+      toast.error('Group photo must be 5 MB or smaller');
+      return;
+    }
+    changePhoto(file);
+  };
+
+  const cancelRename = () => {
+    setName(conversation.name || '');
+    setEditingName(false);
+  };
 
   const submitRename = async (e) => {
     e.preventDefault();
@@ -68,12 +108,49 @@ const ConversationInfo = ({
       >
         <div className="flex shrink-0 items-start justify-between border-b border-[#E4E7EC] px-5 py-4">
           <div className="flex min-w-0 items-center gap-3">
-            <Avatar
-              src={conversation.avatar}
-              alt={conversation.name}
-              initials={conversation.initials}
-              size="lg"
-            />
+            {canEditPhoto ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => photoInputRef.current?.click()}
+                  disabled={photoBusy}
+                  aria-label="Change group photo"
+                  title="Change group photo"
+                  className="group relative shrink-0 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-wait"
+                >
+                  <Avatar
+                    src={conversation.avatar}
+                    alt={conversation.name}
+                    initials={conversation.initials}
+                    size="lg"
+                  />
+                  <span className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+                    <Camera className="h-5 w-5" />
+                  </span>
+                  <span className="absolute -bottom-0.5 -right-0.5 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-primary text-white">
+                    {photoBusy ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <Camera className="h-3 w-3" />
+                    )}
+                  </span>
+                </button>
+                <input
+                  ref={photoInputRef}
+                  type="file"
+                  accept="image/png,image/jpeg,image/gif,image/webp"
+                  className="hidden"
+                  onChange={pickPhoto}
+                />
+              </>
+            ) : (
+              <Avatar
+                src={conversation.avatar}
+                alt={conversation.name}
+                initials={conversation.initials}
+                size="lg"
+              />
+            )}
             <div className="min-w-0">
               {editingName ? (
                 <form onSubmit={submitRename} className="flex items-center gap-2">
@@ -83,13 +160,22 @@ const ConversationInfo = ({
                     maxLength={160}
                     aria-label="Group name"
                     autoFocus
+                    className="h-8 px-2.5! py-1! text-[13px]!"
                   />
                   <button
                     type="submit"
                     disabled={busy}
-                    className="rounded-lg bg-primary px-3 py-2 text-[12px] font-semibold text-white disabled:opacity-60"
+                    className="h-8 rounded-lg bg-primary px-3 text-[12px] font-semibold text-white disabled:opacity-60"
                   >
                     Save
+                  </button>
+                  <button
+                    type="button"
+                    onClick={cancelRename}
+                    disabled={busy}
+                    className="h-8 rounded-lg border border-[#D0D5DD] px-3 text-[12px] font-semibold text-[#344054] hover:bg-[#F9FAFB] disabled:opacity-60"
+                  >
+                    Cancel
                   </button>
                 </form>
               ) : (
@@ -112,6 +198,19 @@ const ConversationInfo = ({
               )}
               <p className="mt-0.5 truncate text-[13px] text-[#64748B]">
                 {isGroup ? `${members.length} members` : conversation.subtitle}
+                {canEditPhoto && conversation.avatar ? (
+                  <>
+                    {' · '}
+                    <button
+                      type="button"
+                      onClick={() => changePhoto(null)}
+                      disabled={photoBusy}
+                      className="font-medium text-[#CC1016] hover:underline disabled:opacity-60"
+                    >
+                      Remove photo
+                    </button>
+                  </>
+                ) : null}
               </p>
             </div>
           </div>
@@ -125,7 +224,11 @@ const ConversationInfo = ({
           </button>
         </div>
 
-        <div className="overflow-y-auto px-5 py-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+        <div
+          className={`min-h-0 flex-1 overflow-y-auto px-5 py-4 ${
+            isGroup && onLeave ? '' : 'pb-[max(1.25rem,env(safe-area-inset-bottom))]'
+          }`}
+        >
           <div className="mb-2 flex items-center justify-between">
             <p className="text-[13px] font-semibold text-deep-blue">
               {isGroup ? 'Members' : 'Participants'}
@@ -213,18 +316,20 @@ const ConversationInfo = ({
               );
             })}
           </ul>
+        </div>
 
-          {isGroup && onLeave ? (
+        {isGroup && onLeave ? (
+          <div className="shrink-0 border-t border-[#E4E7EC] px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             <button
               type="button"
               onClick={onLeave}
-              className="mt-5 inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-[#FDA29B] px-4 py-2.5 text-[13px] font-semibold text-[#CC1016] hover:bg-[#FEF3F2]"
+              className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-[#FDA29B] px-4 py-2.5 text-[13px] font-semibold text-[#CC1016] hover:bg-[#FEF3F2]"
             >
               <LogOut className="h-4 w-4" />
               Leave group
             </button>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </div>
 
       <AddMembersModal

@@ -210,6 +210,10 @@ export function systemMessageParts(message, currentUserId) {
       return [actor, " left the group"];
     case "renamed":
       return [actor, ` renamed the group to "${event.name}"`];
+    case "photoChanged":
+      return [actor, " changed the group photo"];
+    case "photoRemoved":
+      return [actor, " removed the group photo"];
     default:
       return [message?.body || ""];
   }

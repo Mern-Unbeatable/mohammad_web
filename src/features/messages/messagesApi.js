@@ -109,8 +109,20 @@ export async function leaveConversation(conversationId) {
   return { conversationId };
 }
 
-export async function renameGroup(conversationId, name) {
-  return unwrapApiData(await crudService.patch(E.RENAME(conversationId), { name }));
+/** `{ name?, avatar? }`; `avatar: null` removes the group photo. */
+export async function updateGroup(conversationId, changes) {
+  return unwrapApiData(await crudService.patch(E.UPDATE_GROUP(conversationId), changes));
+}
+
+/** Uploads a group photo and returns its public URL. */
+export async function uploadGroupPhoto(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+  const uploaded = unwrapApiData(
+    await crudService.upload(E.GROUP_PHOTO_UPLOAD, formData, null, { timeout: 60000 }),
+  );
+  if (!uploaded?.url) throw new Error("Upload did not return a file URL");
+  return uploaded.url;
 }
 
 export async function addParticipants(conversationId, participantIds) {
