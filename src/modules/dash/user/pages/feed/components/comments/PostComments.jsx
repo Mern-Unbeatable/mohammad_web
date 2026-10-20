@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
+import ConfirmModal from "@/components/modals/common/ConfirmModal";
 import { useCommentManagement } from "../../hooks/useCommentManagement";
 import { useReplyComposer } from "../../hooks/useReplyComposer";
 import { selectPreview } from "../../utils/commentTree";

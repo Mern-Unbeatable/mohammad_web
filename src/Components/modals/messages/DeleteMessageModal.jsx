@@ -1,4 +1,4 @@
-import ConfirmModal from '@/components/common/ConfirmModal/ConfirmModal';
+import ConfirmModal from '@/components/modals/common/ConfirmModal';
 
 const DeleteMessageModal = ({ open, onClose, onConfirm }) => (
   <ConfirmModal

@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router";
 import { configureStore } from "@reduxjs/toolkit";
 import FeedPost from "../components/post/FeedPost";
-import CreatePostModal from "../components/composer/CreatePostModal";
+import CreatePostModal from "@/components/modals/feed/CreatePostModal";
 import { toFeedPostModel, userFeedReducer } from "@/features/dash/user/feed";
 import { userProfileReducer } from "@/features/dash/user/profile";
 import { anna, originalPost, repostOf } from "@/features/dash/user/feed/feedRepostFixtures";

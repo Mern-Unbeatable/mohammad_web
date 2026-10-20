@@ -1,10 +1,10 @@
 import { CHAT_BASE_PATHS, CHAT_SECTIONS } from '@/features/messages/chatPaths';
 import MessagesPageContent from './components/layout/MessagesPageContent';
-import NewMessageModal from './components/modals/NewMessageModal';
-import CreateGroupModal from './components/modals/CreateGroupModal';
-import ConversationInfoModal from './components/modals/ConversationInfoModal';
-import DeleteMessageModal from './components/modals/DeleteMessageModal';
-import LeaveGroupModal from './components/modals/LeaveGroupModal';
+import NewMessageModal from '@/components/modals/messages/NewMessageModal';
+import CreateGroupModal from '@/components/modals/messages/CreateGroupModal';
+import ConversationInfoModal from '@/components/modals/messages/ConversationInfoModal';
+import DeleteMessageModal from '@/components/modals/messages/DeleteMessageModal';
+import LeaveGroupModal from '@/components/modals/messages/LeaveGroupModal';
 import { useMessagesContainer } from './hooks/useMessagesContainer';
 
 /**

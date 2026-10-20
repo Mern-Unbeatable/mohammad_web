@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Loader2, X } from "lucide-react";
-import RecipientPicker from "../recipients/RecipientPicker";
+import RecipientPicker from "@/modules/messages/components/recipients/RecipientPicker";
 
 /** Stacked above the group info modal; closing it returns to the member list. */
 const AddMembersDialog = ({

@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
-import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
+import ConfirmModal from "@/components/modals/common/ConfirmModal";
 import Pagination from "@/components/common/Pagination/Pagination";
 import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
 import { CardSkeleton } from "@/components/loader";

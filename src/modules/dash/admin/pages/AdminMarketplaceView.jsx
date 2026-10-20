@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import Pagination from "@/components/common/Pagination/Pagination";
-import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
+import ConfirmModal from "@/components/modals/common/ConfirmModal";
 import { CardSkeleton } from "@/components/loader";
 import ListingCard from "@/components/data-display/ListingCard/ListingCard";
 import PanelPage from "@/components/navigation/panel/PanelPage";

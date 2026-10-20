@@ -2,7 +2,7 @@ import ListingCard from '@/components/data-display/ListingCard/ListingCard';
 import MarketplacePage from './components/layout/MarketplacePage';
 import MarketplaceToolbar from './components/toolbar/MarketplaceToolbar';
 import ListingsSection from './components/listings/ListingsSection';
-import DeleteListingModal from './components/modals/DeleteListingModal';
+import DeleteListingModal from '@/components/modals/marketplace/DeleteListingModal';
 import { useMyListings } from './hooks/useMyListings';
 import { MARKETPLACE_VIEW } from './constant/constants';
 

@@ -26,7 +26,7 @@ profile/
 │   │
 │   └── layout/
 │       └── MembershipPrompt.jsx    "Want full access?" link for inactive accounts
-│                             (DeletePostModal: @/components/common/DeletePostModal;
+│                             (DeletePostModal: @/components/modals/common/DeletePostModal;
 │                              ProfileSetupLoading: @/components/loader/spinners)
 │
 ├── hooks/

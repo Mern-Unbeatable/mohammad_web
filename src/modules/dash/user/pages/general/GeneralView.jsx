@@ -1,5 +1,5 @@
 import GeneralPostCard from '@/components/data-display/GeneralPostCard/GeneralPostCard';
-import CreateGeneralPostModal from './components/modals/CreateGeneralPostModal';
+import CreateGeneralPostModal from '@/components/modals/general/CreateGeneralPostModal';
 import GeneralPage from './components/layout/GeneralPage';
 import GeneralToolbar from './components/toolbar/GeneralToolbar';
 import PostsGrid from './components/posts/PostsGrid';

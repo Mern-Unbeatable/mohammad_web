@@ -1,9 +1,9 @@
 import GeneralPostCard from '@/components/data-display/GeneralPostCard/GeneralPostCard';
-import CreateGeneralPostModal from './components/modals/CreateGeneralPostModal';
+import CreateGeneralPostModal from '@/components/modals/general/CreateGeneralPostModal';
 import GeneralPage from './components/layout/GeneralPage';
 import GeneralToolbar from './components/toolbar/GeneralToolbar';
 import PostsGrid from './components/posts/PostsGrid';
-import DeletePostModal from '@/components/common/DeletePostModal/DeletePostModal';
+import DeletePostModal from '@/components/modals/common/DeletePostModal';
 import { useMyGeneralPosts } from './hooks/useMyGeneralPosts';
 import { GENERAL_VIEW, generalPostPath } from './constant/constants';
 

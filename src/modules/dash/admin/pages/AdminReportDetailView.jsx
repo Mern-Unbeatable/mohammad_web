@@ -16,8 +16,8 @@ import Card from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
 import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
 import { ReportDetailSkeleton } from "@/components/loader";
-import ModerationHistoryModal from "@/modules/dash/admin/components/ModerationHistoryModal";
-import ReasonModal from "@/modules/dash/admin/components/ReasonModal";
+import ModerationHistoryModal from "@/components/modals/admin/ModerationHistoryModal";
+import ReasonModal from "@/components/modals/admin/ReasonModal";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
 import {

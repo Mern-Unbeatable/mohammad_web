@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { Ban, CheckCircle2, Loader2 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import SuspendUserModal from "@/modules/dash/admin/components/SuspendUserModal";
+import SuspendUserModal from "@/components/modals/admin/SuspendUserModal";
 import Card from "@/components/ui/Card";
 import ProfilePageContent from "@/components/data-display/ProfilePageContent/ProfilePageContent";
 import { ProfilePageSkeleton } from "@/components/loader";

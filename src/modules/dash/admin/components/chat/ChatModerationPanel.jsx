@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { ArrowLeft, FileText, Loader2, MessageSquare, Search, Trash2, Users } from 'lucide-react';
 import Avatar from '@/components/ui/Avatar';
-import ConfirmModal from '@/components/common/ConfirmModal/ConfirmModal';
+import ConfirmModal from '@/components/modals/common/ConfirmModal';
 import FormattedMessage from '@/components/data-display/Messenger/FormattedMessage';
 import {
   clearAdminMessagesError,

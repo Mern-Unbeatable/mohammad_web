@@ -1,4 +1,4 @@
-import ConfirmModal from '@/components/common/ConfirmModal/ConfirmModal';
+import ConfirmModal from '@/components/modals/common/ConfirmModal';
 
 const PostTitleDescription = ({ post }) => (
   <p className="text-[14px] leading-relaxed text-[#64748B]">

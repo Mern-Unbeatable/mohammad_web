@@ -8,7 +8,7 @@ import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
 import Avatar from "@/components/ui/Avatar";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
-import SuspendUserModal from "@/modules/dash/admin/components/SuspendUserModal";
+import SuspendUserModal from "@/components/modals/admin/SuspendUserModal";
 import SubscriptionPill from "@/modules/dash/admin/components/SubscriptionPill";
 import { fetchUsersList, updateUserStatus } from "@/features/dash/admin/users";
 import { formatDate } from "@/shared/utils/dates/date";

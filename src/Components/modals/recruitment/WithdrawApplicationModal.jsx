@@ -1,4 +1,4 @@
-import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
+import ConfirmModal from "@/components/modals/common/ConfirmModal";
 
 /** Confirms withdrawing one of the caller's applications. */
 const WithdrawApplicationModal = ({ application, withdrawing, onClose, onConfirm }) => (

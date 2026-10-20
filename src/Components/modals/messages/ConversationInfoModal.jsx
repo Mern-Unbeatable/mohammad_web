@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { Crown, Loader2, LogOut, Pencil, UserMinus, UserPlus, X } from 'lucide-react';
 import Avatar from '@/components/ui/Avatar';
-import AddMembersModal from './AddMembersModal';
+import AddMembersModal from '@/components/modals/messages/AddMembersModal';
 
 const fieldClass =
   'w-full rounded-lg border border-[#E4E7EC] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10';

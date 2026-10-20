@@ -13,7 +13,7 @@ import {
   StatCardSkeleton,
 } from "@/components/loader";
 import Card from "@/components/ui/Card";
-import CreateAdModal from "@/modules/dash/supplier/components/CreateAdModal";
+import CreateAdModal from "@/components/modals/supplier/CreateAdModal";
 import {
   fetchSupplierDashboard,
   clearSupplierDashError,

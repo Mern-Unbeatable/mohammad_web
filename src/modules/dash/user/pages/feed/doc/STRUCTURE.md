@@ -35,21 +35,18 @@ feed/
 │   │   ├── CommentThread.jsx     Top-level comment + replies with thread lines
 │   │   ├── CommentBody.jsx       Bubble, like / reply footer, inline reply box
 │   │   ├── CommentEditForm.jsx   In-place editor (Esc / Ctrl+Enter)
-│   │   ├── InlineReplyBox.jsx    Reply input under a comment
-│   │   └── FullCommentsModal.jsx Modal showing the post with all comments
+│   │   └── InlineReplyBox.jsx    Reply input under a comment
 │   │
 │   ├── composer/             Creating / editing posts
 │   │   ├── FeedComposer.jsx      "Start a post" card on the feed
 │   │   ├── FeedFilters.jsx       Filter tabs
-│   │   ├── CreatePostModal.jsx   Create / edit dialog (mounts only while open)
 │   │   ├── PostTypeChips.jsx     Post type selector
 │   │   ├── DraftImageGrid.jsx    Selected images with remove buttons
 │   │   ├── DraftDocumentCard.jsx Selected document
 │   │   └── ComposerFooter.jsx    Attach buttons, file inputs, Cancel / Publish
 │   │
-│   └── modals/
-│       ├── SharePostModal.jsx    Repost (with caption) / undo repost / copy link
-│       └── ReportPostModal.jsx   Report a post
+│   └── (modals live in @/components/modals/feed: CreatePostModal, FullCommentsModal,
+│        SharePostModal, ReportPostModal)
 │
 ├── hooks/
 │   ├── useFeedPosts.js           Fetch, filter, paginate and refresh the feed

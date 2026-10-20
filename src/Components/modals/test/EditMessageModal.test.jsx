@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import EditMessageModal from './EditMessageModal';
+import EditMessageModal from '@/components/modals/messages/EditMessageModal';
 
 const render = (props) => renderToStaticMarkup(<EditMessageModal open {...props} />);
 

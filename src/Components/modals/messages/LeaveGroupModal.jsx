@@ -1,5 +1,5 @@
 import { LogOut } from 'lucide-react';
-import ConfirmModal from '@/components/common/ConfirmModal/ConfirmModal';
+import ConfirmModal from '@/components/modals/common/ConfirmModal';
 
 const LeaveGroupModal = ({ open, confirming, onClose, onConfirm }) => (
   <ConfirmModal

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router";
 import { Mail, MapPin, Phone, X } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
-import { applicationStatusClass } from "../../utils/candidates";
+import { applicationStatusClass } from "@/modules/dash/user/pages/recruitment/utils/candidates";
 
 const InfoRow = ({ icon, label, children }) => (
   <div className="flex items-start gap-3">
