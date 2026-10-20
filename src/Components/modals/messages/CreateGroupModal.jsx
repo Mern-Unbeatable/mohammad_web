@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import RecipientPicker from '@/modules/messages/components/recipients/RecipientPicker';
+<<<<<<< HEAD
 import { FormLabel, Input } from '@/components/form-controls';
+=======
+
+const fieldClass =
+  'w-full rounded-lg border border-[#E4E7EC] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10';
+>>>>>>> 88bd014ce48e4532e70b1b96d0e2b84bc164fef5
 
 const CreateGroupForm = ({
   onClose,
