@@ -19,11 +19,11 @@ import {
   clearSupplierDashError,
 } from "@/features/dash/supplier/dashboard";
 import { useAuth } from "@/modules/auth";
-import PanelPage from "@/layouts/panel/PanelPage";
+import PanelPage from "@/components/navigation/panel/PanelPage";
 import {
   panelPageTheme,
   panelPrimaryBtn,
-} from "@/layouts/panel/panelPageTheme";
+} from "@/components/navigation/panel/panelPageTheme";
 
 const currentYear = new Date().getFullYear();
 const YEAR_OPTIONS = [currentYear, currentYear - 1, currentYear - 2].map(String);

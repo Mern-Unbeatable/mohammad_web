@@ -1,6 +1,6 @@
 import { Outlet, useLocation, useNavigate } from 'react-router';
-import PanelPage from '@/layouts/panel/PanelPage';
-import PanelPageHeader from '@/layouts/panel/PanelPageHeader';
+import PanelPage from '@/components/navigation/panel/PanelPage';
+import PanelPageHeader from '@/components/navigation/panel/PanelPageHeader';
 import SegmentedTabs from '@/components/common/SegmentedTabs/SegmentedTabs';
 import { CHAT_BASE_PATHS, chatPath } from '@/shared/constants/chat';
 

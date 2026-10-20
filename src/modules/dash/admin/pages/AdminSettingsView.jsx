@@ -4,13 +4,13 @@ import { Calculator, Check, RefreshCw, Trash2, Wallet } from "lucide-react";
 import { toast } from "react-hot-toast";
 import Card from "@/components/ui/Card";
 import { AdminSettingsSkeleton } from "@/components/common/Skeleton";
-import PanelPage from "@/layouts/panel/PanelPage";
-import PanelPageHeader from "@/layouts/panel/PanelPageHeader";
+import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
 import {
   panelPageTheme,
   panelPrimaryBtn,
   panelSecondaryBtn,
-} from "@/layouts/panel/panelPageTheme";
+} from "@/components/navigation/panel/panelPageTheme";
 import {
   fetchAdminSettings,
   saveAdminSetting,

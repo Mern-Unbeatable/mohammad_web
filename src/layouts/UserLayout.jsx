@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { DashboardNavbar, MobileBottomNav } from "@/components/navigation";
 import { FeedActionsProvider } from "@/modules/dash/user/context/FeedActionsContext";
 import { LayoutChromeProvider } from "@/shared/context/LayoutChromeContext";
-import AppFooter from "@/layouts/footer/AppFooter";
+import AppFooter from "@/components/navigation/footer/AppFooter";
 import ScrollToTop from "@/shared/routing/ScrollToTop";
 import { fetchUserProfile } from "@/features/dash/user/profile";
 

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import ProfileSetupForm from "@/components/forms/ProfileSetupForm/ProfileSetupForm";
 import { ProfileSetupFormSkeleton } from "@/components/common/Skeleton";
-import PanelPage from "@/layouts/panel/PanelPage";
+import PanelPage from "@/components/navigation/panel/PanelPage";
 import { profileCountries } from "@/modules/dash/user/data/subscription";
 import {
   fetchSupplierProfile,

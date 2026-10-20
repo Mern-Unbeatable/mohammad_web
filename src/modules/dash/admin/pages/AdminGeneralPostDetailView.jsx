@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { Calendar, MapPin, Share2 } from "lucide-react";
 import { GeneralPostDetailSkeleton } from "@/components/common/Skeleton";
-import PanelPage from "@/layouts/panel/PanelPage";
-import PanelBackButton from "@/layouts/panel/PanelBackButton";
+import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
 import NotFound from "@/shared/pages/NotFound";
 import {
   fetchGeneralPostDetails,

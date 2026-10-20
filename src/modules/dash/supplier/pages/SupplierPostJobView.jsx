@@ -15,7 +15,7 @@ import {
   RECRUITMENT_LEVEL_OPTIONS,
   recruitmentApi,
 } from "@/features/dash/supplier/recruitment";
-import PanelPage from "@/layouts/panel/PanelPage";
+import PanelPage from "@/components/navigation/panel/PanelPage";
 
 const LEVEL_OPTIONS = RECRUITMENT_LEVEL_OPTIONS.filter(
   (item) => item !== "All",

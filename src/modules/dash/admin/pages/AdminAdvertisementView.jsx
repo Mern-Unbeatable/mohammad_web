@@ -5,8 +5,8 @@ import { toast } from "react-hot-toast";
 import DataTable from "@/components/data-display/DataTable/DataTable";
 import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
 import CategoryPill from "@/components/data-display/CategoryPill/CategoryPill";
-import PanelPage from "@/layouts/panel/PanelPage";
-import PanelPageHeader from "@/layouts/panel/PanelPageHeader";
+import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
 import ReasonModal from "@/modules/dash/admin/components/ReasonModal";
 import {
   fetchAdsList,

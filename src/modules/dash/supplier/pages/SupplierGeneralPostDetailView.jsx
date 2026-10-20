@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { Calendar, ChevronLeft, MapPin, Share2 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import PanelPage from "@/layouts/panel/PanelPage";
+import PanelPage from "@/components/navigation/panel/PanelPage";
 import { GeneralPostDetailSkeleton } from "@/components/common/Skeleton";
 import NotFound from "@/shared/pages/NotFound";
 import {

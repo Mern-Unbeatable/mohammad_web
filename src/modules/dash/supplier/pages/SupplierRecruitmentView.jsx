@@ -17,8 +17,8 @@ import {
   levelToApi,
   toJobCardModel,
 } from "@/features/dash/supplier/recruitment";
-import PanelPage from "@/layouts/panel/PanelPage";
-import PanelPageHeader from "@/layouts/panel/PanelPageHeader";
+import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
 import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
 
 const JOB_BASE = "/supplier/recruitment";

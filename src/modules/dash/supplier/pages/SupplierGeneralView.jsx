@@ -5,7 +5,7 @@ import Pagination from "@/components/common/Pagination/Pagination";
 import { CardSkeleton } from "@/components/common/Skeleton";
 import GeneralPostCard from "@/components/data-display/GeneralPostCard/GeneralPostCard";
 import { GeneralToolbar, CreateGeneralPostModal } from "@/modules/dash/user/pages/general";
-import PanelPage from "@/layouts/panel/PanelPage";
+import PanelPage from "@/components/navigation/panel/PanelPage";
 import {
   fetchSupplierGeneralPosts,
   createSupplierGeneralPost,

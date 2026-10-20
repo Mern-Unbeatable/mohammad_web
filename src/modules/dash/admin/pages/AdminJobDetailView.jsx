@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import JobDetailCard from "@/components/data-display/JobDetailCard/JobDetailCard";
 import { JobDetailSkeleton } from "@/components/common/Skeleton";
-import PanelPage from "@/layouts/panel/PanelPage";
-import PanelBackButton from "@/layouts/panel/PanelBackButton";
+import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
 import NotFound from "@/shared/pages/NotFound";
 import { AppliedCandidatesPanel, JobPosterCard } from "@/modules/dash/user/pages/recruitment";
 import {

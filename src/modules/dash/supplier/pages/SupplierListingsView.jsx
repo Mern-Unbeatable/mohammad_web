@@ -1,6 +1,6 @@
 import Card from '@/components/ui/Card';
-import PanelPage from '@/layouts/panel/PanelPage';
-import PanelPageHeader from '@/layouts/panel/PanelPageHeader';
+import PanelPage from '@/components/navigation/panel/PanelPage';
+import PanelPageHeader from '@/components/navigation/panel/PanelPageHeader';
 
 const SupplierListingsView = () => (
   <PanelPage>

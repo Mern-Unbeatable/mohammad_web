@@ -1,7 +1,7 @@
 # Layouts structure
 
-All app layouts: the route layouts used by `shared/router/*.routes.jsx` and the
-building blocks they (and panel pages) share.
+Route layouts used by `shared/router/*.routes.jsx`. The chrome they render
+(navbar, sidebars, panel shell, footer) lives in `@/components/navigation`.
 
 ```
 layouts/
@@ -10,14 +10,6 @@ layouts/
 ├── UserLayout.jsx            # user dashboard: DashboardNavbar, MobileBottomNav, AppFooter
 ├── SupplierLayout.jsx        # PanelLayout + supplier nav and badges
 ├── AdminLayout.jsx           # PanelLayout + admin nav
-├── panel/                    # supplier / admin panel chrome
-│   ├── PanelLayout.jsx       # sidebar, top bar, account menu
-│   ├── PanelPage.jsx         # page frame (width + theme)
-│   ├── PanelPageHeader.jsx
-│   ├── PanelBackButton.jsx
-│   └── panelPageTheme.js     # panelPageTheme, panelPageWidths, button classes
-├── footer/
-│   └── AppFooter.jsx         # shared by RootLayout and UserLayout
 └── doc/STRUCTURE.md
 ```
 
@@ -26,6 +18,7 @@ layouts/
 | Thing | Location |
 |---|---|
 | New role / route layout | `layouts/<Name>Layout.jsx`, wired in `shared/router/*.routes.jsx` |
-| Panel page frame pieces | `layouts/panel/` (import `@/layouts/panel/PanelPage` etc.) |
+| Panel shell and page frame pieces | `@/components/navigation/panel/` (`PanelLayout`, `PanelPage`, …) |
+| Site footer | `@/components/navigation/footer/AppFooter` |
 | Dashboard navbar / sidebars | `@/components/navigation` |
 | Messenger route element | `@/modules/messages` (`route/ChatLayout`) |

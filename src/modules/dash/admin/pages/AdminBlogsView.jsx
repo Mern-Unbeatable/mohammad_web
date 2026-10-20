@@ -6,9 +6,9 @@ import Pagination from "@/components/common/Pagination/Pagination";
 import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
 import { CardSkeleton } from "@/components/common/Skeleton";
 import BlogAdminCard from "@/components/data-display/BlogAdminCard/BlogAdminCard";
-import PanelPage from "@/layouts/panel/PanelPage";
-import PanelPageHeader from "@/layouts/panel/PanelPageHeader";
-import { panelPrimaryBtn } from "@/layouts/panel/panelPageTheme";
+import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
+import { panelPrimaryBtn } from "@/components/navigation/panel/panelPageTheme";
 import {
   fetchBlogsList,
   removeBlogPost,

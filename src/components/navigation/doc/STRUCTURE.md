@@ -1,9 +1,10 @@
 # Navigation structure
 
-User dashboard chrome: top navbar (search, nav links, hover previews,
-profile menu, mobile drawer), mobile bottom nav, and the feed's left/right
-sidebars. Rendered by `layouts/UserLayout` (navbar + bottom nav) and
-`modules/dash/user/pages/feed/FeedView` (sidebars).
+App chrome: the user dashboard's top navbar (search, nav links, hover
+previews, profile menu, mobile drawer), mobile bottom nav and the feed's
+left/right sidebars; the supplier / admin panel shell; and the site footer.
+Rendered by `layouts/*Layout.jsx`, `modules/dash/user/pages/feed/FeedView`
+(sidebars) and the supplier / admin pages (panel page frame).
 
 ```
 components/navigation/
@@ -33,6 +34,13 @@ components/navigation/
 │   ├── useMessagesPreview.js
 │   ├── useNotificationsPreview.js
 │   └── useRightSidebar.js       # people / listings / jobs + Connect
+├── panel/                       # supplier / admin panel chrome
+│   ├── PanelLayout.jsx          # sidebar, top bar, account menu
+│   ├── PanelPage.jsx            # page frame (width + theme)
+│   ├── PanelPageHeader.jsx
+│   ├── PanelBackButton.jsx
+│   └── panelPageTheme.js        # panelPageTheme, panelPageWidths, button classes
+├── footer/AppFooter.jsx         # site footer (RootLayout, UserLayout)
 ├── utils/                       # pure: navActive, badges, membership, sidebarModels
 ├── test/
 └── doc/STRUCTURE.md
@@ -44,6 +52,12 @@ components/navigation/
 |---|---|
 | `DashboardNavbar`, `MobileBottomNav` | `layouts/UserLayout` |
 | `LeftSidebar`, `RightSidebar` | `modules/dash/user/pages/feed/FeedView` |
+
+`panel/*` and `footer/AppFooter` are imported by file path:
+`@/components/navigation/panel/PanelLayout` (Supplier / Admin layouts),
+`panel/PanelPage`, `PanelPageHeader`, `PanelBackButton`, `panelPageTheme`
+(supplier / admin pages, `CreateAdModal`, `AdminAccountForm`, `GeneralToolbar`)
+and `footer/AppFooter` (Root / User layouts).
 
 ## Rules
 

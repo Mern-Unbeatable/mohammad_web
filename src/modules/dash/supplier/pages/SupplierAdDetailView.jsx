@@ -12,8 +12,8 @@ import {
   clearSupplierAdsError,
   toAdDetailModel,
 } from "@/features/dash/supplier/advertisements";
-import PanelPage from "@/layouts/panel/PanelPage";
-import PanelPageHeader from "@/layouts/panel/PanelPageHeader";
+import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
 
 const DEFAULT_REJECTION =
   "The advertisement does not meet Lab Unity's advertising guidelines. Please review and resubmit.";
