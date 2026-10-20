@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router';
-import { FeedActionsContext } from './useFeedActions';
+import { FeedActionsContext } from '../hooks/useFeedActions';
 
 const FEED_PATH = '/feed';
 

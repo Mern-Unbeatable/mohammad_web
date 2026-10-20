@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import { createPost } from "@/features/dash/user/feed";
-import { useFeedActions } from "@/modules/dash/user/context/useFeedActions";
+import { useFeedActions } from "./useFeedActions";
 import { DEFAULT_POST_OPTION } from "../utils/postTypeOptions";
 import { toCreatePostPayload } from "../utils/postPayload";
 
