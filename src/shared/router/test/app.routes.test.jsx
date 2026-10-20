@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { matchRoutes } from "react-router";
+import AppRootLayout from "@/layouts/AppRootLayout";
 import AuthLayout from "@/layouts/AuthLayout";
+import RouterErrorPage from "@/modules/error/RouterErrorPage";
 import NotFoundLayout from "@/layouts/NotFoundLayout";
 import PanelNotFound from "@/modules/error/PanelNotFound";
 import ContactSupportView from "@/modules/auth/contact-support/pages/ContactSupportView";
@@ -37,5 +39,43 @@ describe("app route tree", () => {
     expect(matches.at(-1).route.element.type).toBe(ContactSupportView);
     expect(matches.some((m) => m.route.element?.type === AuthLayout)).toBe(true);
     expect(matches.some((m) => m.route.handle?.guestOnly)).toBe(false);
+  });
+
+  it.each(["/login", "/join", "/forgot-password", "/reset-password"])(
+    "keeps %s behind GuestOnly",
+    (path) => {
+      expect(resolve(path).some((m) => m.route.handle?.guestOnly)).toBe(true);
+    },
+  );
+
+  const requiredRole = (path) =>
+    resolve(path).find((m) => m.route.handle?.requiredRole)?.route.handle.requiredRole ?? null;
+
+  it.each([
+    ["/feed", "USER"],
+    ["/profile/edit", "USER"],
+    ["/blogs/some-post", "USER"],
+    ["/chat/messages", "USER"],
+    ["/supplier", "SUPPLIER"],
+    ["/supplier/blogs/some-post", "SUPPLIER"],
+    ["/supplier/nope", "SUPPLIER"],
+    ["/admin", "ADMIN"],
+    ["/admin/nope", "ADMIN"],
+  ])("guards %s for %s (the catch-all never shadows it)", (path, role) => {
+    expect(requiredRole(path)).toBe(role);
+    expect(leafType(path)).not.toBe(NotFoundLayout);
+  });
+
+  it.each(["/", "/terms", "/privacy", "/does-not-exist"])("leaves %s unguarded", (path) => {
+    expect(requiredRole(path)).toBeNull();
+    expect(resolve(path).some((m) => m.route.handle?.guestOnly)).toBe(false);
+  });
+
+  it("wraps every route in the app root and its error boundary", () => {
+    for (const path of ["/", "/login", "/feed", "/supplier", "/admin", "/does-not-exist"]) {
+      const [root] = resolve(path);
+      expect(root.route.element.type).toBe(AppRootLayout);
+      expect(root.route.errorElement.type).toBe(RouterErrorPage);
+    }
   });
 });
