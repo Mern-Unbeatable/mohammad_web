@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { matchRoutes } from "react-router";
-import TermsOfServiceView from "@/modules/public/pages/legal/TermsOfServiceView";
-import PrivacyPolicyView from "@/modules/public/pages/legal/PrivacyPolicyView";
-import { PRIVACY_PATH, TERMS_PATH } from "@/modules/public/pages/legal/constant/constants";
+import TermsOfServiceView from "@/modules/public/legal/pages/TermsOfServiceView";
+import PrivacyPolicyView from "@/modules/public/legal/pages/PrivacyPolicyView";
+import { PRIVACY_PATH, TERMS_PATH } from "@/modules/public/legal";
 import { publicRoutes } from "../routes/public.routes";
 import { authRoutes } from "../routes/auth.routes";
 

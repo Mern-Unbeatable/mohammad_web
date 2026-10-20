@@ -1,7 +1,7 @@
-import HeroSection from './sections/HeroSection';
-import FeaturesSection from './sections/FeaturesSection';
-import EcosystemSection from './sections/EcosystemSection';
-import CtaSection from './sections/CtaSection';
+import HeroSection from '../components/sections/HeroSection';
+import FeaturesSection from '../components/sections/FeaturesSection';
+import EcosystemSection from '../components/sections/EcosystemSection';
+import CtaSection from '../components/sections/CtaSection';
 
 const HomeView = () => {
   return (

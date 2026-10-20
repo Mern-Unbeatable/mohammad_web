@@ -1,12 +1,11 @@
 import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
 import Container from '@/components/ui/Container';
-import { useAuth } from '@/modules/auth';
-
 import { FadeUp, Float } from '@/shared/motion/LandingMotion';
+import { useHomeCta } from '../../hooks/useHomeCta';
 
 const CtaSection = () => {
-  const { isUser, homePath } = useAuth();
+  const cta = useHomeCta();
 
   return (
     <section className="bg-deep-blue py-16 lg:py-20">
@@ -25,27 +24,15 @@ const CtaSection = () => {
           </p>
         </FadeUp>
         <FadeUp delay={0.16}>
-          {isUser ? (
-            <Link
-              to={homePath}
-              className="mt-8 inline-flex items-center gap-2 rounded-md bg-[#F7F8FA] px-6 py-3 text-[15px] font-semibold text-deep-blue transition-opacity hover:opacity-90 lg:mt-9 lg:px-7 lg:py-3.5 lg:text-[16px] xl:mt-10"
-            >
-              Go to Dashboard
-              <Float y={2} duration={2.5} className="inline-flex">
-                <ArrowRight className="h-4 w-4 stroke-[2.5]" />
-              </Float>
-            </Link>
-          ) : (
-            <Link
-              to="/join"
-              className="mt-8 inline-flex items-center gap-2 rounded-md bg-[#F7F8FA] px-6 py-3 text-[15px] font-semibold text-deep-blue transition-opacity hover:opacity-90 lg:mt-9 lg:px-7 lg:py-3.5 lg:text-[16px] xl:mt-10"
-            >
-              Create your free account
-              <Float y={2} duration={2.5} className="inline-flex">
-                <ArrowRight className="h-4 w-4 stroke-[2.5]" />
-              </Float>
-            </Link>
-          )}
+          <Link
+            to={cta.to}
+            className="mt-8 inline-flex items-center gap-2 rounded-md bg-[#F7F8FA] px-6 py-3 text-[15px] font-semibold text-deep-blue transition-opacity hover:opacity-90 lg:mt-9 lg:px-7 lg:py-3.5 lg:text-[16px] xl:mt-10"
+          >
+            {cta.isMember ? 'Go to Dashboard' : 'Create your free account'}
+            <Float y={2} duration={2.5} className="inline-flex">
+              <ArrowRight className="h-4 w-4 stroke-[2.5]" />
+            </Float>
+          </Link>
         </FadeUp>
       </Container>
     </section>

@@ -1,9 +1,15 @@
 import { Link } from 'react-router';
-import LegalDocument from './LegalDocument';
-import { PRIVACY_PATH } from '@/modules/public/pages/legal/constant/constants';
+import { PRIVACY_PATH } from '../constant/constants';
 import { CONTACT_SUPPORT_PATH, SUPPORT_CONTACT } from '@/shared/constants/support';
 
-const sections = [
+export const TERMS_OF_SERVICE = {
+  title: 'Terms of Service',
+  intro:
+    'These terms explain the rules for using Lab Unity, the professional network for the laboratory industry. Please read them carefully before creating your account.',
+  related: { to: PRIVACY_PATH, label: 'Privacy Policy' },
+};
+
+export const TERMS_SECTIONS = [
   {
     id: 'acceptance',
     heading: 'Acceptance of these terms',
@@ -264,14 +270,3 @@ const sections = [
     ),
   },
 ];
-
-const TermsOfServiceView = () => (
-  <LegalDocument
-    title="Terms of Service"
-    intro="These terms explain the rules for using Lab Unity, the professional network for the laboratory industry. Please read them carefully before creating your account."
-    sections={sections}
-    related={{ to: PRIVACY_PATH, label: 'Privacy Policy' }}
-  />
-);
-
-export default TermsOfServiceView;

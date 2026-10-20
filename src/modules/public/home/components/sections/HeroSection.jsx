@@ -2,31 +2,16 @@ import { Link } from 'react-router';
 import { Check } from 'lucide-react';
 import heroImage from '@/assets/hero.png';
 import Container from '@/components/ui/Container';
-import { useAuth } from '@/modules/auth';
-
 import { FadeUp, Float, Pulse } from '@/shared/motion/LandingMotion';
-
-const features = [
-  'Research-focused',
-  'Professional community',
-  'Built for the laboratory industry',
-];
-
-const EXPLORE_SECTION_ID = 'community';
-
-const scrollToExploreSection = (event) => {
-  const section = document.getElementById(EXPLORE_SECTION_ID);
-  if (!section) return;
-  event.preventDefault();
-  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  window.history.replaceState(null, '', `#${EXPLORE_SECTION_ID}`);
-};
+import { useHomeCta } from '../../hooks/useHomeCta';
+import { scrollToSection } from '../../utils/scrollToSection';
+import { EXPLORE_SECTION_ID, HERO_FEATURES, HOME_SECTIONS } from '../../constant/constants';
 
 const HeroSection = () => {
-  const { isUser, homePath } = useAuth();
+  const cta = useHomeCta();
 
   return (
-    <section id="platform" className="relative scroll-mt-[72px] overflow-hidden bg-white lg:scroll-mt-[76px] xl:scroll-mt-[84px]">
+    <section id={HOME_SECTIONS.PLATFORM} className="relative scroll-mt-[72px] overflow-hidden bg-white lg:scroll-mt-[76px] xl:scroll-mt-[84px]">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -left-24 top-0 h-full w-[55%] bg-[radial-gradient(ellipse_at_left,rgba(8,118,196,0.08)_0%,rgba(240,246,252,0.6)_45%,transparent_75%)] lg:w-[48%] xl:w-[55%]"
@@ -60,24 +45,15 @@ const HeroSection = () => {
 
           <FadeUp inView={false} delay={0.32}>
             <div className="mt-8 flex flex-wrap items-center gap-3 lg:mt-6 lg:gap-2.5 xl:mt-10 xl:gap-4">
-              {isUser ? (
-                <Link
-                  to={homePath}
-                  className="rounded-full bg-primary px-7 py-3 text-[15px] font-medium leading-none text-white transition-opacity hover:opacity-90 lg:px-6 lg:py-2.5 lg:text-[14px] xl:px-9 xl:py-3.5 xl:text-[16px]"
-                >
-                  Dashboard
-                </Link>
-              ) : (
-                <Link
-                  to="/join"
-                  className="rounded-full bg-primary px-7 py-3 text-[15px] font-medium leading-none text-white transition-opacity hover:opacity-90 lg:px-6 lg:py-2.5 lg:text-[14px] xl:px-9 xl:py-3.5 xl:text-[16px]"
-                >
-                  Join Lab Unity
-                </Link>
-              )}
+              <Link
+                to={cta.to}
+                className="rounded-full bg-primary px-7 py-3 text-[15px] font-medium leading-none text-white transition-opacity hover:opacity-90 lg:px-6 lg:py-2.5 lg:text-[14px] xl:px-9 xl:py-3.5 xl:text-[16px]"
+              >
+                {cta.isMember ? 'Dashboard' : 'Join Lab Unity'}
+              </Link>
               <Link
                 to={`/#${EXPLORE_SECTION_ID}`}
-                onClick={scrollToExploreSection}
+                onClick={scrollToSection(EXPLORE_SECTION_ID)}
                 className="rounded-full bg-secondary px-7 py-3 text-[15px] font-medium leading-none text-deep-blue transition-colors hover:bg-[#E3EEF8] lg:px-6 lg:py-2.5 lg:text-[14px] xl:px-9 xl:py-3.5 xl:text-[16px]"
               >
                 Explore Network
@@ -87,7 +63,7 @@ const HeroSection = () => {
 
           <FadeUp inView={false} delay={0.44}>
             <ul className="mt-8 flex flex-col gap-y-2.5 lg:mt-6 xl:mt-10 xl:flex-row xl:flex-wrap xl:gap-x-10 xl:gap-y-4">
-              {features.map((feature) => (
+              {HERO_FEATURES.map((feature) => (
                 <li
                   key={feature}
                   className="flex items-center gap-2 text-[14px] font-normal text-green-primary lg:text-[13px] xl:text-[15px]"

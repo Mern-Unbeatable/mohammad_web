@@ -1,9 +1,15 @@
 import { Link } from 'react-router';
-import LegalDocument from './LegalDocument';
-import { TERMS_PATH } from '@/modules/public/pages/legal/constant/constants';
+import { TERMS_PATH } from '../constant/constants';
 import { SUPPORT_CONTACT } from '@/shared/constants/support';
 
-const sections = [
+export const PRIVACY_POLICY = {
+  title: 'Privacy Policy',
+  intro:
+    'This policy explains what personal data Lab Unity collects, how we use and protect it, and the choices and rights you have.',
+  related: { to: TERMS_PATH, label: 'Terms of Service' },
+};
+
+export const PRIVACY_SECTIONS = [
   {
     id: 'introduction',
     heading: 'Who we are',
@@ -266,14 +272,3 @@ const sections = [
     ),
   },
 ];
-
-const PrivacyPolicyView = () => (
-  <LegalDocument
-    title="Privacy Policy"
-    intro="This policy explains what personal data Lab Unity collects, how we use and protect it, and the choices and rights you have."
-    sections={sections}
-    related={{ to: TERMS_PATH, label: 'Terms of Service' }}
-  />
-);
-
-export default PrivacyPolicyView;

@@ -4,7 +4,7 @@ import { Loader2, ShieldCheck } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { getSafeRedirectPath } from "@/shared/router/utils/safeRedirect";
-import { PRIVACY_PATH, TERMS_PATH } from "@/modules/public/pages/legal/constant/constants";
+import { PRIVACY_PATH, TERMS_PATH } from "@/modules/public/legal";
 import { PasswordField, PasswordStrength } from "@/modules/auth/components/AuthFormFields";
 import SelectField from "../components/SelectField";
 import { COUNTRIES, PROFILE_OPTIONS } from "../constant/constants";

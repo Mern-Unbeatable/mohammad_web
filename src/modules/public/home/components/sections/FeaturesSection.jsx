@@ -1,32 +1,8 @@
-import {
-  User,
-  Shield,
-  FileText,
-  MessageCircle,
-  FlaskConical,
-  Wrench,
-  Briefcase,
-  CalendarDays,
-  GraduationCap,
-  Newspaper,
-} from 'lucide-react';
+import { User, Shield, FileText, MessageCircle } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import { FadeUp, Float } from '@/shared/motion/LandingMotion';
-
-const discoverTags = [
-  { label: 'Research', icon: FlaskConical, color: 'text-pink-light', bg: 'bg-[#FDF0F6]' },
-  { label: 'Equipment', icon: Wrench, color: 'text-[#E67E22]', bg: 'bg-[#FEF3E8]' },
-  { label: 'Jobs', icon: Briefcase, color: 'text-primary', bg: 'bg-[#E8F3FB]' },
-  { label: 'Events', icon: CalendarDays, color: 'text-green-primary', bg: 'bg-green-secondary' },
-  { label: 'Training', icon: GraduationCap, color: 'text-[#6B7280]', bg: 'bg-[#F3F4F6]' },
-  { label: 'Industry News', icon: Newspaper, color: 'text-primary', bg: 'bg-[#E8F3FB]' },
-];
-
-const avatars = [
-  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=160&h=160&fit=crop&crop=face',
-  'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=160&h=160&fit=crop&crop=face',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqy5ShEFSxwHTFMoD48GNhTteRdlLb51azWU0ibObL5g&s=10',
-];
+import DiscoverTag from '../DiscoverTag';
+import { CONNECT_AVATARS as avatars, DISCOVER_TAGS, HOME_SECTIONS } from '../../constant/constants';
 
 const cardTitle =
   'text-[18px] font-bold leading-[1.3] text-deep-blue lg:text-[17px] xl:text-[20px]';
@@ -35,7 +11,7 @@ const cardBody =
 
 const FeaturesSection = () => {
   return (
-    <section id="community" className="scroll-mt-[72px] bg-white py-14 lg:scroll-mt-[76px] lg:py-16 xl:scroll-mt-[84px] xl:py-24">
+    <section id={HOME_SECTIONS.COMMUNITY} className="scroll-mt-[72px] bg-white py-14 lg:scroll-mt-[76px] lg:py-16 xl:scroll-mt-[84px] xl:py-24">
       <Container>
         <FadeUp className="mb-10 grid grid-cols-1 items-start gap-6 lg:mb-12 lg:grid-cols-[minmax(0,1.28fr)_minmax(0,0.72fr)] lg:gap-x-10 lg:gap-y-0 xl:mb-14 xl:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)] xl:gap-x-16">
           <div>
@@ -100,14 +76,8 @@ const FeaturesSection = () => {
             <FadeUp as="article" delay={0.08} className="rounded-xl bg-secondary p-6 lg:p-7 xl:p-10">
                 <h3 className={cardTitle}>Discover More Than Connections</h3>
                 <div className="mt-5 flex flex-wrap gap-2 xl:mt-6 xl:gap-2.5">
-                  {discoverTags.map(({ label, icon: Icon, color, bg }) => (
-                    <span
-                      key={label}
-                      className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[12px] font-medium xl:px-4 xl:py-2.5 xl:text-[13px] ${bg} ${color}`}
-                    >
-                      <Icon className="h-3.5 w-3.5 xl:h-4 xl:w-4" strokeWidth={2.25} />
-                      {label}
-                    </span>
+                  {DISCOVER_TAGS.map((tag) => (
+                    <DiscoverTag key={tag.label} {...tag} />
                   ))}
                 </div>
             </FadeUp>

@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import Container from '@/components/ui/Container';
-import { PRIVACY_PATH, TERMS_PATH } from '@/modules/public/pages/legal/constant/constants';
+import { PRIVACY_PATH, TERMS_PATH } from '@/modules/public/legal';
 
 const linkClass =
   'text-[13px] text-[#475467] transition-colors hover:text-deep-blue lg:text-[14px]';

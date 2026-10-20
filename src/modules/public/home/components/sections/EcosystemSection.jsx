@@ -8,49 +8,13 @@ import {
 } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import { FadeUp, Float, Pulse, RingPulse } from '@/shared/motion/LandingMotion';
-
-const networkNodes = [
-  {
-    role: 'Researcher',
-    label: 'Biochemistry',
-    avatar:
-      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&h=80&fit=crop&crop=face',
-    className: 'left-[8%] top-[8%]',
-  },
-  {
-    role: 'Laboratory',
-    label: 'Nordic Analytics',
-    avatar:
-      'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=80&h=80&fit=crop&crop=face',
-    className: 'right-[8%] top-[8%]',
-  },
-  {
-    role: 'Supplier',
-    label: 'Chromatography',
-    avatar:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqy5ShEFSxwHTFMoD48GNhTteRdlLb51azWU0ibObL5g&s=10',
-    className: 'bottom-[6%] left-1/2 -translate-x-1/2',
-  },
-];
-
-const stats = [
-  { value: '2,500+', label: 'LABORATORIES' },
-  { value: '12K+', label: 'PROFESSIONALS' },
-  { value: '120+', label: 'COUNTRIES' },
-];
-
-const marketplaceItems = [
-  {
-    title: 'Agilent 1260 HPLC System',
-    price: 'Refurbished · €14,500',
-  },
-  {
-    title: 'Benchtop Centrifuge 5810R',
-    price: 'Used · €3,200',
-  },
-];
-
-const knowledgeTags = ['Analytica 2026 · Munich', 'GMP Training · Online'];
+import {
+  HOME_SECTIONS,
+  KNOWLEDGE_TAGS as knowledgeTags,
+  MARKETPLACE_ITEMS as marketplaceItems,
+  NETWORK_NODES as networkNodes,
+  NETWORK_STATS as stats,
+} from '../../constant/constants';
 
 const cardLabel =
   'text-[10px] font-semibold uppercase tracking-[0.12em] xl:text-[11px]';
@@ -64,7 +28,7 @@ const ringClass =
 
 const EcosystemSection = () => {
   return (
-    <section id="marketplace" className="scroll-mt-[72px] bg-[#F7F8FA] py-14 lg:scroll-mt-[76px] lg:py-16 xl:scroll-mt-[84px] xl:py-24">
+    <section id={HOME_SECTIONS.MARKETPLACE} className="scroll-mt-[72px] bg-[#F7F8FA] py-14 lg:scroll-mt-[76px] lg:py-16 xl:scroll-mt-[84px] xl:py-24">
       <Container>
         <FadeUp className="mb-10 lg:mb-12 xl:mb-14">
           <p className={`${cardLabel} text-pink-light`}>One professional ecosystem</p>
