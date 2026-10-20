@@ -2,6 +2,12 @@ import { Link } from 'react-router';
 import { Heart, List, Plus, Search } from 'lucide-react';
 import { categories } from '@/modules/user/data/marketplace';
 import { SEARCH_MAX_LENGTH } from '@/shared/utils/urlFilters';
+import {
+  CREATE_LISTING_PATH,
+  MARKETPLACE_VIEW,
+  MY_LISTINGS_PATH,
+  SAVED_LISTINGS_PATH,
+} from '../../constant/constants';
 
 const actionBtn =
   'inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-[12px] font-semibold transition-colors';
@@ -11,7 +17,7 @@ const MarketplaceToolbar = ({
   onQueryChange,
   category,
   onCategoryChange,
-  activeView = 'browse',
+  activeView = MARKETPLACE_VIEW.BROWSE,
 }) => (
   <div className="space-y-4">
     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -24,9 +30,9 @@ const MarketplaceToolbar = ({
 
       <div className="flex flex-wrap gap-2">
         <Link
-          to="/marketplace/saved"
+          to={SAVED_LISTINGS_PATH}
           className={`${actionBtn} ${
-            activeView === 'saved'
+            activeView === MARKETPLACE_VIEW.SAVED
               ? 'bg-pink-secondary text-pink-light'
               : 'border border-pink-light/30 text-pink-light hover:bg-pink-secondary'
           }`}
@@ -35,9 +41,9 @@ const MarketplaceToolbar = ({
           Saved Listing
         </Link>
         <Link
-          to="/marketplace/my-listings"
+          to={MY_LISTINGS_PATH}
           className={`${actionBtn} ${
-            activeView === 'mine'
+            activeView === MARKETPLACE_VIEW.MINE
               ? 'bg-green-secondary text-green-primary'
               : 'border border-green-primary/30 text-green-primary hover:bg-green-secondary'
           }`}
@@ -46,7 +52,7 @@ const MarketplaceToolbar = ({
           My Listing
         </Link>
         <Link
-          to="/marketplace/create"
+          to={CREATE_LISTING_PATH}
           className={`${actionBtn} bg-primary text-white hover:bg-[#066BB0]`}
         >
           <Plus className="h-3.5 w-3.5" />

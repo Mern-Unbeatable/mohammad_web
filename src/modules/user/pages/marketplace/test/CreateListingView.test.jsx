@@ -6,7 +6,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authReducer } from '@/features/auth';
 import { userMarketplaceReducer } from '@/features/user/marketplace';
 import { userProfileReducer } from '@/features/user/profile';
-import CreateListingView from './CreateListingView';
+import CreateListingView from '../CreateListingView';
 
 const render = () => {
   const store = configureStore({

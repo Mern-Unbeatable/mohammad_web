@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { marketplaceFilters, parseCategoryParam } from './marketplaceUrlFilters';
+import { marketplaceFilters, parseCategoryParam } from '../utils/marketplaceUrlFilters';
 
 const params = (query) => new URLSearchParams(query);
 

@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 import { configureStore } from '@reduxjs/toolkit';
 import { userMarketplaceReducer } from '@/features/user/marketplace';
-import MarketplaceView from './MarketplaceView';
+import MarketplaceView from '../MarketplaceView';
 
 const listing = (id) => ({
   id,

@@ -5,7 +5,7 @@ import { MemoryRouter, Route, Routes } from 'react-router';
 import { configureStore } from '@reduxjs/toolkit';
 import { authReducer } from '@/features/auth';
 import { userMarketplaceReducer } from '@/features/user/marketplace';
-import ListingDetailView from './ListingDetailView';
+import ListingDetailView from '../ListingDetailView';
 
 const ME = 'user-me';
 const OTHER = 'user-other';
