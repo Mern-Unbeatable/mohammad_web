@@ -6,7 +6,7 @@ import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
 import { CardSkeleton } from "@/components/common/Skeleton";
 import GeneralPostCard from "@/components/data-display/GeneralPostCard/GeneralPostCard";
 import { GeneralToolbar } from "@/modules/dash/user/pages/general";
-import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
+import PanelPage from "@/layouts/panel/PanelPage";
 import {
   fetchGeneralPosts,
   removeGeneralPost,

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { useAuth } from '@/shared/auth/useAuth';
+import { useAuth } from '@/modules/auth';
 import { LOGIN_PATH } from '../constant/constants';
 
 /** Logs out and, on success, replaces the current entry with the login page. */

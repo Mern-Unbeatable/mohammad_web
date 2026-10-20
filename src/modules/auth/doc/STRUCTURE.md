@@ -1,11 +1,20 @@
-# Shared auth structure
+# Auth module structure
 
-App-wide session and access control on top of the `auth` Redux slice
-(`@/features/auth`). Import from `@/shared/auth`.
+Everything auth-related in the UI: the guest pages (login, register, password
+reset, support), app-wide session bootstrapping, route guards and the
+`useAuth` hook. State and HTTP live in the Redux layer at `@/features/auth`.
 
 ```
-shared/auth/
-├── index.js                      # public API (see below)
+modules/auth/
+├── index.js                      # public API (see below); pages are not exported
+├── pages/                        # imported directly by store/router/auth.routes.jsx
+│   ├── LoginView.jsx
+│   ├── RegisterView.jsx
+│   ├── ForgotPasswordView.jsx
+│   ├── ResetPasswordView.jsx
+│   └── ContactSupportView.jsx
+├── components/
+│   └── AuthFormFields.jsx        # input / label classes, PasswordField, PasswordStrength
 ├── hooks/
 │   └── useAuth.js                # user, role, homePath + login / register / logout / password actions
 ├── guards/                       # route elements for store/router/*.routes.jsx
@@ -14,18 +23,27 @@ shared/auth/
 │   └── SessionCheckingFallback.jsx
 ├── session/
 │   └── AuthSessionBridge.jsx     # boot: revalidates the token via /auth/me, shows boot screen
-├── utils/
-│   └── accountIdentity.js        # pure: user → { name, initials, avatar }
+├── utils/                        # pure
+│   ├── accountIdentity.js        # user → { name, initials, avatar }
+│   └── passwordRules.js          # password strength checks
 ├── test/
 └── doc/STRUCTURE.md
 ```
 
-## Public API (`@/shared/auth`)
+## Public API (`@/modules/auth`)
 
 | Export | Used by |
 |---|---|
 | `AuthSessionBridge` | `main.jsx` (wraps the app) |
 | `RequireRole` | `store/router/{user,supplier,admin}.routes.jsx` |
 | `GuestOnly` | `store/router/auth.routes.jsx` |
-| `useAuth` | auth pages, public navbar / home, panels, navigation, messenger, role pages |
-| `toAccountIdentity` | `PanelLayout`; `features/dash/admin/profile/profileMappers.js` imports `utils/accountIdentity` directly so the feature layer does not load React components |
+| `useAuth` | public navbar / home, panels, navigation, messenger, role pages |
+| `toAccountIdentity` | `PanelLayout` |
+
+## Rules
+
+- Files inside this module import each other relatively (e.g. pages use
+  `../hooks/useAuth`), never through `@/modules/auth`, to avoid import cycles.
+- `features/dash/admin/profile/profileMappers.js` imports
+  `@/modules/auth/utils/accountIdentity` directly so the Redux layer does not
+  load React components.

@@ -7,10 +7,10 @@ import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import { ListingDetailSkeleton } from "@/components/common/Skeleton";
 import { formatPrice } from "@/modules/dash/user/data/marketplace";
-import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
-import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
+import PanelPage from "@/layouts/panel/PanelPage";
+import PanelBackButton from "@/layouts/panel/PanelBackButton";
 import NotFound from "@/shared/pages/NotFound";
-import { useAuth } from "@/shared/auth/useAuth";
+import { useAuth } from "@/modules/auth";
 import { CHAT_BASE_PATHS } from "@/shared/constants/chat";
 import { StartConversationModal, useStartConversation } from "@/modules/messages";
 import {

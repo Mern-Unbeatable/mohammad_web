@@ -31,7 +31,7 @@ import {
   toDurationTiers,
   defaultDurationId,
 } from '@/features/dash/supplier/advertisements';
-import { panelPrimaryBtn, panelSecondaryBtn } from '@/shared/layout/PanelLayout/panelPageTheme';
+import { panelPrimaryBtn, panelSecondaryBtn } from '@/layouts/panel/panelPageTheme';
 
 const STEPPER_STEPS_INITIAL = [
   { id: 'type', label: 'Type' },

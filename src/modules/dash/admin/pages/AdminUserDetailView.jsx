@@ -8,10 +8,10 @@ import Card from "@/components/ui/Card";
 import ProfilePageContent from "@/components/data-display/ProfilePageContent/ProfilePageContent";
 import { ProfilePageSkeleton } from "@/components/common/Skeleton";
 import { SubscriptionDetailsCard } from "@/modules/dash/user/pages/profile";
-import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
-import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
+import PanelPage from "@/layouts/panel/PanelPage";
+import PanelBackButton from "@/layouts/panel/PanelBackButton";
 import { CHAT_BASE_PATHS, chatPath } from "@/shared/constants/chat";
-import { useAuth } from "@/shared/auth/useAuth";
+import { useAuth } from "@/modules/auth";
 import { StartConversationModal, useStartConversation } from "@/modules/messages";
 import { roleLabel } from "@/shared/constants/roles";
 import {

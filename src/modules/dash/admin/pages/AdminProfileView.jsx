@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import AdminAccountForm from "@/components/forms/AdminAccountForm/AdminAccountForm";
 import { AdminAccountFormSkeleton } from "@/components/common/Skeleton";
-import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
+import PanelPage from "@/layouts/panel/PanelPage";
 import {
   fetchAdminProfile,
   updateAdminProfile,

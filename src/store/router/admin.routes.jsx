@@ -1,4 +1,4 @@
-import RequireRole from '@/shared/auth/RequireRole';
+import { RequireRole } from '@/modules/auth';
 import { USER_ROLES } from '@/shared/constants/roles';
 import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
 import { lazyPage } from '@/shared/routing/lazyPage';

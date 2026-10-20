@@ -76,8 +76,8 @@ flowchart TD
 ## Public API (`index.js`)
 
 Routes lazy-load the `*View.jsx` files directly. `index.js` exposes only
-`BLOG_BASE_PATH` and `blogDetailPath` for code that links to articles. The
-shared supplier/admin blog pages live in `@/shared/pages/blogs` and are separate.
+`BLOG_BASE_PATH` and `blogDetailPath` for code that links to articles.
+Supplier and admin blog pages are separate (`SupplierBlogsView`, `AdminBlogsView`).
 
 ## Where to add things
 

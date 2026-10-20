@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { List, Newspaper, Plus } from "lucide-react";
-import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
-import { panelPrimaryBtn } from "@/shared/layout/PanelLayout/panelPageTheme";
+import PanelPageHeader from "@/layouts/panel/PanelPageHeader";
+import { panelPrimaryBtn } from "@/layouts/panel/panelPageTheme";
 import { generalCategories } from "@/modules/dash/user/data/general";
 import { GENERAL_PATH, GENERAL_VIEW, MY_GENERAL_POSTS_PATH } from "../../constant/constants";
 

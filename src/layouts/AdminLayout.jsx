@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router';
-import PanelLayout from '@/shared/layout/PanelLayout/PanelLayout';
+import PanelLayout from '@/layouts/panel/PanelLayout';
 import { adminNavItems } from '@/modules/dash/admin/config/nav';
 
 const AdminLayout = () => (

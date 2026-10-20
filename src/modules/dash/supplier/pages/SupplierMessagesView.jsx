@@ -1,4 +1,4 @@
-import PanelPage from '@/shared/layout/PanelLayout/PanelPage';
+import PanelPage from '@/layouts/panel/PanelPage';
 import ChatLayout from '@/modules/messages/route/ChatLayout';
 
 const SupplierMessagesView = () => (

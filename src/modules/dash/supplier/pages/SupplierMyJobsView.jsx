@@ -27,8 +27,8 @@ import {
   toJobCardModel,
 } from "@/features/dash/supplier/recruitment";
 import { MY_JOB_STATUS_FILTERS } from "@/shared/constants/jobStatus";
-import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
-import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
+import PanelPage from "@/layouts/panel/PanelPage";
+import PanelPageHeader from "@/layouts/panel/PanelPageHeader";
 import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
 
 const JOB_BASE = "/supplier/recruitment";

@@ -86,7 +86,7 @@ flowchart TD
 Code outside this folder imports from `@/modules/dash/user/pages/general` only:
 
 - `GeneralToolbar` — used by `SupplierGeneralView`, `SupplierMyGeneralPostsView`,
-  `AdminGeneralView` and `shared/pages/general/GeneralPageContent`. Its props
+  and `AdminGeneralView`. Its props
   (`activeView` `'browse' | 'mine'`, `browseHref`, `myPostHref`, `show*`) are part
   of the contract; change them together with those pages.
 

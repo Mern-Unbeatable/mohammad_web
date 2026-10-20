@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 import { ArrowLeft, Loader2, MailCheck } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { useAuth } from '@/shared/auth/useAuth';
+import { useAuth } from '../hooks/useAuth';
 import { inputClass, labelClass } from '@/modules/auth/components/AuthFormFields';
 
 /** Matches the server's per-account cooldown between reset emails. */

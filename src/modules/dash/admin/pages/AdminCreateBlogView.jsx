@@ -4,12 +4,12 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 import { ImagePlus, X } from "lucide-react";
 import Card from "@/components/ui/Card";
-import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
-import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
+import PanelPage from "@/layouts/panel/PanelPage";
+import PanelPageHeader from "@/layouts/panel/PanelPageHeader";
 import {
   panelPrimaryBtn,
   panelSecondaryBtn,
-} from "@/shared/layout/PanelLayout/panelPageTheme";
+} from "@/layouts/panel/panelPageTheme";
 import {
   blogsApi,
   createBlogPost,

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-hot-toast';
-import { useAuth } from '@/shared/auth/useAuth';
+import { useAuth } from '@/modules/auth';
 import {
   addParticipants,
   clearMessagesError,

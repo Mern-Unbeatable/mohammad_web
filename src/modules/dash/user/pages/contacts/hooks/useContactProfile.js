@@ -10,7 +10,7 @@ import {
   toContactProfileModel,
 } from '@/features/dash/user/contacts';
 import { fetchAuthorPosts, toFeedPostModel } from '@/features/dash/user/feed';
-import { useAuth } from '@/shared/auth/useAuth';
+import { useAuth } from '@/modules/auth';
 import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
 import { useStartConversation } from '@/modules/messages';
 

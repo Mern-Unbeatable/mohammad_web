@@ -18,12 +18,12 @@ import {
   fetchSupplierDashboard,
   clearSupplierDashError,
 } from "@/features/dash/supplier/dashboard";
-import { useAuth } from "@/shared/auth/useAuth";
-import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
+import { useAuth } from "@/modules/auth";
+import PanelPage from "@/layouts/panel/PanelPage";
 import {
   panelPageTheme,
   panelPrimaryBtn,
-} from "@/shared/layout/PanelLayout/panelPageTheme";
+} from "@/layouts/panel/panelPageTheme";
 
 const currentYear = new Date().getFullYear();
 const YEAR_OPTIONS = [currentYear, currentYear - 1, currentYear - 2].map(String);

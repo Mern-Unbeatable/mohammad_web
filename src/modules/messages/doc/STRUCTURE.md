@@ -45,9 +45,7 @@ modules/messages/
 | `StartConversationModal`, `useStartConversation` | contacts, marketplace, admin user / listing detail |
 | `RecipientPicker` | feed `SharePostModal` |
 
-Old paths (@/shared/pages/messages, @/shared/layout/ChatLayout/*) are
-re-export shims. `route/` is not named `layout/` because module folders
-must not contain `layout/` directories.
+`route/` is not named `layout/` because app layouts live only in `src/layouts/`.
 
 ## Rules
 

@@ -7,8 +7,8 @@ import DataTable from "@/components/data-display/DataTable/DataTable";
 import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
 import StatCard from "@/components/data-display/StatCard/StatCard";
 import { CardSkeleton } from "@/components/common/Skeleton";
-import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
-import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
+import PanelPage from "@/layouts/panel/PanelPage";
+import PanelPageHeader from "@/layouts/panel/PanelPageHeader";
 import {
   fetchReportsList,
   fetchReportStats,

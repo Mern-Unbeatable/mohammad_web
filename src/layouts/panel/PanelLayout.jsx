@@ -5,8 +5,7 @@ import logo from "@/assets/logo.png";
 import Avatar from "@/components/ui/Avatar";
 import CountBadge from "@/components/ui/CountBadge";
 import { useUnreadMessages } from "@/features/messages";
-import { useAuth } from "@/shared/auth/useAuth";
-import { toAccountIdentity } from "@/shared/auth/accountIdentity";
+import { useAuth, toAccountIdentity } from "@/modules/auth";
 import { roleLabel as formatRoleLabel } from "@/shared/constants/roles";
 import ScrollToTop from "@/shared/routing/ScrollToTop";
 

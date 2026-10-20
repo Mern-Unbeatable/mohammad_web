@@ -8,7 +8,7 @@ import {
   clearSelectedListing,
   toListingDetailModel,
 } from '@/features/dash/user/marketplace';
-import { useAuth } from '@/shared/auth/useAuth';
+import { useAuth } from '@/modules/auth';
 import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
 import { useStartConversation } from '@/modules/messages';
 import { listingGalleryImages, listingViewerState } from '../utils/listingDetail';

@@ -18,8 +18,8 @@ import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
 import { ReportDetailSkeleton } from "@/components/common/Skeleton";
 import ModerationHistoryModal from "@/modules/dash/admin/components/ModerationHistoryModal";
 import ReasonModal from "@/modules/dash/admin/components/ReasonModal";
-import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
-import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
+import PanelPage from "@/layouts/panel/PanelPage";
+import PanelBackButton from "@/layouts/panel/PanelBackButton";
 import {
   fetchReportDetails,
   clearSelectedReport,

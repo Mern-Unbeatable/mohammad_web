@@ -18,8 +18,8 @@ import {
 } from "@/features/dash/supplier/contacts";
 import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
 import CountBadge from "@/components/ui/CountBadge";
-import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
-import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
+import PanelPage from "@/layouts/panel/PanelPage";
+import PanelPageHeader from "@/layouts/panel/PanelPageHeader";
 import { GRID_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
 
 const PROFILE_BASE = "/supplier/contacts";

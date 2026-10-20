@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { useAuth } from '@/shared/auth/useAuth';
+import { useAuth } from '@/modules/auth';
 
 const PanelNotFound = () => {
   const { homePath } = useAuth();

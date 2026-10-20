@@ -1,4 +1,4 @@
-import { toAccountIdentity } from "@/shared/auth/accountIdentity";
+import { toAccountIdentity } from "@/modules/auth/utils/accountIdentity";
 
 /**
  * Map API user → AdminAccountForm shape.
