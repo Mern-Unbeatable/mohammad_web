@@ -7,7 +7,7 @@ reset, support), app-wide session bootstrapping, route guards and the
 ```
 modules/auth/
 ├── index.js                      # public API (see below); pages are not exported
-├── pages/                        # imported directly by store/router/auth.routes.jsx
+├── pages/                        # imported directly by shared/router/auth.routes.jsx
 │   ├── LoginView.jsx
 │   ├── RegisterView.jsx
 │   ├── ForgotPasswordView.jsx
@@ -17,7 +17,7 @@ modules/auth/
 │   └── AuthFormFields.jsx        # input / label classes, PasswordField, PasswordStrength
 ├── hooks/
 │   └── useAuth.js                # user, role, homePath + login / register / logout / password actions
-├── guards/                       # route elements for store/router/*.routes.jsx
+├── guards/                       # route elements for shared/router/*.routes.jsx
 │   ├── RequireRole.jsx           # login redirect, wrong-role redirect (handle.roleRedirect)
 │   ├── GuestOnly.jsx             # sends signed-in users to their home path
 │   └── SessionCheckingFallback.jsx
@@ -35,8 +35,8 @@ modules/auth/
 | Export | Used by |
 |---|---|
 | `AuthSessionBridge` | `main.jsx` (wraps the app) |
-| `RequireRole` | `store/router/{user,supplier,admin}.routes.jsx` |
-| `GuestOnly` | `store/router/auth.routes.jsx` |
+| `RequireRole` | `shared/router/{user,supplier,admin}.routes.jsx` |
+| `GuestOnly` | `shared/router/auth.routes.jsx` |
 | `useAuth` | public navbar / home, panels, navigation, messenger, role pages |
 | `toAccountIdentity` | `PanelLayout` |
 

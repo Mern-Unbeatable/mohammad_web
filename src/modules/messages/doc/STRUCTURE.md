@@ -41,7 +41,7 @@ modules/messages/
 |---|---|
 | `MessagesContainer` | `route/ChatLayout` |
 | `ChatLayout` | role `*MessagesView` / `AdminChatInboxView` |
-| `ChatRedirect`, `LegacyChatRedirect` | `store/router/chat.routes.jsx` |
+| `ChatRedirect`, `LegacyChatRedirect` | `shared/router/chat.routes.jsx` |
 | `StartConversationModal`, `useStartConversation` | contacts, marketplace, admin user / listing detail |
 | `RecipientPicker` | feed `SharePostModal` |
 

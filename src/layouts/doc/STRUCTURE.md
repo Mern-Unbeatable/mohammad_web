@@ -1,6 +1,6 @@
 # Layouts structure
 
-All app layouts: the route layouts used by `store/router/*.routes.jsx` and the
+All app layouts: the route layouts used by `shared/router/*.routes.jsx` and the
 building blocks they (and panel pages) share.
 
 ```
@@ -25,7 +25,7 @@ layouts/
 
 | Thing | Location |
 |---|---|
-| New role / route layout | `layouts/<Name>Layout.jsx`, wired in `store/router/*.routes.jsx` |
+| New role / route layout | `layouts/<Name>Layout.jsx`, wired in `shared/router/*.routes.jsx` |
 | Panel page frame pieces | `layouts/panel/` (import `@/layouts/panel/PanelPage` etc.) |
 | Dashboard navbar / sidebars | `@/components/navigation` |
 | Messenger route element | `@/modules/messages` (`route/ChatLayout`) |
