@@ -16,9 +16,13 @@ supplier/
 │   ├── constant/ test/ doc/
 │   └── index.js                             Public API: AdDetailCard
 │
-├── blogs/pages/
-│   ├── SupplierBlogsView.jsx                Blog hub with search
-│   └── SupplierBlogDetailView.jsx           Article page
+├── blogs/                                   Full feature layout; see blogs/doc/STRUCTURE.md
+│   ├── pages/        SupplierBlogsView, SupplierBlogDetailView
+│   ├── components/   hub/ (BlogsHero, LatestHubSection, CarouselControls, ArchiveSection), detail/ (BlogArticle, PopularPosts), layout/ (BlogDetailPage)
+│   ├── hooks/        useBlogsHub, useHubCarousel, useBlogDetail
+│   ├── utils/        blogQueries, blogCards
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: BLOG_BASE_PATH, blogDetailPath
 │
 ├── contacts/pages/
 │   ├── SupplierContactsView.jsx             Directory with filters and pagination
