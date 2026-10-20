@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router';
 import { AlertCircle, Eye, EyeOff, Loader2, Mail } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../hooks/useAuth';
-import { getSafeRedirectPath } from '@/shared/routing/safeRedirect';
+import { getSafeRedirectPath } from '@/shared/router/utils/safeRedirect';
 import { inputClass, labelClass } from '@/modules/auth/components/AuthFormFields';
 import { CONTACT_SUPPORT_PATH } from '@/shared/constants/support';
 

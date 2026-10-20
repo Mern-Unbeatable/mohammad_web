@@ -2,7 +2,7 @@ import { Navigate } from 'react-router';
 import { RequireRole } from '@/shared/guards';
 import { USER_ROLES } from '@/shared/constants/roles';
 import { CHAT_BASE_PATHS } from '@/features/messages/chatPaths';
-import { lazyPage } from '@/shared/routing/lazyPage';
+import { lazyPage } from '@/shared/router/utils/lazyPage';
 import UserLayout from '@/layouts/UserLayout';
 import { buildChatRoute, legacyChatRoute } from './chat.routes';
 

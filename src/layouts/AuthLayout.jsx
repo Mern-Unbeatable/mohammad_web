@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation } from 'react-router';
 import logo from '@/assets/logo.png';
 import Container from '@/components/ui/Container';
-import ScrollToTop from '@/shared/routing/ScrollToTop';
+import ScrollToTop from '@/shared/router/components/ScrollToTop';
 
 const AuthLayout = () => {
   const { pathname } = useLocation();

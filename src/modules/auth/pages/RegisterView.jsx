@@ -4,7 +4,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../hooks/useAuth";
-import { getSafeRedirectPath } from "@/shared/routing/safeRedirect";
+import { getSafeRedirectPath } from "@/shared/router/utils/safeRedirect";
 import { PRIVACY_PATH, TERMS_PATH } from "@/modules/public/pages/legal/constant/constants";
 import {
   inputClass,

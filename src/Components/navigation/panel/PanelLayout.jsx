@@ -7,7 +7,7 @@ import CountBadge from "@/components/ui/CountBadge";
 import { useUnreadMessages } from "@/features/messages";
 import { useAuth, toAccountIdentity } from "@/modules/auth";
 import { roleLabel as formatRoleLabel } from "@/shared/constants/roles";
-import ScrollToTop from "@/shared/routing/ScrollToTop";
+import ScrollToTop from "@/shared/router/components/ScrollToTop";
 
 const SIDEBAR_WIDTH = 260;
 

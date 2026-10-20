@@ -8,7 +8,7 @@ State and HTTP live in the Redux layer at `@/features/auth`; route guards
 ```
 modules/auth/
 ├── index.js                      # public API (see below); pages are not exported
-├── pages/                        # imported directly by shared/router/auth.routes.jsx
+├── pages/                        # imported directly by shared/router/routes/auth.routes.jsx
 │   ├── LoginView.jsx
 │   ├── RegisterView.jsx
 │   ├── ForgotPasswordView.jsx

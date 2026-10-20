@@ -3,8 +3,8 @@ import { matchRoutes } from "react-router";
 import TermsOfServiceView from "@/modules/public/pages/legal/TermsOfServiceView";
 import PrivacyPolicyView from "@/modules/public/pages/legal/PrivacyPolicyView";
 import { PRIVACY_PATH, TERMS_PATH } from "@/modules/public/pages/legal/constant/constants";
-import { publicRoutes } from "../public.routes";
-import { authRoutes } from "../auth.routes";
+import { publicRoutes } from "../routes/public.routes";
+import { authRoutes } from "../routes/auth.routes";
 
 const routes = [publicRoutes, ...authRoutes];
 
