@@ -33,12 +33,19 @@ describe('attachments utils', () => {
     expect(patchAttachment(undefined, 'x', null)).toEqual([]);
   });
 
-  it('keeps only uploaded attachments in API shape', () => {
+  it('keeps only uploaded attachments, sending the private key and name', () => {
     expect(
       readyAttachments([
-        { localId: '1', url: 'u', name: 'n', mimeType: 'm', size: 1, uploading: false },
+        { localId: '1', key: 'u1/1-abc.pdf', name: 'n', mimeType: 'm', size: 1, uploading: false },
         { localId: '2', uploading: true },
+        { localId: '3', key: 'u1/2-def.pdf', name: 'still going', uploading: true },
       ]),
-    ).toEqual([{ url: 'u', name: 'n', mimeType: 'm', size: 1 }]);
+    ).toEqual([{ key: 'u1/1-abc.pdf', name: 'n' }]);
+  });
+
+  it('still sends legacy url-based attachments by reference only', () => {
+    expect(
+      readyAttachments([{ localId: '1', url: 'u', name: 'n', mimeType: 'm', size: 1 }]),
+    ).toEqual([{ url: 'u', name: 'n' }]);
   });
 });

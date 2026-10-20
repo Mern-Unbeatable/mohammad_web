@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { toast } from "react-hot-toast";
 import {
+  ArrowDown,
   ArrowLeft,
   Check,
   Copy,
@@ -27,16 +28,21 @@ import {
   continueList,
   formatShortcutFor,
 } from "@/features/messages/composerFormat";
+import { isImageAttachment } from "@/features/messages/messagesMappers";
 import ChatListingCard from "./ChatListingCard";
 import EditMessageModal from "@/components/modals/messages/EditMessageModal";
 import FormatToolbar, { ComposerToolButton } from "./FormatToolbar";
 import FormattedMessage from "./FormattedMessage";
+import {
+  arrivalAnnouncement,
+  isNearBottom,
+  newMessagesLabel,
+  threadScrollAction,
+} from "./threadScroll";
 
+/** Mirrors the server's accepted types (content is verified server-side). */
 const FILE_ACCEPT =
-  "image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,video/mp4,video/quicktime";
-
-const isImage = (attachment) =>
-  String(attachment?.mimeType || "").startsWith("image/");
+  "image/jpeg,image/png,image/gif,image/webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,video/mp4,video/quicktime";
 
 const formatSize = (bytes) => {
   if (!Number.isFinite(bytes) || bytes <= 0) return "";
@@ -155,7 +161,7 @@ const AttachmentList = ({ attachments, isMe }) => {
   return (
     <div className="mt-1 flex flex-col gap-1.5">
       {attachments.map((attachment) =>
-        isImage(attachment) ? (
+        isImageAttachment(attachment) ? (
           <a
             key={attachment.url}
             href={attachment.url}
@@ -195,7 +201,14 @@ const AttachmentList = ({ attachments, isMe }) => {
 };
 
 const messageActionClass =
-  "rounded-md p-1 text-[#98A2B3] transition-colors hover:bg-[#F2F4F7]";
+  "rounded-md p-1 text-[#98A2B3] transition-colors hover:bg-[#F2F4F7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+
+/**
+ * Hover/focus toolbar beside a bubble. It stays in the tab order (opacity,
+ * not display:none) and appears when any of its buttons has keyboard focus.
+ */
+const messageActionsRevealClass =
+  "flex items-center gap-0.5 opacity-0 pointer-events-none transition-opacity group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 [@media(hover:none)]:pointer-events-auto [@media(hover:none)]:opacity-100";
 
 /** Copies the message text as written (formatting marks included, so it re-pastes formatted). */
 const CopyMessageButton = ({ text }) => {
@@ -276,7 +289,7 @@ const MessageBubble = ({
           ) : null}
           <AttachmentList attachments={message.attachments} isMe />
           {text || onDeleteMessage ? (
-            <div className="absolute right-full top-1 mr-1 hidden items-center gap-0.5 group-hover:flex [@media(hover:none)]:flex">
+            <div className={`absolute right-full top-1 mr-1 ${messageActionsRevealClass}`}>
               {text ? <CopyMessageButton text={text} /> : null}
               {onStartEdit && text ? (
                 <button
@@ -295,7 +308,7 @@ const MessageBubble = ({
                   onClick={() => onDeleteMessage(message.id)}
                   aria-label="Delete message"
                   title="Delete"
-                  className="rounded-md p-1 text-[#98A2B3] transition-colors hover:bg-[#FEF3F2] hover:text-[#CC1016]"
+                  className={`${messageActionClass} hover:bg-[#FEF3F2] hover:text-[#CC1016]`}
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                 </button>
@@ -330,7 +343,7 @@ const MessageBubble = ({
             <div className="space-y-1.5 rounded-2xl rounded-bl-sm bg-[#E8ECF0] px-4 py-2.5 text-[13px] leading-relaxed break-words text-[#334155]">
               <FormattedMessage text={text} tone="them" />
             </div>
-            <div className="absolute left-full top-1 ml-1 hidden items-center group-hover:flex [@media(hover:none)]:flex">
+            <div className={`absolute left-full top-1 ml-1 ${messageActionsRevealClass}`}>
               <CopyMessageButton text={text} />
             </div>
           </div>
@@ -378,36 +391,92 @@ const SystemNotice = ({ message, getProfileHref }) => (
   </div>
 );
 
-/** Keeps the thread pinned to the newest message, and stable when older ones load. */
+export const NewMessagesButton = ({ count, onClick }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-deep-blue px-3.5 py-1.5 text-[12px] font-medium text-white shadow-md transition-colors hover:bg-deep-blue/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+  >
+    <ArrowDown className="h-3.5 w-3.5" aria-hidden="true" />
+    {newMessagesLabel(count)}
+  </button>
+);
+
+/**
+ * Follows the newest message only while the reader is at the bottom (or just
+ * sent something); otherwise counts unseen arrivals for the "new messages"
+ * button. Keeps the viewport still when older messages are prepended.
+ */
+const threadSnapshot = (messages, chatId) => ({
+  chatId,
+  firstId: messages[0]?.id ?? null,
+  lastId: messages[messages.length - 1]?.id ?? null,
+  count: messages.length,
+});
+
+const sameSnapshot = (a, b) =>
+  a.chatId === b.chatId && a.firstId === b.firstId && a.lastId === b.lastId && a.count === b.count;
+
 const useThreadScroll = (messages, chatId) => {
   const containerRef = useRef(null);
-  const snapshot = useRef({
-    chatId: null,
-    firstId: null,
-    lastId: null,
-    height: 0,
+  const heightRef = useRef(0);
+  const [nearBottom, setNearBottom] = useState(true);
+  const [thread, setThread] = useState({
+    seen: threadSnapshot([], null),
+    action: null,
+    unseen: 0,
+    announcement: "",
   });
 
+  const current = threadSnapshot(messages, chatId);
+  if (!sameSnapshot(thread.seen, current)) {
+    const action = threadScrollAction(thread.seen, messages, chatId, { wasNearBottom: nearBottom });
+    const spoken = arrivalAnnouncement(thread.seen, messages, chatId);
+    const switched = thread.seen.chatId !== chatId;
+    setThread({
+      seen: current,
+      action,
+      unseen: action.type === "bottom" ? 0 : thread.unseen + action.unseen,
+      announcement: spoken || (switched ? "" : thread.announcement),
+    });
+    if (action.type === "bottom") setNearBottom(true);
+  }
+
+  const { action } = thread;
   useLayoutEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const firstId = messages[0]?.id ?? null;
-    const lastId = messages[messages.length - 1]?.id ?? null;
-    const prev = snapshot.current;
+    if (action?.type === "keep-older") el.scrollTop += el.scrollHeight - heightRef.current;
+    else if (action?.type === "bottom") el.scrollTop = el.scrollHeight;
+    heightRef.current = el.scrollHeight;
+  }, [action]);
 
-    const olderPrepended =
-      prev.chatId === chatId &&
-      prev.lastId === lastId &&
-      prev.firstId !== firstId;
-    if (olderPrepended) {
-      el.scrollTop += el.scrollHeight - prev.height;
-    } else if (prev.chatId !== chatId || prev.lastId !== lastId) {
-      el.scrollTop = el.scrollHeight;
-    }
-    snapshot.current = { chatId, firstId, lastId, height: el.scrollHeight };
-  }, [messages, chatId]);
+  const clearUnseen = () =>
+    setThread((state) => (state.unseen ? { ...state, unseen: 0 } : state));
 
-  return containerRef;
+  const onScroll = () => {
+    const el = containerRef.current;
+    if (!el) return;
+    const near = isNearBottom(el);
+    setNearBottom(near);
+    if (near) clearUnseen();
+  };
+
+  const jumpToLatest = () => {
+    const el = containerRef.current;
+    if (!el) return;
+    el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+    setNearBottom(true);
+    clearUnseen();
+  };
+
+  return {
+    containerRef,
+    onScroll,
+    unseen: thread.unseen,
+    jumpToLatest,
+    announcement: thread.announcement,
+  };
 };
 
 /**
@@ -478,6 +547,8 @@ const Messenger = ({
   onEditMessage,
   onOpenInfo,
   loading = false,
+  listError = null,
+  onRetryList,
   threadLoading = false,
   hasMoreMessages = false,
   olderLoading = false,
@@ -501,7 +572,13 @@ const Messenger = ({
   const displayChat = activeChat || null;
   const isMobileChat = mobilePanel === "chat";
   const messages = displayChat?.messages || [];
-  const threadRef = useThreadScroll(messages, displayChat?.id ?? activeChatId);
+  const {
+    containerRef: threadRef,
+    onScroll: onThreadScroll,
+    unseen: unseenCount,
+    jumpToLatest,
+    announcement,
+  } = useThreadScroll(messages, displayChat?.id ?? activeChatId);
   const fileInputRef = useRef(null);
   const imageInputRef = useRef(null);
   const composerRef = useRef(null);
@@ -569,7 +646,7 @@ const Messenger = ({
     !uploading &&
     !listingLoading &&
     (draft.trim().length > 0 ||
-      attachments.some((a) => a.url) ||
+      attachments.some((a) => a.key || a.url) ||
       Boolean(pendingListing));
 
   const handleFiles = (event) => {
@@ -648,6 +725,19 @@ const Messenger = ({
         <div className="min-h-0 flex-1 overflow-y-auto scrollbar-thin xl:divide-y xl:divide-[#E4E7EC]">
           {loading && chats.length === 0 ? (
             <ConversationListSkeleton />
+          ) : listError && chats.length === 0 ? (
+            <div role="alert" className="px-4 py-10 text-center">
+              <p className="text-[13px] text-[#B42318]">{listError}</p>
+              {onRetryList ? (
+                <button
+                  type="button"
+                  onClick={onRetryList}
+                  className="mt-3 inline-flex items-center justify-center rounded-lg border border-[#E4E7EC] px-4 py-2 text-[12px] font-semibold text-[#475467] hover:bg-[#F9FAFB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  Try again
+                </button>
+              ) : null}
+            </div>
           ) : chats.length > 0 ? (
             <>
               {chats.map((chat) => (
@@ -742,9 +832,17 @@ const Messenger = ({
               </div>
             </div>
 
+            <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+              {announcement}
+            </p>
             <div
               ref={threadRef}
-              className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain bg-white px-3 py-4 scrollbar-hide sm:px-6 sm:py-5"
+              onScroll={onThreadScroll}
+              role="log"
+              aria-label={`Messages with ${displayChat.name}`}
+              aria-live="off"
+              tabIndex={0}
+              className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain bg-white px-3 py-4 scrollbar-hide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 sm:px-6 sm:py-5"
             >
               {hasMoreMessages ? (
                 <div className="flex justify-center">
@@ -808,6 +906,12 @@ const Messenger = ({
                   );
                 })
               )}
+
+              {unseenCount > 0 ? (
+                <div className="pointer-events-none sticky bottom-0 flex justify-center">
+                  <NewMessagesButton count={unseenCount} onClick={jumpToLatest} />
+                </div>
+              ) : null}
             </div>
 
             <div className="shrink-0 border-t border-[#E4E7EC]/70 bg-[#F4F6F9]/80 px-3 pb-3 pt-2.5 backdrop-blur-md sm:px-5 sm:py-4">
@@ -827,7 +931,7 @@ const Messenger = ({
                     >
                       {attachment.uploading ? (
                         <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin" />
-                      ) : isImage(attachment) ? (
+                      ) : isImageAttachment(attachment) ? (
                         <ImageIcon className="h-3.5 w-3.5 shrink-0" />
                       ) : (
                         <FileText className="h-3.5 w-3.5 shrink-0" />

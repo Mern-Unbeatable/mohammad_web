@@ -10,7 +10,8 @@ import {
   moderateDeleteMessage,
   selectModerationConversation,
 } from "@/features/messages/moderation";
-import { hasMorePages, nextPage } from "../utils/moderation";
+import { nextConversationsParams, olderMessagesParams } from "@/features/messages";
+import { hasMorePages } from "../utils/moderation";
 import { SEARCH_DEBOUNCE_MS } from "../constant/constants";
 
 /**
@@ -24,6 +25,7 @@ export const useChatModeration = () => {
     meta,
     listLoading,
     loadingMore,
+    listError,
     selectedId,
     selected,
     messages,
@@ -64,10 +66,12 @@ export const useChatModeration = () => {
   const closeConversation = () => dispatch(selectModerationConversation(null));
 
   const loadMoreConversations = () =>
-    dispatch(fetchModerationConversations({ page: nextPage(meta), search, type }));
+    dispatch(fetchModerationConversations({ ...nextConversationsParams(meta), search, type }));
 
   const loadOlderMessages = () =>
-    dispatch(fetchModerationThread({ conversationId: selectedId, before: messages[0]?.time }));
+    dispatch(
+      fetchModerationThread({ conversationId: selectedId, ...olderMessagesParams(messages) }),
+    );
 
   const deleteMessage = async () => {
     const messageId = pendingMessageId;
@@ -93,6 +97,8 @@ export const useChatModeration = () => {
       total: meta?.total ?? 0,
       conversations,
       loading: listLoading && conversations.length === 0,
+      error: listError,
+      retry: () => dispatch(fetchModerationConversations({ page: 1, search, type })),
       selectedId,
       hasMore: hasMorePages(meta),
       loadingMore,

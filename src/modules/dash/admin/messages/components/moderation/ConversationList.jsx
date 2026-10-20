@@ -21,6 +21,19 @@ const ConversationList = ({ list }) => (
     <div className="min-h-0 flex-1 overflow-y-auto">
       {list.loading ? (
         <Spinner />
+      ) : list.error && list.conversations.length === 0 ? (
+        <div role="alert" className="px-4 py-10 text-center">
+          <p className="text-[13px] text-[#B42318]">{list.error}</p>
+          {list.retry ? (
+            <button
+              type="button"
+              onClick={list.retry}
+              className="mt-3 inline-flex items-center justify-center rounded-lg border border-[#E4E7EC] px-4 py-2 text-[12px] font-semibold text-[#475467] hover:bg-[#F9FAFB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              Try again
+            </button>
+          ) : null}
+        </div>
       ) : list.conversations.length === 0 ? (
         <p className="px-4 py-10 text-center text-[13px] text-[#64748B]">No conversations found.</p>
       ) : (

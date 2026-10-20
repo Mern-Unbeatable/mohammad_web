@@ -56,7 +56,8 @@ export const API_ENDPOINTS = {
     PARTICIPANT: (conversationId, userId) =>
       `/messages/${conversationId}/participants/${userId}`,
     LEAVE: (conversationId) => `/messages/${conversationId}/leave`,
-    UPLOAD: "/uploads",
+    /** Private chat upload; returns a key, files are only reachable through signed links. */
+    UPLOAD: "/messages/attachments",
   },
 
   // ═══════════════════════════════════════════════════════════════════════

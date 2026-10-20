@@ -25,10 +25,10 @@ export const fetchModerationConversation = createAsyncThunk(
 
 export const fetchModerationThread = createAsyncThunk(
   "adminMessages/fetchThread",
-  withError("Failed to load messages", async ({ conversationId, before }) => {
+  withError("Failed to load messages", async ({ conversationId, before, beforeId }) => {
     const result = await adminMessagesApi.getThread(
       conversationId,
-      before ? { before } : {},
+      before ? { before, ...(beforeId ? { beforeId } : {}) } : {},
     );
     return { conversationId, ...result };
   }),

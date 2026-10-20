@@ -44,23 +44,42 @@ function createSocket() {
     reconnectionDelayMax: 10000,
   });
 
-  instance.on("connect", () => {
-    authRetries = 0;
-  });
-
-  // Middleware rejections are not retried by socket.io; an authenticated
-  // HTTP call lets the axios interceptor refresh the token first.
-  instance.on("connect_error", async (error) => {
-    if (error?.message !== "UNAUTHENTICATED" || authRetries >= MAX_AUTH_RETRIES) {
-      return;
-    }
-    authRetries += 1;
+  /** An authenticated HTTP call lets the axios interceptor refresh the token, then reconnect. */
+  const reconnectWithFreshToken = async () => {
     try {
       await crudService.get(API_ENDPOINTS.AUTH.ME);
     } catch {
       return;
     }
     if (socket === instance && !instance.connected) instance.connect();
+  };
+
+  let sessionExpired = false;
+
+  instance.on("connect", () => {
+    authRetries = 0;
+    sessionExpired = false;
+  });
+
+  // Middleware rejections are not retried by socket.io.
+  instance.on("connect_error", (error) => {
+    if (error?.message !== "UNAUTHENTICATED" || authRetries >= MAX_AUTH_RETRIES) {
+      return;
+    }
+    authRetries += 1;
+    reconnectWithFreshToken();
+  });
+
+  // The server ends sockets whose access token expired ("session:expired")
+  // or whose account was suspended ("session:revoked"). socket.io does not
+  // reconnect after a server-side disconnect, so only expiry resumes.
+  instance.on("session:expired", () => {
+    sessionExpired = true;
+  });
+  instance.on("disconnect", (reason) => {
+    if (reason !== "io server disconnect" || !sessionExpired) return;
+    sessionExpired = false;
+    reconnectWithFreshToken();
   });
 
   return instance;

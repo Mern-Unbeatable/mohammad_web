@@ -133,8 +133,8 @@ export async function uploadAttachment(file, onProgress) {
     await crudService.upload(E.UPLOAD, formData, onProgress),
   );
   return {
-    url: uploaded.url,
-    name: uploaded.originalName || file.name,
+    key: uploaded.key,
+    name: uploaded.name || file.name,
     mimeType: uploaded.mimeType || file.type,
     size: uploaded.size ?? file.size,
   };

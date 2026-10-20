@@ -10,8 +10,14 @@ import {
 const initialState = {
   conversations: [],
   meta: { page: 1, pageSize: 20, total: 0, totalPages: 1 },
+  /** Type filter ("" = all) the loaded list belongs to. */
+  listType: "",
   listLoading: false,
   loadingMore: false,
+  /** Latest list request; responses from earlier ones are stale. */
+  listRequestId: null,
+  /** Why the first page failed to load (shown with a retry). */
+  listError: null,
   selectedId: null,
   selected: null,
   messages: [],
@@ -42,24 +48,42 @@ const adminMessagesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchModerationConversations.pending, (state, action) => {
+        const { page = 1, type = "" } = action.meta.arg || {};
         state.error = null;
-        if ((action.meta.arg?.page ?? 1) > 1) state.loadingMore = true;
+        state.listError = null;
+        state.listRequestId = action.meta.requestId;
+        if (type !== state.listType) {
+          // Another filter: never show (or page) the previous filter's rows as this one's.
+          state.listType = type;
+          state.conversations = [];
+          state.meta = initialState.meta;
+          state.loadingMore = false;
+        }
+        if (page > 1) state.loadingMore = true;
         else state.listLoading = true;
       })
       .addCase(fetchModerationConversations.fulfilled, (state, action) => {
+        const latest = state.listRequestId;
+        if (latest && action.meta.requestId !== latest) return;
         const page = action.meta.arg?.page ?? 1;
         state.listLoading = false;
         state.loadingMore = false;
-        state.conversations =
-          page > 1
-            ? [...state.conversations, ...action.payload.data]
-            : action.payload.data;
+        if (page > 1) {
+          const seen = new Set(state.conversations.map((c) => c.id));
+          state.conversations.push(...action.payload.data.filter((c) => !seen.has(c.id)));
+        } else {
+          state.conversations = action.payload.data;
+        }
         state.meta = action.payload.meta;
       })
       .addCase(fetchModerationConversations.rejected, (state, action) => {
+        const latest = state.listRequestId;
+        if (latest && action.meta.requestId !== latest) return;
+        const message = action.payload || action.error?.message || "Something went wrong";
         state.listLoading = false;
         state.loadingMore = false;
-        state.error = action.payload;
+        if ((action.meta.arg?.page ?? 1) > 1) state.error = message;
+        else state.listError = message;
       })
 
       .addCase(fetchModerationConversation.fulfilled, (state, action) => {

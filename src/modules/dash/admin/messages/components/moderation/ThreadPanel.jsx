@@ -24,7 +24,13 @@ const ThreadPanel = ({ open, thread }) => (
           onDelete={thread.requestDeleteConversation}
         />
 
-        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4 sm:px-5">
+        <div
+          role="log"
+          aria-label={`Messages in ${thread.selected.name}`}
+          aria-live="off"
+          tabIndex={0}
+          className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 sm:px-5"
+        >
           {thread.hasOlder ? (
             <div className="flex justify-center">
               <button

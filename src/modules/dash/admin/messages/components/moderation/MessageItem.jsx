@@ -55,8 +55,9 @@ const MessageItem = ({ message, onRemove }) => {
       <button
         type="button"
         onClick={() => onRemove(message.id)}
-        aria-label="Remove message"
-        className="rounded-md p-1.5 text-[#98A2B3] opacity-0 hover:bg-[#FEF3F2] hover:text-[#CC1016] group-hover:opacity-100 [@media(hover:none)]:opacity-100"
+        aria-label={message.sender ? `Remove message from ${message.sender}` : "Remove message"}
+        title="Remove message"
+        className="rounded-md p-1.5 text-[#98A2B3] opacity-0 transition-opacity hover:bg-[#FEF3F2] hover:text-[#CC1016] focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CC1016]/40 group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
       >
         <Trash2 className="h-4 w-4" />
       </button>
