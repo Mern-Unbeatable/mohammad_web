@@ -865,9 +865,9 @@ export const COMPONENT_DOCS = [
     name: 'NotificationsPanel',
     category: 'pages',
     summary: 'User notifications list card with mark-read actions. Wrap in Container or PanelPage per layout.',
-    path: 'src/modules/user/pages/notifications/components/list/NotificationsPanel.jsx',
+    path: 'src/modules/dash/user/pages/notifications/components/list/NotificationsPanel.jsx',
     importExample:
-      "import { NotificationsPanel } from '@/modules/user/pages/notifications'\n\n<PanelPage className=\"max-w-[760px]\">\n  <NotificationsPanel />\n</PanelPage>",
+      "import { NotificationsPanel } from '@/modules/dash/user/pages/notifications'\n\n<PanelPage className=\"max-w-[760px]\">\n  <NotificationsPanel />\n</PanelPage>",
     props: [],
     requiredExample: `<NotificationsPanel />`,
     optionalExample: `<Container className="max-w-[760px]">\n  <NotificationsPanel />\n</Container>`,

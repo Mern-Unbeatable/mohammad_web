@@ -1,5 +1,5 @@
 import { Search } from "lucide-react";
-import { SearchResultsList, SearchTabs } from "@/modules/user/pages/search";
+import { SearchResultsList, SearchTabs } from "@/modules/dash/user/pages/search";
 import { ALL_TAB_GROUP_LIMIT } from "../../constant/constants";
 
 const SearchDropdown = ({

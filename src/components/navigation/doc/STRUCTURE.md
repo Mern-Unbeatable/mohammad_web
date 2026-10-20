@@ -3,7 +3,7 @@
 User dashboard chrome: top navbar (search, nav links, hover previews,
 profile menu, mobile drawer), mobile bottom nav, and the feed's left/right
 sidebars. Rendered by `layouts/UserLayout` (navbar + bottom nav) and
-`modules/user/pages/feed/FeedView` (sidebars).
+`modules/dash/user/pages/feed/FeedView` (sidebars).
 
 ```
 components/navigation/
@@ -43,7 +43,7 @@ components/navigation/
 | Export | Used by |
 |---|---|
 | `DashboardNavbar`, `MobileBottomNav` | `layouts/UserLayout` |
-| `LeftSidebar`, `RightSidebar` | `modules/user/pages/feed/FeedView` |
+| `LeftSidebar`, `RightSidebar` | `modules/dash/user/pages/feed/FeedView` |
 
 ## Rules
 

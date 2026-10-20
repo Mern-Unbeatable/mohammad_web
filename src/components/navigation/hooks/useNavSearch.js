@@ -7,7 +7,7 @@ import {
   SEARCH_PATH,
   buildSearchPath,
   toSearchGroups,
-} from '@/modules/user/pages/search';
+} from '@/modules/dash/user/pages/search';
 import {
   clearSearchError,
   clearSearchResults,

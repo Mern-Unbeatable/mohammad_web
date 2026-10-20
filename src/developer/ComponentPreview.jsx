@@ -29,8 +29,8 @@ import ProfilePageContent from "@/components/data-display/ProfilePageContent/Pro
 import ContactProfilePageContent from "@/components/data-display/ContactProfilePageContent/ContactProfilePageContent";
 import BlogsPageContent from "@/shared/pages/blogs/BlogsPageContent";
 import BlogDetailPageContent from "@/shared/pages/blogs/BlogDetailPageContent";
-import { NotificationsPanel } from "@/modules/user/pages/notifications";
-import { SubscriptionDetailsCard } from "@/modules/user/pages/profile";
+import { NotificationsPanel } from "@/modules/dash/user/pages/notifications";
+import { SubscriptionDetailsCard } from "@/modules/dash/user/pages/profile";
 import {
   DEMO_ADMIN_PASSWORD,
   DEMO_ADMIN_PROFILE,
@@ -57,9 +57,9 @@ import {
   groupChats,
   feedPosts,
 } from "@/data/demoData";
-import { generalPosts } from "@/modules/user/data/general";
-import { featuredArticle } from "@/modules/user/data/blogs";
-import { profileCountries } from "@/modules/user/data/subscription";
+import { generalPosts } from "@/modules/dash/user/data/general";
+import { featuredArticle } from "@/modules/dash/user/data/blogs";
+import { profileCountries } from "@/modules/dash/user/data/subscription";
 
 function AvatarPreview({ variantId }) {
   if (variantId === "initials") {

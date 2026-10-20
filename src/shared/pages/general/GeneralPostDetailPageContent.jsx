@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router';
 import { Calendar, ChevronLeft, MapPin, Share2 } from 'lucide-react';
-import { getGeneralPostById } from '@/modules/user/data/general';
+import { getGeneralPostById } from '@/modules/dash/user/data/general';
 import NotFound from '@/shared/pages/NotFound';
 
 const typeStyles = {

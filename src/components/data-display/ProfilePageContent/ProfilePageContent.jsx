@@ -3,7 +3,7 @@ import ProfileHero, {
   ProfessionalInfoCard,
 } from "@/components/data-display/ProfileHero/ProfileHero";
 import ActivitySection from "@/components/data-display/ActivitySection/ActivitySection";
-import { currentUser } from "@/modules/user/data/dashboard";
+import { currentUser } from "@/modules/dash/user/data/dashboard";
 
 /**
  * Composed own-profile page content: hero, info cards, and activity feed.

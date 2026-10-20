@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router';
 import Container from '@/components/ui/Container';
-import { featuredArticle, getArticleBySlug, popularPosts } from '@/modules/user/data/blogs';
+import { featuredArticle, getArticleBySlug, popularPosts } from '@/modules/dash/user/data/blogs';
 import NotFound from '@/shared/pages/NotFound';
 
 const BlogDetailPageContent = ({ blogBasePath = '/blogs', slug: slugOverride }) => {

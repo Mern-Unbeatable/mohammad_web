@@ -10,12 +10,12 @@ import {
   Star,
   Users,
 } from 'lucide-react';
-import { contacts } from '@/modules/user/data/contacts';
-import { jobs } from '@/modules/user/data/recruitment';
-import { generalPosts } from '@/modules/user/data/general';
-import { listings } from '@/modules/user/data/marketplace';
-import { latestArticles } from '@/modules/user/data/blogs';
-import { currentUser } from '@/modules/user/data/dashboard';
+import { contacts } from '@/modules/dash/user/data/contacts';
+import { jobs } from '@/modules/dash/user/data/recruitment';
+import { generalPosts } from '@/modules/dash/user/data/general';
+import { listings } from '@/modules/dash/user/data/marketplace';
+import { latestArticles } from '@/modules/dash/user/data/blogs';
+import { currentUser } from '@/modules/dash/user/data/dashboard';
 
 export const DEMO_CONTACT = contacts[0];
 export const DEMO_CONTACT_PENDING = { ...contacts[1], pending: true };
@@ -312,5 +312,5 @@ export const DEMO_TABLE_MENU_ACTIONS = [
   { id: 'delete', label: 'Delete', variant: 'danger', onClick: () => {} },
 ];
 
-export { directChats, groupChats } from '@/modules/user/data/messages';
-export { feedPosts } from '@/modules/user/data/dashboard';
+export { directChats, groupChats } from '@/modules/dash/user/data/messages';
+export { feedPosts } from '@/modules/dash/user/data/dashboard';

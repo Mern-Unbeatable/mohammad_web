@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
 import Pagination from '@/components/common/Pagination/Pagination';
 import GeneralPostCard from '@/components/data-display/GeneralPostCard/GeneralPostCard';
-import { GeneralToolbar } from '@/modules/user/pages/general';
+import { GeneralToolbar } from '@/modules/dash/user/pages/general';
 import CreateGeneralPostModal from '@/shared/pages/general/CreateGeneralPostModal';
-import { filterGeneralPosts, generalPosts, getMyGeneralPosts } from '@/modules/user/data/general';
+import { filterGeneralPosts, generalPosts, getMyGeneralPosts } from '@/modules/dash/user/data/general';
 import { GRID_PAGE_SIZE, usePaginatedList } from '@/shared/hooks/usePaginatedList';
 
 const GeneralPageContent = ({

@@ -4,7 +4,7 @@ import Pagination from '@/components/common/Pagination/Pagination';
 import Container from '@/components/ui/Container';
 import LatestHubCard from '@/components/data-display/BlogCard/LatestHubCard';
 import BlogGridCard from '@/components/data-display/BlogCard/BlogGridCard';
-import { archiveArticles, latestArticles } from '@/modules/user/data/blogs';
+import { archiveArticles, latestArticles } from '@/modules/dash/user/data/blogs';
 import { GRID_PAGE_SIZE, usePaginatedList } from '@/shared/hooks/usePaginatedList';
 
 const BlogsPageContent = ({ blogBasePath = '/blogs' }) => {

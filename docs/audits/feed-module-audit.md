@@ -1,8 +1,8 @@
 # Feed module — architecture & code audit
 
-- **Scope:** `web/src/modules/user/pages/feed`, its data layer `web/src/features/user/feed`,
+- **Scope:** `web/src/modules/dash/user/pages/feed`, its data layer `web/src/features/user/feed`,
   shell integration (`FeedActionsContext`, `MobileBottomNav`), external consumers, and the
-  backend feed/upload endpoints in `server/src/modules/user/feed` and `server/src/middleware/upload.ts`.
+  backend feed/upload endpoints in `server/src/modules/dash/user/feed` and `server/src/middleware/upload.ts`.
 - **Date:** 2026-10-19
 - **Repos touched:** `web` (frontend) and `server` (one validator change + one test).
 
@@ -58,7 +58,7 @@ lint clean, and repo-wide web lint went from 41 to 40 problems.
 | Comment like / edit / delete | `usePostCommentActions` | `likeComment` / `editComment` / `removeComment` | patched / stripped in every list |
 | Repost / undo | `useRepost` | `repostPost` / `undoRepost` → `POST/DELETE /feed/:id/repost` | prepends repost; syncs `sharedByMe` + share count |
 | Create | `useCreatePost` (+ `usePostDraft` uploads) | `createPost` → `POST /feed` | upsert at top, refresh first page |
-| Edit | `usePostEditor` (`modules/user/hooks`) | `updatePost` → `PATCH /feed/:id` | replace in place |
+| Edit | `usePostEditor` (`modules/dash/user/hooks`) | `updatePost` → `PATCH /feed/:id` | replace in place |
 | Delete | `usePostDeletion` / `ProfileView` | `removePost` → `DELETE /feed/:id` | removed from every list |
 
 ### Per-card state
@@ -90,7 +90,7 @@ Verified boundaries:
 - Components do not dispatch feed thunks; all post/comment actions go through hooks.
 - `utils/` files import only constants and each other (no React, no network).
   The new `utils/postDraft.js` keeps that rule; network uploads stay in `hooks/usePostDraft.js`.
-- External code imports only from `@/modules/user/pages/feed` (index) — the single deep
+- External code imports only from `@/modules/dash/user/pages/feed` (index) — the single deep
   import is the lazy route `FeedView`, which is expected.
 - No circular imports between feed folders; the feed depends on `@/features/user/feed`
   (data layer), never the reverse.
@@ -105,13 +105,13 @@ Verified boundaries:
 | F-02 | **High** | Data integrity | `features/user/feed/feedMappers.js` (`toFeedPostModel`) | Document name derived with `decodeURIComponent(url.split("/").pop())` — throws `URIError` on malformed escapes; server accepted such URLs. | One post makes `useFeedPosts`' `useMemo` (and profile/admin lists) throw → whole list fails to render for every viewer. | **Fixed** — safe decode with fallback; query/hash stripped from names. |
 | F-03 | Medium | Reliability / UX | `hooks/useFeedPosts.js`, `features/user/feed/feedSlice.js` | `useFeedPosts` toasted `state.userFeed.error`, which the slice also sets for `createPost`, `removePost`, `reactToPost`, `addComment`, `likeComment`, `fetchMoreMyPosts`, `fetchPostDetails` rejections — whose callers already toast. | Duplicate error toasts on the feed; an error left by another page can toast on the next feed visit. | **Fixed** — the hook now toasts only the results of its own list requests (skipping thunk-`condition` cancellations). |
 | F-04 | Medium | State / concurrency | `hooks/usePostEngagement.js` | No in-flight guard; the server toggles (`feedService.react`: same type ⇒ delete). Rollback did `setState(previous)`. | Rapid repeat clicks send overlapping toggles reconciled in arrival order; a failed reaction rolled back unrelated comment/stat updates made meanwhile; clearing with no reaction would send "like". | **Fixed** — one request per card at a time, rollback restores only reaction fields, no request when nothing to change. Transitions moved to pure `utils/reactions.js`. |
-| F-05 | Medium | Functional | `modules/user/context/FeedActionsContext.jsx`, `hooks/useCreatePost.js`, `components/shell/MobileBottomNav.jsx` | `registerOpenCreatePost` stored a handler that was never cleared; the mobile "Post" tab is shown on every user page. | Outside `/feed` the tab called an unmounted page's setter — tapping it did nothing. | **Fixed** — registration returns an unregister; with no feed mounted the tab navigates to `/feed` and opens the dialog when the feed registers. |
+| F-05 | Medium | Functional | `modules/dash/user/context/FeedActionsContext.jsx`, `hooks/useCreatePost.js`, `components/shell/MobileBottomNav.jsx` | `registerOpenCreatePost` stored a handler that was never cleared; the mobile "Post" tab is shown on every user page. | Outside `/feed` the tab called an unmounted page's setter — tapping it did nothing. | **Fixed** — registration returns an unregister; with no feed mounted the tab navigates to `/feed` and opens the dialog when the feed registers. |
 | F-06 | Medium | Functional | `components/modals/SharePostModal.jsx`, `server/.../feed.service.ts` (`addComment` notification) | Share URL is `/feed?post=<id>` but nothing reads `post`; comment notifications link to `/feed`. `fetchPostDetails` exists but no user-feed view uses it. | Shared/sent links and notifications land on the top of the feed, not the post. | **Not fixed** — needs a new post-detail route/UI (product decision). |
 | F-07 | Medium | Data consistency | `features/user/feed/feedThunks.js` (`fetchMoreFeed`), `feedSlice.js` (`appendUnique`) | Offset pages (`page + 1`). Inserts are deduped, but deletions by others between pages shift offsets. | A post can be silently skipped on "Load more". | **Not fixed** — needs cursor pagination (`createdAt,id`) on the server. |
 | F-08 | **High** (backend) | Security | `server/src/middleware/upload.ts` | Stored filename keeps `path.extname(file.originalname)`; `fileFilter` trusts the client-declared `file.mimetype`. | A file like `x.html` / `x.svg` declared as `image/png` is stored with its own extension and served from the upload directory — possible stored XSS on the upload origin depending on static headers (**not verified**). | **Not fixed** (shared by all upload features) — derive the extension from a validated MIME/magic bytes, serve uploads with `X-Content-Type-Options: nosniff` and `Content-Disposition: attachment` for documents. |
 | F-09 | Low | UX / correctness | `components/modals/SharePostModal.jsx` | Clipboard failure was swallowed and "Link copied" shown; `setTimeout(onClose)` not cleared on unmount; caption limit duplicated as `5000`. | False success on insecure contexts; late `onClose` after unmount. | **Fixed** — error toast on failure, timers cleared, uses `MAX_POST_LENGTH`. |
 | F-10 | Low | Accessibility | `components/post/ReactionButton.jsx` | Picker opens on mouse hover or long-press only; keyboard Enter/Space toggles Like. | Keyboard users can't choose other reactions. | **Not fixed** — add a keyboard trigger (e.g. ArrowUp) with roving focus in the menu. |
-| F-11 | Low | Consistency | `modules/supplier/pages/SupplierAdDetailView.jsx` | Uses `PostComments` with in-memory comments (`replies: 0` number), ignores `parentCommentId`, passes no `currentUser`. | Supplier ad comments aren't persisted; replies become top-level. | **Not fixed** — existing product behaviour; component stays compatible. |
+| F-11 | Low | Consistency | `modules/dash/supplier/pages/SupplierAdDetailView.jsx` | Uses `PostComments` with in-memory comments (`replies: 0` number), ignores `parentCommentId`, passes no `currentUser`. | Supplier ad comments aren't persisted; replies become top-level. | **Not fixed** — existing product behaviour; component stays compatible. |
 | F-12 | Low | Performance | `components/post/FeedPost.jsx` | Every card selects global `likingCommentId`. | All memoized cards re-render when any comment like starts/ends. | **Not fixed** — not profiled; select it only while comments are open if profiling shows cost. |
 | F-13 | Low | Data hygiene | `hooks/usePostDraft.js` (`publish`) | Uploads run before `onPublish`; on publish failure a retry uploads again. | Orphaned uploaded files. | **Not fixed** — cache uploaded URLs per draft image or clean up server-side. |
 | F-14 | Low | Maintainability | `features/user/feed/feedSlice.js` | `error`, `reactingId`, `commenting` have no UI consumers after F-03. | Dead state. | **Not fixed** — slice-wide cleanup; existing slice tests assert `error`. |
@@ -124,11 +124,11 @@ Verified boundaries:
 | Change | Files | Rationale |
 |---|---|---|
 | Safe document-name decoding; `isSafeMediaUrl` filter for images, documents and provided attachments | `web/src/features/user/feed/feedMappers.js` | F-02, F-01 (client defence for existing data). Same-origin paths (`/uploads/…`) still allowed. |
-| `http(s)`-only media URLs on create/update | `server/src/modules/user/feed/feed.validators.ts` | F-01 at the source. Seed data uses absolute `http(s)` URLs, so no existing flow breaks. |
+| `http(s)`-only media URLs on create/update | `server/src/modules/dash/user/feed/feed.validators.ts` | F-01 at the source. Seed data uses absolute `http(s)` URLs, so no existing flow breaks. |
 | `useFeedPosts` toasts only its own request results | `hooks/useFeedPosts.js` | F-03; removes duplicate/stale toasts without changing the slice contract other pages use. |
 | Reaction guard, scoped rollback, pure transitions (`planReaction`, `applyReaction`, `rollbackReaction`, `reconcileReaction`) | `hooks/usePostEngagement.js`, `utils/reactions.js` | F-04; makes the rules testable without a DOM. |
 | Composer rules extracted (`pickImageFiles`, `hasDraftChanges`, `getShownDocument`, `getSubmitLabel`, `mergeUploadedImageUrls`, `getInitialDraft`) | `utils/postDraft.js`, `hooks/usePostDraft.js` | Testable validation/business rules; hook keeps state, toasts and network only. Behaviour unchanged. |
-| Unregister + navigate-and-open for the create-post opener; hook moved to its own file | `modules/user/context/FeedActionsContext.jsx`, `modules/user/context/useFeedActions.js`, `hooks/useCreatePost.js`, `components/shell/MobileBottomNav.jsx` | F-05; the split also fixes the existing `react-refresh/only-export-components` lint error. |
+| Unregister + navigate-and-open for the create-post opener; hook moved to its own file | `modules/dash/user/context/FeedActionsContext.jsx`, `modules/dash/user/context/useFeedActions.js`, `hooks/useCreatePost.js`, `components/shell/MobileBottomNav.jsx` | F-05; the split also fixes the existing `react-refresh/only-export-components` lint error. |
 | Clipboard failure handling, timer cleanup, shared caption limit | `components/modals/SharePostModal.jsx` | F-09. |
 | Structure doc updated | `feed/doc/STRUCTURE.md` | New util and tests listed. |
 
@@ -192,7 +192,7 @@ interactions; this was not done here to avoid introducing dependencies without s
 | Web type-check | n/a — JavaScript project, no `tsconfig`/type-check script | n/a |
 | Web production build (`vite build`) | passed | **passed** |
 | Server type-check (`tsc --noEmit`) | passed | **passed** |
-| Server lint (`eslint src/modules/user/feed`) | — | **passed** |
+| Server lint (`eslint src/modules/dash/user/feed`) | — | **passed** |
 | Server feed tests | 57 passed | **58 passed** |
 | Server full suite (`vitest run`, Prisma mocked) | — | **187 / 187 passed** |
 
@@ -219,7 +219,7 @@ no debug code, no line-ending churn, no unrelated modifications.
 | `SupplierAdDetailView` | `PostComments` | Untouched component; local-handler contract (`onAddComment` may return `undefined`) still honoured. |
 | `AdDetailCard` (supplier ads) | `PostActions`, `PostStats` | Untouched. |
 | `AdminUserDetailView`, `ProfilePageContent` | `toFeedPostModel` | Same as contact profile. |
-| `MobileBottomNav`, `UserLayout` | `useFeedActions`, `FeedActionsProvider` | Import path for the hook moved to `@/modules/user/context/useFeedActions`; both importers updated. Provider export and location unchanged. |
+| `MobileBottomNav`, `UserLayout` | `useFeedActions`, `FeedActionsProvider` | Import path for the hook moved to `@/modules/dash/user/context/useFeedActions`; both importers updated. Provider export and location unchanged. |
 
 `index.js` exports are unchanged (verified by the existing `FeedPost.repost` test that goes
 through `ActivitySection`, and by the build).
