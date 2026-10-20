@@ -7,7 +7,7 @@ import { authReducer } from "@/features/auth";
 import { userContactsReducer } from "@/features/user/contacts";
 import { userFeedReducer } from "@/features/user/feed";
 import { userReportsReducer } from "@/features/user/reports";
-import ContactProfileView from "./ContactProfileView";
+import ContactProfileView from "../ContactProfileView";
 
 const ME = "11111111-1111-4111-8111-111111111111";
 const OTHER = "f8e82337-f5b4-4176-9c23-a9aee20ce570";

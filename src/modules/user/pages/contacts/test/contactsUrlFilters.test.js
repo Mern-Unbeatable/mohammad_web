@@ -4,9 +4,9 @@ import {
   buildContactsQuery,
   parseCountryParam,
   parseFilterParam,
-  parseSearchParam,
   withoutInvalidFilters,
-} from "./contactsUrlFilters";
+} from "../utils/contactsUrlFilters";
+import { parseSearchParam } from "@/shared/utils/urlFilters";
 
 const params = (query) => new URLSearchParams(query);
 

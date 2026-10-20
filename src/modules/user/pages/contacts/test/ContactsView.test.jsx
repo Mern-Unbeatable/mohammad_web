@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router";
 import { configureStore } from "@reduxjs/toolkit";
 import { userContactsReducer } from "@/features/user/contacts";
-import ContactsView from "./ContactsView";
+import ContactsView from "../ContactsView";
 
 const contact = (id) => ({ id, firstName: `Member`, lastName: id, connectionStatus: null });
 
