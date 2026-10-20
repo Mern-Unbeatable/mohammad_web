@@ -8,8 +8,8 @@ import {
   clearContactsError,
   clearSelectedContact,
   toContactProfileModel,
-} from '@/features/user/contacts';
-import { fetchAuthorPosts, toFeedPostModel } from '@/features/user/feed';
+} from '@/features/dash/user/contacts';
+import { fetchAuthorPosts, toFeedPostModel } from '@/features/dash/user/feed';
 import { useAuth } from '@/shared/auth/useAuth';
 import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
 import { useStartConversation } from '@/shared/pages/messages';

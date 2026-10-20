@@ -4,9 +4,9 @@ import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router";
 import { configureStore } from "@reduxjs/toolkit";
 import ContactProfilePageContent from "./ContactProfilePageContent";
-import { fetchAuthorPosts, toFeedPostModel, userFeedReducer } from "@/features/user/feed";
-import { userProfileReducer } from "@/features/user/profile";
-import { originalPost } from "@/features/user/feed/feedRepostFixtures";
+import { fetchAuthorPosts, toFeedPostModel, userFeedReducer } from "@/features/dash/user/feed";
+import { userProfileReducer } from "@/features/dash/user/profile";
+import { originalPost } from "@/features/dash/user/feed/feedRepostFixtures";
 
 const contact = {
   id: "anna",

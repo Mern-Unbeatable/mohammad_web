@@ -16,8 +16,8 @@ import { StartConversationModal, useStartConversation } from "@/shared/pages/mes
 import {
   fetchListingDetails,
   clearSelectedListing,
-} from "@/features/admin/marketplace";
-import { toListingCardModel } from "@/features/admin/marketplace/marketplaceMappers";
+} from "@/features/dash/admin/marketplace";
+import { toListingCardModel } from "@/features/dash/admin/marketplace/marketplaceMappers";
 
 const SpecTile = ({ label, value }) => (
   <div className="rounded-xl border border-[#E4E7EC] bg-[#F9FAFB] px-4 py-3.5">

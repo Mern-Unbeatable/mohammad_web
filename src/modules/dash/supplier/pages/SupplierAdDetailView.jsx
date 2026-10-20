@@ -11,7 +11,7 @@ import {
   clearSelectedSupplierAd,
   clearSupplierAdsError,
   toAdDetailModel,
-} from "@/features/supplier/advertisements";
+} from "@/features/dash/supplier/advertisements";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
 

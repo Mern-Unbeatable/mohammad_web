@@ -1,4 +1,4 @@
-import { formToCreatePayload } from '@/features/user/general';
+import { formToCreatePayload } from '@/features/dash/user/general';
 
 /**
  * Builds the API payload from the post modal form.

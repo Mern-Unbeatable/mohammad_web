@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 import { configureStore } from '@reduxjs/toolkit';
-import { userMarketplaceReducer } from '@/features/user/marketplace';
+import { userMarketplaceReducer } from '@/features/dash/user/marketplace';
 import MarketplaceView from '../MarketplaceView';
 
 const listing = (id) => ({

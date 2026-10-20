@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
-import { removePost } from "@/features/user/feed";
+import { removePost } from "@/features/dash/user/feed";
 
 /** Ask-then-delete flow for a post; `pendingDelete` drives the confirm modal. */
 export function usePostDeletion() {

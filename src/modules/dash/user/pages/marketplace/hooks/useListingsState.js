@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
-import { toListingCardModel } from '@/features/user/marketplace';
+import { toListingCardModel } from '@/features/dash/user/marketplace';
 
 /** Marketplace list state with listings mapped to card models; toasts store errors. */
 export const useListingsState = () => {

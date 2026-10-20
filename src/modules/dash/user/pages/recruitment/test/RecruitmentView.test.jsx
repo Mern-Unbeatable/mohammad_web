@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router";
 import { configureStore } from "@reduxjs/toolkit";
-import { userRecruitmentReducer } from "@/features/user/recruitment";
+import { userRecruitmentReducer } from "@/features/dash/user/recruitment";
 import RecruitmentView from "../RecruitmentView";
 
 const job = (id) => ({

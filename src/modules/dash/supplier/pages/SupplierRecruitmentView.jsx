@@ -16,7 +16,7 @@ import {
   invalidateJobsList,
   levelToApi,
   toJobCardModel,
-} from "@/features/supplier/recruitment";
+} from "@/features/dash/supplier/recruitment";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
 import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";

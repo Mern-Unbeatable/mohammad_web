@@ -8,7 +8,7 @@ import {
   clearSelectedBlog,
   clearBlogsError,
   toBlogDetailModel,
-} from '@/features/user/blogs';
+} from '@/features/dash/user/blogs';
 import { popularPosts } from '../utils/blogCards';
 import { POPULAR_POSTS_LIMIT } from '../constant/constants';
 

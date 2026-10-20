@@ -11,12 +11,12 @@ import ReasonModal from "@/modules/dash/admin/components/ReasonModal";
 import {
   fetchAdsList,
   reviewAdvertisement,
-} from "@/features/admin/advertisements";
+} from "@/features/dash/admin/advertisements";
 import {
   statusFilterToApi,
   statusLabelToReviewApi,
   toAdRowModel,
-} from "@/features/admin/advertisements/adsMappers";
+} from "@/features/dash/admin/advertisements/adsMappers";
 
 const PAGE_SIZE = 10;
 

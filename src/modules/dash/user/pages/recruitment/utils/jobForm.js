@@ -1,7 +1,7 @@
 import {
   EMPLOYMENT_TYPE_OPTIONS,
   RECRUITMENT_LEVEL_OPTIONS,
-} from "@/features/user/recruitment";
+} from "@/features/dash/user/recruitment";
 import { DEFAULT_WORKPLACE_TYPE } from "@/shared/constants/jobWorkplace";
 
 /** Experience levels a job can be posted with (no "All"). */

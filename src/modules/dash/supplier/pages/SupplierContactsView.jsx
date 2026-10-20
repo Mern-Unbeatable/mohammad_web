@@ -15,7 +15,7 @@ import {
   selectPendingRequestCount,
   COUNTRY_OPTIONS,
   toContactCardModel,
-} from "@/features/supplier/contacts";
+} from "@/features/dash/supplier/contacts";
 import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
 import CountBadge from "@/components/ui/CountBadge";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";

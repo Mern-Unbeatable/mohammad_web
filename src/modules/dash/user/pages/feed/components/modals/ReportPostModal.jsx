@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { X } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { reportReasons } from "@/modules/dash/user/data/dashboard";
-import { createReport } from "@/features/user/reports";
+import { createReport } from "@/features/dash/user/reports";
 
 const REASON_TO_API = {
   Harassment: "HARASSMENT",

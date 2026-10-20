@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
-import { feedApi, getApiErrorMessage } from "@/features/user/feed";
+import { feedApi, getApiErrorMessage } from "@/features/dash/user/feed";
 import { IMAGE_MIME_TYPES, MAX_POST_IMAGES } from "../constants";
 import { formatBytes } from "../utils/formatBytes";
 import {

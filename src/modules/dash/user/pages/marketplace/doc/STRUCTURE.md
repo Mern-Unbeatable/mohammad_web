@@ -86,8 +86,8 @@ marketplace/
 | ------------- | ------------------------------------------------ | ------------------------------------------------- |
 | `*View.jsx`   | Page layout; wires one hook to components        | components, hooks, constants                      |
 | `components/` | Rendering only; no dispatch, no toasts           | utils, constants, shared UI                       |
-| `hooks/`      | State, effects, dispatch, navigation, toasts     | utils, constants, `@/features/user/marketplace`   |
-| `utils/`      | Pure functions, no React                         | constants, `@/features/user/marketplace` mappers  |
+| `hooks/`      | State, effects, dispatch, navigation, toasts     | utils, constants, `@/features/dash/user/marketplace`   |
+| `utils/`      | Pure functions, no React                         | constants, `@/features/dash/user/marketplace` mappers  |
 | `constant/`   | Static values                                    | `@/shared/hooks/usePaginatedList` (page size)     |
 
 - Browse keeps category, search and page in the URL; Saved and My listings keep

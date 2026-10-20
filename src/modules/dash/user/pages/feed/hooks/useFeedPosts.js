@@ -6,7 +6,7 @@ import {
   fetchMoreFeed,
   invalidateFeedPosts,
   toFeedPostModel,
-} from "@/features/user/feed";
+} from "@/features/dash/user/feed";
 import { FEED_PAGE_SIZE, FILTER_TO_API_TYPE } from "../constants";
 
 /**

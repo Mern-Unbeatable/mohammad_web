@@ -1,4 +1,4 @@
-import { toBlogCardModel } from '@/features/user/blogs';
+import { toBlogCardModel } from '@/features/dash/user/blogs';
 import { POPULAR_POSTS_LIMIT } from '../constant/constants';
 
 export const toBlogCards = (blogs) => (blogs || []).map(toBlogCardModel).filter(Boolean);

@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
-import { toggleSaveListing } from '@/features/user/marketplace';
+import { toggleSaveListing } from '@/features/dash/user/marketplace';
 
 /** Returns `toggleSave(id)`, resolving to true when the save state changed. */
 export const useToggleSaveListing = () => {

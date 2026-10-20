@@ -12,7 +12,7 @@ import {
   clearContactsError,
   clearSelectedContact,
   toContactProfileModel,
-} from "@/features/supplier/contacts";
+} from "@/features/dash/supplier/contacts";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import NotFound from "@/shared/pages/NotFound";
 import { CHAT_BASE_PATHS, chatPath } from "@/shared/constants/chat";

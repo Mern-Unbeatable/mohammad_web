@@ -5,9 +5,9 @@ import { MemoryRouter } from "react-router";
 import { configureStore } from "@reduxjs/toolkit";
 import FeedPost from "../components/post/FeedPost";
 import CreatePostModal from "../components/composer/CreatePostModal";
-import { toFeedPostModel, userFeedReducer } from "@/features/user/feed";
-import { userProfileReducer } from "@/features/user/profile";
-import { anna, originalPost, repostOf } from "@/features/user/feed/feedRepostFixtures";
+import { toFeedPostModel, userFeedReducer } from "@/features/dash/user/feed";
+import { userProfileReducer } from "@/features/dash/user/profile";
+import { anna, originalPost, repostOf } from "@/features/dash/user/feed/feedRepostFixtures";
 
 const storeFor = (viewer) =>
   configureStore({

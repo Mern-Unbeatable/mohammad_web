@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import { toSearchResultsModel, useGlobalSearch } from "@/features/user/search";
+import { toSearchResultsModel, useGlobalSearch } from "@/features/dash/user/search";
 import {
   DEFAULT_SEARCH_TAB,
   PAGE_FETCH_LIMIT,

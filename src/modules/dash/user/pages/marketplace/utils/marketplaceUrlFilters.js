@@ -1,4 +1,4 @@
-import { MARKETPLACE_CATEGORY_OPTIONS } from '@/features/user/marketplace';
+import { MARKETPLACE_CATEGORY_OPTIONS } from '@/features/dash/user/marketplace';
 import {
   SEARCH_PARAM,
   createUrlFilters,

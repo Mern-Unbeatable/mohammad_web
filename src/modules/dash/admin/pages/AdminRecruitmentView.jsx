@@ -11,14 +11,14 @@ import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
 import {
   fetchJobsList,
   removeJob,
-} from "@/features/admin/recruitment";
+} from "@/features/dash/admin/recruitment";
 import {
   RECRUITMENT_LEVEL_OPTIONS,
   RECRUITMENT_TIME_OPTIONS,
   levelToApi,
   timeToApi,
   toJobCardModel,
-} from "@/features/admin/recruitment/recruitmentMappers";
+} from "@/features/dash/admin/recruitment/recruitmentMappers";
 
 const PAGE_SIZE = 10;
 

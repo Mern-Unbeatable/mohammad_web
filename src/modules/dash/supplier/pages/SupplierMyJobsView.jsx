@@ -25,7 +25,7 @@ import {
   jobLeftList,
   levelToApi,
   toJobCardModel,
-} from "@/features/supplier/recruitment";
+} from "@/features/dash/supplier/recruitment";
 import { MY_JOB_STATUS_FILTERS } from "@/shared/constants/jobStatus";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";

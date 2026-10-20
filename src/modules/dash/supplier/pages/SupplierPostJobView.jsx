@@ -14,7 +14,7 @@ import {
   EMPLOYMENT_TYPE_OPTIONS,
   RECRUITMENT_LEVEL_OPTIONS,
   recruitmentApi,
-} from "@/features/supplier/recruitment";
+} from "@/features/dash/supplier/recruitment";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 
 const LEVEL_OPTIONS = RECRUITMENT_LEVEL_OPTIONS.filter(

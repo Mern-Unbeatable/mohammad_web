@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
-import { reactToPost } from "@/features/user/feed";
+import { reactToPost } from "@/features/dash/user/feed";
 import {
   applyReaction,
   normalizeReaction,

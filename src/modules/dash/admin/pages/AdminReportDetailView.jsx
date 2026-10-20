@@ -25,8 +25,8 @@ import {
   clearSelectedReport,
   moderateReport,
   updateReportStatus,
-} from "@/features/admin/reports";
-import { toReportDetailModel } from "@/features/admin/reports/reportsMappers";
+} from "@/features/dash/admin/reports";
+import { toReportDetailModel } from "@/features/dash/admin/reports/reportsMappers";
 
 const ModerationAction = ({ icon: Icon, label, tone, onClick, disabled }) => {
   const tones = {

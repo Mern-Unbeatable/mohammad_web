@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { configureStore } from '@reduxjs/toolkit';
-import { userBlogsReducer } from '@/features/user/blogs';
+import { userBlogsReducer } from '@/features/dash/user/blogs';
 import BlogsView from '../BlogsView';
 import BlogDetailView from '../BlogDetailView';
 

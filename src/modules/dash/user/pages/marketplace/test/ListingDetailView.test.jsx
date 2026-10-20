@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { configureStore } from '@reduxjs/toolkit';
 import { authReducer } from '@/features/auth';
-import { userMarketplaceReducer } from '@/features/user/marketplace';
+import { userMarketplaceReducer } from '@/features/dash/user/marketplace';
 import ListingDetailView from '../ListingDetailView';
 
 const ME = 'user-me';

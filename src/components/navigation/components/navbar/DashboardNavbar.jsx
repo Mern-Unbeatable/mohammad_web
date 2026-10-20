@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useLocation } from "react-router";
 import { useSelector } from "react-redux";
-import { toProfilePageUser } from "@/features/user/profile";
+import { toProfilePageUser } from "@/features/dash/user/profile";
 import { useNavBadges } from "../../hooks/useNavBadges";
 import { useNavSearch } from "../../hooks/useNavSearch";
 import { useBodyScrollLock } from "../../hooks/useBodyScrollLock";

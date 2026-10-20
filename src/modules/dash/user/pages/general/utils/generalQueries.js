@@ -1,4 +1,4 @@
-import { categoryToApi } from '@/features/user/general';
+import { categoryToApi } from '@/features/dash/user/general';
 import { POSTS_PAGE_SIZE } from '../constant/constants';
 
 export const buildPostsQuery = ({ page, category, mine = false }) => {

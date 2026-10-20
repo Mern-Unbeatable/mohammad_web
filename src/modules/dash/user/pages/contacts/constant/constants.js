@@ -1,5 +1,5 @@
 import { Clock, Handshake, UserCheck, Users } from 'lucide-react';
-import { COUNTRY_OPTIONS } from '@/features/user/contacts';
+import { COUNTRY_OPTIONS } from '@/features/dash/user/contacts';
 
 export const CONTACTS_PATH = '/contacts';
 export const contactProfilePath = (id) => `${CONTACTS_PATH}/${id}`;

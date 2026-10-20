@@ -5,8 +5,8 @@ import {
   fetchUserProfile,
   clearProfileError,
   toProfilePageUser,
-} from "@/features/user/profile";
-import { fetchMyReports, clearReportsError, toMyReportModel } from "@/features/user/reports";
+} from "@/features/dash/user/profile";
+import { fetchMyReports, clearReportsError, toMyReportModel } from "@/features/dash/user/reports";
 import { MY_REPORTS_QUERY } from "../constant/constants";
 import { isPremiumMember, showsSubscriptionCard } from "../utils/membership";
 

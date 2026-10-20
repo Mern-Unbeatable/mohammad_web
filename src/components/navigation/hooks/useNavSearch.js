@@ -13,7 +13,7 @@ import {
   clearSearchResults,
   fetchGlobalSearch,
   toSearchResultsModel,
-} from '@/features/user/search';
+} from '@/features/dash/user/search';
 import { SEARCH_DEBOUNCE_MS, SEARCH_FETCH_LIMIT } from '../constant/constants';
 
 /**

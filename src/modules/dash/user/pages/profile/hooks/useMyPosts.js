@@ -6,7 +6,7 @@ import {
   fetchMoreMyPosts,
   removePost,
   toFeedPostModel,
-} from "@/features/user/feed";
+} from "@/features/dash/user/feed";
 
 /** The caller's posts for the activity tab: load, load more, report target and delete flow. */
 export function useMyPosts() {

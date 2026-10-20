@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 import { configureStore } from '@reduxjs/toolkit';
-import { userNotificationsReducer } from '@/features/user/notifications';
+import { userNotificationsReducer } from '@/features/dash/user/notifications';
 import NotificationsView from '../NotificationsView';
 
 const render = (notificationsState = {}) => {

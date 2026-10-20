@@ -60,8 +60,8 @@ general/
 | ------------- | ------------------------------------------- | --------------------------------------------- |
 | `*View.jsx`   | Page layout; wires one hook to components   | components, hooks, constants, shared modal    |
 | `components/` | Rendering only; no dispatch, no toasts      | constants, `@/modules/dash/user/data/general`      |
-| `hooks/`      | State, effects, dispatch, toasts            | utils, constants, `@/features/user/general`   |
-| `utils/`      | Pure functions, no React                    | constants, `@/features/user/general` mappers  |
+| `hooks/`      | State, effects, dispatch, toasts            | utils, constants, `@/features/dash/user/general`   |
+| `utils/`      | Pure functions, no React                    | constants, `@/features/dash/user/general` mappers  |
 | `constant/`   | Static values                               | `@/shared/hooks/usePaginatedList` (page size) |
 
 - Changing the category resets to page 1 in the same handler (no effect).

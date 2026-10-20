@@ -8,7 +8,7 @@ import {
   formToCreatePayload,
   jobToFormValues,
   toJobCardModel,
-} from "@/features/user/recruitment/recruitmentMappers";
+} from "@/features/dash/user/recruitment/recruitmentMappers";
 
 describe("job workplace type", () => {
   it("round-trips every option between label and API value", () => {

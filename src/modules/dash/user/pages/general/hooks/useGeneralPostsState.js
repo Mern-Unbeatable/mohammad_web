@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
-import { toGeneralPostModel } from '@/features/user/general';
+import { toGeneralPostModel } from '@/features/dash/user/general';
 
 /** General list state with posts mapped to card models; toasts store errors. */
 export const useGeneralPostsState = () => {

@@ -4,9 +4,9 @@ import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router";
 import { configureStore } from "@reduxjs/toolkit";
 import ActivitySection from "@/components/data-display/ActivitySection/ActivitySection";
-import { fetchFeed, fetchMyPosts, toFeedPostModel, userFeedReducer } from "@/features/user/feed";
-import { userProfileReducer } from "@/features/user/profile";
-import { originalPost, repostOf } from "@/features/user/feed/feedRepostFixtures";
+import { fetchFeed, fetchMyPosts, toFeedPostModel, userFeedReducer } from "@/features/dash/user/feed";
+import { userProfileReducer } from "@/features/dash/user/profile";
+import { originalPost, repostOf } from "@/features/dash/user/feed/feedRepostFixtures";
 
 const meta = { page: 1, pageSize: 5, total: 1, totalPages: 1 };
 

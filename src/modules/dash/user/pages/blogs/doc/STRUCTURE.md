@@ -53,8 +53,8 @@ blogs/
 | ------------- | -------------------------------------------- | -------------------------------------------- |
 | `*View.jsx`   | Page layout; wires one hook to components    | components, hooks                            |
 | `components/` | Rendering only; no dispatch, no toasts       | UI hooks (`useHubCarousel`), constants       |
-| `hooks/`      | State, effects, dispatch, toasts             | utils, constants, `@/features/user/blogs`    |
-| `utils/`      | Pure functions, no React                     | constants, `@/features/user/blogs` mappers   |
+| `hooks/`      | State, effects, dispatch, toasts             | utils, constants, `@/features/dash/user/blogs`    |
+| `utils/`      | Pure functions, no React                     | constants, `@/features/dash/user/blogs` mappers   |
 | `constant/`   | Static values                                | `@/shared/hooks/usePaginatedList` (page size) |
 
 - One search box drives both the latest strip and the archive; a new search or

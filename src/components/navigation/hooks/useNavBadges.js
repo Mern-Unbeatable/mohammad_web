@@ -2,9 +2,9 @@ import { useUnreadMessages } from '@/features/messages';
 import {
   fetchUserUnreadNotificationCount,
   selectUserUnreadNotificationCount,
-} from '@/features/user/notifications';
-import { fetchPendingRequestCount, selectPendingRequestCount } from '@/features/user/contacts';
-import { fetchNewApplicationCounts, selectNewApplicationTotal } from '@/features/user/recruitment';
+} from '@/features/dash/user/notifications';
+import { fetchPendingRequestCount, selectPendingRequestCount } from '@/features/dash/user/contacts';
+import { fetchNewApplicationCounts, selectNewApplicationTotal } from '@/features/dash/user/recruitment';
 import { useNotificationBadge } from '@/shared/hooks/useNotificationBadge';
 import { buildNavBadges } from '../utils/badges';
 

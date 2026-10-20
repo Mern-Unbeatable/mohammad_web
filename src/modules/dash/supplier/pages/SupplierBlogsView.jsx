@@ -18,7 +18,7 @@ import {
   fetchSupplierLatestBlogs,
   clearBlogsError,
   toBlogCardModel,
-} from "@/features/supplier/blogs";
+} from "@/features/dash/supplier/blogs";
 import { GRID_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
 
 const BLOG_BASE = "/supplier/blogs";

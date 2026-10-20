@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { Clock, Crown, Loader2, LogOut, Sparkles, User } from "lucide-react";
 import { Link } from "react-router";
 import Avatar from "@/components/ui/Avatar";
-import { toProfilePageUser } from "@/features/user/profile";
+import { toProfilePageUser } from "@/features/dash/user/profile";
 import { AVATAR_ACCENT_CLASS, PROFILE_PATH } from "../../constant/constants";
 import { useDropdown } from "../../hooks/useDropdown";
 import { useLogout } from "../../hooks/useLogout";

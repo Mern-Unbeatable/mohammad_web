@@ -9,7 +9,7 @@ import {
   clearProfileError,
   setProfileField,
   profileApi,
-} from "@/features/user/profile";
+} from "@/features/dash/user/profile";
 import { PROFILE_PATH } from "../constant/constants";
 import { countryOptions, isProfileImage, profileFormError } from "../utils/profileSetup";
 

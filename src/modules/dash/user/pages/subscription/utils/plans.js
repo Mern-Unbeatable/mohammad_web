@@ -1,4 +1,4 @@
-import { toPlansList } from '@/features/user/subscriptions';
+import { toPlansList } from '@/features/dash/user/subscriptions';
 import { CYCLE, DEFAULT_CYCLE, PLAN_API } from '../constant/constants';
 
 export const cycleKey = (planId) => String(planId).toLowerCase();

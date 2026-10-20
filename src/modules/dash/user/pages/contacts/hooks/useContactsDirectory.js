@@ -10,7 +10,7 @@ import {
   invalidateContactsList,
   selectPendingRequestCount,
   toContactCardModel,
-} from '@/features/user/contacts';
+} from '@/features/dash/user/contacts';
 import { usePageParam } from '@/shared/hooks/usePageParam';
 import { SEARCH_PARAM } from '@/shared/utils/urlFilters';
 import {

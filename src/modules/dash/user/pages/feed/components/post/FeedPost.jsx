@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import Card from "@/components/ui/Card";
-import { toProfilePageUser } from "@/features/user/profile";
+import { toProfilePageUser } from "@/features/dash/user/profile";
 import { COMMENT_PREVIEW_LIMIT } from "../../constants";
 import { usePostCommentActions } from "../../hooks/usePostCommentActions";
 import { usePostEngagement } from "../../hooks/usePostEngagement";

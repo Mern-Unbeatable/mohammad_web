@@ -54,7 +54,7 @@ subscription/
 | ------------- | -------------------------------------------- | ----------------------------------------------------------- |
 | `*View.jsx`   | Page layout; wires one hook to components    | components, hooks                                           |
 | `components/` | Rendering only; no dispatch, no toasts       | utils, constants                                            |
-| `hooks/`      | State, effects, dispatch, toasts, redirects  | utils, constants, `@/features/user/subscriptions`, `@/features/user/profile` |
+| `hooks/`      | State, effects, dispatch, toasts, redirects  | utils, constants, `@/features/dash/user/subscriptions`, `@/features/dash/user/profile` |
 | `utils/`      | Pure functions, no React                     | constants, subscription mappers                             |
 | `constant/`   | Static values                                | `lucide-react`, `SUPPORT_CONTACT`                           |
 

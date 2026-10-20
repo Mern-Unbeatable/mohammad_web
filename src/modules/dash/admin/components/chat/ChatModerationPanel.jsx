@@ -13,7 +13,7 @@ import {
   moderateDeleteConversation,
   moderateDeleteMessage,
   selectModerationConversation,
-} from '@/features/admin/messages';
+} from '@/features/dash/admin/messages';
 import {
   formatBubbleTime,
   formatEventTime,

@@ -8,8 +8,8 @@ import {
   cancelSubscription,
   clearSubscriptionsError,
   toSubscriptionModel,
-} from '@/features/user/subscriptions';
-import { fetchUserProfile, toProfilePageUser } from '@/features/user/profile';
+} from '@/features/dash/user/subscriptions';
+import { fetchUserProfile, toProfilePageUser } from '@/features/dash/user/profile';
 import { planFeatures, toApiPlan, toPlanOptions } from '../utils/plans';
 import {
   canCancel,

@@ -1,6 +1,6 @@
-import { toContactCardModel } from '@/features/user/contacts';
-import { toListingCardModel } from '@/features/user/marketplace';
-import { toJobCardModel } from '@/features/user/recruitment';
+import { toContactCardModel } from '@/features/dash/user/contacts';
+import { toListingCardModel } from '@/features/dash/user/marketplace';
+import { toJobCardModel } from '@/features/dash/user/recruitment';
 import { SIDEBAR_LIMIT } from '../constant/constants';
 
 export const formatPrice = (price) => {

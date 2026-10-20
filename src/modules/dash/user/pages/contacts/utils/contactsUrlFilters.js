@@ -1,4 +1,4 @@
-import { COUNTRY_OPTIONS } from '@/features/user/contacts';
+import { COUNTRY_OPTIONS } from '@/features/dash/user/contacts';
 import {
   SEARCH_PARAM,
   createUrlFilters,

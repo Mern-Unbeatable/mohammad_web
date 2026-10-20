@@ -4,7 +4,7 @@ import Container from "@/components/ui/Container";
 import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
 import { LeftSidebar, RightSidebar } from "@/components/navigation";
 import { usePostEditor } from "@/modules/dash/user/hooks/usePostEditor";
-import { fetchUserProfile, toProfilePageUser } from "@/features/user/profile";
+import { fetchUserProfile, toProfilePageUser } from "@/features/dash/user/profile";
 import CreatePostModal from "./components/composer/CreatePostModal";
 import FeedComposer from "./components/composer/FeedComposer";
 import FeedFilters from "./components/composer/FeedFilters";

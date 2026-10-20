@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
-import { createListing, updateListing, marketplaceApi } from '@/features/user/marketplace';
+import { createListing, updateListing, marketplaceApi } from '@/features/dash/user/marketplace';
 import { useAuth } from '@/shared/auth/useAuth';
 import {
   emptyListingForm,

@@ -8,7 +8,7 @@ import {
   recruitmentApi,
   jobApplicationsSeen,
   fetchNewApplicationCounts,
-} from "@/features/user/recruitment";
+} from "@/features/dash/user/recruitment";
 
 /**
  * Loads a job by id. For the owner it also loads the applications and marks

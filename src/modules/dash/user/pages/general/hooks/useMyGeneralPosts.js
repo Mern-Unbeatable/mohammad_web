@@ -9,7 +9,7 @@ import {
   clearGeneralError,
   invalidateGeneralPostsList,
   postToFormValues,
-} from '@/features/user/general';
+} from '@/features/dash/user/general';
 import { buildPostsQuery } from '../utils/generalQueries';
 import { buildPostPayload } from '../utils/postForm';
 import { DEFAULT_CATEGORY } from '../constant/constants';

@@ -8,7 +8,7 @@ import {
   declineConnection,
   removeConnection,
 } from "./contactsThunks";
-import { logoutUser } from "../../auth/authThunks";
+import { logoutUser } from "@/features/auth/authThunks";
 
 /** Unfiltered Requests list, whose total is the badge count. */
 const isIncomingRequestsQuery = (params) =>

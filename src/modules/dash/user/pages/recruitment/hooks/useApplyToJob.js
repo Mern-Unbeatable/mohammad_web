@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
-import { applyToJob } from "@/features/user/recruitment";
+import { applyToJob } from "@/features/dash/user/recruitment";
 
 /** In-app apply form: open/close, cover letter and submit. */
 export function useApplyToJob(jobId) {

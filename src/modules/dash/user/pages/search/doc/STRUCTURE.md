@@ -46,13 +46,13 @@ search/
 | ------------- | ---------------------------------------------- | ------------------------------------------- |
 | `SearchView`  | Page layout; wires the hook to components      | components, hooks, constants                |
 | `components/` | Rendering only                                 | utils, constants                            |
-| `hooks/`      | URL state, fetching, navigation                | utils, constants, `@/features/user/search`  |
+| `hooks/`      | URL state, fetching, navigation                | utils, constants, `@/features/dash/user/search`  |
 | `utils/`      | Pure functions, no React                       | constants, `@/modules/dash/user/data/marketplace` |
 | `constant/`   | Static values, tab/group config, icon map      | `lucide-react` only                         |
 
 - The URL is the source of truth: `q` is the query, `tab` the category; the
   default tab ("all") is never written to the URL.
-- Fetching goes through `useGlobalSearch` from `@/features/user/search`;
+- Fetching goes through `useGlobalSearch` from `@/features/dash/user/search`;
   components never dispatch.
 - Posts appear as a group on "All" but have no tab and no "See all".
 

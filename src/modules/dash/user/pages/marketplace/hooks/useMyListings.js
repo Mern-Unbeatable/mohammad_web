@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-hot-toast';
-import { fetchListings, removeListing, clearMarketplaceError } from '@/features/user/marketplace';
+import { fetchListings, removeListing, clearMarketplaceError } from '@/features/dash/user/marketplace';
 import { buildMineQuery } from '../utils/listingQueries';
 import { editListingPath } from '../constant/constants';
 import { useListingsState } from './useListingsState';

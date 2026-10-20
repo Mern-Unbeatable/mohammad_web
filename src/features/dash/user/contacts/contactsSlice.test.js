@@ -11,7 +11,7 @@ import {
   fetchPendingRequestCount,
   requestContactConnection,
 } from "./contactsThunks";
-import { logoutUser } from "../../auth/authThunks";
+import { logoutUser } from "@/features/auth/authThunks";
 
 const initial = reducer(undefined, { type: "@@init" });
 const meta = (page) => ({ page, pageSize: 8, total: 20, totalPages: 3 });

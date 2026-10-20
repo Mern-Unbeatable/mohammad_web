@@ -19,7 +19,7 @@ import {
   SUBSCRIPTION_FEATURES,
   DEFAULT_MARKETPLACE_CATEGORIES,
   DEFAULT_GENERAL_CATEGORIES,
-} from "@/features/admin/settings";
+} from "@/features/dash/admin/settings";
 
 const inputClass =
   "w-full rounded-lg border border-[#D0D5DD] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 lg:text-[15px]";

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
-import { repostPost, undoRepost } from "@/features/user/feed";
+import { repostPost, undoRepost } from "@/features/dash/user/feed";
 
 /**
  * Repost / undo-repost for a post, plus why reposting is unavailable

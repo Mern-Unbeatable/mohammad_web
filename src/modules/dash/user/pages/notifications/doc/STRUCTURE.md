@@ -31,7 +31,7 @@ notifications/
     └── STRUCTURE.md
 ```
 
-There is no `utils/` folder: mapping lives in `@/features/user/notifications`
+There is no `utils/` folder: mapping lives in `@/features/dash/user/notifications`
 (`toNotificationListModel`) and link resolution in `@/features/messages`.
 
 ## Layers and rules
@@ -40,7 +40,7 @@ There is no `utils/` folder: mapping lives in `@/features/user/notifications`
 | ------------- | ----------------------------------------------- | --------------------------------------------------------- |
 | `*View.jsx`   | Page frame                                      | components                                                |
 | `components/` | Rendering; `NotificationsPanel` alone calls the hook so it can be dropped into any layout | hooks (panel only), constants |
-| `hooks/`      | Fetching, dispatch, navigation, toasts          | constants, `@/features/user/notifications`, `@/features/messages` |
+| `hooks/`      | Fetching, dispatch, navigation, toasts          | constants, `@/features/dash/user/notifications`, `@/features/messages` |
 | `constant/`   | Static values                                   | —                                                         |
 
 ## How the page works

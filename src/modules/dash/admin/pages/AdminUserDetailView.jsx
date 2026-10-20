@@ -19,10 +19,10 @@ import {
   clearSelectedUser,
   updateUserStatus,
   usersApi,
-} from "@/features/admin/users";
+} from "@/features/dash/admin/users";
 import ProfileActivityTabs from "@/modules/dash/admin/components/ProfileActivityTabs";
-import { toProfilePageUser } from "@/features/user/profile";
-import { fetchAuthorPosts, toFeedPostModel } from "@/features/user/feed";
+import { toProfilePageUser } from "@/features/dash/user/profile";
+import { fetchAuthorPosts, toFeedPostModel } from "@/features/dash/user/feed";
 
 const formatDate = (value) =>
   value

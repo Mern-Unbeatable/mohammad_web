@@ -1,4 +1,4 @@
-import { sellerContactLinks } from '@/features/user/marketplace';
+import { sellerContactLinks } from '@/features/dash/user/marketplace';
 import { editListingPath } from '../constant/constants';
 
 export const listingGalleryImages = (listing) =>

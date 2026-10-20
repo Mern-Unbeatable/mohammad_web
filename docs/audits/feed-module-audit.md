@@ -1,6 +1,6 @@
 # Feed module — architecture & code audit
 
-- **Scope:** `web/src/modules/dash/user/pages/feed`, its data layer `web/src/features/user/feed`,
+- **Scope:** `web/src/modules/dash/user/pages/feed`, its data layer `web/src/features/dash/user/feed`,
   shell integration (`FeedActionsContext`, `MobileBottomNav`), external consumers, and the
   backend feed/upload endpoints in `server/src/modules/dash/user/feed` and `server/src/middleware/upload.ts`.
 - **Date:** 2026-10-19
@@ -42,7 +42,7 @@ lint clean, and repo-wide web lint went from 41 to 40 problems.
 
 1. `FeedView` → `useFeedPosts(filter)` builds `{ page: 1, pageSize: 20, sort: "desc", type? }`.
 2. On mount / filter change (`useLayoutEffect`) it dispatches `invalidateFeedPosts()` then
-   `fetchFeed(query)` (`features/user/feed/feedThunks.js`) → `feedApi.getFeed` → `GET /feed`.
+   `fetchFeed(query)` (`features/dash/user/feed/feedThunks.js`) → `feedApi.getFeed` → `GET /feed`.
 3. `feedSlice` stores raw posts; `fetchFeed.fulfilled` is applied only if
    `action.meta.requestId === state.postsRequestId`, so a slow response for an old filter is dropped.
 4. "Load more" dispatches `fetchMoreFeed({ ...query, page: n + 1 })`; its thunk `condition`
@@ -92,7 +92,7 @@ Verified boundaries:
   The new `utils/postDraft.js` keeps that rule; network uploads stay in `hooks/usePostDraft.js`.
 - External code imports only from `@/modules/dash/user/pages/feed` (index) — the single deep
   import is the lazy route `FeedView`, which is expected.
-- No circular imports between feed folders; the feed depends on `@/features/user/feed`
+- No circular imports between feed folders; the feed depends on `@/features/dash/user/feed`
   (data layer), never the reverse.
 
 ---
@@ -101,20 +101,20 @@ Verified boundaries:
 
 | ID | Severity | Area | Affected files | Evidence | Impact | Recommendation / status |
 |---|---|---|---|---|---|---|
-| F-01 | **High** | Security | `server/.../feed.validators.ts`, `features/user/feed/feedMappers.js`, `components/post/AttachmentCard.jsx` | `imageUrls`, `imageUrl`, `documentUrl` validated only with `z.string().url()`, which accepts any parseable scheme. `AttachmentCard` renders `<a href={attachment.url} target="_blank">`. | A member calling the API directly could store `javascript:`/`data:` links shown to every viewer. Whether React 19.2 neutralises `javascript:` hrefs in this build was **not verified**; other schemes are not blocked by React. | **Fixed** — server accepts only `http(s)`; client mapper drops non-`http(s)` / non-root-relative media URLs (defence for existing rows). |
-| F-02 | **High** | Data integrity | `features/user/feed/feedMappers.js` (`toFeedPostModel`) | Document name derived with `decodeURIComponent(url.split("/").pop())` — throws `URIError` on malformed escapes; server accepted such URLs. | One post makes `useFeedPosts`' `useMemo` (and profile/admin lists) throw → whole list fails to render for every viewer. | **Fixed** — safe decode with fallback; query/hash stripped from names. |
-| F-03 | Medium | Reliability / UX | `hooks/useFeedPosts.js`, `features/user/feed/feedSlice.js` | `useFeedPosts` toasted `state.userFeed.error`, which the slice also sets for `createPost`, `removePost`, `reactToPost`, `addComment`, `likeComment`, `fetchMoreMyPosts`, `fetchPostDetails` rejections — whose callers already toast. | Duplicate error toasts on the feed; an error left by another page can toast on the next feed visit. | **Fixed** — the hook now toasts only the results of its own list requests (skipping thunk-`condition` cancellations). |
+| F-01 | **High** | Security | `server/.../feed.validators.ts`, `features/dash/user/feed/feedMappers.js`, `components/post/AttachmentCard.jsx` | `imageUrls`, `imageUrl`, `documentUrl` validated only with `z.string().url()`, which accepts any parseable scheme. `AttachmentCard` renders `<a href={attachment.url} target="_blank">`. | A member calling the API directly could store `javascript:`/`data:` links shown to every viewer. Whether React 19.2 neutralises `javascript:` hrefs in this build was **not verified**; other schemes are not blocked by React. | **Fixed** — server accepts only `http(s)`; client mapper drops non-`http(s)` / non-root-relative media URLs (defence for existing rows). |
+| F-02 | **High** | Data integrity | `features/dash/user/feed/feedMappers.js` (`toFeedPostModel`) | Document name derived with `decodeURIComponent(url.split("/").pop())` — throws `URIError` on malformed escapes; server accepted such URLs. | One post makes `useFeedPosts`' `useMemo` (and profile/admin lists) throw → whole list fails to render for every viewer. | **Fixed** — safe decode with fallback; query/hash stripped from names. |
+| F-03 | Medium | Reliability / UX | `hooks/useFeedPosts.js`, `features/dash/user/feed/feedSlice.js` | `useFeedPosts` toasted `state.userFeed.error`, which the slice also sets for `createPost`, `removePost`, `reactToPost`, `addComment`, `likeComment`, `fetchMoreMyPosts`, `fetchPostDetails` rejections — whose callers already toast. | Duplicate error toasts on the feed; an error left by another page can toast on the next feed visit. | **Fixed** — the hook now toasts only the results of its own list requests (skipping thunk-`condition` cancellations). |
 | F-04 | Medium | State / concurrency | `hooks/usePostEngagement.js` | No in-flight guard; the server toggles (`feedService.react`: same type ⇒ delete). Rollback did `setState(previous)`. | Rapid repeat clicks send overlapping toggles reconciled in arrival order; a failed reaction rolled back unrelated comment/stat updates made meanwhile; clearing with no reaction would send "like". | **Fixed** — one request per card at a time, rollback restores only reaction fields, no request when nothing to change. Transitions moved to pure `utils/reactions.js`. |
 | F-05 | Medium | Functional | `modules/dash/user/context/FeedActionsContext.jsx`, `hooks/useCreatePost.js`, `components/shell/MobileBottomNav.jsx` | `registerOpenCreatePost` stored a handler that was never cleared; the mobile "Post" tab is shown on every user page. | Outside `/feed` the tab called an unmounted page's setter — tapping it did nothing. | **Fixed** — registration returns an unregister; with no feed mounted the tab navigates to `/feed` and opens the dialog when the feed registers. |
 | F-06 | Medium | Functional | `components/modals/SharePostModal.jsx`, `server/.../feed.service.ts` (`addComment` notification) | Share URL is `/feed?post=<id>` but nothing reads `post`; comment notifications link to `/feed`. `fetchPostDetails` exists but no user-feed view uses it. | Shared/sent links and notifications land on the top of the feed, not the post. | **Not fixed** — needs a new post-detail route/UI (product decision). |
-| F-07 | Medium | Data consistency | `features/user/feed/feedThunks.js` (`fetchMoreFeed`), `feedSlice.js` (`appendUnique`) | Offset pages (`page + 1`). Inserts are deduped, but deletions by others between pages shift offsets. | A post can be silently skipped on "Load more". | **Not fixed** — needs cursor pagination (`createdAt,id`) on the server. |
+| F-07 | Medium | Data consistency | `features/dash/user/feed/feedThunks.js` (`fetchMoreFeed`), `feedSlice.js` (`appendUnique`) | Offset pages (`page + 1`). Inserts are deduped, but deletions by others between pages shift offsets. | A post can be silently skipped on "Load more". | **Not fixed** — needs cursor pagination (`createdAt,id`) on the server. |
 | F-08 | **High** (backend) | Security | `server/src/middleware/upload.ts` | Stored filename keeps `path.extname(file.originalname)`; `fileFilter` trusts the client-declared `file.mimetype`. | A file like `x.html` / `x.svg` declared as `image/png` is stored with its own extension and served from the upload directory — possible stored XSS on the upload origin depending on static headers (**not verified**). | **Not fixed** (shared by all upload features) — derive the extension from a validated MIME/magic bytes, serve uploads with `X-Content-Type-Options: nosniff` and `Content-Disposition: attachment` for documents. |
 | F-09 | Low | UX / correctness | `components/modals/SharePostModal.jsx` | Clipboard failure was swallowed and "Link copied" shown; `setTimeout(onClose)` not cleared on unmount; caption limit duplicated as `5000`. | False success on insecure contexts; late `onClose` after unmount. | **Fixed** — error toast on failure, timers cleared, uses `MAX_POST_LENGTH`. |
 | F-10 | Low | Accessibility | `components/post/ReactionButton.jsx` | Picker opens on mouse hover or long-press only; keyboard Enter/Space toggles Like. | Keyboard users can't choose other reactions. | **Not fixed** — add a keyboard trigger (e.g. ArrowUp) with roving focus in the menu. |
 | F-11 | Low | Consistency | `modules/dash/supplier/pages/SupplierAdDetailView.jsx` | Uses `PostComments` with in-memory comments (`replies: 0` number), ignores `parentCommentId`, passes no `currentUser`. | Supplier ad comments aren't persisted; replies become top-level. | **Not fixed** — existing product behaviour; component stays compatible. |
 | F-12 | Low | Performance | `components/post/FeedPost.jsx` | Every card selects global `likingCommentId`. | All memoized cards re-render when any comment like starts/ends. | **Not fixed** — not profiled; select it only while comments are open if profiling shows cost. |
 | F-13 | Low | Data hygiene | `hooks/usePostDraft.js` (`publish`) | Uploads run before `onPublish`; on publish failure a retry uploads again. | Orphaned uploaded files. | **Not fixed** — cache uploaded URLs per draft image or clean up server-side. |
-| F-14 | Low | Maintainability | `features/user/feed/feedSlice.js` | `error`, `reactingId`, `commenting` have no UI consumers after F-03. | Dead state. | **Not fixed** — slice-wide cleanup; existing slice tests assert `error`. |
+| F-14 | Low | Maintainability | `features/dash/user/feed/feedSlice.js` | `error`, `reactingId`, `commenting` have no UI consumers after F-03. | Dead state. | **Not fixed** — slice-wide cleanup; existing slice tests assert `error`. |
 | F-15 | Low | Repo hygiene | `web/vite.config.js` | Unused `createRequire` / `require` left from the earlier malware clean-up (lint error). File inspected: 1015 chars, no payload. | Lint noise; pattern previously used to load `api.js`. | **Not fixed** — outside feed scope; remove the two lines. |
 
 ---
@@ -123,7 +123,7 @@ Verified boundaries:
 
 | Change | Files | Rationale |
 |---|---|---|
-| Safe document-name decoding; `isSafeMediaUrl` filter for images, documents and provided attachments | `web/src/features/user/feed/feedMappers.js` | F-02, F-01 (client defence for existing data). Same-origin paths (`/uploads/…`) still allowed. |
+| Safe document-name decoding; `isSafeMediaUrl` filter for images, documents and provided attachments | `web/src/features/dash/user/feed/feedMappers.js` | F-02, F-01 (client defence for existing data). Same-origin paths (`/uploads/…`) still allowed. |
 | `http(s)`-only media URLs on create/update | `server/src/modules/dash/user/feed/feed.validators.ts` | F-01 at the source. Seed data uses absolute `http(s)` URLs, so no existing flow breaks. |
 | `useFeedPosts` toasts only its own request results | `hooks/useFeedPosts.js` | F-03; removes duplicate/stale toasts without changing the slice contract other pages use. |
 | Reaction guard, scoped rollback, pure transitions (`planReaction`, `applyReaction`, `rollbackReaction`, `reconcileReaction`) | `hooks/usePostEngagement.js`, `utils/reactions.js` | F-04; makes the rules testable without a DOM. |
@@ -165,7 +165,7 @@ No public exports, component props, routes, API contracts or visual design chang
 | `feed/test/commentTree.test.js` | 11 | find (nested/missing), root lookup, immutable update, delete root (+reply count), delete reply (parent count), unknown id, preview limit + pinned new comments |
 | `feed/test/reactions.test.js` | 10 | API mapping incl. legacy ids, toggle planning (add/switch/remove/clear/no-op), totals, optimistic apply, rollback preserving concurrent comment/stat changes, server reconciliation, missing fields |
 | `feed/test/postDraft.test.js` | 12 | initial draft (new/edit/unsafe attachment), image type filter, per-post limit, change detection (whitespace, order, new images, document), shown document, submit labels, upload URL order |
-| `features/user/feed/feedMappers.test.js` (+5) | 5 | document name from URL, malformed `%` escape doesn't throw, unsafe document/image URLs dropped, unsafe provided attachment URL cleared, rules apply inside reposts |
+| `features/dash/user/feed/feedMappers.test.js` (+5) | 5 | document name from URL, malformed `%` escape doesn't throw, unsafe document/image URLs dropped, unsafe provided attachment URL cleared, rules apply inside reposts |
 | `server/tests/feed.update.test.ts` (+1) | 1 | `javascript:`, `data:`, `file:` rejected for `documentUrl`, `imageUrls`, `imageUrl` on create and update; `https` and `null` still accepted |
 
 **Not covered by automated tests** (the web project has no DOM test environment — no jsdom or

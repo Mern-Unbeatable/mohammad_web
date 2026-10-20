@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import SegmentedTabs from '@/components/common/SegmentedTabs/SegmentedTabs';
 import CountBadge from '@/components/ui/CountBadge';
-import { COUNTRY_OPTIONS } from '@/features/user/contacts';
+import { COUNTRY_OPTIONS } from '@/features/dash/user/contacts';
 import { SEARCH_MAX_LENGTH } from '@/shared/utils/urlFilters';
 import { FILTER, FILTER_TABS } from '../../constant/constants';
 import { requestsToConfirmLabel } from '../../utils/contactsLabels';

@@ -83,8 +83,8 @@ recruitment/
 | -------------- | ------------------------------------------------ | ----------------------------------------------- |
 | `*View.jsx`    | Page layout; wires hooks to components           | components, hooks, utils, constants             |
 | `components/`  | Rendering and local UI state only                | utils, constants                                |
-| `hooks/`       | State, side effects, Redux dispatches, API calls | utils, constants, `@/features/user/recruitment` |
-| `utils/`       | Pure functions, no React                         | `@/features/user/recruitment` mappers, shared constants |
+| `hooks/`       | State, side effects, Redux dispatches, API calls | utils, constants, `@/features/dash/user/recruitment` |
+| `utils/`       | Pure functions, no React                         | `@/features/dash/user/recruitment` mappers, shared constants |
 | `constant/`    | Static values and limits                         | nothing                                         |
 
 - Components never dispatch Redux thunks; job, application and apply actions go

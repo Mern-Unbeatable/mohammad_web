@@ -7,7 +7,7 @@ import {
   clearRecruitmentError,
   invalidateJobsList,
   toJobCardModel,
-} from "@/features/user/recruitment";
+} from "@/features/dash/user/recruitment";
 import { usePageParam } from "@/shared/hooks/usePageParam";
 import { SEARCH_PARAM } from "@/shared/utils/urlFilters";
 import { PUBLIC_JOBS_PAGE_SIZE, SEARCH_DEBOUNCE_MS } from "../constant/constants";

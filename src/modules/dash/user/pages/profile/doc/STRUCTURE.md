@@ -57,7 +57,7 @@ Post editing reuses `usePostEditor` (`@/modules/dash/user/hooks`) and the feed's
 | ------------- | ------------------------------------------------ | -------------------------------------------------------------- |
 | `*View.jsx`   | Page layout; wires hooks to components           | components, hooks, feed public API                             |
 | `components/` | Rendering and local UI state only                | hooks (cancel subscription), utils, constants                  |
-| `hooks/`      | State, side effects, Redux dispatches, API calls | utils, constants, `@/features/user/{profile,feed,reports,subscriptions}` |
+| `hooks/`      | State, side effects, Redux dispatches, API calls | utils, constants, `@/features/dash/user/{profile,feed,reports,subscriptions}` |
 | `utils/`      | Pure functions, no React                         | constants                                                      |
 | `constant/`   | Static values                                    | nothing                                                        |
 

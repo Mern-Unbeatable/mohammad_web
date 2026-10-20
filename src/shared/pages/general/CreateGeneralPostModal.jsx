@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { FileText, ImagePlus, Newspaper, Paperclip, X } from "lucide-react";
 import { toast } from "react-hot-toast";
 import Avatar from "@/components/ui/Avatar";
-import { generalApi } from "@/features/user/general";
+import { generalApi } from "@/features/dash/user/general";
 import { useAuth } from "@/shared/auth/useAuth";
 
 const postTypes = [

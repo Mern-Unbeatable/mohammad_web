@@ -5,7 +5,7 @@ import {
   editComment,
   likeComment,
   removeComment as removeCommentThunk,
-} from "@/features/user/feed";
+} from "@/features/dash/user/feed";
 import { findComment, removeComment, updateComment } from "../utils/commentTree";
 
 /**

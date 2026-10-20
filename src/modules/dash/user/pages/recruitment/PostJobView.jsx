@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router";
 import { ChevronLeft, Loader2 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Card from "@/components/ui/Card";
-import { EMPLOYMENT_TYPE_OPTIONS } from "@/features/user/recruitment";
+import { EMPLOYMENT_TYPE_OPTIONS } from "@/features/dash/user/recruitment";
 import JobPostForm from "./components/form/JobPostForm";
 import { useJobForm } from "./hooks/useJobForm";
 import { MY_JOBS_PATH } from "./constant/constants";

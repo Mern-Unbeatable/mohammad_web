@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { configureStore } from '@reduxjs/toolkit';
 import { authReducer } from '@/features/auth';
-import { userGeneralReducer } from '@/features/user/general';
+import { userGeneralReducer } from '@/features/dash/user/general';
 import GeneralView from '../GeneralView';
 import MyGeneralPostsView from '../MyGeneralPostsView';
 import GeneralPostDetailView from '../GeneralPostDetailView';

@@ -3,7 +3,7 @@ import {
   categoryToApi,
   conditionFromApi,
   MARKETPLACE_CATEGORY_OPTIONS,
-} from '@/features/user/marketplace';
+} from '@/features/dash/user/marketplace';
 import { conditions, years } from '@/modules/dash/user/data/marketplace';
 import { currentUser } from '@/modules/dash/user/data/dashboard';
 import {

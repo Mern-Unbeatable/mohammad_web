@@ -10,12 +10,12 @@ import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
 import {
   fetchListingsList,
   removeListing,
-} from "@/features/admin/marketplace";
+} from "@/features/dash/admin/marketplace";
 import {
   MARKETPLACE_CATEGORY_OPTIONS,
   categoryToApi,
   toListingCardModel,
-} from "@/features/admin/marketplace/marketplaceMappers";
+} from "@/features/dash/admin/marketplace/marketplaceMappers";
 
 const PAGE_SIZE = 8;
 

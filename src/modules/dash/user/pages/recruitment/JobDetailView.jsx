@@ -3,7 +3,7 @@ import { ChevronLeft } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { JobDetailPageSkeleton } from "@/components/common/Skeleton";
 import JobDetailCard from "@/components/data-display/JobDetailCard/JobDetailCard";
-import { toJobDetailModel } from "@/features/user/recruitment";
+import { toJobDetailModel } from "@/features/dash/user/recruitment";
 import NotFound from "@/shared/pages/NotFound";
 import { isJobOpen, jobClosedNotice } from "@/shared/constants/jobStatus";
 import AppliedCandidatesPanel from "./components/candidates/AppliedCandidatesPanel";

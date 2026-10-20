@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
-import { cancelSubscription } from "@/features/user/subscriptions";
-import { fetchUserProfile } from "@/features/user/profile";
+import { cancelSubscription } from "@/features/dash/user/subscriptions";
+import { fetchUserProfile } from "@/features/dash/user/profile";
 
 /** Cancel the signed-in account's subscription behind a confirm dialog. */
 export function useCancelSubscription({ canCancel, isTrial }) {

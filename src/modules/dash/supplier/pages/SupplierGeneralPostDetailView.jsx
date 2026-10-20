@@ -11,7 +11,7 @@ import {
   clearSelectedPost,
   clearGeneralError,
   toGeneralPostModel,
-} from "@/features/supplier/general";
+} from "@/features/dash/supplier/general";
 
 const typeStyles = {
   news: "bg-[#FEF3E8] text-[#E67E22]",

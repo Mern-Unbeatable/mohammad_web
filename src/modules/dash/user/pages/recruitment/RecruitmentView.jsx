@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import Pagination from "@/components/common/Pagination/Pagination";
 import Container from "@/components/ui/Container";
-import { selectNewApplicationTotal } from "@/features/user/recruitment";
+import { selectNewApplicationTotal } from "@/features/dash/user/recruitment";
 import RecruitmentToolbar from "./components/toolbar/RecruitmentToolbar";
 import ViewModeToggle from "./components/toolbar/ViewModeToggle";
 import JobsSectionHeader from "./components/jobs/JobsSectionHeader";

@@ -8,7 +8,7 @@ import {
   markAllUserNotificationsRead,
   clearNotificationsError,
   toNotificationListModel,
-} from '@/features/user/notifications';
+} from '@/features/dash/user/notifications';
 import { resolveNotificationLink } from '@/features/messages';
 import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
 import { NOTIFICATIONS_QUERY } from '../constant/constants';

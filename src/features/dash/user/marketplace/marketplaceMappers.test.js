@@ -5,7 +5,7 @@ import {
   categoryToApi,
   toListingCardModel,
 } from './marketplaceMappers';
-import * as adminMappers from '@/features/admin/marketplace/marketplaceMappers';
+import * as adminMappers from '@/features/dash/admin/marketplace/marketplaceMappers';
 
 describe('marketplace Other category', () => {
   it('is the last selectable category', () => {

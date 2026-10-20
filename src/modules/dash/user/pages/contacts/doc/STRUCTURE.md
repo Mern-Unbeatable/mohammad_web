@@ -50,7 +50,7 @@ contacts/
 | ------------- | -------------------------------------------- | ------------------------------------------------ |
 | `*View.jsx`   | Page layout; wires one hook to components    | components, hooks, utils (labels)                |
 | `components/` | Rendering only; no dispatch, no toasts       | utils, constants, shared UI                      |
-| `hooks/`      | URL state, effects, dispatch, toasts         | utils, constants, `@/features/user/contacts`, `@/features/user/feed` |
+| `hooks/`      | URL state, effects, dispatch, toasts         | utils, constants, `@/features/dash/user/contacts`, `@/features/dash/user/feed` |
 | `utils/`      | Pure functions, no React                     | constants, `@/shared/utils/urlFilters`           |
 | `constant/`   | Static values and tab config                 | `lucide-react`, `COUNTRY_OPTIONS`                |
 

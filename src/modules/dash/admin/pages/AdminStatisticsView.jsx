@@ -12,11 +12,11 @@ import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
 import {
   fetchAdminDashboardStats,
   clearAdminError,
-} from "@/features/admin/dashboard";
+} from "@/features/dash/admin/dashboard";
 import {
   fetchAdminStatistics,
   clearStatisticsError,
-} from "@/features/admin/statistics";
+} from "@/features/dash/admin/statistics";
 
 const PERIOD_OPTIONS = [
   "This year",

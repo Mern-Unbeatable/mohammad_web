@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router';
 import { toast } from 'react-hot-toast';
-import { confirmCheckout, fetchMySubscription } from '@/features/user/subscriptions';
-import { fetchUserProfile } from '@/features/user/profile';
+import { confirmCheckout, fetchMySubscription } from '@/features/dash/user/subscriptions';
+import { fetchUserProfile } from '@/features/dash/user/profile';
 import { CHECKOUT_PARAM, CHECKOUT_STATUS, SESSION_ID_PARAM } from '../constant/constants';
 
 /** Handles the Stripe redirect once: confirms the session, clears the params, refreshes state. */

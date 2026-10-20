@@ -13,13 +13,13 @@ import {
   fetchReportsList,
   fetchReportStats,
   updateReportStatus,
-} from "@/features/admin/reports";
+} from "@/features/dash/admin/reports";
 import {
   statusFilterToApi,
   statusLabelToApi,
   toReportRowModel,
   toStatCards,
-} from "@/features/admin/reports/reportsMappers";
+} from "@/features/dash/admin/reports/reportsMappers";
 
 const PAGE_SIZE = 10;
 

@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  fetchUserNotifications,
-  markUserNotificationRead,
-  markAllUserNotificationsRead,
-  removeUserNotification,
-  fetchUserUnreadNotificationCount,
+  fetchSupplierNotifications,
+  markSupplierNotificationRead,
+  markAllSupplierNotificationsRead,
+  removeSupplierNotification,
+  fetchSupplierUnreadNotificationCount,
 } from "./notificationsThunks";
-import { logoutUser } from "../../auth/authThunks";
+import { logoutUser } from "@/features/auth/authThunks";
 
 const initialState = {
   notifications: [],
@@ -25,7 +25,7 @@ const initialState = {
 };
 
 const notificationsSlice = createSlice({
-  name: "userNotifications",
+  name: "supplierNotifications",
   initialState,
   reducers: {
     clearNotificationsError: (state) => {
@@ -34,23 +34,23 @@ const notificationsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchUserNotifications.pending, (state) => {
+      .addCase(fetchSupplierNotifications.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchUserNotifications.fulfilled, (state, action) => {
+      .addCase(fetchSupplierNotifications.fulfilled, (state, action) => {
         state.loading = false;
         state.notifications = action.payload.data;
         state.notificationsMeta = action.payload.meta;
       })
-      .addCase(fetchUserNotifications.rejected, (state, action) => {
+      .addCase(fetchSupplierNotifications.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(markUserNotificationRead.pending, (state) => {
+      .addCase(markSupplierNotificationRead.pending, (state) => {
         state.actionLoading = true;
       })
-      .addCase(markUserNotificationRead.fulfilled, (state, action) => {
+      .addCase(markSupplierNotificationRead.fulfilled, (state, action) => {
         state.actionLoading = false;
         const { notificationId } = action.payload;
         state.notifications = state.notifications.map((item) =>
@@ -60,14 +60,14 @@ const notificationsSlice = createSlice({
           state.notificationsMeta.unreadCount -= 1;
         }
       })
-      .addCase(markUserNotificationRead.rejected, (state, action) => {
+      .addCase(markSupplierNotificationRead.rejected, (state, action) => {
         state.actionLoading = false;
         state.error = action.payload;
       })
-      .addCase(markAllUserNotificationsRead.pending, (state) => {
+      .addCase(markAllSupplierNotificationsRead.pending, (state) => {
         state.actionLoading = true;
       })
-      .addCase(markAllUserNotificationsRead.fulfilled, (state) => {
+      .addCase(markAllSupplierNotificationsRead.fulfilled, (state) => {
         state.actionLoading = false;
         state.notifications = state.notifications.map((item) => ({
           ...item,
@@ -75,14 +75,14 @@ const notificationsSlice = createSlice({
         }));
         state.notificationsMeta.unreadCount = 0;
       })
-      .addCase(markAllUserNotificationsRead.rejected, (state, action) => {
+      .addCase(markAllSupplierNotificationsRead.rejected, (state, action) => {
         state.actionLoading = false;
         state.error = action.payload;
       })
-      .addCase(removeUserNotification.pending, (state) => {
+      .addCase(removeSupplierNotification.pending, (state) => {
         state.actionLoading = true;
       })
-      .addCase(removeUserNotification.fulfilled, (state, action) => {
+      .addCase(removeSupplierNotification.fulfilled, (state, action) => {
         state.actionLoading = false;
         const removed = state.notifications.find(
           (item) => item.id === action.payload.notificationId,
@@ -94,14 +94,14 @@ const notificationsSlice = createSlice({
           state.notificationsMeta.unreadCount -= 1;
         }
       })
-      .addCase(removeUserNotification.rejected, (state, action) => {
+      .addCase(removeSupplierNotification.rejected, (state, action) => {
         state.actionLoading = false;
         state.error = action.payload;
       })
-      .addCase(fetchUserUnreadNotificationCount.pending, (state, action) => {
+      .addCase(fetchSupplierUnreadNotificationCount.pending, (state, action) => {
         state.unreadRequestId = action.meta.requestId;
       })
-      .addCase(fetchUserUnreadNotificationCount.fulfilled, (state, action) => {
+      .addCase(fetchSupplierUnreadNotificationCount.fulfilled, (state, action) => {
         if (state.unreadRequestId !== action.meta.requestId) return;
         state.notificationsMeta.unreadCount = action.payload;
       })
@@ -112,6 +112,6 @@ const notificationsSlice = createSlice({
 
 export const { clearNotificationsError } = notificationsSlice.actions;
 
-export const selectUserUnreadNotificationCount = (state) =>
-  state.userNotifications.notificationsMeta.unreadCount ?? 0;
+export const selectSupplierUnreadNotificationCount = (state) =>
+  state.supplierNotifications.notificationsMeta.unreadCount ?? 0;
 export default notificationsSlice.reducer;

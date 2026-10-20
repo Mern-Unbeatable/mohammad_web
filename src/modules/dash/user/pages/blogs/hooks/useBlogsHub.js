@@ -6,7 +6,7 @@ import {
   fetchLatestBlogs,
   clearBlogsError,
   invalidateBlogsList,
-} from '@/features/user/blogs';
+} from '@/features/dash/user/blogs';
 import { buildBlogsQuery, buildLatestBlogsQuery } from '../utils/blogQueries';
 import { toBlogCards } from '../utils/blogCards';
 import { SEARCH_DEBOUNCE_MS } from '../constant/constants';

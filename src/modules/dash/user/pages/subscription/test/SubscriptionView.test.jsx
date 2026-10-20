@@ -3,8 +3,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 import { configureStore } from '@reduxjs/toolkit';
-import { userSubscriptionsReducer } from '@/features/user/subscriptions';
-import { userProfileReducer } from '@/features/user/profile';
+import { userSubscriptionsReducer } from '@/features/dash/user/subscriptions';
+import { userProfileReducer } from '@/features/dash/user/profile';
 import SubscriptionView from '../SubscriptionView';
 
 const PLANS = {

@@ -11,7 +11,7 @@ import {
   changeAdminPassword,
   clearProfileError,
   setProfileField,
-} from "@/features/admin/profile";
+} from "@/features/dash/admin/profile";
 
 const emptyPasswords = { current: "", next: "", confirm: "" };
 const IMAGE_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);

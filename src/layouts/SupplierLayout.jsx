@@ -4,7 +4,7 @@ import { supplierNavItems } from '@/modules/dash/supplier/config/nav';
 import {
   fetchSupplierUnreadNotificationCount,
   selectSupplierUnreadNotificationCount,
-} from '@/features/supplier/notifications';
+} from '@/features/dash/supplier/notifications';
 import { useNotificationBadge } from '@/shared/hooks/useNotificationBadge';
 
 const supplierNotificationBadge = {

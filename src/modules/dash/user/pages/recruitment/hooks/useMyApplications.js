@@ -6,7 +6,7 @@ import {
   withdrawApplication,
   toJobCardModel,
   formatPostedAgo,
-} from "@/features/user/recruitment";
+} from "@/features/dash/user/recruitment";
 import { MY_APPLICATIONS_PAGE_SIZE } from "../constant/constants";
 
 const toApplicationModel = (app) => {

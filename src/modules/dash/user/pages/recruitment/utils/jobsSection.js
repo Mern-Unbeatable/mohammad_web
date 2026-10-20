@@ -1,4 +1,4 @@
-import { employmentToApi, levelToApi } from "@/features/user/recruitment";
+import { employmentToApi, levelToApi } from "@/features/dash/user/recruitment";
 import { workplaceToApi } from "@/shared/constants/jobWorkplace";
 import { JOB_STATUS } from "@/shared/constants/jobStatus";
 import { ALL_OPTION } from "./recruitmentUrlFilters";

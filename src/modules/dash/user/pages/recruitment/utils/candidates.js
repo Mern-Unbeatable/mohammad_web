@@ -1,4 +1,4 @@
-import { formatPostedAgo } from "@/features/user/recruitment/recruitmentMappers";
+import { formatPostedAgo } from "@/features/dash/user/recruitment/recruitmentMappers";
 
 const capitalize = (text) =>
   text ? text.charAt(0).toUpperCase() + text.slice(1) : "";

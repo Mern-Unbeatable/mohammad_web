@@ -1,8 +1,8 @@
 import { Link, useLocation } from 'react-router';
 import { useSelector } from 'react-redux';
 import CountBadge from '@/components/ui/CountBadge';
-import { selectUserUnreadNotificationCount } from '@/features/user/notifications';
-import { selectPendingRequestCount } from '@/features/user/contacts';
+import { selectUserUnreadNotificationCount } from '@/features/dash/user/notifications';
+import { selectPendingRequestCount } from '@/features/dash/user/contacts';
 import { useFeedActions } from '@/modules/dash/user/context/useFeedActions';
 import { useLayoutChrome } from '@/shared/context/LayoutChromeContext';
 import { BOTTOM_NAV_TABS } from '../../constant/constants';

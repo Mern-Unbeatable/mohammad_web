@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router';
-import { fetchListings, clearMarketplaceError } from '@/features/user/marketplace';
+import { fetchListings, clearMarketplaceError } from '@/features/dash/user/marketplace';
 import { usePageParam } from '@/shared/hooks/usePageParam';
 import { SEARCH_PARAM } from '@/shared/utils/urlFilters';
 import { CATEGORY_PARAM, marketplaceFilters } from '../utils/marketplaceUrlFilters';

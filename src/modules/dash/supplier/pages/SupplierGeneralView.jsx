@@ -15,7 +15,7 @@ import {
   categoryToApi,
   toGeneralPostModel,
   formToCreatePayload,
-} from "@/features/supplier/general";
+} from "@/features/dash/supplier/general";
 import { GRID_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
 
 const BASE = "/supplier/general";

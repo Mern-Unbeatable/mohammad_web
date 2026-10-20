@@ -10,7 +10,7 @@ import {
   jobLeftList,
   toJobCardModel,
   selectNewApplicationsByJob,
-} from "@/features/user/recruitment";
+} from "@/features/dash/user/recruitment";
 import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
 import { SEARCH_DEBOUNCE_MS } from "../constant/constants";
 import {

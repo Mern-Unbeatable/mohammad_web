@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
-import { contactsApi, requestContactConnection } from '@/features/user/contacts';
-import { marketplaceApi } from '@/features/user/marketplace';
-import { recruitmentApi } from '@/features/user/recruitment';
+import { contactsApi, requestContactConnection } from '@/features/dash/user/contacts';
+import { marketplaceApi } from '@/features/dash/user/marketplace';
+import { recruitmentApi } from '@/features/dash/user/recruitment';
 import { PEOPLE_FETCH_SIZE, SIDEBAR_LIMIT } from '../constant/constants';
 import {
   markPending,

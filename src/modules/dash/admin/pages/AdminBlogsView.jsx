@@ -12,8 +12,8 @@ import { panelPrimaryBtn } from "@/shared/layout/PanelLayout/panelPageTheme";
 import {
   fetchBlogsList,
   removeBlogPost,
-} from "@/features/admin/blogs";
-import { toBlogCardModel } from "@/features/admin/blogs/blogsMappers";
+} from "@/features/dash/admin/blogs";
+import { toBlogCardModel } from "@/features/dash/admin/blogs/blogsMappers";
 
 const PAGE_SIZE = 8;
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
-import { fetchGeneralPosts, createGeneralPost, clearGeneralError } from '@/features/user/general';
+import { fetchGeneralPosts, createGeneralPost, clearGeneralError } from '@/features/dash/user/general';
 import { buildPostsQuery } from '../utils/generalQueries';
 import { buildPostPayload } from '../utils/postForm';
 import { DEFAULT_CATEGORY } from '../constant/constants';

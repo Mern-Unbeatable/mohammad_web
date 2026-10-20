@@ -8,7 +8,7 @@ import {
   formToCreatePayload,
   jobToFormValues,
   recruitmentApi,
-} from "@/features/user/recruitment";
+} from "@/features/dash/user/recruitment";
 import { MY_JOBS_PATH } from "../constant/constants";
 import { emptyJobForm, jobPayloadError } from "../utils/jobForm";
 

@@ -9,8 +9,8 @@ import NotFound from "@/shared/pages/NotFound";
 import {
   fetchGeneralPostDetails,
   clearSelectedPost,
-} from "@/features/admin/general";
-import { toGeneralPostModel } from "@/features/admin/general/generalMappers";
+} from "@/features/dash/admin/general";
+import { toGeneralPostModel } from "@/features/dash/admin/general/generalMappers";
 
 const typeStyles = {
   news: "bg-[#FEF3E8] text-[#E67E22]",

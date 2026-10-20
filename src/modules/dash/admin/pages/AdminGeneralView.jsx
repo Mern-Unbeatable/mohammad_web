@@ -10,11 +10,11 @@ import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import {
   fetchGeneralPosts,
   removeGeneralPost,
-} from "@/features/admin/general";
+} from "@/features/dash/admin/general";
 import {
   categoryToApi,
   toGeneralPostModel,
-} from "@/features/admin/general/generalMappers";
+} from "@/features/dash/admin/general/generalMappers";
 
 const PAGE_SIZE = 8;
 

@@ -17,7 +17,7 @@ import CreateAdModal from "@/modules/dash/supplier/components/CreateAdModal";
 import {
   fetchSupplierDashboard,
   clearSupplierDashError,
-} from "@/features/supplier/dashboard";
+} from "@/features/dash/supplier/dashboard";
 import { useAuth } from "@/shared/auth/useAuth";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import {

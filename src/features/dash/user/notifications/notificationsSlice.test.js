@@ -6,7 +6,7 @@ import {
   markAllUserNotificationsRead,
   markUserNotificationRead,
 } from "./notificationsThunks";
-import { logoutUser } from "../../auth/authThunks";
+import { logoutUser } from "@/features/auth/authThunks";
 
 vi.mock("./notificationsApi", () => ({ getApiErrorMessage: (_err, fallback) => fallback }));
 

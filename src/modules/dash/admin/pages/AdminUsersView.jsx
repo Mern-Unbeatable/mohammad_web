@@ -10,7 +10,7 @@ import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
 import SuspendUserModal from "@/modules/dash/admin/components/SuspendUserModal";
 import SubscriptionPill from "@/modules/dash/admin/components/SubscriptionPill";
-import { fetchUsersList, updateUserStatus } from "@/features/admin/users";
+import { fetchUsersList, updateUserStatus } from "@/features/dash/admin/users";
 
 const PAGE_SIZE = 10;
 

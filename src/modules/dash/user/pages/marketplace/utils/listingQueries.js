@@ -1,4 +1,4 @@
-import { categoryToApi } from '@/features/user/marketplace';
+import { categoryToApi } from '@/features/dash/user/marketplace';
 import { LISTINGS_PAGE_SIZE, PERSONAL_LISTINGS_PAGE_SIZE } from '../constant/constants';
 
 const withFilters = (params, { query, category }) => {

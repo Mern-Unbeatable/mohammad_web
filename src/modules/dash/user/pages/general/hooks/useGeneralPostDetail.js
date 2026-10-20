@@ -7,7 +7,7 @@ import {
   clearSelectedPost,
   clearGeneralError,
   toGeneralPostModel,
-} from '@/features/user/general';
+} from '@/features/dash/user/general';
 
 const copyPageLink = async () => {
   try {

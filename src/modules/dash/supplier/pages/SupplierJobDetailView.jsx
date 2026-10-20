@@ -13,7 +13,7 @@ import {
   clearRecruitmentError,
   toJobDetailModel,
   recruitmentApi,
-} from "@/features/supplier/recruitment";
+} from "@/features/dash/supplier/recruitment";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import NotFound from "@/shared/pages/NotFound";
 import { isJobOpen, jobClosedNotice } from "@/shared/constants/jobStatus";

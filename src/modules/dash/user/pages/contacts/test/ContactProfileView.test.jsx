@@ -4,9 +4,9 @@ import { Provider } from "react-redux";
 import { MemoryRouter, Route, Routes } from "react-router";
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "@/features/auth";
-import { userContactsReducer } from "@/features/user/contacts";
-import { userFeedReducer } from "@/features/user/feed";
-import { userReportsReducer } from "@/features/user/reports";
+import { userContactsReducer } from "@/features/dash/user/contacts";
+import { userFeedReducer } from "@/features/dash/user/feed";
+import { userReportsReducer } from "@/features/dash/user/reports";
 import ContactProfileView from "../ContactProfileView";
 
 const ME = "11111111-1111-4111-8111-111111111111";

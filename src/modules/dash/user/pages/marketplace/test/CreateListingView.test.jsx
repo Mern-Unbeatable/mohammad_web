@@ -4,8 +4,8 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 import { configureStore } from '@reduxjs/toolkit';
 import { authReducer } from '@/features/auth';
-import { userMarketplaceReducer } from '@/features/user/marketplace';
-import { userProfileReducer } from '@/features/user/profile';
+import { userMarketplaceReducer } from '@/features/dash/user/marketplace';
+import { userProfileReducer } from '@/features/dash/user/profile';
 import CreateListingView from '../CreateListingView';
 
 const render = () => {

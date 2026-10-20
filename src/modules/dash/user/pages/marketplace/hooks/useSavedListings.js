@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchListings, clearMarketplaceError } from '@/features/user/marketplace';
+import { fetchListings, clearMarketplaceError } from '@/features/dash/user/marketplace';
 import { buildSavedQuery } from '../utils/listingQueries';
 import { useListingsState } from './useListingsState';
 import { useLocalListingFilters } from './useLocalListingFilters';

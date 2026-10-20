@@ -88,7 +88,7 @@ feed/
 | Layer          | Holds                                            | May import                               |
 | -------------- | ------------------------------------------------ | ---------------------------------------- |
 | `components/`  | Rendering and local UI state only                | hooks, utils, constants                  |
-| `hooks/`       | State, side effects, Redux dispatches, API calls | utils, constants, `@/features/user/feed` |
+| `hooks/`       | State, side effects, Redux dispatches, API calls | utils, constants, `@/features/dash/user/feed` |
 | `utils/`       | Pure functions, no React                         | constants                                |
 | `constants.js` | Static values and limits                         | nothing                                  |
 

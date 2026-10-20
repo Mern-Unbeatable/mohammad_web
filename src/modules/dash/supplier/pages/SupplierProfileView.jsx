@@ -11,7 +11,7 @@ import {
   clearProfileError,
   setProfileField,
   profileApi,
-} from "@/features/supplier/profile";
+} from "@/features/dash/supplier/profile";
 
 const IMAGE_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
 

@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Pagination from "@/components/common/Pagination/Pagination";
 import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
-import { selectNewApplicationTotal } from "@/features/user/recruitment";
+import { selectNewApplicationTotal } from "@/features/dash/user/recruitment";
 import { MY_JOB_STATUS_FILTERS } from "@/shared/constants/jobStatus";
 import RecruitmentToolbar from "./components/toolbar/RecruitmentToolbar";
 import JobsSectionHeader from "./components/jobs/JobsSectionHeader";

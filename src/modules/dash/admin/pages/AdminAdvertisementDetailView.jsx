@@ -13,11 +13,11 @@ import {
   fetchAdDetails,
   clearSelectedAd,
   reviewAdvertisement,
-} from "@/features/admin/advertisements";
+} from "@/features/dash/admin/advertisements";
 import {
   statusLabelToReviewApi,
   toAdDetailModel,
-} from "@/features/admin/advertisements/adsMappers";
+} from "@/features/dash/admin/advertisements/adsMappers";
 
 const STATUS_PILL = {
   Active: "bg-green-secondary text-green-primary",

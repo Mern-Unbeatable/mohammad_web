@@ -14,8 +14,8 @@ import {
   blogsApi,
   createBlogPost,
   updateBlogPost,
-} from "@/features/admin/blogs";
-import { BLOG_CATEGORY_OPTIONS } from "@/features/admin/blogs/blogsMappers";
+} from "@/features/dash/admin/blogs";
+import { BLOG_CATEGORY_OPTIONS } from "@/features/dash/admin/blogs/blogsMappers";
 
 const labelClass = "mb-1.5 block text-[14px] font-medium text-deep-blue";
 const inputClass =

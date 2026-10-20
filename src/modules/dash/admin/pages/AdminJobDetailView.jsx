@@ -11,8 +11,8 @@ import {
   fetchJobDetails,
   clearSelectedJob,
   recruitmentApi,
-} from "@/features/admin/recruitment";
-import { toJobCardModel } from "@/features/admin/recruitment/recruitmentMappers";
+} from "@/features/dash/admin/recruitment";
+import { toJobCardModel } from "@/features/dash/admin/recruitment/recruitmentMappers";
 
 const adminProfilePath = (userId) => `/admin/users/${userId}`;
 

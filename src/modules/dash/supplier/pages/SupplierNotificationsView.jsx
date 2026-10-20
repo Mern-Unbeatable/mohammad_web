@@ -11,7 +11,7 @@ import {
   markAllSupplierNotificationsRead,
   clearNotificationsError,
   toNotificationListModel,
-} from "@/features/supplier/notifications";
+} from "@/features/dash/supplier/notifications";
 import { resolveNotificationLink } from "@/features/messages";
 import { CHAT_BASE_PATHS } from "@/shared/constants/chat";
 

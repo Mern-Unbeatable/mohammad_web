@@ -12,7 +12,7 @@ import {
   clearBlogsError,
   toBlogCardModel,
   toBlogDetailModel,
-} from "@/features/supplier/blogs";
+} from "@/features/dash/supplier/blogs";
 
 const BLOG_BASE = "/supplier/blogs";
 

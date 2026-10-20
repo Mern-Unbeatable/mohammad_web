@@ -6,7 +6,7 @@ import { FeedActionsProvider } from "@/modules/dash/user/context/FeedActionsCont
 import { LayoutChromeProvider } from "@/shared/context/LayoutChromeContext";
 import AppFooter from "@/shared/layout/FooterLayout";
 import ScrollToTop from "@/shared/routing/ScrollToTop";
-import { fetchUserProfile } from "@/features/user/profile";
+import { fetchUserProfile } from "@/features/dash/user/profile";
 
 const UserLayout = () => {
   const dispatch = useDispatch();

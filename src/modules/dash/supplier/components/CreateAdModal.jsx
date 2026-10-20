@@ -30,7 +30,7 @@ import {
   adToForm,
   toDurationTiers,
   defaultDurationId,
-} from '@/features/supplier/advertisements';
+} from '@/features/dash/supplier/advertisements';
 import { panelPrimaryBtn, panelSecondaryBtn } from '@/shared/layout/PanelLayout/panelPageTheme';
 
 const STEPPER_STEPS_INITIAL = [
