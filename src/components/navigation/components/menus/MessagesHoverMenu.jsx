@@ -1,3 +1,4 @@
+import { MessageSquare } from "lucide-react";
 import { ConversationItem } from "@/components/data-display/Messenger/Messenger";
 import { CHAT_BASE_PATHS } from "@/features/messages/chatPaths";
 import { useMessagesPreview } from "../../hooks/useMessagesPreview";
@@ -12,6 +13,7 @@ const MessagesHoverMenu = ({ children }) => {
   return (
     <NavHoverMenu
       title="Messages"
+      icon={MessageSquare}
       footerLabel="See all messages"
       footerTo={CHAT_BASE_PATHS.USER}
       onOpen={loadPreview}

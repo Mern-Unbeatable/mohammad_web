@@ -7,7 +7,7 @@ import MessagesHoverMenu from "../menus/MessagesHoverMenu";
 
 /** Icon + label links; Notifications and Messages open a preview on hover. */
 const DesktopNavLinks = ({ pathname, badgeFor, badgeLabelFor }) => (
-  <nav className="flex items-center gap-0.5">
+  <nav className="flex gap-0.5 self-stretch">
     {NAV_ITEMS.map((item) => {
       const { id, label, to } = item;
       const active = isNavItemActive(item, pathname);
@@ -15,10 +15,11 @@ const DesktopNavLinks = ({ pathname, badgeFor, badgeLabelFor }) => (
         <Link
           key={id}
           to={to}
-          className={`flex min-w-[68px] flex-col items-center gap-0.5 rounded-md px-2 py-1.5 text-[11px] font-medium transition-colors ${
+          aria-current={active ? "page" : undefined}
+          className={`relative flex h-full min-w-[68px] flex-col items-center justify-center gap-0.5 px-2 text-[11px] font-medium transition-colors after:absolute after:inset-x-1 after:-bottom-px after:h-[2px] after:rounded-full after:transition-colors ${
             active
-              ? "text-primary"
-              : "text-[#64748B] hover:bg-[#F9FAFB] hover:text-deep-blue"
+              ? "text-primary after:bg-primary"
+              : "text-[#64748B] after:bg-transparent hover:bg-[#F9FAFB] hover:text-deep-blue"
           }`}
         >
           <span className="relative">

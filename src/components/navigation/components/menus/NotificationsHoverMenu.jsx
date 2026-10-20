@@ -1,3 +1,4 @@
+import { Bell } from "lucide-react";
 import { CardSkeleton } from "@/components/loader";
 import { NOTIFICATIONS_PATH } from "../../constant/constants";
 import { useNotificationsPreview } from "../../hooks/useNotificationsPreview";
@@ -12,6 +13,7 @@ const NotificationsHoverMenu = ({ children }) => {
   return (
     <NavHoverMenu
       title="Notifications"
+      icon={Bell}
       footerLabel="See all notifications"
       footerTo={NOTIFICATIONS_PATH}
       onOpen={loadPreview}
