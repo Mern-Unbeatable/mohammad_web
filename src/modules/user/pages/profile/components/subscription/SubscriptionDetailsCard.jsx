@@ -1,5 +1,5 @@
 import Card from "@/components/ui/Card";
-import CancelSubscriptionModal from "@/modules/user/components/subscription/CancelSubscriptionModal";
+import { CancelSubscriptionModal } from "@/modules/user/pages/subscription";
 import { useCancelSubscription } from "../../hooks/useCancelSubscription";
 import {
   canCancelSubscription,
