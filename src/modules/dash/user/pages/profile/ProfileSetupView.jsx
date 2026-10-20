@@ -1,5 +1,5 @@
 import Container from "@/components/ui/Container";
-import ProfileSetupForm from "@/components/forms/ProfileSetupForm/ProfileSetupForm";
+import ProfileSetupForm from "./components/setup/ProfileSetupForm";
 import ProfileSetupLoading from "@/components/loader/spinners/ProfileSetupLoading";
 import { useProfileSetup } from "./hooks/useProfileSetup";
 

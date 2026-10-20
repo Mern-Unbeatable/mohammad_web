@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
-import AdminAccountForm from "@/components/forms/AdminAccountForm/AdminAccountForm";
+import AdminAccountForm from "@/modules/dash/admin/components/profile/AdminAccountForm";
 import { AdminAccountFormSkeleton } from "@/components/loader";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import {

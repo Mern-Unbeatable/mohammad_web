@@ -81,8 +81,11 @@ or checkboxes from `form-controls`:
   `register/components/SelectField.jsx`,
   `forgot-password/pages/ForgotPasswordView.jsx`.
   `ResetPasswordView` uses `PasswordField` unchanged.
-- **Shared forms:** `Components/forms/AdminAccountForm/AdminAccountForm.jsx`,
-  `Components/forms/ProfileSetupForm/ProfileSetupForm.jsx`.
+- **Feature forms:** `AdminAccountForm` and `ProfileSetupForm`, which were in
+  `Components/forms/` when migrated. They have since moved to
+  `modules/dash/admin/components/profile/` and
+  `modules/dash/user/pages/profile/components/setup/`. `RichTextArea` moved
+  into `form-controls/`, and `Components/forms/` was removed.
 - **Modals:** `messages/{NewMessage,CreateGroup,ConversationInfo,StartConversation}Modal.jsx`,
   `general/CreateGeneralPostModal.jsx`, `supplier/CreateAdModal.jsx`,
   `admin/{Reason,SuspendUser}Modal.jsx`.

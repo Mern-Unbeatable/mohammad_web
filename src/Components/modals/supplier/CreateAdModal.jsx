@@ -19,7 +19,6 @@ import {
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import StatusBadge from '@/components/data-display/DataTable/StatusBadge';
-import RichTextArea from '@/components/forms/RichTextArea/RichTextArea';
 import AdDetailCard from '@/modules/dash/supplier/components/AdDetailCard';
 import { AD_CATEGORIES, getCategoryById } from '@/modules/dash/supplier/data/advertisements';
 import {
@@ -32,7 +31,7 @@ import {
   defaultDurationId,
 } from '@/features/dash/supplier/advertisements';
 import { panelPrimaryBtn, panelSecondaryBtn } from '@/components/navigation/panel/panelPageTheme';
-import { FormLabel, Input } from '@/components/form-controls';
+import { FormLabel, Input, RichTextArea } from '@/components/form-controls';
 
 const STEPPER_STEPS_INITIAL = [
   { id: 'type', label: 'Type' },

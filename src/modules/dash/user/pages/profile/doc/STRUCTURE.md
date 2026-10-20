@@ -17,6 +17,9 @@ profile/
 │   └── constants.js          Routes, paid membership statuses, reports query, subscription defaults / colours, image types
 │
 ├── components/
+│   ├── setup/
+│   │   └── ProfileSetupForm.jsx    Edit-profile form (also used by the supplier profile page)
+│   │
 │   ├── subscription/
 │   │   └── SubscriptionDetailsCard.jsx  Plan details and Cancel Subscription
 │   │
@@ -82,9 +85,11 @@ flowchart TD
 
 Code outside this folder must import from `@/modules/dash/user/pages/profile` only:
 
-- `SubscriptionDetailsCard` (props: `subscription`, `manageable`, `accent`)
+- `SubscriptionDetailsCard` (props: `subscription`, `manageable`, `accent`),
+  used by `AdminUserDetailView`
+- `ProfileSetupForm`, used by `SupplierProfileView`
 
-Used by `AdminUserDetailView`. The routes
+The routes
 lazy-load the `*View.jsx` files directly.
 
 ## Where to add things

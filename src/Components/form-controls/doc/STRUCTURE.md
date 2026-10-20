@@ -15,6 +15,7 @@ form-controls/
 ├── Checkbox.jsx         <input type="checkbox">
 ├── PasswordInput.jsx    password input + show/hide toggle (controlled or self-managed)
 ├── SearchInput.jsx      search icon + <input type="search">
+├── RichTextArea.jsx     textarea + formatting toolbar (bold, italic, lists, links…)
 ├── FormLabel.jsx        <label> (or `as="p"` / `as="span"`), optional required mark
 ├── FormField.jsx        label + control + hint + error, ids `${htmlFor}-hint` / `-error`
 ├── FormError.jsx        inline error with role="alert"; renders nothing when empty
