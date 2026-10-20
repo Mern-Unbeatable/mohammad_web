@@ -1,81 +1,33 @@
-import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  Clock,
-  CreditCard,
-  Crown,
-  Loader2,
-  LogOut,
-  Sparkles,
-  User,
-} from "lucide-react";
-import { Link, useNavigate } from "react-router";
+import { Clock, Crown, Loader2, LogOut, Sparkles, User } from "lucide-react";
+import { Link } from "react-router";
 import Avatar from "@/components/ui/Avatar";
-import { useAuth } from "@/shared/auth/useAuth";
 import { toProfilePageUser } from "@/features/user/profile";
-
-const ViewPlansLink = ({ onClick }) => (
-  <Link
-    to="/subscription"
-    onClick={onClick}
-    className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-md border border-primary py-2 text-[13px] font-semibold text-primary transition-colors hover:bg-secondary"
-  >
-    <Crown aria-hidden className="h-4 w-4" />
-    View plans
-  </Link>
-);
+import { AVATAR_ACCENT_CLASS, PROFILE_PATH } from "../../constant/constants";
+import { useDropdown } from "../../hooks/useDropdown";
+import { useLogout } from "../../hooks/useLogout";
+import {
+  dropdownMembershipBanner,
+  expiredOrUpgradeText,
+  profileSubtitle,
+} from "../../utils/membership";
+import ViewPlansLink from "../membership/ViewPlansLink";
 
 const ProfileDropdown = () => {
-  const { logout, loggingOut } = useAuth();
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const rootRef = useRef(null);
+  const { handleLogout, loggingOut } = useLogout();
+  const { open, rootRef, toggle, close } = useDropdown({ locked: loggingOut });
   const { user } = useSelector((state) => state.userProfile);
   const profile = toProfilePageUser(user);
 
-  useEffect(() => {
-    if (!open || loggingOut) return undefined;
-
-    const handleClickOutside = (event) => {
-      if (rootRef.current && !rootRef.current.contains(event.target)) {
-        setOpen(false);
-      }
-    };
-
-    const handleEscape = (event) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [open, loggingOut]);
-
-  const close = () => setOpen(false);
-
-  const handleLogout = async () => {
-    if (await logout()) navigate("/login", { replace: true });
-  };
-
   const displayName = profile?.name || "Member";
-  const subtitle = [profile?.title, profile?.company]
-    .filter(Boolean)
-    .join(" · ");
-  const isTrial = profile?.membershipStatus === "trial";
-  const showUpgrade =
-    !profile?.isActive ||
-    profile?.membershipStatus === "expired" ||
-    profile?.membershipStatus === "free";
+  const subtitle = profileSubtitle(profile);
+  const banner = dropdownMembershipBanner(profile);
 
   return (
     <div ref={rootRef} className="relative shrink-0">
       <button
         type="button"
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={toggle}
         aria-label="Open profile menu"
         aria-expanded={open}
         aria-haspopup="true"
@@ -86,7 +38,7 @@ const ProfileDropdown = () => {
           alt={displayName}
           initials={profile?.initials || "MB"}
           size="sm"
-          className="bg-[#FEF3C7] text-[#B45309]"
+          className={AVATAR_ACCENT_CLASS}
         />
       </button>
 
@@ -106,7 +58,7 @@ const ProfileDropdown = () => {
             ) : null}
           </div>
 
-          {isTrial ? (
+          {banner === "trial" ? (
             <div className="border-b border-[#E4E7EC] px-4 py-3">
               <div className="flex items-center justify-between gap-2">
                 <p className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-deep-blue">
@@ -120,16 +72,14 @@ const ProfileDropdown = () => {
               </div>
               <ViewPlansLink onClick={close} />
             </div>
-          ) : showUpgrade ? (
+          ) : banner === "upgrade" ? (
             <div className="border-b border-[#E4E7EC] px-4 py-3">
               <p className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-deep-blue">
                 <Crown aria-hidden className="h-4 w-4 text-[#E67E22]" />
                 Membership
               </p>
               <p className="mt-1 text-[12px] text-red-500">
-                {profile?.membershipStatus === "expired"
-                  ? "Your membership has expired."
-                  : "Upgrade for full Lab Unity access."}
+                {expiredOrUpgradeText(profile?.membershipStatus)}
               </p>
               <ViewPlansLink onClick={close} />
             </div>
@@ -138,7 +88,7 @@ const ProfileDropdown = () => {
           <ul className="py-1">
             <li>
               <Link
-                to="/profile"
+                to={PROFILE_PATH}
                 role="menuitem"
                 onClick={close}
                 className="flex items-center gap-3 px-4 py-2.5 text-[13px] font-medium text-[#475467] transition-colors hover:bg-[#F9FAFB]"

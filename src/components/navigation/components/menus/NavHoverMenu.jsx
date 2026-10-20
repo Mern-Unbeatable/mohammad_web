@@ -1,8 +1,5 @@
-import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
-
-const OPEN_DELAY_MS = 120;
-const CLOSE_DELAY_MS = 200;
+import { useHoverMenu } from "../../hooks/useHoverMenu";
 
 /**
  * Hover/focus preview panel around a navbar link. Clicking the link still
@@ -18,29 +15,7 @@ const NavHoverMenu = ({
   onOpen,
   body,
 }) => {
-  const [open, setOpen] = useState(false);
-  const timerRef = useRef(null);
-
-  useEffect(() => () => clearTimeout(timerRef.current), []);
-
-  const show = () => {
-    clearTimeout(timerRef.current);
-    if (open) return;
-    timerRef.current = setTimeout(() => {
-      setOpen(true);
-      onOpen?.();
-    }, OPEN_DELAY_MS);
-  };
-
-  const hide = () => {
-    clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => setOpen(false), CLOSE_DELAY_MS);
-  };
-
-  const close = () => {
-    clearTimeout(timerRef.current);
-    setOpen(false);
-  };
+  const { open, show, hide, close } = useHoverMenu(onOpen);
 
   return (
     <div

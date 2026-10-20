@@ -1,4 +1,3 @@
-import { Bell, Briefcase, Home, SquarePlus, Users } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 import { useSelector } from 'react-redux';
 import CountBadge from '@/components/ui/CountBadge';
@@ -6,35 +5,20 @@ import { selectUserUnreadNotificationCount } from '@/features/user/notifications
 import { selectPendingRequestCount } from '@/features/user/contacts';
 import { useFeedActions } from '@/modules/user/context/useFeedActions';
 import { useLayoutChrome } from '@/shared/context/LayoutChromeContext';
-
-const tabs = [
-  { id: 'home', label: 'Home', icon: Home, to: '/feed' },
-  { id: 'network', label: 'Network', icon: Users, to: '/contacts' },
-  { id: 'post', label: 'Post', icon: SquarePlus, action: 'create' },
-  { id: 'notifications', label: 'Notifications', icon: Bell, to: '/notifications' },
-  { id: 'jobs', label: 'Jobs', icon: Briefcase, to: '/recruitment' },
-];
+import { BOTTOM_NAV_TABS } from '../../constant/constants';
+import { isBottomTabActive } from '../../utils/navActive';
 
 const MobileBottomNav = () => {
   const { pathname } = useLocation();
   const { openCreatePost } = useFeedActions();
   const { bottomNavHidden } = useLayoutChrome();
-  // Kept fresh by `useNotificationBadge` in DashboardNavbar.
+  // Kept fresh by `useNavBadges` in DashboardNavbar.
   const unreadNotifications = useSelector(selectUserUnreadNotificationCount);
   const pendingRequests = useSelector(selectPendingRequestCount);
 
   if (bottomNavHidden) return null;
 
   const badges = { notifications: unreadNotifications, network: pendingRequests };
-  const badgeFor = (tab) => badges[tab.id] ?? 0;
-
-  const isTabActive = (tab) => {
-    if (tab.id === 'home') return pathname === '/feed';
-    if (tab.id === 'network') return pathname.startsWith('/contacts');
-    if (tab.id === 'jobs') return pathname.startsWith('/recruitment');
-    if (tab.id === 'notifications') return pathname.startsWith('/notifications');
-    return pathname === tab.to;
-  };
 
   return (
     <nav
@@ -42,11 +26,11 @@ const MobileBottomNav = () => {
       aria-label="Mobile navigation"
     >
       <ul className="mx-auto flex h-14 max-w-lg items-stretch">
-        {tabs.map((tab) => {
+        {BOTTOM_NAV_TABS.map((tab) => {
           const { id, label, to, action } = tab;
           const Icon = tab.icon;
-          const isActive = isTabActive(tab);
-          const badge = badgeFor(tab);
+          const isActive = isBottomTabActive(tab, pathname);
+          const badge = badges[id] ?? 0;
           const isPost = action === 'create';
 
           const content = (

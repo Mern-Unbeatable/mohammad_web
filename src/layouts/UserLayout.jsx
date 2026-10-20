@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { Outlet } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import DashboardNavbar from "@/modules/user/components/shell/DashboardNavbar";
-import MobileBottomNav from "@/modules/user/components/shell/MobileBottomNav";
+import { DashboardNavbar, MobileBottomNav } from "@/components/navigation";
 import { FeedActionsProvider } from "@/modules/user/context/FeedActionsContext";
 import { LayoutChromeProvider } from "@/shared/context/LayoutChromeContext";
 import AppFooter from "@/shared/layout/FooterLayout";
