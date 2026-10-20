@@ -14,7 +14,7 @@ const AdminJobDetailView = lazyPage(() => import('@/modules/dash/admin/recruitme
 const AdminChatView = lazyPage(() => import('@/modules/dash/admin/messages/pages/AdminChatView'));
 const AdminChatInboxView = lazyPage(() => import('@/modules/dash/admin/messages/pages/AdminChatInboxView'));
 const ChatModerationView = lazyPage(
-  () => import('@/modules/dash/admin/messages/components/ChatModerationPanel'),
+  () => import('@/modules/dash/admin/messages/pages/AdminChatModerationView'),
 );
 const AdminGeneralView = lazyPage(() => import('@/modules/dash/admin/general/pages/AdminGeneralView'));
 const AdminGeneralPostDetailView = lazyPage(

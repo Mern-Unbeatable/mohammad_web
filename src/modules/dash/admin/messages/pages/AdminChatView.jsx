@@ -1,26 +1,13 @@
-import { Outlet, useLocation, useNavigate } from 'react-router';
-import PanelPage from '@/components/navigation/panel/PanelPage';
-import PanelPageHeader from '@/components/navigation/panel/PanelPageHeader';
-import SegmentedTabs from '@/components/common/SegmentedTabs/SegmentedTabs';
-import { CHAT_BASE_PATHS, chatPath } from '@/features/messages/chatPaths';
-
-const ADMIN_CHAT_MODERATION_PATH = `${CHAT_BASE_PATHS.ADMIN}/moderation`;
-
-const TABS = [
-  { id: 'inbox', label: 'My conversations' },
-  { id: 'moderation', label: 'Moderation' },
-];
+import { Outlet } from "react-router";
+import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
+import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
+import { useChatTabs } from "../hooks/useChatTabs";
+import { CHAT_TABS } from "../constant/constants";
 
 /** Admin chat shell: the active tab is the route (inbox sections vs `/moderation`). */
 const AdminChatView = () => {
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
-  const activeTab = pathname.startsWith(ADMIN_CHAT_MODERATION_PATH) ? 'moderation' : 'inbox';
-
-  const handleTabChange = (tab) => {
-    if (tab === activeTab) return;
-    navigate(tab === 'moderation' ? ADMIN_CHAT_MODERATION_PATH : chatPath(CHAT_BASE_PATHS.ADMIN));
-  };
+  const { activeTab, changeTab } = useChatTabs();
 
   return (
     <PanelPage className="flex h-[calc(100dvh-5.5rem)] flex-col lg:h-[calc(100dvh-3rem)]">
@@ -29,9 +16,9 @@ const AdminChatView = () => {
         subtitle="Message members and moderate platform conversations."
         action={
           <SegmentedTabs
-            tabs={TABS}
+            tabs={CHAT_TABS}
             activeTab={activeTab}
-            onTabChange={handleTabChange}
+            onTabChange={changeTab}
             ariaLabel="Chat sections"
           />
         }

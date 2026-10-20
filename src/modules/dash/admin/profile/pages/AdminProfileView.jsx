@@ -1,97 +1,12 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-hot-toast";
-import AdminAccountForm from "../components/AdminAccountForm";
 import { AdminAccountFormSkeleton } from "@/components/loader";
 import PanelPage from "@/components/navigation/panel/PanelPage";
-import {
-  fetchAdminProfile,
-  updateAdminProfile,
-  updateAdminAvatar,
-  changeAdminPassword,
-  clearProfileError,
-  setProfileField,
-} from "@/features/dash/admin/profile";
-
-const emptyPasswords = { current: "", next: "", confirm: "" };
-const IMAGE_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
+import AdminAccountForm from "../components/form/AdminAccountForm";
+import { useAdminProfile } from "../hooks/useAdminProfile";
 
 const AdminProfileView = () => {
-  const dispatch = useDispatch();
-  const {
-    form,
-    loading,
-    savingProfile,
-    uploadingAvatar,
-    savingPassword,
-    error,
-    saveError,
-  } = useSelector((state) => state.adminProfile);
-  const [passwords, setPasswords] = useState(emptyPasswords);
+  const profile = useAdminProfile();
 
-  useEffect(() => {
-    dispatch(clearProfileError());
-    dispatch(fetchAdminProfile());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (error) toast.error(error);
-  }, [error]);
-
-  useEffect(() => {
-    if (saveError) toast.error(saveError);
-  }, [saveError]);
-
-  const handleUpdateProfile = async (e) => {
-    e.preventDefault();
-    const trimmed = form.name.trim();
-    if (!trimmed) {
-      toast.error("Name is required");
-      return;
-    }
-    const result = await dispatch(updateAdminProfile(trimmed));
-    if (updateAdminProfile.fulfilled.match(result)) {
-      toast.success("Profile updated");
-    }
-  };
-
-  const handleAvatarChange = async (file) => {
-    if (uploadingAvatar) return;
-    if (!IMAGE_MIME.has(file.type)) {
-      toast.error("Please upload a JPG, PNG, or WebP image");
-      return;
-    }
-    const result = await dispatch(updateAdminAvatar(file));
-    if (updateAdminAvatar.fulfilled.match(result)) {
-      toast.success("Profile photo updated");
-    }
-  };
-
-  const handleChangePassword = async (e) => {
-    e.preventDefault();
-    if (!passwords.current || !passwords.next || !passwords.confirm) {
-      toast.error("Fill in all password fields");
-      return;
-    }
-    if (passwords.next !== passwords.confirm) {
-      toast.error("New passwords do not match");
-      return;
-    }
-
-    const result = await dispatch(
-      changeAdminPassword({
-        currentPassword: passwords.current,
-        newPassword: passwords.next,
-        confirmPassword: passwords.confirm,
-      }),
-    );
-    if (changeAdminPassword.fulfilled.match(result)) {
-      setPasswords(emptyPasswords);
-      toast.success("Password updated");
-    }
-  };
-
-  if (loading) {
+  if (profile.loading) {
     return (
       <PanelPage>
         <AdminAccountFormSkeleton />
@@ -101,22 +16,14 @@ const AdminProfileView = () => {
 
   return (
     <AdminAccountForm
-      profileValues={form}
-      passwordValues={passwords}
-      onProfileChange={(key, value) =>
-        dispatch(setProfileField({ key, value }))
-      }
-      onPasswordChange={(key, value) =>
-        setPasswords((prev) => ({ ...prev, [key]: value }))
-      }
-      onUpdateProfile={
-        savingProfile ? (e) => e.preventDefault() : handleUpdateProfile
-      }
-      onChangePassword={
-        savingPassword ? (e) => e.preventDefault() : handleChangePassword
-      }
-      onAvatarChange={handleAvatarChange}
-      avatarUploading={uploadingAvatar}
+      profileValues={profile.form}
+      passwordValues={profile.passwords}
+      onProfileChange={profile.changeProfileField}
+      onPasswordChange={profile.changePasswordField}
+      onUpdateProfile={profile.updateProfile}
+      onChangePassword={profile.changePassword}
+      onAvatarChange={profile.changeAvatar}
+      avatarUploading={profile.uploadingAvatar}
     />
   );
 };

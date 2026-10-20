@@ -30,12 +30,13 @@ admin/
 │   ├── AdminRecruitmentView.jsx             Job list (/admin/recruitment)
 │   └── AdminJobDetailView.jsx               Job detail (/admin/recruitment/:jobId)
 │
-├── messages/
-│   ├── pages/
-│   │   ├── AdminChatView.jsx                Chat shell (/admin/chat)
-│   │   └── AdminChatInboxView.jsx           Inbox placeholder
-│   └── components/
-│       └── ChatModerationPanel.jsx          Moderation page (/admin/chat/moderation)
+├── messages/                                Full feature layout; see messages/doc/STRUCTURE.md
+│   ├── pages/        AdminChatView (/admin/chat shell), AdminChatInboxView, AdminChatModerationView (/admin/chat/moderation)
+│   ├── components/   moderation/ (ConversationList, ConversationFilters, ConversationItem, ThreadPanel, ThreadHeader, MessageItem, RemovalModals), common/ (Spinner)
+│   ├── hooks/        useChatTabs, useChatModeration
+│   ├── utils/        moderation
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: ADMIN_CHAT_PATH, ADMIN_CHAT_MODERATION_PATH
 │
 ├── general/                                 Full feature layout; see general/doc/STRUCTURE.md
 │   ├── pages/        AdminGeneralView (/admin/general), AdminGeneralPostDetailView (/admin/general/:postId)
@@ -79,11 +80,13 @@ admin/
 ├── settings/pages/
 │   └── AdminSettingsView.jsx                Settings (/admin/settings)
 │
-├── profile/
-│   ├── pages/
-│   │   └── AdminProfileView.jsx             Own profile (/admin/profile)
-│   └── components/
-│       └── AdminAccountForm.jsx             Account form
+├── profile/                                 Full feature layout; see profile/doc/STRUCTURE.md
+│   ├── pages/        AdminProfileView (/admin/profile)
+│   ├── components/   form/ (AdminAccountForm, ProfileSummary, AvatarPicker, AccountInfoSection, PasswordSection)
+│   ├── hooks/        useAdminProfile
+│   ├── utils/        profileForm
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: PROFILE_PATH
 │
 ├── data/
 │   ├── users.js                             SUBSCRIPTION_PILL_STYLES (used by SubscriptionPill) + unused demo rows
@@ -97,20 +100,19 @@ admin/
 ## Imports
 
 - Routes (`shared/router/routes/admin.routes.jsx`) lazy-load
-  `@/modules/dash/admin/<feature>/pages/<View>` directly, and
-  `messages/components/ChatModerationPanel` for `/admin/chat/moderation`.
+  `@/modules/dash/admin/<feature>/pages/<View>` directly.
 - The sidebar items (`adminNavItems`) live in
   `@/components/navigation/navbar/nav.js`, used by `layouts/AdminLayout`.
 - Nothing outside admin imports admin files. `ads/`, `blogs/`, `dashboard/`,
-  `general/` and `marketplace/` have an `index.js`; the other features have
-  none yet.
+  `general/`, `marketplace/`, `messages/` and `profile/` have an `index.js`;
+  the other features have none yet.
 
 ## Not done yet
 
 The `hooks/`, `utils/`, `constant/`, `test/` and `doc/` split has been
-applied to `ads/`, `blogs/`, `dashboard/`, `general/` and `marketplace/`. The
-other views still hold their
-own state and effects, and several are large: `AdminSettingsView` (463 lines),
-`ChatModerationPanel` (365), `AdminUsersView` (351),
+applied to `ads/`, `blogs/`, `dashboard/`, `general/`, `marketplace/`,
+`messages/` and `profile/`. The other views still hold their own state and
+effects, and several are large: `AdminSettingsView` (463 lines),
+`AdminUsersView` (351),
 `AdminReportDetailView` (326), `AdminUserDetailView` (309) and
 `AdminStatisticsView` (297). The unused files in `data/` can be deleted.
