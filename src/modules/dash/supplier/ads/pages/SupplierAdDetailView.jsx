@@ -1,13 +1,4 @@
-<<<<<<< HEAD
 import { Navigate, useParams } from "react-router";
-=======
-import { useEffect, useState } from "react";
-import { Link, Navigate, useParams } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { AlertTriangle, ChevronLeft } from "lucide-react";
-import { toast } from "react-hot-toast";
-import AdDetailCard from "@/modules/dash/supplier/ads/components/AdDetailCard";
->>>>>>> 5ed086633093a351eba3113c20868e8c97f1f83a
 import { AdvertisementDetailSkeleton } from "@/components/loader";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";

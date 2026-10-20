@@ -6,33 +6,33 @@ import AdminLayout from '@/layouts/AdminLayout';
 import PanelNotFound from '@/modules/error/PanelNotFound';
 import { buildChatRoute } from './chat.routes';
 
-const AdminDashboardView = lazyPage(() => import('@/modules/dash/admin/pages/AdminDashboardView'));
-const AdminUsersView = lazyPage(() => import('@/modules/dash/admin/pages/AdminUsersView'));
-const AdminUserDetailView = lazyPage(() => import('@/modules/dash/admin/pages/AdminUserDetailView'));
-const AdminRecruitmentView = lazyPage(() => import('@/modules/dash/admin/pages/AdminRecruitmentView'));
-const AdminJobDetailView = lazyPage(() => import('@/modules/dash/admin/pages/AdminJobDetailView'));
-const AdminChatView = lazyPage(() => import('@/modules/dash/admin/pages/AdminChatView'));
-const AdminChatInboxView = lazyPage(() => import('@/modules/dash/admin/pages/AdminChatInboxView'));
+const AdminDashboardView = lazyPage(() => import('@/modules/dash/admin/dashboard/pages/AdminDashboardView'));
+const AdminUsersView = lazyPage(() => import('@/modules/dash/admin/users/pages/AdminUsersView'));
+const AdminUserDetailView = lazyPage(() => import('@/modules/dash/admin/users/pages/AdminUserDetailView'));
+const AdminRecruitmentView = lazyPage(() => import('@/modules/dash/admin/recruitment/pages/AdminRecruitmentView'));
+const AdminJobDetailView = lazyPage(() => import('@/modules/dash/admin/recruitment/pages/AdminJobDetailView'));
+const AdminChatView = lazyPage(() => import('@/modules/dash/admin/messages/pages/AdminChatView'));
+const AdminChatInboxView = lazyPage(() => import('@/modules/dash/admin/messages/pages/AdminChatInboxView'));
 const ChatModerationView = lazyPage(
-  () => import('@/modules/dash/admin/components/chat/ChatModerationPanel'),
+  () => import('@/modules/dash/admin/messages/components/ChatModerationPanel'),
 );
-const AdminGeneralView = lazyPage(() => import('@/modules/dash/admin/pages/AdminGeneralView'));
+const AdminGeneralView = lazyPage(() => import('@/modules/dash/admin/general/pages/AdminGeneralView'));
 const AdminGeneralPostDetailView = lazyPage(
-  () => import('@/modules/dash/admin/pages/AdminGeneralPostDetailView'),
+  () => import('@/modules/dash/admin/general/pages/AdminGeneralPostDetailView'),
 );
-const AdminMarketplaceView = lazyPage(() => import('@/modules/dash/admin/pages/AdminMarketplaceView'));
-const AdminListingDetailView = lazyPage(() => import('@/modules/dash/admin/pages/AdminListingDetailView'));
-const AdminReportsView = lazyPage(() => import('@/modules/dash/admin/pages/AdminReportsView'));
-const AdminReportDetailView = lazyPage(() => import('@/modules/dash/admin/pages/AdminReportDetailView'));
-const AdminAdvertisementView = lazyPage(() => import('@/modules/dash/admin/pages/AdminAdvertisementView'));
+const AdminMarketplaceView = lazyPage(() => import('@/modules/dash/admin/marketplace/pages/AdminMarketplaceView'));
+const AdminListingDetailView = lazyPage(() => import('@/modules/dash/admin/marketplace/pages/AdminListingDetailView'));
+const AdminReportsView = lazyPage(() => import('@/modules/dash/admin/reports/pages/AdminReportsView'));
+const AdminReportDetailView = lazyPage(() => import('@/modules/dash/admin/reports/pages/AdminReportDetailView'));
+const AdminAdvertisementView = lazyPage(() => import('@/modules/dash/admin/ads/pages/AdminAdvertisementView'));
 const AdminAdvertisementDetailView = lazyPage(
-  () => import('@/modules/dash/admin/pages/AdminAdvertisementDetailView'),
+  () => import('@/modules/dash/admin/ads/pages/AdminAdvertisementDetailView'),
 );
-const AdminBlogsView = lazyPage(() => import('@/modules/dash/admin/pages/AdminBlogsView'));
-const AdminCreateBlogView = lazyPage(() => import('@/modules/dash/admin/pages/AdminCreateBlogView'));
-const AdminStatisticsView = lazyPage(() => import('@/modules/dash/admin/pages/AdminStatisticsView'));
-const AdminSettingsView = lazyPage(() => import('@/modules/dash/admin/pages/AdminSettingsView'));
-const AdminProfileView = lazyPage(() => import('@/modules/dash/admin/pages/AdminProfileView'));
+const AdminBlogsView = lazyPage(() => import('@/modules/dash/admin/blogs/pages/AdminBlogsView'));
+const AdminCreateBlogView = lazyPage(() => import('@/modules/dash/admin/blogs/pages/AdminCreateBlogView'));
+const AdminStatisticsView = lazyPage(() => import('@/modules/dash/admin/statistics/pages/AdminStatisticsView'));
+const AdminSettingsView = lazyPage(() => import('@/modules/dash/admin/settings/pages/AdminSettingsView'));
+const AdminProfileView = lazyPage(() => import('@/modules/dash/admin/profile/pages/AdminProfileView'));
 
 export const adminRoutes = {
   path: '/admin',
