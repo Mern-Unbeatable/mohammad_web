@@ -14,9 +14,16 @@ shared/router/
 │   ├── admin.routes.jsx        # RequireRole(ADMIN) + AdminLayout
 │   └── chat.routes.jsx         # buildChatRoute / legacyChatRoute, shared by the role routes
 ├── guards/                     # route elements used by routes/*.routes.jsx
+<<<<<<< HEAD
 │   ├── index.js                # RequireRole, GuestOnly, SessionCheckingFallback (re-export)
 │   ├── RequireRole.jsx         # login redirect, wrong-role redirect (handle.roleRedirect)
 │   └── GuestOnly.jsx           # sends signed-in users to their home path
+=======
+│   ├── index.js                # RequireRole, GuestOnly, SessionCheckingFallback
+│   ├── RequireRole.jsx         # login redirect, wrong-role redirect (handle.roleRedirect)
+│   ├── GuestOnly.jsx           # sends signed-in users to their home path
+│   └── SessionCheckingFallback.jsx
+>>>>>>> 83ebffb0c717a2f6754699937caf77e8fce8f0e3
 ├── components/
 │   ├── RouterErrorPage.jsx     # root errorElement
 │   └── ScrollToTop.jsx         # rendered by the layouts and PanelLayout
@@ -27,5 +34,9 @@ shared/router/
 └── doc/STRUCTURE.md
 ```
 
+<<<<<<< HEAD
 Guards import `useAuth` from `@/modules/auth`. Loading UI (`PageLoadingFallback`,
 `SessionCheckingFallback`) lives in `@/components/loader/fallbacks`. Route layouts live in `@/layouts`.
+=======
+Guards import `useAuth` from `@/modules/auth`. Route layouts live in `@/layouts`.
+>>>>>>> 83ebffb0c717a2f6754699937caf77e8fce8f0e3
