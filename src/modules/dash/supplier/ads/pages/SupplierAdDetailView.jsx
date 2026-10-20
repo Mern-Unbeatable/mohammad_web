@@ -3,7 +3,7 @@ import { Link, Navigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertTriangle, ChevronLeft } from "lucide-react";
 import { toast } from "react-hot-toast";
-import AdDetailCard from "@/modules/dash/supplier/components/AdDetailCard";
+import AdDetailCard from "@/modules/dash/supplier/ads/components/AdDetailCard";
 import { AdvertisementDetailSkeleton } from "@/components/loader";
 import { PostComments } from "@/modules/dash/user/feed";
 import {

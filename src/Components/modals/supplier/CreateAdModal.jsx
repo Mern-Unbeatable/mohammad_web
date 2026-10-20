@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import StatusBadge from '@/components/data-display/DataTable/StatusBadge';
-import AdDetailCard from '@/modules/dash/supplier/components/AdDetailCard';
+import { AdDetailCard } from '@/modules/dash/supplier/ads';
 import { AD_CATEGORIES, getCategoryById } from '@/modules/dash/supplier/data/advertisements';
 import {
   createSupplierAd,

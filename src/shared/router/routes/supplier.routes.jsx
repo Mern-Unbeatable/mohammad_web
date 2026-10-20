@@ -7,38 +7,38 @@ import PanelNotFound from '@/modules/error/PanelNotFound';
 import { buildChatRoute, legacyChatRoute } from './chat.routes';
 
 const SupplierDashboardView = lazyPage(
-  () => import('@/modules/dash/supplier/pages/SupplierDashboardView'),
+  () => import('@/modules/dash/supplier/dashboard/pages/SupplierDashboardView'),
 );
-const SupplierAdsView = lazyPage(() => import('@/modules/dash/supplier/pages/SupplierAdsView'));
-const SupplierAdDetailView = lazyPage(() => import('@/modules/dash/supplier/pages/SupplierAdDetailView'));
-const SupplierGeneralView = lazyPage(() => import('@/modules/dash/supplier/pages/SupplierGeneralView'));
+const SupplierAdsView = lazyPage(() => import('@/modules/dash/supplier/ads/pages/SupplierAdsView'));
+const SupplierAdDetailView = lazyPage(() => import('@/modules/dash/supplier/ads/pages/SupplierAdDetailView'));
+const SupplierGeneralView = lazyPage(() => import('@/modules/dash/supplier/general/pages/SupplierGeneralView'));
 const SupplierMyGeneralPostsView = lazyPage(
-  () => import('@/modules/dash/supplier/pages/SupplierMyGeneralPostsView'),
+  () => import('@/modules/dash/supplier/general/pages/SupplierMyGeneralPostsView'),
 );
 const SupplierGeneralPostDetailView = lazyPage(
-  () => import('@/modules/dash/supplier/pages/SupplierGeneralPostDetailView'),
+  () => import('@/modules/dash/supplier/general/pages/SupplierGeneralPostDetailView'),
 );
-const SupplierMessagesView = lazyPage(() => import('@/modules/dash/supplier/pages/SupplierMessagesView'));
-const SupplierContactsView = lazyPage(() => import('@/modules/dash/supplier/pages/SupplierContactsView'));
+const SupplierMessagesView = lazyPage(() => import('@/modules/dash/supplier/messages/pages/SupplierMessagesView'));
+const SupplierContactsView = lazyPage(() => import('@/modules/dash/supplier/contacts/pages/SupplierContactsView'));
 const SupplierContactProfileView = lazyPage(
-  () => import('@/modules/dash/supplier/pages/SupplierContactProfileView'),
+  () => import('@/modules/dash/supplier/contacts/pages/SupplierContactProfileView'),
 );
 const SupplierRecruitmentView = lazyPage(
-  () => import('@/modules/dash/supplier/pages/SupplierRecruitmentView'),
+  () => import('@/modules/dash/supplier/recruitment/pages/SupplierRecruitmentView'),
 );
-const SupplierMyJobsView = lazyPage(() => import('@/modules/dash/supplier/pages/SupplierMyJobsView'));
+const SupplierMyJobsView = lazyPage(() => import('@/modules/dash/supplier/recruitment/pages/SupplierMyJobsView'));
 const SupplierJobDetailView = lazyPage(
-  () => import('@/modules/dash/supplier/pages/SupplierJobDetailView'),
+  () => import('@/modules/dash/supplier/recruitment/pages/SupplierJobDetailView'),
 );
-const SupplierPostJobView = lazyPage(() => import('@/modules/dash/supplier/pages/SupplierPostJobView'));
-const SupplierBlogsView = lazyPage(() => import('@/modules/dash/supplier/pages/SupplierBlogsView'));
+const SupplierPostJobView = lazyPage(() => import('@/modules/dash/supplier/recruitment/pages/SupplierPostJobView'));
+const SupplierBlogsView = lazyPage(() => import('@/modules/dash/supplier/blogs/pages/SupplierBlogsView'));
 const SupplierBlogDetailView = lazyPage(
-  () => import('@/modules/dash/supplier/pages/SupplierBlogDetailView'),
+  () => import('@/modules/dash/supplier/blogs/pages/SupplierBlogDetailView'),
 );
 const SupplierNotificationsView = lazyPage(
-  () => import('@/modules/dash/supplier/pages/SupplierNotificationsView'),
+  () => import('@/modules/dash/supplier/notifications/pages/SupplierNotificationsView'),
 );
-const SupplierProfileView = lazyPage(() => import('@/modules/dash/supplier/pages/SupplierProfileView'));
+const SupplierProfileView = lazyPage(() => import('@/modules/dash/supplier/profile/pages/SupplierProfileView'));
 
 export const supplierRoutes = {
   path: '/supplier',

@@ -9,7 +9,7 @@ import {
   JobsSectionHeader,
   jobCount,
 } from "@/modules/dash/user/recruitment";
-import SupplierRecruitmentActions from "@/modules/dash/supplier/components/SupplierRecruitmentActions";
+import SupplierRecruitmentActions from "@/modules/dash/supplier/recruitment/components/SupplierRecruitmentActions";
 import {
   fetchSupplierJobs,
   clearRecruitmentError,
