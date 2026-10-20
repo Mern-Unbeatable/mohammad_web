@@ -7,7 +7,7 @@ import SuspendUserModal from "@/modules/admin/components/SuspendUserModal";
 import Card from "@/components/ui/Card";
 import ProfilePageContent from "@/components/data-display/ProfilePageContent/ProfilePageContent";
 import { ProfilePageSkeleton } from "@/components/common/Skeleton";
-import { SubscriptionDetailsCard } from "@/modules/user/components/profile/ProfileSections";
+import { SubscriptionDetailsCard } from "@/modules/user/pages/profile";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
 import { CHAT_BASE_PATHS, chatPath } from "@/shared/constants/chat";

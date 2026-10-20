@@ -30,7 +30,7 @@ import ContactProfilePageContent from "@/components/data-display/ContactProfileP
 import BlogsPageContent from "@/shared/pages/blogs/BlogsPageContent";
 import BlogDetailPageContent from "@/shared/pages/blogs/BlogDetailPageContent";
 import NotificationsPageContent from "@/shared/pages/notifications/NotificationsPageContent";
-import { SubscriptionDetailsCard } from "@/modules/user/components/profile/ProfileSections";
+import { SubscriptionDetailsCard } from "@/modules/user/pages/profile";
 import {
   DEMO_ADMIN_PASSWORD,
   DEMO_ADMIN_PROFILE,
