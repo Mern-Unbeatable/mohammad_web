@@ -19,6 +19,7 @@ import PanelPage from "@/components/navigation/panel/PanelPage";
 import NotFound from "@/modules/error/NotFound";
 import { isJobOpen, jobClosedNotice } from "@/features/recruitment/jobStatus";
 import { contactProfilePath as contactPath } from "@/modules/dash/supplier/contacts";
+import { PROFILE_PATH } from "@/modules/dash/supplier/profile";
 
 const SupplierJobDetailView = () => {
   const { jobId } = useParams();
@@ -205,7 +206,7 @@ const SupplierJobDetailView = () => {
             <JobPosterCard
               owner={selectedJob.owner}
               isSelf={isOwner}
-              profilePath={isOwner ? () => "/supplier/profile" : contactPath}
+              profilePath={isOwner ? () => PROFILE_PATH : contactPath}
             />
           </div>
           {isOwner ? (

@@ -53,8 +53,12 @@ supplier/
 ├── notifications/pages/
 │   └── SupplierNotificationsView.jsx        Notification list
 │
-├── profile/pages/
-│   └── SupplierProfileView.jsx              Profile form (reuses user ProfileSetupForm)
+├── profile/                                 See profile/doc/STRUCTURE.md
+│   ├── pages/        SupplierProfileView (reuses user ProfileSetupForm)
+│   ├── hooks/        useSupplierProfile
+│   ├── utils/        profileForm
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: PROFILE_PATH
 │
 ├── recruitment/
 │   ├── pages/
