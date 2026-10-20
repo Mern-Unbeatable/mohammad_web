@@ -27,5 +27,5 @@ export {
   COUNTRY_OPTIONS,
   toContactCardModel,
   toContactProfileModel,
-} from "./contactsMappers";
+} from "@/features/contacts";
 export * as contactsApi from "./contactsApi";

@@ -3,7 +3,7 @@ import ContactProfilePageContent from '@/components/data-display/ContactProfileP
 import { ReportPostModal } from '@/modules/dash/user/pages/feed';
 import NotFound from '@/shared/pages/NotFound';
 import { CHAT_BASE_PATHS, chatPath } from '@/shared/constants/chat';
-import { StartConversationModal } from '@/shared/pages/messages';
+import { StartConversationModal } from '@/modules/messages';
 import ContactProfilePage from './components/profile/ContactProfilePage';
 import BackToDirectoryLink from './components/profile/BackToDirectoryLink';
 import { useContactProfile } from './hooks/useContactProfile';

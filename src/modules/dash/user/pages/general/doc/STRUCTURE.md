@@ -26,15 +26,13 @@ general/
 │   │   └── PostsEmptyState.jsx
 │   │
 │   ├── detail/               Post page
-│   │   ├── PostHeader.jsx           Cover, type badge, title, date, category
-│   │   ├── PostBody.jsx             Paragraphs, or the summary when there is no body
+│   │   ├── GeneralPostHeader.jsx    Cover, type badge, title, date, category
+│   │   ├── GeneralPostBody.jsx      Paragraphs, or the summary when there is no body
 │   │   └── PostActions.jsx          Download (documents) and Share
 │   │
-│   ├── layout/
-│   │   └── GeneralPage.jsx          <main> + Container frame
-│   │
-│   └── modals/
-│       └── DeletePostModal.jsx
+│   └── layout/
+│       └── GeneralPage.jsx          <main> + Container frame
+│                             (DeletePostModal: @/components/common/DeletePostModal)
 │
 ├── hooks/
 │   ├── useGeneralPosts.js       Browse: category, page, fetch, create
@@ -79,7 +77,7 @@ flowchart TD
   GeneralView & MyGeneralPostsView --> GeneralToolbar & PostsGrid & CreateGeneralPostModal
   MyGeneralPostsView --> DeletePostModal
   GeneralPostDetailView --> useGeneralPostDetail
-  GeneralPostDetailView --> PostHeader & PostBody & PostActions
+  GeneralPostDetailView --> GeneralPostHeader & GeneralPostBody & PostActions
   SupplierGeneralView & AdminGeneralView & GeneralPageContent --> GeneralToolbar
 ```
 

@@ -12,7 +12,7 @@ import {
 import { fetchAuthorPosts, toFeedPostModel } from '@/features/dash/user/feed';
 import { useAuth } from '@/shared/auth/useAuth';
 import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
-import { useStartConversation } from '@/shared/pages/messages';
+import { useStartConversation } from '@/modules/messages';
 
 /** Contact profile: details, the contact's posts, connect, message and report state. */
 export const useContactProfile = () => {

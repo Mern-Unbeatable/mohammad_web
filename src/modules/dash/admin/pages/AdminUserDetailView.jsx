@@ -12,7 +12,7 @@ import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
 import { CHAT_BASE_PATHS, chatPath } from "@/shared/constants/chat";
 import { useAuth } from "@/shared/auth/useAuth";
-import { StartConversationModal, useStartConversation } from "@/shared/pages/messages";
+import { StartConversationModal, useStartConversation } from "@/modules/messages";
 import { roleLabel } from "@/shared/constants/roles";
 import {
   fetchUserDetails,

@@ -3,7 +3,7 @@ import CreateGeneralPostModal from '@/shared/pages/general/CreateGeneralPostModa
 import GeneralPage from './components/layout/GeneralPage';
 import GeneralToolbar from './components/toolbar/GeneralToolbar';
 import PostsGrid from './components/posts/PostsGrid';
-import DeletePostModal from './components/modals/DeletePostModal';
+import DeletePostModal from '@/components/common/DeletePostModal/DeletePostModal';
 import { useMyGeneralPosts } from './hooks/useMyGeneralPosts';
 import { GENERAL_VIEW, generalPostPath } from './constant/constants';
 

@@ -31,7 +31,7 @@ const PostMenu = ({ post, isOwner, onReport, onEdit, onDelete }) => {
   );
 };
 
-const PostHeader = ({
+const FeedPostHeader = ({
   post,
   onReport,
   onEdit,
@@ -102,4 +102,4 @@ const PostHeader = ({
   );
 };
 
-export default PostHeader;
+export default FeedPostHeader;

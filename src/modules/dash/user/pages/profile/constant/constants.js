@@ -10,6 +10,9 @@ export const PAID_MEMBERSHIP_STATUSES = ["premium", "trial", "cancelled"];
 
 export const MY_REPORTS_QUERY = { page: 1, pageSize: 10, sort: "desc" };
 
+export const DELETE_POST_DESCRIPTION =
+  "This will permanently remove this post, including its comments and reactions. This action cannot be undone.";
+
 /* ---------- Subscription card ---------- */
 
 export const EMPTY_SUBSCRIPTION = {

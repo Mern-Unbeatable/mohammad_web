@@ -6,7 +6,8 @@ import { usePostEditor } from "@/modules/dash/user/hooks/usePostEditor";
 import SubscriptionDetailsCard from "./components/subscription/SubscriptionDetailsCard";
 import MyReportsCard from "./components/reports/MyReportsCard";
 import MembershipPrompt from "./components/layout/MembershipPrompt";
-import DeletePostModal from "./components/modals/DeletePostModal";
+import DeletePostModal from "@/components/common/DeletePostModal/DeletePostModal";
+import { DELETE_POST_DESCRIPTION } from "./constant/constants";
 import { useProfilePage } from "./hooks/useProfilePage";
 import { useMyPosts } from "./hooks/useMyPosts";
 
@@ -84,6 +85,7 @@ const ProfileView = () => {
 
       <DeletePostModal
         open={Boolean(posts.pendingDelete)}
+        description={DELETE_POST_DESCRIPTION}
         deleting={posts.deleting}
         onClose={posts.cancelDelete}
         onConfirm={posts.confirmDelete}

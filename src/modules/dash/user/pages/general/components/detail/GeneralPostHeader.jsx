@@ -2,7 +2,7 @@ import { Calendar, MapPin } from 'lucide-react';
 import { POST_TYPE, POST_TYPE_STYLES } from '../../constant/constants';
 
 /** Cover image, type badge, title, date and category. */
-const PostHeader = ({ post }) => (
+const GeneralPostHeader = ({ post }) => (
   <>
     <img
       src={post.image}
@@ -35,4 +35,4 @@ const PostHeader = ({ post }) => (
   </>
 );
 
-export default PostHeader;
+export default GeneralPostHeader;

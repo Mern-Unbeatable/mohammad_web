@@ -6,9 +6,10 @@ role's view renders `ChatLayout`, which reads the chat route and renders
 `targetId` the open conversation, and `?listing=<id>` preloads a listing.
 
 ```
-shared/pages/messages/
+modules/messages/
 ├── MessagesContainer.jsx         # thin: useMessagesContainer → page + modals
 ├── index.js                      # public API (see below)
+├── route/                        # ChatLayout, ChatRedirect, LegacyChatRedirect, useChatRoute
 ├── constant/constants.js         # tabs, timings, media queries, limits, messages
 ├── components/
 │   ├── layout/MessagesPageContent.jsx   # Messenger shell (dashboard / panel)
@@ -34,13 +35,19 @@ shared/pages/messages/
 └── doc/STRUCTURE.md
 ```
 
-## Public API (`@/shared/pages/messages`)
+## Public API (`@/modules/messages`)
 
 | Export | Used by |
 |---|---|
-| `MessagesContainer` | `shared/layout/ChatLayout` |
+| `MessagesContainer` | `route/ChatLayout` |
+| `ChatLayout` | role `*MessagesView` / `AdminChatInboxView` |
+| `ChatRedirect`, `LegacyChatRedirect` | `store/router/chat.routes.jsx` |
 | `StartConversationModal`, `useStartConversation` | contacts, marketplace, admin user / listing detail |
 | `RecipientPicker` | feed `SharePostModal` |
+
+Old paths (@/shared/pages/messages, @/shared/layout/ChatLayout/*) are
+re-export shims. `route/` is not named `layout/` because module folders
+must not contain `layout/` directories.
 
 ## Rules
 

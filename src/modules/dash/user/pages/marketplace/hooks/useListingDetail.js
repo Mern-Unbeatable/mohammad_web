@@ -10,7 +10,7 @@ import {
 } from '@/features/dash/user/marketplace';
 import { useAuth } from '@/shared/auth/useAuth';
 import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
-import { useStartConversation } from '@/shared/pages/messages';
+import { useStartConversation } from '@/modules/messages';
 import { listingGalleryImages, listingViewerState } from '../utils/listingDetail';
 import { useToggleSaveListing } from './useToggleSaveListing';
 

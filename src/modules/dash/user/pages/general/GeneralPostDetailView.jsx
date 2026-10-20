@@ -3,8 +3,8 @@ import { ChevronLeft } from 'lucide-react';
 import { GeneralPostDetailSkeleton } from '@/components/common/Skeleton';
 import NotFound from '@/shared/pages/NotFound';
 import GeneralPage from './components/layout/GeneralPage';
-import PostHeader from './components/detail/PostHeader';
-import PostBody from './components/detail/PostBody';
+import GeneralPostHeader from './components/detail/GeneralPostHeader';
+import GeneralPostBody from './components/detail/GeneralPostBody';
 import PostActions from './components/detail/PostActions';
 import { useGeneralPostDetail } from './hooks/useGeneralPostDetail';
 import { GENERAL_PATH } from './constant/constants';
@@ -36,8 +36,8 @@ const GeneralPostDetailView = () => {
         Back to General
       </Link>
 
-      <PostHeader post={post} />
-      <PostBody body={post.body} summary={post.summary} />
+      <GeneralPostHeader post={post} />
+      <GeneralPostBody body={post.body} summary={post.summary} />
       <PostActions post={post} onShare={share} />
     </GeneralPage>
   );

@@ -1,5 +1,5 @@
-import ChatRedirect from "@/shared/layout/ChatLayout/ChatRedirect";
-import LegacyChatRedirect from "@/shared/layout/ChatLayout/LegacyChatRedirect";
+import ChatRedirect from "@/modules/messages/route/ChatRedirect";
+import LegacyChatRedirect from "@/modules/messages/route/LegacyChatRedirect";
 import { CHAT_SECTIONS, toRoleChatPath } from "@/shared/constants/chat";
 
 const { DIRECT, GROUP } = CHAT_SECTIONS;

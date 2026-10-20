@@ -1,4 +1,4 @@
-import ChatLayout from '@/shared/layout/ChatLayout/ChatLayout';
+import ChatLayout from '@/modules/messages/route/ChatLayout';
 
 const AdminChatInboxView = () => <ChatLayout variant="panel" />;
 

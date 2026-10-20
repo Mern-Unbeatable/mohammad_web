@@ -18,8 +18,8 @@ feed/
 │   │
 │   ├── post/                 One post card
 │   │   ├── FeedPost.jsx          Card container: composes header, body, stats, actions, comments
-│   │   ├── PostHeader.jsx        Author, badges, meta, owner menu or report button
-│   │   ├── PostBody.jsx          Text, attachment, images, promo pricing, repost body
+│   │   ├── FeedPostHeader.jsx        Author, badges, meta, owner menu or report button
+│   │   ├── FeedPostBody.jsx          Text, attachment, images, promo pricing, repost body
 │   │   ├── PostActionsBar.jsx    PostStats (counts) and PostActions (react / comment / share)
 │   │   ├── ReactionButton.jsx    Reaction picker
 │   │   ├── PostMeta.jsx          Country · time · Edited line
@@ -109,7 +109,7 @@ flowchart TD
   FeedPost --> usePostEngagement
   FeedPost --> usePostCommentActions
   FeedPost --> useRepost
-  FeedPost --> PostHeader & PostBody & PostActionsBar
+  FeedPost --> FeedPostHeader & FeedPostBody & PostActionsBar
   FeedPost --> PostComments
   PostComments --> useReplyComposer & useCommentManagement
   PostComments --> CommentComposer & CommentThread
@@ -135,7 +135,7 @@ with their callers (profiles, supplier ads, activity section).
 
 | Change                      | Put it in                                                            |
 | --------------------------- | -------------------------------------------------------------------- |
-| New post type look          | `components/post/PostBody.jsx` (+ badge in `constants.js`)           |
+| New post type look          | `components/post/FeedPostBody.jsx` (+ badge in `constants.js`)           |
 | New post action (e.g. save) | a hook in `hooks/`, button in `PostActionsBar.jsx`                   |
 | New comment feature         | `components/comments/` + `useReplyComposer` / `useCommentManagement` |
 | New composer attachment     | `usePostDraft.js` + a `Draft*` component + `ComposerFooter.jsx`      |

@@ -12,7 +12,7 @@ import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
 import NotFound from "@/shared/pages/NotFound";
 import { useAuth } from "@/shared/auth/useAuth";
 import { CHAT_BASE_PATHS } from "@/shared/constants/chat";
-import { StartConversationModal, useStartConversation } from "@/shared/pages/messages";
+import { StartConversationModal, useStartConversation } from "@/modules/messages";
 import {
   fetchListingDetails,
   clearSelectedListing,

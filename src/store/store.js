@@ -11,7 +11,7 @@ import { adminAdsReducer } from "../features/dash/admin/advertisements";
 import { adminBlogsReducer } from "../features/dash/admin/blogs";
 import { adminSettingsReducer } from "../features/dash/admin/settings";
 import { adminProfileReducer } from "../features/dash/admin/profile";
-import { adminMessagesReducer } from "../features/dash/admin/messages";
+import { adminMessagesReducer } from "@/features/messages/moderation";
 import { messagesReducer } from "../features/messages";
 import { supplierDashboardReducer } from "../features/dash/supplier/dashboard";
 import { supplierAdsReducer } from "../features/dash/supplier/advertisements";

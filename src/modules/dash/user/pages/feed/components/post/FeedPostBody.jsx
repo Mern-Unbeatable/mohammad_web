@@ -92,7 +92,7 @@ const OriginalBody = ({ post }) => {
   );
 };
 
-const PostBody = ({ post }) =>
+const FeedPostBody = ({ post }) =>
   post.isRepost ? <RepostBody post={post} /> : <OriginalBody post={post} />;
 
-export default PostBody;
+export default FeedPostBody;

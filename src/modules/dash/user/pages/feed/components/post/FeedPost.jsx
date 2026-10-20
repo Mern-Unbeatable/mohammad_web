@@ -9,8 +9,8 @@ import { useRepost } from "../../hooks/useRepost";
 import FullCommentsModal from "../comments/FullCommentsModal";
 import PostComments from "../comments/PostComments";
 import SharePostModal from "../modals/SharePostModal";
-import PostBody from "./PostBody";
-import PostHeader from "./PostHeader";
+import FeedPostBody from "./FeedPostBody";
+import FeedPostHeader from "./FeedPostHeader";
 import { PostActions, PostStats } from "./PostActionsBar";
 
 const FeedPost = ({ post, onReport, onEdit, onDelete }) => {
@@ -45,14 +45,14 @@ const FeedPost = ({ post, onReport, onEdit, onDelete }) => {
   return (
     <>
       <Card>
-        <PostHeader
+        <FeedPostHeader
           post={post}
           onReport={onReport}
           onEdit={onEdit}
           onDelete={onDelete}
           isOwner={isOwner}
         />
-        <PostBody post={post} />
+        <FeedPostBody post={post} />
         {statsBar}
         <PostActions
           reactionId={reactionId}
@@ -77,8 +77,8 @@ const FeedPost = ({ post, onReport, onEdit, onDelete }) => {
         title={`${post.author.name}'s post`}
         onClose={closeFullComments}
       >
-        <PostHeader post={post} showActions={false} />
-        <PostBody post={post} />
+        <FeedPostHeader post={post} showActions={false} />
+        <FeedPostBody post={post} />
         {statsBar}
         <PostComments {...commentProps} emptyText="No comments yet. Start the conversation." />
       </FullCommentsModal>

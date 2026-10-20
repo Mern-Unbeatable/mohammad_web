@@ -24,12 +24,10 @@ profile/
 │   │   ├── MyReportsCard.jsx       Loading / empty states and the list
 │   │   └── ReportRow.jsx           Reason · type, snippet, date, status
 │   │
-│   ├── layout/
-│   │   ├── MembershipPrompt.jsx    "Want full access?" link for inactive accounts
-│   │   └── ProfileSetupLoading.jsx Spinner while the edit form loads
-│   │
-│   └── modals/
-│       └── DeletePostModal.jsx     Confirm deleting a post
+│   └── layout/
+│       ├── MembershipPrompt.jsx    "Want full access?" link for inactive accounts
+│       └── ProfileSetupLoading.jsx Spinner while the edit form loads
+│                             (DeletePostModal: @/components/common/DeletePostModal)
 │
 ├── hooks/
 │   ├── useProfilePage.js         Load profile + reports, error toasts, premium / subscription flags
