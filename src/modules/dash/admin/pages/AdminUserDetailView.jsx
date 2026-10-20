@@ -10,7 +10,7 @@ import { ProfilePageSkeleton } from "@/components/common/Skeleton";
 import { SubscriptionDetailsCard } from "@/modules/dash/user/pages/profile";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
-import { CHAT_BASE_PATHS, chatPath } from "@/shared/constants/chat";
+import { CHAT_BASE_PATHS, chatPath } from "@/features/messages/chatPaths";
 import { useAuth } from "@/modules/auth";
 import { StartConversationModal, useStartConversation } from "@/modules/messages";
 import { roleLabel } from "@/shared/constants/roles";

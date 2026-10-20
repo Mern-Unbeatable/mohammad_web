@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { chatTargetFor } from '@/shared/constants/chat';
+import { chatTargetFor } from '@/features/messages/chatPaths';
 import { CONVERSATION_TYPE, DESKTOP_QUERY } from '../constant/constants';
 
 /** Desktop: open the newest conversation of the current section when none is in the URL. */

@@ -7,8 +7,8 @@ import {
   chatTargetFor,
   listingChatPath,
   toRoleChatPath,
-} from "./chat";
-import { marketplaceListingPath } from "./marketplace";
+} from "./chatPaths";
+import { marketplaceListingPath } from "@/modules/messages/constant/marketplacePaths";
 
 describe("marketplace links", () => {
   it("opens the seller chat with the listing in the composer", () => {

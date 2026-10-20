@@ -1,4 +1,4 @@
-import { CHAT_BASE_PATHS, CHAT_SECTIONS } from '@/shared/constants/chat';
+import { CHAT_BASE_PATHS, CHAT_SECTIONS } from '@/features/messages/chatPaths';
 import MessagesPageContent from './components/layout/MessagesPageContent';
 import NewMessageModal from './components/modals/NewMessageModal';
 import CreateGroupModal from './components/modals/CreateGroupModal';

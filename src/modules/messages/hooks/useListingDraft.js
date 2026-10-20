@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router';
 import { toast } from 'react-hot-toast';
 import { toChatListingModel } from '@/features/messages';
 import { marketplaceApi } from '@/features/dash/user/marketplace';
-import { CHAT_LISTING_PARAM, CHAT_SECTIONS } from '@/shared/constants/chat';
+import { CHAT_LISTING_PARAM, CHAT_SECTIONS } from '@/features/messages/chatPaths';
 import { LISTING_UNAVAILABLE_MESSAGE } from '../constant/constants';
 import { isListingUnavailable } from '../utils/chatListing';
 

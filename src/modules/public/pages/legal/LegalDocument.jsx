@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { ArrowRight, Mail } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { SUPPORT_CONTACT } from "@/shared/constants/support";
-import { LEGAL_LAST_UPDATED } from "@/shared/constants/legal";
+import { LEGAL_LAST_UPDATED } from "@/modules/public/pages/legal/constant/constants";
 
 const sectionBodyClass =
   "mt-3 space-y-3 text-[15px] leading-[1.75] text-[#475467] [&_a]:font-medium [&_a]:text-primary [&_a:hover]:underline [&_strong]:font-semibold [&_strong]:text-deep-blue [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5";

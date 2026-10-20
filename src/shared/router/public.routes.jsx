@@ -3,7 +3,7 @@ import HomeView from '@/modules/public/pages/home/HomeView';
 import TermsOfServiceView from '@/modules/public/pages/legal/TermsOfServiceView';
 import PrivacyPolicyView from '@/modules/public/pages/legal/PrivacyPolicyView';
 import NotFound from '@/modules/error/NotFound';
-import { PRIVACY_PATH, TERMS_PATH } from '@/shared/constants/legal';
+import { PRIVACY_PATH, TERMS_PATH } from '@/modules/public/pages/legal/constant/constants';
 
 export const publicRoutes = {
   path: '/',

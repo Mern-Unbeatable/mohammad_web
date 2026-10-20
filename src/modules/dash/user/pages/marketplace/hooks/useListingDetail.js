@@ -9,7 +9,7 @@ import {
   toListingDetailModel,
 } from '@/features/dash/user/marketplace';
 import { useAuth } from '@/modules/auth';
-import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
+import { CHAT_BASE_PATHS } from '@/features/messages/chatPaths';
 import { useStartConversation } from '@/modules/messages';
 import { listingGalleryImages, listingViewerState } from '../utils/listingDetail';
 import { useToggleSaveListing } from './useToggleSaveListing';

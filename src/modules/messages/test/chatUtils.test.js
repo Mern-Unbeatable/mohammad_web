@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CHAT_SECTIONS } from '@/shared/constants/chat';
+import { CHAT_SECTIONS } from '@/features/messages/chatPaths';
 import { CHAT_TAB, CONVERSATION_TYPE } from '../constant/constants';
 import { sectionForTab, tabForSection, typeForTab } from '../utils/chatTabs';
 import {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Link } from "react-router";
-import { WORKPLACE_TYPE_OPTIONS } from "@/shared/constants/jobWorkplace";
+import { WORKPLACE_TYPE_OPTIONS } from "@/features/recruitment/jobWorkplace";
 import JobImageField from "./JobImageField";
 
 const fieldClass =

@@ -1,5 +1,5 @@
 import { ConversationItem } from "@/components/data-display/Messenger/Messenger";
-import { CHAT_BASE_PATHS } from "@/shared/constants/chat";
+import { CHAT_BASE_PATHS } from "@/features/messages/chatPaths";
 import { useMessagesPreview } from "../../hooks/useMessagesPreview";
 import NavHoverMenu from "./NavHoverMenu";
 import ConversationSkeleton from "./ConversationSkeleton";

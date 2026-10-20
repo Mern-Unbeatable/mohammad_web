@@ -1,5 +1,5 @@
 import { useMatches, useParams } from 'react-router';
-import { CHAT_BASE_PATHS, CHAT_SECTIONS } from '@/shared/constants/chat';
+import { CHAT_BASE_PATHS, CHAT_SECTIONS } from '@/features/messages/chatPaths';
 
 const lastHandle = (matches, key) => {
   for (let i = matches.length - 1; i >= 0; i -= 1) {

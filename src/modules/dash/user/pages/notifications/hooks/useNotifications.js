@@ -10,7 +10,7 @@ import {
   toNotificationListModel,
 } from '@/features/dash/user/notifications';
 import { resolveNotificationLink } from '@/features/messages';
-import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
+import { CHAT_BASE_PATHS } from '@/features/messages/chatPaths';
 import { NOTIFICATIONS_QUERY } from '../constant/constants';
 
 /** Notification list, open (mark read + follow link) and mark-all-read. */

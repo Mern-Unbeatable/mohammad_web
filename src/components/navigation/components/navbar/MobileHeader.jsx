@@ -2,7 +2,7 @@ import { Menu, MessageSquare, X } from "lucide-react";
 import { Link } from "react-router";
 import logo from "@/assets/logo.png";
 import CountBadge from "@/components/ui/CountBadge";
-import { CHAT_BASE_PATHS } from "@/shared/constants/chat";
+import { CHAT_BASE_PATHS } from "@/features/messages/chatPaths";
 import { hasMenuAlerts, menuToggleLabel } from "../../utils/badges";
 import NavSearchField from "./NavSearchField";
 

@@ -1,6 +1,6 @@
 /** Map API enums / fields onto JobCard & JobDetailCard props. */
 
-import { workplaceLabel } from "@/shared/constants/jobWorkplace";
+import { workplaceLabel } from "@/features/recruitment/jobWorkplace";
 
 const LEVEL_LABEL = {
   ENTRY_LEVEL: "Entry-level",

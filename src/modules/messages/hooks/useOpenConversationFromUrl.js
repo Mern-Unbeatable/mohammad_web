@@ -8,7 +8,7 @@ import {
   fetchThread,
   setActiveConversation,
 } from '@/features/messages';
-import { CHAT_SECTIONS, chatPath } from '@/shared/constants/chat';
+import { CHAT_SECTIONS, chatPath } from '@/features/messages/chatPaths';
 import { CONVERSATION_UNAVAILABLE_MESSAGE } from '../constant/constants';
 
 /**

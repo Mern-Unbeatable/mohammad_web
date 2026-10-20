@@ -8,7 +8,7 @@ import {
   toNotificationListModel,
 } from '@/features/dash/user/notifications';
 import { resolveNotificationLink } from '@/features/messages';
-import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
+import { CHAT_BASE_PATHS } from '@/features/messages/chatPaths';
 import { NOTIFICATIONS_PATH, NOTIFICATIONS_PREVIEW_LIMIT } from '../constant/constants';
 
 /** Latest notifications for the navbar hover preview; opening one marks it read. */

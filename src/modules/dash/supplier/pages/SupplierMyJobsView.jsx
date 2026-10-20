@@ -26,7 +26,7 @@ import {
   levelToApi,
   toJobCardModel,
 } from "@/features/dash/supplier/recruitment";
-import { MY_JOB_STATUS_FILTERS } from "@/shared/constants/jobStatus";
+import { MY_JOB_STATUS_FILTERS } from "@/features/recruitment/jobStatus";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
 import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";

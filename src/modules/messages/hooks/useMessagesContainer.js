@@ -21,9 +21,9 @@ import {
   setActiveConversation,
   startDirect,
 } from '@/features/messages';
-import { CHAT_SECTIONS, chatPath, chatTargetFor } from '@/shared/constants/chat';
-import { marketplaceListingPath } from '@/shared/constants/marketplace';
-import { memberProfilePath } from '@/shared/constants/profile';
+import { CHAT_SECTIONS, chatPath, chatTargetFor } from '@/features/messages/chatPaths';
+import { marketplaceListingPath } from '@/modules/messages/constant/marketplacePaths';
+import { memberProfilePath } from '@/modules/messages/constant/memberProfilePaths';
 import { CHAT_TAB } from '../constant/constants';
 import { sectionForTab, tabForSection, typeForTab } from '../utils/chatTabs';
 import { findConversation, hasMorePages, memberNameFor, nextPage } from '../utils/chatModels';

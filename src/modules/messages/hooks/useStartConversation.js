@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { messagesApi } from '@/features/messages';
-import { CHAT_SECTIONS, chatPath, chatTargetFor } from '@/shared/constants/chat';
+import { CHAT_SECTIONS, chatPath, chatTargetFor } from '@/features/messages/chatPaths';
 
 /**
  * Sends the first message to `recipientId` (the API reuses an existing 1:1

@@ -10,7 +10,7 @@ import {
   Store,
   Users,
 } from 'lucide-react';
-import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
+import { CHAT_BASE_PATHS } from '@/features/messages/chatPaths';
 
 export const FEED_PATH = '/feed';
 export const PROFILE_PATH = '/profile';

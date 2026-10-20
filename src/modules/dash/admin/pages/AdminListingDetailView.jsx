@@ -11,7 +11,7 @@ import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
 import NotFound from "@/modules/error/NotFound";
 import { useAuth } from "@/modules/auth";
-import { CHAT_BASE_PATHS } from "@/shared/constants/chat";
+import { CHAT_BASE_PATHS } from "@/features/messages/chatPaths";
 import { StartConversationModal, useStartConversation } from "@/modules/messages";
 import {
   fetchListingDetails,

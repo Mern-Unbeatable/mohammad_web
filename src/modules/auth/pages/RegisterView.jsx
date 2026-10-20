@@ -5,7 +5,7 @@ import { Loader2, ShieldCheck } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../hooks/useAuth";
 import { getSafeRedirectPath } from "@/shared/routing/safeRedirect";
-import { PRIVACY_PATH, TERMS_PATH } from "@/shared/constants/legal";
+import { PRIVACY_PATH, TERMS_PATH } from "@/modules/public/pages/legal/constant/constants";
 import {
   inputClass,
   labelClass,

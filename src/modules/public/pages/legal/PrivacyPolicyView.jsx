@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import LegalDocument from './LegalDocument';
-import { TERMS_PATH } from '@/shared/constants/legal';
+import { TERMS_PATH } from '@/modules/public/pages/legal/constant/constants';
 import { SUPPORT_CONTACT } from '@/shared/constants/support';
 
 const sections = [

@@ -2,7 +2,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router';
 import PanelPage from '@/components/navigation/panel/PanelPage';
 import PanelPageHeader from '@/components/navigation/panel/PanelPageHeader';
 import SegmentedTabs from '@/components/common/SegmentedTabs/SegmentedTabs';
-import { CHAT_BASE_PATHS, chatPath } from '@/shared/constants/chat';
+import { CHAT_BASE_PATHS, chatPath } from '@/features/messages/chatPaths';
 
 const ADMIN_CHAT_MODERATION_PATH = `${CHAT_BASE_PATHS.ADMIN}/moderation`;
 

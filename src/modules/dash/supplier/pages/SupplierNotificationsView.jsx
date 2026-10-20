@@ -13,7 +13,7 @@ import {
   toNotificationListModel,
 } from "@/features/dash/supplier/notifications";
 import { resolveNotificationLink } from "@/features/messages";
-import { CHAT_BASE_PATHS } from "@/shared/constants/chat";
+import { CHAT_BASE_PATHS } from "@/features/messages/chatPaths";
 
 const NotificationItem = ({ item, onMarkRead }) => {
   const Icon = item.icon;

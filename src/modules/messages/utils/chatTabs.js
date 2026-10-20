@@ -1,4 +1,4 @@
-import { CHAT_SECTIONS } from '@/shared/constants/chat';
+import { CHAT_SECTIONS } from '@/features/messages/chatPaths';
 import { CHAT_TAB, CONVERSATION_TYPE } from '../constant/constants';
 
 export const tabForSection = (section) =>

@@ -11,7 +11,7 @@ import {
 } from '@/features/dash/user/contacts';
 import { fetchAuthorPosts, toFeedPostModel } from '@/features/dash/user/feed';
 import { useAuth } from '@/modules/auth';
-import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
+import { CHAT_BASE_PATHS } from '@/features/messages/chatPaths';
 import { useStartConversation } from '@/modules/messages';
 
 /** Contact profile: details, the contact's posts, connect, message and report state. */

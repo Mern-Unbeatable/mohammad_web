@@ -1,6 +1,6 @@
 import { RequireRole } from '@/shared/guards';
 import { USER_ROLES } from '@/shared/constants/roles';
-import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
+import { CHAT_BASE_PATHS } from '@/features/messages/chatPaths';
 import { lazyPage } from '@/shared/routing/lazyPage';
 import SupplierLayout from '@/layouts/SupplierLayout';
 import PanelNotFound from '@/modules/error/PanelNotFound';

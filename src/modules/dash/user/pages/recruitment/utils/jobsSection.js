@@ -1,6 +1,6 @@
 import { employmentToApi, levelToApi } from "@/features/dash/user/recruitment";
-import { workplaceToApi } from "@/shared/constants/jobWorkplace";
-import { JOB_STATUS } from "@/shared/constants/jobStatus";
+import { workplaceToApi } from "@/features/recruitment/jobWorkplace";
+import { JOB_STATUS } from "@/features/recruitment/jobStatus";
 import { ALL_OPTION } from "./recruitmentUrlFilters";
 
 /** Count shown next to a section title; hidden (null) while loading. */

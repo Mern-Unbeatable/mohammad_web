@@ -5,7 +5,7 @@ import { JobDetailPageSkeleton } from "@/components/common/Skeleton";
 import JobDetailCard from "@/components/data-display/JobDetailCard/JobDetailCard";
 import { toJobDetailModel } from "@/features/dash/user/recruitment";
 import NotFound from "@/modules/error/NotFound";
-import { isJobOpen, jobClosedNotice } from "@/shared/constants/jobStatus";
+import { isJobOpen, jobClosedNotice } from "@/features/recruitment/jobStatus";
 import AppliedCandidatesPanel from "./components/candidates/AppliedCandidatesPanel";
 import JobPosterCard from "./components/detail/JobPosterCard";
 import ApplyForm from "./components/detail/ApplyForm";

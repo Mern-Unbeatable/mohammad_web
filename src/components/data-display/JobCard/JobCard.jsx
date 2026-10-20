@@ -3,7 +3,7 @@ import { Eye, Loader2, Lock, LockOpen, Pencil, Trash2 } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import CountBadge from '@/components/ui/CountBadge';
-import { JOB_STATUS, JOB_STATUS_LABEL } from '@/shared/constants/jobStatus';
+import { JOB_STATUS, JOB_STATUS_LABEL } from '@/features/recruitment/jobStatus';
 
 const STATUS_BADGE_CLASS = {
   [JOB_STATUS.OPEN]: 'bg-green-secondary text-green-primary',

@@ -2,7 +2,7 @@ import {
   EMPLOYMENT_TYPE_OPTIONS,
   RECRUITMENT_LEVEL_OPTIONS,
 } from "@/features/dash/user/recruitment";
-import { WORKPLACE_TYPE_OPTIONS } from "@/shared/constants/jobWorkplace";
+import { WORKPLACE_TYPE_OPTIONS } from "@/features/recruitment/jobWorkplace";
 import {
   SEARCH_PARAM,
   createUrlFilters,

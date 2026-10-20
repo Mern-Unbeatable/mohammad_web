@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MemoryRouter } from 'react-router';
 import Messenger from './Messenger';
-import { memberProfilePath } from '@/shared/constants/profile';
+import { memberProfilePath } from '@/modules/messages/constant/memberProfilePaths';
 
 const direct = {
   id: 'c1',

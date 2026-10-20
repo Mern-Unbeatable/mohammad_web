@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { toast } from 'react-hot-toast';
 import { messagesApi, toConversationModel } from '@/features/messages';
 import { useAuth } from '@/modules/auth';
-import { CHAT_BASE_PATHS, chatPath, chatTargetFor } from '@/shared/constants/chat';
+import { CHAT_BASE_PATHS, chatPath, chatTargetFor } from '@/features/messages/chatPaths';
 import { CONVERSATIONS_PAGE_SIZE } from '../constant/constants';
 
 const fetchAllConversations = async () => {

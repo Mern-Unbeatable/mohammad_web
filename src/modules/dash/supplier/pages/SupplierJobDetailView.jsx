@@ -16,7 +16,7 @@ import {
 } from "@/features/dash/supplier/recruitment";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import NotFound from "@/modules/error/NotFound";
-import { isJobOpen, jobClosedNotice } from "@/shared/constants/jobStatus";
+import { isJobOpen, jobClosedNotice } from "@/features/recruitment/jobStatus";
 
 const contactPath = (userId) => `/supplier/contacts/${userId}`;
 

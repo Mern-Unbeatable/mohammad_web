@@ -4,7 +4,7 @@ import {
   DEFAULT_WORKPLACE_TYPE,
   workplaceLabel,
   workplaceToApi,
-} from "@/shared/constants/jobWorkplace";
+} from "@/features/recruitment/jobWorkplace";
 
 const LEVEL_LABEL = {
   ENTRY_LEVEL: "Entry-level",
