@@ -2,7 +2,7 @@ import RootLayout from '@/layouts/RootLayout';
 import HomeView from '@/modules/public/pages/home/HomeView';
 import TermsOfServiceView from '@/modules/public/pages/legal/TermsOfServiceView';
 import PrivacyPolicyView from '@/modules/public/pages/legal/PrivacyPolicyView';
-import NotFound from '@/shared/pages/NotFound';
+import NotFound from '@/modules/error/NotFound';
 import { PRIVACY_PATH, TERMS_PATH } from '@/shared/constants/legal';
 
 export const publicRoutes = {

@@ -9,7 +9,7 @@ import { ListingDetailSkeleton } from "@/components/common/Skeleton";
 import { formatPrice } from "@/modules/dash/user/data/marketplace";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
-import NotFound from "@/shared/pages/NotFound";
+import NotFound from "@/modules/error/NotFound";
 import { useAuth } from "@/modules/auth";
 import { CHAT_BASE_PATHS } from "@/shared/constants/chat";
 import { StartConversationModal, useStartConversation } from "@/modules/messages";

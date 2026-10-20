@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation, useMatches } from 'react-router';
 import { roleHomePath } from '@/shared/constants/roles';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '@/modules/auth';
 import SessionCheckingFallback from './SessionCheckingFallback';
 
 /**

@@ -14,7 +14,7 @@ import {
   toContactProfileModel,
 } from "@/features/dash/supplier/contacts";
 import PanelPage from "@/components/navigation/panel/PanelPage";
-import NotFound from "@/shared/pages/NotFound";
+import NotFound from "@/modules/error/NotFound";
 import { CHAT_BASE_PATHS, chatPath } from "@/shared/constants/chat";
 
 const SupplierContactProfileView = () => {

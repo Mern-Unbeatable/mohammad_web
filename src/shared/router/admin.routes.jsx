@@ -1,9 +1,9 @@
-import { RequireRole } from '@/modules/auth';
+import { RequireRole } from '@/shared/guards';
 import { USER_ROLES } from '@/shared/constants/roles';
 import { CHAT_BASE_PATHS } from '@/shared/constants/chat';
 import { lazyPage } from '@/shared/routing/lazyPage';
 import AdminLayout from '@/layouts/AdminLayout';
-import PanelNotFound from '@/shared/pages/PanelNotFound';
+import PanelNotFound from '@/modules/error/PanelNotFound';
 import { buildChatRoute } from './chat.routes';
 
 const AdminDashboardView = lazyPage(() => import('@/modules/dash/admin/pages/AdminDashboardView'));

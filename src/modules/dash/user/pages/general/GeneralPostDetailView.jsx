@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import { ChevronLeft } from 'lucide-react';
 import { GeneralPostDetailSkeleton } from '@/components/common/Skeleton';
-import NotFound from '@/shared/pages/NotFound';
+import NotFound from '@/modules/error/NotFound';
 import GeneralPage from './components/layout/GeneralPage';
 import GeneralPostHeader from './components/detail/GeneralPostHeader';
 import GeneralPostBody from './components/detail/GeneralPostBody';

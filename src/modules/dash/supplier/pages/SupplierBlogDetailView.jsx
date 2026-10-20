@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import Container from "@/components/ui/Container";
 import { BlogDetailSkeleton } from "@/components/common/Skeleton";
-import NotFound from "@/shared/pages/NotFound";
+import NotFound from "@/modules/error/NotFound";
 import {
   fetchSupplierBlogBySlug,
   fetchSupplierLatestBlogs,

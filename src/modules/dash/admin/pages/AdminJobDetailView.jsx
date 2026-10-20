@@ -5,7 +5,7 @@ import JobDetailCard from "@/components/data-display/JobDetailCard/JobDetailCard
 import { JobDetailSkeleton } from "@/components/common/Skeleton";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
-import NotFound from "@/shared/pages/NotFound";
+import NotFound from "@/modules/error/NotFound";
 import { AppliedCandidatesPanel, JobPosterCard } from "@/modules/dash/user/pages/recruitment";
 import {
   fetchJobDetails,

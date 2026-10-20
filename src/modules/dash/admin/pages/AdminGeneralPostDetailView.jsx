@@ -5,7 +5,7 @@ import { Calendar, MapPin, Share2 } from "lucide-react";
 import { GeneralPostDetailSkeleton } from "@/components/common/Skeleton";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
-import NotFound from "@/shared/pages/NotFound";
+import NotFound from "@/modules/error/NotFound";
 import {
   fetchGeneralPostDetails,
   clearSelectedPost,

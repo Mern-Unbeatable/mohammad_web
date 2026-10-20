@@ -5,7 +5,7 @@ import { Calendar, ChevronLeft, MapPin, Share2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import { GeneralPostDetailSkeleton } from "@/components/common/Skeleton";
-import NotFound from "@/shared/pages/NotFound";
+import NotFound from "@/modules/error/NotFound";
 import {
   fetchSupplierGeneralPostDetails,
   clearSelectedPost,

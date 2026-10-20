@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from 'react-router';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '@/modules/auth';
 import SessionCheckingFallback from './SessionCheckingFallback';
 
 /**

@@ -1,5 +1,5 @@
 import { BlogDetailSkeleton } from '@/components/common/Skeleton';
-import NotFound from '@/shared/pages/NotFound';
+import NotFound from '@/modules/error/NotFound';
 import BlogDetailPage from './components/layout/BlogDetailPage';
 import BlogArticle from './components/detail/BlogArticle';
 import PopularPosts from './components/detail/PopularPosts';

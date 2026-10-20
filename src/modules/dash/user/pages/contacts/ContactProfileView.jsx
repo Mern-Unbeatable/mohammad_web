@@ -1,7 +1,7 @@
 import { ContactProfilePageSkeleton } from '@/components/common/Skeleton';
 import ContactProfilePageContent from '@/components/data-display/ContactProfilePageContent/ContactProfilePageContent';
 import { ReportPostModal } from '@/modules/dash/user/pages/feed';
-import NotFound from '@/shared/pages/NotFound';
+import NotFound from '@/modules/error/NotFound';
 import { CHAT_BASE_PATHS, chatPath } from '@/shared/constants/chat';
 import { StartConversationModal } from '@/modules/messages';
 import ContactProfilePage from './components/profile/ContactProfilePage';
