@@ -169,7 +169,7 @@ const ProfileDropdown = () => {
               ) : (
                 <LogOut className="h-[18px] w-[18px]" strokeWidth={1.8} />
               )}
-              {loggingOut ? "Logging out…" : "Log out"}
+              {loggingOut ? "Logging out…" : "Logout"}
             </button>
           </div>
         </div>

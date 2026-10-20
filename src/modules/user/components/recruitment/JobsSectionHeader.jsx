@@ -12,7 +12,7 @@ const JobsSectionHeader = ({
         {title}
         {typeof count === "number" ? (
           <span
-            className="text-[15px] font-semibold text-pink-light"
+            className=" font-semibold text-pink-light"
             aria-label={`${count} ${itemName}${count === 1 ? "" : "s"}`}
           >
             ({count})
