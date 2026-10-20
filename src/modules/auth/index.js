@@ -1,3 +1,3 @@
-export { useAuth } from './hooks/useAuth';
+export { useAuth } from '@/shared/hooks/useAuth';
 export { default as AuthSessionBridge } from './session/AuthSessionBridge';
-export { toAccountIdentity } from './utils/accountIdentity';
+export { toAccountIdentity } from '@/shared/utils/auth/accountIdentity';

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parsePageParam } from "./usePageParam";
+import { parsePageParam } from "../usePageParam";
 
 describe("parsePageParam", () => {
   it.each([

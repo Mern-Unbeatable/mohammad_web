@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { IoIosArrowDown } from "react-icons/io";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "@/shared/hooks/useAuth";
 import { getSafeRedirectPath } from "@/shared/router/utils/safeRedirect";
 import { PRIVACY_PATH, TERMS_PATH } from "@/modules/public/pages/legal/constant/constants";
 import {
@@ -12,67 +11,8 @@ import {
   PasswordField,
   PasswordStrength,
 } from "@/modules/auth/components/AuthFormFields";
-
-const selectClass = `${inputClass} appearance-none pr-10`;
-
-const SelectField = ({ id, label, value, onChange, children, disabled }) => (
-  <div>
-    <label htmlFor={id} className={labelClass}>
-      {label}
-    </label>
-    <div className="relative">
-      <select
-        id={id}
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-        className={selectClass}
-      >
-        {children}
-      </select>
-      <IoIosArrowDown
-        aria-hidden="true"
-        className="pointer-events-none absolute right-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-[#64748B]"
-      />
-    </div>
-  </div>
-);
-
-const profileOptions = [
-  { value: "", label: "Select One" },
-  {
-    value: "laboratory",
-    label: "Laboratory — For laboratories and laboratory professionals",
-  },
-  {
-    value: "hospital",
-    label: "Hospital — For hospitals and healthcare organizations",
-  },
-  {
-    value: "clinic",
-    label: "Clinic — For clinics and healthcare professionals",
-  },
-  {
-    value: "supplier",
-    label:
-      "Supplier — For laboratory equipment, products, and services suppliers",
-  },
-  {
-    value: "professional",
-    label:
-      "Professional — For individual professionals in the laboratory industry",
-  },
-  { value: "other", label: "Other — If none of the above describes you" },
-];
-
-const countries = [
-  "Belgium",
-  "France",
-  "Germany",
-  "Netherlands",
-  "United Kingdom",
-  "United States",
-];
+import SelectField from "../components/SelectField";
+import { COUNTRIES, PROFILE_OPTIONS } from "../constant/constants";
 
 const RegisterView = () => {
   const navigate = useNavigate();
@@ -161,7 +101,7 @@ const RegisterView = () => {
               onChange={(e) => setProfileType(e.target.value)}
               disabled={loading}
             >
-              {profileOptions.map(({ value, label }) => (
+              {PROFILE_OPTIONS.map(({ value, label }) => (
                 <option
                   key={value || "default"}
                   value={value}
@@ -276,7 +216,7 @@ const RegisterView = () => {
                 onChange={(e) => setCountry(e.target.value)}
                 disabled={loading}
               >
-                {countries.map((c) => (
+                {COUNTRIES.map((c) => (
                   <option key={c} value={c}>
                     {c}
                   </option>

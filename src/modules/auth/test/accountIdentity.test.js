@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { toAccountIdentity } from "../utils/accountIdentity";
+import { toAccountIdentity } from "@/shared/utils/auth/accountIdentity";
 
 describe("toAccountIdentity", () => {
   it("prefers the nested profile fields", () => {

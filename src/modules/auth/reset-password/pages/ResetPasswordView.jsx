@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router';
 import { AlertCircle, ArrowLeft, CheckCircle2, Loader2, RefreshCw } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '@/shared/hooks/useAuth';
 import { PasswordField, PasswordStrength } from '@/modules/auth/components/AuthFormFields';
-import { isStrongPassword } from '@/modules/auth/utils/passwordRules';
+import { isStrongPassword } from '@/shared/utils/auth/passwordRules';
 
 /** Reset tokens are 32 random bytes, hex-encoded. */
 const TOKEN_PATTERN = /^[a-f0-9]{64}$/i;

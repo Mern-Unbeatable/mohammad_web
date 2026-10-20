@@ -1,5 +1,5 @@
 import { Eye, EyeOff } from 'lucide-react';
-import { getPasswordChecks } from '@/modules/auth/utils/passwordRules';
+import { getPasswordChecks } from '@/shared/utils/auth/passwordRules';
 
 export const labelClass = 'mb-1.5 block text-base font-medium text-deep-blue';
 export const inputClass =
