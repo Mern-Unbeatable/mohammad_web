@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import logo from "@/assets/logo.png";
 import CountBadge from "@/components/ui/CountBadge";
 import { CHAT_BASE_PATHS } from "@/features/messages/chatPaths";
-import { hasMenuAlerts, menuToggleLabel } from "../../utils/badges";
+import { hasMenuAlerts, menuToggleLabel } from "@/shared/utils/nav/badges";
 import NavSearchField from "./NavSearchField";
 
 /** Mobile & tablet header row: logo, search, messages shortcut, menu toggle. */

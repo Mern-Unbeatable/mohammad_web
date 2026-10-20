@@ -1,4 +1,4 @@
-import { DEFAULT_TRIAL_DAYS } from '../constant/constants';
+import { DEFAULT_TRIAL_DAYS } from '@/components/navigation/constant/constants';
 
 export const profileSubtitle = (profile) =>
   [profile?.title, profile?.company].filter(Boolean).join(' · ');

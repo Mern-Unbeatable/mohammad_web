@@ -42,8 +42,7 @@ components/navigation/
 │   ├── PanelBackButton.jsx
 │   └── panelPageTheme.js        # panelPageTheme, panelPageWidths, button classes
 ├── footer/AppFooter.jsx         # site footer (RootLayout, UserLayout)
-├── utils/                       # pure: navActive, badges, membership, sidebarModels
-├── test/
+├── test/                        # navUtils.test.js covers @/shared/utils/nav
 └── doc/STRUCTURE.md
 ```
 
@@ -65,4 +64,6 @@ and `footer/AppFooter` (Root / User layouts).
 - Components render only; state, effects, fetching and toasts live in hooks.
 - `MobileBottomNav` reads badge counts from the store; `useNavBadges` (in the
   navbar) keeps them fresh.
-- Utils are pure and unit-tested.
+- Pure helpers (`navActive`, `badges`, `membership`, `sidebarModels`) live in
+  `@/shared/utils/nav`; they read `constant/constants.js` from this folder and
+  are unit-tested in `test/navUtils.test.js`.

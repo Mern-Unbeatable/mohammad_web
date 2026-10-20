@@ -6,7 +6,7 @@ import { selectPendingRequestCount } from '@/features/dash/user/contacts';
 import { useFeedActions } from '@/modules/dash/user/context/useFeedActions';
 import { useLayoutChrome } from '@/shared/context/LayoutChromeContext';
 import { BOTTOM_NAV_TABS } from '../../constant/constants';
-import { isBottomTabActive } from '../../utils/navActive';
+import { isBottomTabActive } from '@/shared/utils/nav/navActive';
 
 const MobileBottomNav = () => {
   const { pathname } = useLocation();

@@ -3,8 +3,8 @@ import { Link } from "react-router";
 import Avatar from "@/components/ui/Avatar";
 import CountBadge from "@/components/ui/CountBadge";
 import { AVATAR_ACCENT_CLASS, NAV_ITEMS } from "../../constant/constants";
-import { isNavItemActive } from "../../utils/navActive";
-import { profileSubtitle } from "../../utils/membership";
+import { isNavItemActive } from "@/shared/utils/nav/navActive";
+import { profileSubtitle } from "@/shared/utils/nav/membership";
 
 /** Mobile slide-in menu; mount only while open so closed layers never cover the header. */
 const MobileMenuDrawer = ({

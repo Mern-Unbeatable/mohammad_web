@@ -10,7 +10,7 @@ import {
   toSidebarJobs,
   toSidebarListings,
   toSuggestedPeople,
-} from '../utils/sidebarModels';
+} from '@/shared/utils/nav/sidebarModels';
 
 /** Loads people suggestions, latest listings and jobs once; handles Connect. */
 export function useRightSidebar() {

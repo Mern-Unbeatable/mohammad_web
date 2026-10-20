@@ -10,7 +10,7 @@ import {
   dropdownMembershipBanner,
   expiredOrUpgradeText,
   profileSubtitle,
-} from "../../utils/membership";
+} from "@/shared/utils/nav/membership";
 import ViewPlansLink from "../membership/ViewPlansLink";
 
 const ProfileDropdown = () => {

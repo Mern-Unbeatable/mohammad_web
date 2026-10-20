@@ -6,7 +6,7 @@ import {
 import { fetchPendingRequestCount, selectPendingRequestCount } from '@/features/dash/user/contacts';
 import { fetchNewApplicationCounts, selectNewApplicationTotal } from '@/features/dash/user/recruitment';
 import { useNotificationBadge } from '@/shared/hooks/useNotificationBadge';
-import { buildNavBadges } from '../utils/badges';
+import { buildNavBadges } from '@/shared/utils/nav/badges';
 
 const userNotificationBadge = {
   fetchCount: fetchUserUnreadNotificationCount,

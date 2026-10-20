@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import CountBadge from "@/components/ui/CountBadge";
 import { NAV_ITEMS } from "../../constant/constants";
-import { isNavItemActive } from "../../utils/navActive";
+import { isNavItemActive } from "@/shared/utils/nav/navActive";
 import NotificationsHoverMenu from "../menus/NotificationsHoverMenu";
 import MessagesHoverMenu from "../menus/MessagesHoverMenu";
 

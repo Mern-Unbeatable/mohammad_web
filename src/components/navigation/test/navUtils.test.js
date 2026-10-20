@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { BOTTOM_NAV_TABS, NAV_ITEMS } from '../constant/constants';
-import { isBottomTabActive, isNavItemActive } from '../utils/navActive';
-import { buildNavBadges, countLabel, hasMenuAlerts, menuToggleLabel } from '../utils/badges';
+import { isBottomTabActive, isNavItemActive } from '@/shared/utils/nav/navActive';
+import { buildNavBadges, countLabel, hasMenuAlerts, menuToggleLabel } from '@/shared/utils/nav/badges';
 import {
   dropdownMembershipBanner,
   expiredOrUpgradeText,
   profileSubtitle,
   sidebarMembershipCard,
   trialProgress,
-} from '../utils/membership';
-import { formatPrice, markPending } from '../utils/sidebarModels';
+} from '@/shared/utils/nav/membership';
+import { formatPrice, markPending } from '@/shared/utils/nav/sidebarModels';
 
 const navItem = (id) => NAV_ITEMS.find((item) => item.id === id);
 const tab = (id) => BOTTOM_NAV_TABS.find((item) => item.id === id);

@@ -1,7 +1,7 @@
 import { toContactCardModel } from '@/features/dash/user/contacts';
 import { toListingCardModel } from '@/features/dash/user/marketplace';
 import { toJobCardModel } from '@/features/dash/user/recruitment';
-import { SIDEBAR_LIMIT } from '../constant/constants';
+import { SIDEBAR_LIMIT } from '@/components/navigation/constant/constants';
 
 export const formatPrice = (price) => {
   const num = Number(price);

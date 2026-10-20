@@ -4,7 +4,7 @@ import {
   expiredOrUpgradeText,
   sidebarMembershipCard,
   trialProgress,
-} from "../../utils/membership";
+} from "@/shared/utils/nav/membership";
 import ViewPlansLink from "../membership/ViewPlansLink";
 
 const TrialCard = ({ user }) => {

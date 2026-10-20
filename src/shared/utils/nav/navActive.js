@@ -2,7 +2,7 @@ import {
   BOTTOM_NAV_ACTIVE_PREFIX,
   FEED_PATH,
   NAV_ACTIVE_PREFIX,
-} from '../constant/constants';
+} from '@/components/navigation/constant/constants';
 
 const matches = (pathname, id, to, prefixes) => {
   if (id === 'home') return pathname === FEED_PATH;
