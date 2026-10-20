@@ -13,7 +13,7 @@ ads/
 │   ├── SupplierAdsView.jsx        Header + create button, AdsTable, CreateAdModal
 │   └── SupplierAdDetailView.jsx   Loading / not found, back link, rejection notice, card, comments
 │
-├── index.js                       Public API: AdDetailCard (used by CreateAdModal's preview)
+├── index.js                       Public API: AdDetailCard (CreateAdModal preview), AdCell, ADS_PATH, adDetailPath (dashboard)
 │
 ├── constant/
 │   └── constants.js               Paths, page size, debounce delay, status labels, filter / sort options, default rejection text

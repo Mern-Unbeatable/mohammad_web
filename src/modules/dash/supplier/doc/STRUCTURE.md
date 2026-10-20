@@ -14,7 +14,7 @@ supplier/
 │   ├── hooks/        useSupplierAds, useSupplierAdDetail, useAdEngagement
 │   ├── utils/        adsQuery, adRowActions, localComments
 │   ├── constant/ test/ doc/
-│   └── index.js                             Public API: AdDetailCard
+│   └── index.js                             Public API: AdDetailCard, AdCell, ADS_PATH, adDetailPath
 │
 ├── blogs/                                   Full feature layout; see blogs/doc/STRUCTURE.md
 │   ├── pages/        SupplierBlogsView, SupplierBlogDetailView
@@ -32,8 +32,12 @@ supplier/
 │   ├── constant/ test/ doc/
 │   └── index.js                             Public API: CONTACTS_PATH, contactProfilePath
 │
-├── dashboard/pages/
-│   └── SupplierDashboardView.jsx            KPI cards and charts
+├── dashboard/                               Full feature layout; see dashboard/doc/STRUCTURE.md
+│   ├── pages/        SupplierDashboardView
+│   ├── components/   overview/ (WelcomeBanner, StatsGrid, ActivityChart), ads/ (RecentAdsCard), notifications/ (RecentNotificationsCard, NotificationItem), common/ (SectionHeader, EmptyState, ErrorState)
+│   ├── hooks/        useSupplierDashboard
+│   ├── utils/        dashboardUtils
+│   └── constant/ test/ doc/
 │
 ├── general/pages/
 │   ├── SupplierGeneralView.jsx              Browse general posts
