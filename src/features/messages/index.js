@@ -34,7 +34,7 @@ export {
   editMessage,
   deleteMessage,
   leaveConversation,
-  renameGroup,
+  updateGroup,
   addParticipants,
   removeParticipant,
   fetchUnreadSummary,

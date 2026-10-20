@@ -17,11 +17,11 @@ import {
   nextConversationsParams,
   olderMessagesParams,
   removeParticipant,
-  renameGroup,
   resetMessages,
   sendMessage,
   setActiveConversation,
   startDirect,
+  updateGroup,
 } from '@/features/messages';
 import { CHAT_SECTIONS, chatPath, chatTargetFor } from '@/features/messages/chatPaths';
 import { marketplaceListingPath } from '@/modules/messages/constant/marketplacePaths';
@@ -268,6 +268,25 @@ export function useMessagesContainer({ variant, basePath, section, targetId }) {
     return ok;
   };
 
+  /** `file: null` removes the photo. */
+  const handleChangeGroupPhoto = async (file) => {
+    const conversationId = activeConversationId;
+    let avatar = null;
+    if (file) {
+      try {
+        avatar = await messagesApi.uploadGroupPhoto(file);
+      } catch (error) {
+        toast.error(messagesApi.getApiErrorMessage(error, 'Failed to upload photo'));
+        return false;
+      }
+    }
+    return runGroupAction(
+      updateGroup,
+      { conversationId, changes: { avatar } },
+      file ? 'Group photo updated' : 'Group photo removed',
+    );
+  };
+
   const recipientProps = {
     recipients,
     recipientsLoading,
@@ -349,7 +368,12 @@ export function useMessagesContainer({ variant, basePath, section, targetId }) {
       onlineUserIds: onlineSet,
       onClose: () => setInfoOpen(false),
       onRename: (name) =>
-        runGroupAction(renameGroup, { conversationId: activeConversationId, name }, 'Group renamed'),
+        runGroupAction(
+          updateGroup,
+          { conversationId: activeConversationId, changes: { name } },
+          'Group renamed',
+        ),
+      onChangePhoto: handleChangeGroupPhoto,
       onAddMembers: (participantIds) =>
         runGroupAction(
           addParticipants,

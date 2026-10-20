@@ -7,6 +7,7 @@ const LeaveGroupModal = ({ open, confirming, onClose, onConfirm }) => (
     title="Leave group?"
     description="You will stop receiving messages from this group. Rejoining requires the owner to add you again."
     confirmLabel="Leave"
+    confirmingLabel="Leaving…"
     confirmIcon={LogOut}
     confirming={confirming}
     onClose={onClose}

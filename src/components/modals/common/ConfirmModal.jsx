@@ -13,6 +13,7 @@ const ConfirmModal = ({
   icon: Icon = TriangleAlert,
   confirmIcon: ConfirmIcon = Trash2,
   confirmLabel = "Delete",
+  confirmingLabel = "Deleting…",
   cancelLabel = "Cancel",
   confirming = false,
   onClose,
@@ -33,7 +34,7 @@ const ConfirmModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 p-4"
+      className="fixed inset-0 z-[210] flex items-center justify-center bg-black/80 p-4"
       onClick={confirming ? undefined : onClose}
       role="presentation"
     >
@@ -102,7 +103,7 @@ const ConfirmModal = ({
             ) : ConfirmIcon ? (
               <ConfirmIcon className="h-4 w-4" aria-hidden="true" />
             ) : null}
-            {confirming ? "Deleting…" : confirmLabel}
+            {confirming ? confirmingLabel : confirmLabel}
           </button>
         </div>
       </div>
