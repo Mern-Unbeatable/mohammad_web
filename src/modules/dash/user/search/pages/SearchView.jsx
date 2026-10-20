@@ -1,3 +1,4 @@
+import DashboardPage from "@/components/layout/DashboardPage";
 import SearchFilterSidebar from "../components/layout/SearchFilterSidebar";
 import SearchHeader from "../components/layout/SearchHeader";
 import SearchPrompt from "../components/layout/SearchPrompt";
@@ -9,7 +10,7 @@ const SearchView = () => {
   const search = useSearchPage();
 
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-col items-start gap-6 px-4 py-6 md:flex-row">
+    <DashboardPage width="6xl" className="flex flex-col items-start gap-6 md:flex-row">
       {search.query ? (
         <SearchFilterSidebar activeTab={search.activeTab} onChange={search.setActiveTab} />
       ) : null}
@@ -32,7 +33,7 @@ const SearchView = () => {
           <SearchPrompt />
         )}
       </section>
-    </main>
+    </DashboardPage>
   );
 };
 

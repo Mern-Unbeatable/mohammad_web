@@ -24,8 +24,7 @@ contacts/
 │   │   ├── ContactsResults.jsx      Skeleton, error + retry, empty text, or contact cards
 │   │   └── ResultsMessage.jsx       Dashed message box
 │   │
-│   └── profile/              Profile page
-│       ├── ContactProfilePage.jsx   <main> + Container frame
+│   └── profile/              Profile page (frame: @/components/layout/DashboardPage)
 │       └── BackToDirectoryLink.jsx
 │
 ├── hooks/

@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
+import PanelPageHeader from "@/components/layout/PanelPageHeader";
 import { RecruitmentToolbar } from "@/modules/dash/user/recruitment";
 import { selectSupplierNewApplicationTotal } from "@/features/dash/supplier/recruitment";
 import RecruitmentActions from "./RecruitmentActions";

@@ -23,7 +23,7 @@ components/loader/
 │                               # ListingDetailSkeleton, MessengerSkeleton, …
 ├── fallbacks/
 │   ├── PageLoadingFallback.jsx     # Suspense fallback (lazyPage, ChatRedirect)
-│   └── SessionCheckingFallback.jsx # route guards while the session revalidates
+│   └── SessionCheckingFallback.jsx # route guards and NotFoundLayout while the session revalidates
 ├── screens/
 │   └── AppBootLoadingScreen.jsx    # AuthSessionBridge before the first render
 ├── spinners/

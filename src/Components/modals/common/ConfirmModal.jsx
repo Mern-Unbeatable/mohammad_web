@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 import { Loader2, Trash2, TriangleAlert, X } from "lucide-react";
 
 /**
@@ -17,14 +18,7 @@ const ConfirmModal = ({
   onClose,
   onConfirm,
 }) => {
-  useEffect(() => {
-    if (!open) return undefined;
-    const overflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = overflow;
-    };
-  }, [open]);
+  useBodyScrollLock(open);
 
   useEffect(() => {
     if (!open) return undefined;

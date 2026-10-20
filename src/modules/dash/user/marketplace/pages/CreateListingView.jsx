@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import { ChevronLeft } from 'lucide-react';
 import Card from '@/components/ui/Card';
-import MarketplacePage from '../components/layout/MarketplacePage';
+import DashboardPage from '@/components/layout/DashboardPage';
 import ListingForm from '../components/form/ListingForm';
 import ListingFormLoading from '@/components/loader/spinners/ListingFormLoading';
 import { useListingForm } from '../hooks/useListingForm';
@@ -13,14 +13,14 @@ const CreateListingView = () => {
 
   if (listingForm.loadingListing) {
     return (
-      <MarketplacePage containerClassName="max-w-[760px]">
+      <DashboardPage width="narrow">
         <ListingFormLoading />
-      </MarketplacePage>
+      </DashboardPage>
     );
   }
 
   return (
-    <MarketplacePage containerClassName="max-w-[760px]">
+    <DashboardPage width="narrow">
       <Link
         to={MY_LISTINGS_PATH}
         className="mb-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
@@ -53,7 +53,7 @@ const CreateListingView = () => {
           onRemovePhoto={listingForm.removePhoto}
         />
       </Card>
-    </MarketplacePage>
+    </DashboardPage>
   );
 };
 

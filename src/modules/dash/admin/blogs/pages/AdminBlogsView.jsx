@@ -1,8 +1,8 @@
 import { Link } from "react-router";
 import Pagination from "@/components/common/Pagination/Pagination";
-import PanelPage from "@/components/navigation/panel/PanelPage";
-import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
-import { panelPrimaryBtn } from "@/components/navigation/panel/panelPageTheme";
+import PanelPage from "@/components/layout/PanelPage";
+import PanelPageHeader from "@/components/layout/PanelPageHeader";
+import { panelPrimaryBtn } from "@/components/layout/panelPageTheme";
 import BlogsGrid from "../components/list/BlogsGrid";
 import DeleteBlogModal from "../components/list/DeleteBlogModal";
 import ErrorBanner from "../components/common/ErrorBanner";

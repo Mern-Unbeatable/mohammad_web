@@ -1,5 +1,5 @@
 import { Select } from "@/components/form-controls";
-import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
+import PanelPageHeader from "@/components/layout/PanelPageHeader";
 
 /** Page title and the statistics year picker. */
 const DashboardHeader = ({

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import RecipientPicker from '@/modules/messages/components/recipients/RecipientPicker';
 import { FormLabel, Input } from '@/components/form-controls';
+import { useBodyScrollLock } from '@/shared/hooks/useBodyScrollLock';
 
 const CreateGroupForm = ({
   onClose,
@@ -14,12 +15,7 @@ const CreateGroupForm = ({
   const [groupName, setGroupName] = useState('');
   const [selected, setSelected] = useState([]);
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, []);
+  useBodyScrollLock();
 
   const canSubmit = groupName.trim().length > 0 && selected.length > 0 && !submitting;
 

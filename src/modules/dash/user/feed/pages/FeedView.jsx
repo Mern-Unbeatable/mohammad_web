@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Container from "@/components/ui/Container";
+import { useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import DashboardPage from "@/components/layout/DashboardPage";
 import ConfirmModal from "@/components/modals/common/ConfirmModal";
 import { LeftSidebar, RightSidebar } from "@/components/navigation";
 import { usePostEditor } from "../hooks/usePostEditor";
-import { fetchUserProfile, toProfilePageUser } from "@/features/dash/user/profile";
+import { toProfilePageUser } from "@/features/dash/user/profile";
 import CreatePostModal from "@/components/modals/feed/CreatePostModal";
 import FeedComposer from "../components/composer/FeedComposer";
 import FeedFilters from "../components/composer/FeedFilters";
@@ -16,7 +16,6 @@ import { useFeedPosts } from "../hooks/useFeedPosts";
 import { usePostDeletion } from "../hooks/usePostDeletion";
 
 const FeedView = () => {
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.userProfile);
   const saving = useSelector((state) => state.userFeed.saving);
   const profileUser = useMemo(() => toProfilePageUser(user), [user]);
@@ -29,42 +28,36 @@ const FeedView = () => {
   const deletion = usePostDeletion();
   const { editingPost, openEditor, closeEditor, saveEdit } = usePostEditor();
 
-  useEffect(() => {
-    if (!user) dispatch(fetchUserProfile());
-  }, [dispatch, user]);
-
   return (
     <>
-      <main className="py-4 sm:py-5">
-        <Container className="flex gap-8">
-          <LeftSidebar />
+      <DashboardPage spacing="compact" className="flex gap-8">
+        <LeftSidebar />
 
-          <section className="min-w-0 w-full flex-1 space-y-4">
-            <div className="hidden sm:block">
-              <FeedComposer user={profileUser} onCreatePost={create.openCreatePost} />
-            </div>
-            <FeedFilters
-              filters={FEED_FILTERS}
-              activeFilter={activeFilter}
-              onChange={setActiveFilter}
-            />
-            <FeedPostList
-              posts={feed.posts}
-              loading={feed.loading}
-              failed={feed.failed}
-              hasMore={feed.hasMore}
-              loadingMore={feed.loadingMore}
-              onRetry={feed.reload}
-              onLoadMore={feed.loadMore}
-              onReport={setReportPost}
-              onEdit={openEditor}
-              onDelete={deletion.requestDelete}
-            />
-          </section>
+        <section className="min-w-0 w-full flex-1 space-y-4">
+          <div className="hidden sm:block">
+            <FeedComposer user={profileUser} onCreatePost={create.openCreatePost} />
+          </div>
+          <FeedFilters
+            filters={FEED_FILTERS}
+            activeFilter={activeFilter}
+            onChange={setActiveFilter}
+          />
+          <FeedPostList
+            posts={feed.posts}
+            loading={feed.loading}
+            failed={feed.failed}
+            hasMore={feed.hasMore}
+            loadingMore={feed.loadingMore}
+            onRetry={feed.reload}
+            onLoadMore={feed.loadMore}
+            onReport={setReportPost}
+            onEdit={openEditor}
+            onDelete={deletion.requestDelete}
+          />
+        </section>
 
-          <RightSidebar />
-        </Container>
-      </main>
+        <RightSidebar />
+      </DashboardPage>
 
       {create.open ? (
         <CreatePostModal

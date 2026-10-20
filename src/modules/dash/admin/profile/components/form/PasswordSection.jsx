@@ -1,4 +1,4 @@
-import { panelPrimaryBtn } from "@/components/navigation/panel/panelPageTheme";
+import { panelPrimaryBtn } from "@/components/layout/panelPageTheme";
 import { FormLabel, PasswordInput } from "@/components/form-controls";
 
 const PASSWORD_FIELDS = [

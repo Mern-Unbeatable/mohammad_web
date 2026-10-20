@@ -1,6 +1,6 @@
 import { Outlet } from "react-router";
-import PanelPage from "@/components/navigation/panel/PanelPage";
-import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
+import PanelPage from "@/components/layout/PanelPage";
+import PanelPageHeader from "@/components/layout/PanelPageHeader";
 import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
 import { useChatTabs } from "../hooks/useChatTabs";
 import { CHAT_TABS } from "../constant/constants";
@@ -10,7 +10,7 @@ const AdminChatView = () => {
   const { activeTab, changeTab } = useChatTabs();
 
   return (
-    <PanelPage className="flex h-[calc(100dvh-5.5rem)] flex-col lg:h-[calc(100dvh-3rem)]">
+    <PanelPage layout="fill">
       <PanelPageHeader
         title="Chat"
         subtitle="Message members and moderate platform conversations."

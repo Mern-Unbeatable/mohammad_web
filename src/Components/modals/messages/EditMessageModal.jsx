@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Loader2, Pencil, X } from "lucide-react";
 import {
   MAX_MESSAGE_LENGTH,
@@ -7,6 +7,7 @@ import {
   formatShortcutFor,
 } from "@/features/messages/composerFormat";
 import FormatToolbar from "@/components/data-display/Messenger/FormatToolbar";
+import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 
 /**
  * `onSave(body)` resolves true when saved; `canBeEmpty` allows clearing the text
@@ -17,13 +18,7 @@ const EditMessageDialog = ({ initialText = "", canBeEmpty = false, onSave, onClo
   const [saving, setSaving] = useState(false);
   const ref = useRef(null);
 
-  useEffect(() => {
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, []);
+  useBodyScrollLock();
 
   useLayoutEffect(() => {
     const el = ref.current;

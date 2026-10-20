@@ -1,4 +1,4 @@
-import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPage from "@/components/layout/PanelPage";
 import DashboardHeader from "../components/overview/DashboardHeader";
 import StatsSection from "../components/overview/StatsSection";
 import ChartsSection from "../components/charts/ChartsSection";

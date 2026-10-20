@@ -1,4 +1,4 @@
-import { panelPageTheme } from "@/components/navigation/panel/panelPageTheme";
+import { panelPageTheme } from "@/components/layout/panelPageTheme";
 import { Input } from "@/components/form-controls";
 
 /** Decimal text input with a € suffix. */

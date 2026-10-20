@@ -1,6 +1,6 @@
 import { ProfileSetupForm } from "@/modules/dash/user/profile";
 import { ProfileSetupFormSkeleton } from "@/components/loader";
-import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPage from "@/components/layout/PanelPage";
 import { useSupplierProfile } from "../hooks/useSupplierProfile";
 
 const SupplierProfileView = () => {

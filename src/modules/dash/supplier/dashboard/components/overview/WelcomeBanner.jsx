@@ -1,5 +1,5 @@
 import { Pencil } from "lucide-react";
-import { panelPrimaryBtn } from "@/components/navigation/panel/panelPageTheme";
+import { panelPrimaryBtn } from "@/components/layout/panelPageTheme";
 
 const WelcomeBanner = ({ name, onCreateAd }) => (
   <div className="rounded-xl bg-deep-blue p-5 sm:p-6 lg:p-8">

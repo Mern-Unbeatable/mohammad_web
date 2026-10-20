@@ -1,26 +1,11 @@
-import BlogsHero from '../components/hub/BlogsHero';
-import LatestHubSection from '../components/hub/LatestHubSection';
-import ArchiveSection from '../components/hub/ArchiveSection';
+import BlogsHub from '@/components/data-display/BlogHub/BlogsHub';
 import { useBlogsHub } from '../hooks/useBlogsHub';
+import { BLOG_BASE_PATH, BLOGS_PAGE_SIZE } from '../constant/constants';
 
 const BlogsView = () => {
   const hub = useBlogsHub();
 
-  return (
-    <main>
-      <div className="pb-8 pt-0 sm:pb-10">
-        <BlogsHero query={hub.query} onQueryChange={hub.setQuery} />
-        <LatestHubSection items={hub.latestItems} loading={hub.latestLoading} />
-        <ArchiveSection
-          items={hub.archiveItems}
-          loading={hub.archiveLoading}
-          page={hub.page}
-          totalPages={hub.totalPages}
-          onPageChange={hub.changePage}
-        />
-      </div>
-    </main>
-  );
+  return <BlogsHub hub={hub} basePath={BLOG_BASE_PATH} pageSize={BLOGS_PAGE_SIZE} />;
 };
 
 export default BlogsView;

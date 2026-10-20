@@ -44,9 +44,6 @@ marketplace/
 │   │                         (inputs / labels: @/components/form-controls;
 │   │                          ListingFormLoading: @/components/loader/spinners)
 │   │
-│   ├── layout/
-│   │   └── MarketplacePage.jsx      <main> + Container, with an `overlays` slot for modals
-│   │
 │   └── (DeleteListingModal lives in @/components/modals/marketplace)
 │
 ├── hooks/
@@ -95,7 +92,9 @@ marketplace/
   them in component state and load one page of `PERSONAL_LISTINGS_PAGE_SIZE`.
 - The detail gallery index is keyed to the listing and resets during render when
   the listing changes (no `setState` in an effect).
-- Modals go in `MarketplacePage`'s `overlays` slot so they sit outside the container.
+- Pages render inside `DashboardPage` (`@/components/layout/DashboardPage`);
+  `UserLayout` owns the `<main>` landmark. Modals are fixed-position, so they
+  can sit inside the page frame.
 
 ## How the pages work
 

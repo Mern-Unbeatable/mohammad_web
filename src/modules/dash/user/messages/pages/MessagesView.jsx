@@ -1,4 +1,4 @@
-import ChatLayout from '@/modules/messages/route/ChatLayout';
+import { ChatLayout } from '@/modules/messages';
 
 const MessagesView = () => <ChatLayout variant="dashboard" />;
 

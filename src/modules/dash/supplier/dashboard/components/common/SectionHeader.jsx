@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { panelPageTheme } from "@/components/navigation/panel/panelPageTheme";
+import { panelPageTheme } from "@/components/layout/panelPageTheme";
 
 /** Card title, subtitle and a "View All" link to the full page. */
 const SectionHeader = ({ title, subtitle, viewAllTo, className = "" }) => (

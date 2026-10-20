@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { Plus } from "lucide-react";
 import Pagination from "@/components/common/Pagination/Pagination";
 import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
-import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPage from "@/components/layout/PanelPage";
 import DeleteJobModal from "@/components/modals/recruitment/DeleteJobModal";
 import WithdrawApplicationModal from "@/components/modals/recruitment/WithdrawApplicationModal";
 import { MY_JOB_STATUS_FILTERS } from "@/features/recruitment/jobStatus";

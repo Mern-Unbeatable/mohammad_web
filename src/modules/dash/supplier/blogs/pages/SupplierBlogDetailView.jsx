@@ -1,9 +1,9 @@
 import { BlogDetailSkeleton } from "@/components/loader";
+import PanelPage from "@/components/layout/PanelPage";
+import BlogDetail, { BlogDetailFrame } from "@/components/data-display/BlogHub/BlogDetail";
 import NotFound from "@/modules/error/NotFound";
-import BlogDetailPage from "../components/layout/BlogDetailPage";
-import BlogArticle from "../components/detail/BlogArticle";
-import PopularPosts from "../components/detail/PopularPosts";
 import { useBlogDetail } from "../hooks/useBlogDetail";
+import { BLOG_BASE_PATH } from "../constant/constants";
 
 const SupplierBlogDetailView = () => {
   const { notFound, loading, detail, popularPosts } = useBlogDetail();
@@ -12,21 +12,20 @@ const SupplierBlogDetailView = () => {
 
   if (loading) {
     return (
-      <BlogDetailPage>
-        <BlogDetailSkeleton />
-      </BlogDetailPage>
+      <PanelPage layout="bleed">
+        <BlogDetailFrame>
+          <BlogDetailSkeleton />
+        </BlogDetailFrame>
+      </PanelPage>
     );
   }
 
   if (!detail) return <NotFound />;
 
   return (
-    <BlogDetailPage>
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-10 xl:max-w-none">
-        <BlogArticle detail={detail} />
-        <PopularPosts posts={popularPosts} />
-      </div>
-    </BlogDetailPage>
+    <PanelPage layout="bleed">
+      <BlogDetail detail={detail} popularPosts={popularPosts} basePath={BLOG_BASE_PATH} />
+    </PanelPage>
   );
 };
 

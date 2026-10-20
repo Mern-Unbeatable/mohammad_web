@@ -1,5 +1,5 @@
 import CreateAdModal from "@/components/modals/supplier/CreateAdModal";
-import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPage from "@/components/layout/PanelPage";
 import WelcomeBanner from "../components/overview/WelcomeBanner";
 import StatsGrid from "../components/overview/StatsGrid";
 import ActivityChart from "../components/overview/ActivityChart";

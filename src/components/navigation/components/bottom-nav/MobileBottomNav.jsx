@@ -3,14 +3,14 @@ import { useSelector } from 'react-redux';
 import CountBadge from '@/components/ui/CountBadge';
 import { selectUserUnreadNotificationCount } from '@/features/dash/user/notifications';
 import { selectPendingRequestCount } from '@/features/dash/user/contacts';
-import { useFeedActions } from '@/modules/dash/user/feed/hooks/useFeedActions';
-import { useLayoutChrome } from '@/shared/context/LayoutChromeContext';
+import { useCreatePostAction } from '@/shared/context/useCreatePostAction';
+import { useLayoutChrome } from '@/shared/context/useLayoutChrome';
 import { BOTTOM_NAV_TABS } from '../../constant/constants';
 import { isBottomTabActive } from '@/shared/utils/nav/navActive';
 
 const MobileBottomNav = () => {
   const { pathname } = useLocation();
-  const { openCreatePost } = useFeedActions();
+  const { openCreatePost } = useCreatePostAction();
   const { bottomNavHidden } = useLayoutChrome();
   // Kept fresh by `useNavBadges` in DashboardNavbar.
   const unreadNotifications = useSelector(selectUserUnreadNotificationCount);
@@ -25,7 +25,7 @@ const MobileBottomNav = () => {
       className="fixed inset-x-0 bottom-0 z-50 border-t border-[#E4E7EC] bg-white pb-[env(safe-area-inset-bottom)] sm:hidden"
       aria-label="Mobile navigation"
     >
-      <ul className="mx-auto flex h-14 max-w-lg items-stretch">
+      <ul className="mx-auto flex h-(--bottom-nav-h) max-w-lg items-stretch">
         {BOTTOM_NAV_TABS.map((tab) => {
           const { id, label, to, action } = tab;
           const Icon = tab.icon;

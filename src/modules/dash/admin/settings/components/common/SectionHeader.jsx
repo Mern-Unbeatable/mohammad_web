@@ -1,4 +1,4 @@
-import { panelPageTheme } from "@/components/navigation/panel/panelPageTheme";
+import { panelPageTheme } from "@/components/layout/panelPageTheme";
 
 /** Card header with a tinted icon tile, title and subtitle. */
 const SectionHeader = ({ icon, iconClass, title, subtitle }) => {

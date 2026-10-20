@@ -1,6 +1,6 @@
 import Pagination from "@/components/common/Pagination/Pagination";
-import PanelPage from "@/components/navigation/panel/PanelPage";
-import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
+import PanelPage from "@/components/layout/PanelPage";
+import PanelPageHeader from "@/components/layout/PanelPageHeader";
 import DirectoryFilters from "../components/directory/DirectoryFilters";
 import ContactsResults from "../components/directory/ContactsResults";
 import { useContactsDirectory } from "../hooks/useContactsDirectory";

@@ -15,7 +15,7 @@ const MobileHeader = ({
   onToggleMenu,
   onCloseMenu,
 }) => (
-  <div className="mx-auto flex h-14 w-full items-center gap-1.5 px-4 sm:gap-2 sm:px-6 xl:hidden">
+  <div className="mx-auto flex h-(--dashboard-header-h) w-full items-center gap-1.5 px-4 sm:gap-2 sm:px-6 xl:hidden">
     <Link
       to="/"
       className="flex shrink-0 items-center gap-2"

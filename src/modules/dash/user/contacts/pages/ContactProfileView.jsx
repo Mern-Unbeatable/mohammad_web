@@ -4,7 +4,7 @@ import { ReportPostModal } from '@/modules/dash/user/feed';
 import NotFound from '@/modules/error/NotFound';
 import { CHAT_BASE_PATHS, chatPath } from '@/features/messages/chatPaths';
 import { StartConversationModal } from '@/modules/messages';
-import ContactProfilePage from '../components/profile/ContactProfilePage';
+import DashboardPage from '@/components/layout/DashboardPage';
 import BackToDirectoryLink from '../components/profile/BackToDirectoryLink';
 import { useContactProfile } from '../hooks/useContactProfile';
 
@@ -16,10 +16,10 @@ const ContactProfileView = () => {
 
   if (profile.loading) {
     return (
-      <ContactProfilePage>
+      <DashboardPage width="7xl">
         <div className="mb-4 h-5 w-36 animate-pulse rounded-md bg-[#E4E7EC]" />
         <ContactProfilePageSkeleton />
-      </ContactProfilePage>
+      </DashboardPage>
     );
   }
 
@@ -27,7 +27,7 @@ const ContactProfileView = () => {
 
   return (
     <>
-      <ContactProfilePage>
+      <DashboardPage width="7xl">
         <BackToDirectoryLink />
 
         <ContactProfilePageContent
@@ -44,7 +44,7 @@ const ContactProfileView = () => {
           messageHref={chatPath(CHAT_BASE_PATHS.USER, { id: contact.id })}
           onMessage={profile.canMessage ? profile.openMessage : undefined}
         />
-      </ContactProfilePage>
+      </DashboardPage>
 
       <StartConversationModal
         open={profile.messageOpen}

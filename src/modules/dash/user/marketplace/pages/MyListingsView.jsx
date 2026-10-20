@@ -1,5 +1,5 @@
 import ListingCard from '@/components/data-display/ListingCard/ListingCard';
-import MarketplacePage from '../components/layout/MarketplacePage';
+import DashboardPage from '@/components/layout/DashboardPage';
 import MarketplaceToolbar from '../components/toolbar/MarketplaceToolbar';
 import ListingsSection from '../components/listings/ListingsSection';
 import DeleteListingModal from '@/components/modals/marketplace/DeleteListingModal';
@@ -10,16 +10,7 @@ const MyListingsView = () => {
   const mine = useMyListings();
 
   return (
-    <MarketplacePage
-      overlays={
-        <DeleteListingModal
-          listing={mine.pendingDelete}
-          deleting={mine.deleting}
-          onClose={mine.cancelDelete}
-          onConfirm={mine.confirmDelete}
-        />
-      }
-    >
+    <DashboardPage>
       <MarketplaceToolbar
         query={mine.query}
         onQueryChange={mine.setQuery}
@@ -44,7 +35,14 @@ const MyListingsView = () => {
         emptyTitle="No listings yet"
         emptyText="Create your first listing to sell laboratory equipment to verified members."
       />
-    </MarketplacePage>
+
+      <DeleteListingModal
+        listing={mine.pendingDelete}
+        deleting={mine.deleting}
+        onClose={mine.cancelDelete}
+        onConfirm={mine.confirmDelete}
+      />
+    </DashboardPage>
   );
 };
 

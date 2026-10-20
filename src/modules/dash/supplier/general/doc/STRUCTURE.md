@@ -7,7 +7,7 @@ post page (`/supplier/general/:postId`). Data comes from
 
 The layout mirrors `modules/dash/user/general`. The supplier version differs in:
 
-- pages sit in `PanelPage` instead of the user `GeneralPage` frame;
+- pages sit in `PanelPage` instead of the user `DashboardPage` frame;
 - the shared `GeneralToolbar` and `CreateGeneralPostModal` come from
   `@/modules/dash/user/general`, with the toolbar pointed at supplier routes;
 - both lists clear the current cards before a category or page change

@@ -1,6 +1,6 @@
 import GeneralPostCard from '@/components/data-display/GeneralPostCard/GeneralPostCard';
 import CreateGeneralPostModal from '@/components/modals/general/CreateGeneralPostModal';
-import GeneralPage from '../components/layout/GeneralPage';
+import DashboardPage from '@/components/layout/DashboardPage';
 import GeneralToolbar from '../components/toolbar/GeneralToolbar';
 import PostsGrid from '../components/posts/PostsGrid';
 import DeletePostModal from '@/components/modals/common/DeletePostModal';
@@ -11,7 +11,7 @@ const MyGeneralPostsView = () => {
   const mine = useMyGeneralPosts();
 
   return (
-    <GeneralPage>
+    <DashboardPage>
       <GeneralToolbar
         category={mine.category}
         onCategoryChange={mine.changeCategory}
@@ -52,7 +52,7 @@ const MyGeneralPostsView = () => {
         onClose={mine.cancelDelete}
         onConfirm={mine.confirmDelete}
       />
-    </GeneralPage>
+    </DashboardPage>
   );
 };
 

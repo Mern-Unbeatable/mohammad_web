@@ -1,6 +1,6 @@
 import GeneralPostCard from '@/components/data-display/GeneralPostCard/GeneralPostCard';
 import CreateGeneralPostModal from '@/components/modals/general/CreateGeneralPostModal';
-import GeneralPage from '../components/layout/GeneralPage';
+import DashboardPage from '@/components/layout/DashboardPage';
 import GeneralToolbar from '../components/toolbar/GeneralToolbar';
 import PostsGrid from '../components/posts/PostsGrid';
 import { useGeneralPosts } from '../hooks/useGeneralPosts';
@@ -10,7 +10,7 @@ const GeneralView = () => {
   const general = useGeneralPosts();
 
   return (
-    <GeneralPage>
+    <DashboardPage>
       <GeneralToolbar
         category={general.category}
         onCategoryChange={general.changeCategory}
@@ -40,7 +40,7 @@ const GeneralView = () => {
         onSubmit={general.createPost}
         saving={general.saving}
       />
-    </GeneralPage>
+    </DashboardPage>
   );
 };
 

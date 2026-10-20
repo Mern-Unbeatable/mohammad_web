@@ -1,4 +1,4 @@
-import Container from "@/components/ui/Container";
+import DashboardPage from "@/components/layout/DashboardPage";
 import { ProfilePageSkeleton } from "@/components/loader";
 import ProfilePageContent from "@/components/data-display/ProfilePageContent/ProfilePageContent";
 import { CreatePostModal, ReportPostModal } from "@/modules/dash/user/feed";
@@ -19,51 +19,47 @@ const ProfileView = () => {
 
   if (profile.loading && !profileUser) {
     return (
-      <main className="pt-6 pb-5 sm:pt-8 sm:pb-8">
-        <Container className="max-w-7xl">
-          <ProfilePageSkeleton showSubscription sidebar />
-        </Container>
-      </main>
+      <DashboardPage width="7xl">
+        <ProfilePageSkeleton showSubscription sidebar />
+      </DashboardPage>
     );
   }
 
   if (!profileUser) {
     return (
-      <main className="py-10 text-center text-[14px] text-[#64748B]">
+      <div className="py-10 text-center text-[14px] text-[#64748B]">
         Unable to load profile.
-      </main>
+      </div>
     );
   }
 
   return (
     <>
-      <main className="pt-6 pb-5 sm:pt-8 sm:pb-8">
-        <Container className="max-w-7xl">
-          <ProfilePageContent
-            user={profileUser}
-            posts={posts.posts}
-            postsLoading={posts.loading}
-            hasMorePosts={posts.hasMore}
-            loadingMorePosts={posts.loadingMore}
-            onLoadMorePosts={posts.loadMore}
-            onReport={posts.openReport}
-            onEdit={editor.openEditor}
-            onDelete={posts.deleting ? undefined : posts.requestDelete}
-            isPremium={profile.isPremium}
-            subscriptionSlot={
-              profile.showSubscription ? (
-                <SubscriptionDetailsCard subscription={profileUser.subscription} />
-              ) : null
-            }
-            sidebarSlot={
-              <MyReportsCard reports={profile.reports} loading={profile.reportsLoading} />
-            }
-            postsTitle="My Posts"
-          />
+      <DashboardPage width="7xl">
+        <ProfilePageContent
+          user={profileUser}
+          posts={posts.posts}
+          postsLoading={posts.loading}
+          hasMorePosts={posts.hasMore}
+          loadingMorePosts={posts.loadingMore}
+          onLoadMorePosts={posts.loadMore}
+          onReport={posts.openReport}
+          onEdit={editor.openEditor}
+          onDelete={posts.deleting ? undefined : posts.requestDelete}
+          isPremium={profile.isPremium}
+          subscriptionSlot={
+            profile.showSubscription ? (
+              <SubscriptionDetailsCard subscription={profileUser.subscription} />
+            ) : null
+          }
+          sidebarSlot={
+            <MyReportsCard reports={profile.reports} loading={profile.reportsLoading} />
+          }
+          postsTitle="My Posts"
+        />
 
-          {!profileUser.isActive && <MembershipPrompt />}
-        </Container>
-      </main>
+        {!profileUser.isActive && <MembershipPrompt />}
+      </DashboardPage>
 
       <ReportPostModal
         open={Boolean(posts.reportPost)}

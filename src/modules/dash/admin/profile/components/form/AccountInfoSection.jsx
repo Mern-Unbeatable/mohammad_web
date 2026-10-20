@@ -1,4 +1,4 @@
-import { panelPrimaryBtn } from "@/components/navigation/panel/panelPageTheme";
+import { panelPrimaryBtn } from "@/components/layout/panelPageTheme";
 import { FormLabel, Input } from "@/components/form-controls";
 
 /** Name / email form with Update Profile. */

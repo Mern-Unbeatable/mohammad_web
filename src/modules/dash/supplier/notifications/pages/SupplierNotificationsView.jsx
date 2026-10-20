@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 import Card from "@/components/ui/Card";
 import { CardSkeleton } from "@/components/loader";
-import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPage from "@/components/layout/PanelPage";
 import {
   fetchSupplierNotifications,
   markSupplierNotificationRead,

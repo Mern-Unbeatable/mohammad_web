@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router";
 import { Mail, MapPin, Phone, X } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
+import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 import { applicationStatusClass } from "@/modules/dash/user/recruitment/utils/candidates";
 
 const InfoRow = ({ icon, label, children }) => (
@@ -22,16 +23,15 @@ const InfoRow = ({ icon, label, children }) => (
 const ApplicantDetailsModal = ({ application, onClose }) => {
   const open = Boolean(application);
 
+  useBodyScrollLock(open);
+
   useEffect(() => {
     if (!open) return undefined;
-    const overflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     const onKeyDown = (event) => {
       if (event.key === "Escape") onClose?.();
     };
     document.addEventListener("keydown", onKeyDown);
     return () => {
-      document.body.style.overflow = overflow;
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [open, onClose]);

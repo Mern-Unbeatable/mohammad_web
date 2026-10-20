@@ -1,5 +1,5 @@
 import Pagination from "@/components/common/Pagination/Pagination";
-import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPage from "@/components/layout/PanelPage";
 import {
   EMPLOYMENT_FILTER_OPTIONS,
   JobsSectionHeader,

@@ -1,6 +1,6 @@
-import { useEffect } from "react";
 import { X } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
+import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 import { MAX_POST_LENGTH } from "@/modules/dash/user/feed/constants";
 import { usePostDraft } from "@/modules/dash/user/feed/hooks/usePostDraft";
 import { DEFAULT_POST_OPTION } from "@/modules/dash/user/feed/utils/postTypeOptions";
@@ -8,15 +8,6 @@ import ComposerFooter from "@/modules/dash/user/feed/components/composer/Compose
 import DraftDocumentCard from "@/modules/dash/user/feed/components/composer/DraftDocumentCard";
 import DraftImageGrid from "@/modules/dash/user/feed/components/composer/DraftImageGrid";
 import PostTypeChips from "@/modules/dash/user/feed/components/composer/PostTypeChips";
-
-const useBodyScrollLock = () => {
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, []);
-};
 
 const ComposerHeader = ({ user, title, busy, onClose }) => {
   const displayName = user?.name || "You";

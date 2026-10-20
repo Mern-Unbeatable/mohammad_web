@@ -7,41 +7,42 @@ import ResetPasswordView from "@/modules/auth/reset-password/pages/ResetPassword
 import ContactSupportView from "@/modules/auth/contact-support/pages/ContactSupportView";
 import { CONTACT_SUPPORT_PATH } from "@/shared/constants/support";
 
+/**
+ * Guest pages share one `AuthLayout` instance. Contact support also uses the
+ * auth shell but stays outside `GuestOnly`: suspended, signed-in users must reach it.
+ */
 export const authRoutes = [
   {
     element: <GuestOnly />,
     handle: { guestOnly: true },
     children: [
       {
-        path: "/login",
         element: <AuthLayout />,
-        handle: { title: "Sign in" },
-        children: [{ index: true, element: <LoginView /> }],
-      },
-      {
-        path: "/join",
-        element: <AuthLayout />,
-        handle: { title: "Create account" },
-        children: [{ index: true, element: <RegisterView /> }],
-      },
-      {
-        path: "/forgot-password",
-        element: <AuthLayout />,
-        handle: { title: "Forgot password" },
-        children: [{ index: true, element: <ForgotPasswordView /> }],
-      },
-      {
-        path: "/reset-password",
-        element: <AuthLayout />,
-        handle: { title: "Reset password" },
-        children: [{ index: true, element: <ResetPasswordView /> }],
+        children: [
+          { path: "/login", element: <LoginView />, handle: { title: "Sign in" } },
+          { path: "/join", element: <RegisterView />, handle: { title: "Create account" } },
+          {
+            path: "/forgot-password",
+            element: <ForgotPasswordView />,
+            handle: { title: "Forgot password" },
+          },
+          {
+            path: "/reset-password",
+            element: <ResetPasswordView />,
+            handle: { title: "Reset password" },
+          },
+        ],
       },
     ],
   },
   {
-    path: CONTACT_SUPPORT_PATH,
     element: <AuthLayout />,
-    handle: { title: "Contact support" },
-    children: [{ index: true, element: <ContactSupportView /> }],
+    children: [
+      {
+        path: CONTACT_SUPPORT_PATH,
+        element: <ContactSupportView />,
+        handle: { title: "Contact support" },
+      },
+    ],
   },
 ];

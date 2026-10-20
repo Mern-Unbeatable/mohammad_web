@@ -6,6 +6,7 @@ import { getApiErrorMessage } from "@/config";
 import { toChatListingModel } from "@/features/messages";
 import { START_CONVERSATION_MAX_LENGTH } from "@/modules/messages/constant/constants";
 import { FormError, FormLabel, Textarea } from "@/components/form-controls";
+import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 
 /** Profile models fill missing fields with "—"; those are left out. */
 const isShown = (value) =>
@@ -36,13 +37,7 @@ const StartConversationForm = ({
     .join(" · ");
   const listingCard = listing ? toChatListingModel(listing) : null;
 
-  useEffect(() => {
-    const overflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = overflow;
-    };
-  }, []);
+  useBodyScrollLock();
 
   useEffect(() => {
     const onKeyDown = (event) => {

@@ -1,5 +1,5 @@
-import PanelPage from "@/components/navigation/panel/PanelPage";
-import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
+import PanelPage from "@/components/layout/PanelPage";
+import PanelPageHeader from "@/components/layout/PanelPageHeader";
 import AdsTable from "../components/list/AdsTable";
 import ErrorBanner from "../components/common/ErrorBanner";
 import RejectAdModal from "../components/common/RejectAdModal";

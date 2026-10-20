@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router';
 import { Crown, Loader2, LogOut, Pencil, UserMinus, UserPlus, X } from 'lucide-react';
 import Avatar from '@/components/ui/Avatar';
 import AddMembersModal from '@/components/modals/messages/AddMembersModal';
 import { Input } from '@/components/form-controls';
+import { useBodyScrollLock } from '@/shared/hooks/useBodyScrollLock';
 
 const ConversationInfo = ({
   conversation,
@@ -35,12 +36,7 @@ const ConversationInfo = ({
     }
   };
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, []);
+  useBodyScrollLock();
 
   const isGroup = conversation.isGroup;
   const isOwner = conversation.myRole === 'OWNER';

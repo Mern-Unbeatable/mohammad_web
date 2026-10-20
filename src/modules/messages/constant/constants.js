@@ -1,3 +1,5 @@
+import { maxWidthQuery, minWidthQuery } from '@/shared/constants/breakpoints';
+
 export const CHAT_TAB = Object.freeze({
   MESSAGES: 'messages',
   GROUPS: 'groups',
@@ -11,8 +13,9 @@ export const CONVERSATION_TYPE = Object.freeze({
 export const SEARCH_DEBOUNCE_MS = 300;
 /** Fallback refresh while the realtime connection is down. */
 export const POLL_INTERVAL_MS = 20000;
-export const DESKTOP_QUERY = '(min-width: 1280px)';
-export const MOBILE_QUERY = '(max-width: 1279px)';
+/** The messenger switches between full-viewport and inline layout at `xl`. */
+export const DESKTOP_QUERY = minWidthQuery('xl');
+export const MOBILE_QUERY = maxWidthQuery('xl');
 /** Hides "typing..." if the sender's "stopped" event never arrives. */
 export const TYPING_EXPIRY_MS = 6000;
 

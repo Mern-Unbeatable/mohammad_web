@@ -1,8 +1,8 @@
-import PanelPage from '@/components/navigation/panel/PanelPage';
+import PanelPage from '@/components/layout/PanelPage';
 import { ChatLayout } from '@/modules/messages';
 
 const SupplierMessagesView = () => (
-  <PanelPage className="flex h-[calc(100dvh-5.5rem)] flex-col lg:h-[calc(100dvh-3rem)]">
+  <PanelPage layout="fill">
     <ChatLayout variant="panel" />
   </PanelPage>
 );

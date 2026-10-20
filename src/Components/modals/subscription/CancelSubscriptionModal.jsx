@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 import { Loader2, X } from "lucide-react";
 
 const CancelSubscriptionModal = ({
@@ -8,13 +8,7 @@ const CancelSubscriptionModal = ({
   onClose,
   onConfirm,
 }) => {
-  useEffect(() => {
-    if (!open) return undefined;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
+  useBodyScrollLock(open);
 
   if (!open) return null;
 

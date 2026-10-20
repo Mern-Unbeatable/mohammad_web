@@ -1,7 +1,7 @@
 import CreateAdModal from "@/components/modals/supplier/CreateAdModal";
-import PanelPage from "@/components/navigation/panel/PanelPage";
-import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
-import { panelPrimaryBtn } from "@/components/navigation/panel/panelPageTheme";
+import PanelPage from "@/components/layout/PanelPage";
+import PanelPageHeader from "@/components/layout/PanelPageHeader";
+import { panelPrimaryBtn } from "@/components/layout/panelPageTheme";
 import AdsTable from "../components/list/AdsTable";
 import { useSupplierAds } from "../hooks/useSupplierAds";
 

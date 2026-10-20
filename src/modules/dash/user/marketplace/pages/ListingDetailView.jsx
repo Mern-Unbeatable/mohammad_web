@@ -1,9 +1,9 @@
 import { Link } from 'react-router';
 import { ChevronLeft } from 'lucide-react';
 import { ListingDetailSkeleton } from '@/components/loader';
+import DashboardPage from '@/components/layout/DashboardPage';
 import NotFound from '@/modules/error/NotFound';
 import { StartConversationModal } from '@/modules/messages';
-import MarketplacePage from '../components/layout/MarketplacePage';
 import ImageGallery from '../components/detail/ImageGallery';
 import ListingOverviewCard from '../components/detail/ListingOverviewCard';
 import ListingPriceCard from '../components/detail/ListingPriceCard';
@@ -11,38 +11,22 @@ import SellerCard from '../components/detail/SellerCard';
 import { useListingDetail } from '../hooks/useListingDetail';
 import { MARKETPLACE_PATH } from '../constant/constants';
 
-const PAGE_CLASS = 'pt-6 pb-8 sm:pt-8';
-
 const ListingDetailView = () => {
   const detail = useListingDetail();
   const { listing, viewer } = detail;
 
   if (detail.loading) {
     return (
-      <MarketplacePage className={PAGE_CLASS}>
+      <DashboardPage>
         <ListingDetailSkeleton />
-      </MarketplacePage>
+      </DashboardPage>
     );
   }
 
   if (!listing) return <NotFound />;
 
   return (
-    <MarketplacePage
-      className={PAGE_CLASS}
-      overlays={
-        <StartConversationModal
-          open={detail.contactOpen}
-          title="Contact seller"
-          description={`Ask ${listing.seller.name} about this listing.`}
-          placeholder="Hi, is this still available?"
-          recipient={listing.seller}
-          listing={listing.raw}
-          onClose={detail.closeContact}
-          onSend={detail.sendMessage}
-        />
-      }
-    >
+    <DashboardPage>
       <Link
         to={MARKETPLACE_PATH}
         className="mb-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
@@ -73,7 +57,18 @@ const ListingDetailView = () => {
           <SellerCard seller={listing.seller} profileHref={viewer.profileHref} />
         </aside>
       </div>
-    </MarketplacePage>
+
+      <StartConversationModal
+        open={detail.contactOpen}
+        title="Contact seller"
+        description={`Ask ${listing.seller.name} about this listing.`}
+        placeholder="Hi, is this still available?"
+        recipient={listing.seller}
+        listing={listing.raw}
+        onClose={detail.closeContact}
+        onSend={detail.sendMessage}
+      />
+    </DashboardPage>
   );
 };
 

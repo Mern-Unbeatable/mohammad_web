@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
+import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 import CandidateRow from "@/modules/dash/user/recruitment/components/candidates/CandidateRow";
 
 /** Full applicant list; Escape is ignored while a stacked dialog is open. */
@@ -10,16 +11,15 @@ const AllCandidatesModal = ({
   onView,
   escapePaused = false,
 }) => {
+  useBodyScrollLock(open);
+
   useEffect(() => {
     if (!open) return undefined;
-    const overflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     const onKeyDown = (event) => {
       if (event.key === "Escape" && !escapePaused) onClose?.();
     };
     document.addEventListener("keydown", onKeyDown);
     return () => {
-      document.body.style.overflow = overflow;
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [open, onClose, escapePaused]);

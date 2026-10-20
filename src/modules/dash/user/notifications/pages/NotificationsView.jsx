@@ -1,12 +1,10 @@
-import Container from '@/components/ui/Container';
+import DashboardPage from '@/components/layout/DashboardPage';
 import NotificationsPanel from '../components/list/NotificationsPanel';
 
 const NotificationsView = () => (
-  <main className="py-6 sm:py-8">
-    <Container className="max-w-[760px]">
-      <NotificationsPanel />
-    </Container>
-  </main>
+  <DashboardPage width="narrow">
+    <NotificationsPanel />
+  </DashboardPage>
 );
 
 export default NotificationsView;

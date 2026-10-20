@@ -3,7 +3,7 @@ import Card from "@/components/ui/Card";
 import {
   panelPageTheme,
   panelSecondaryBtn,
-} from "@/components/navigation/panel/panelPageTheme";
+} from "@/components/layout/panelPageTheme";
 
 const SettingsLoadError = ({ message, onRetry }) => (
   <Card className="flex flex-col items-center gap-3 px-4 py-10 text-center">

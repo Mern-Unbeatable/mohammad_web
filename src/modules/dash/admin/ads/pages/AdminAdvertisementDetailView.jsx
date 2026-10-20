@@ -1,8 +1,8 @@
 import { useParams } from "react-router";
 import Card from "@/components/ui/Card";
 import { AdvertisementDetailSkeleton } from "@/components/loader";
-import PanelPage from "@/components/navigation/panel/PanelPage";
-import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
+import PanelPage from "@/components/layout/PanelPage";
+import PanelBackButton from "@/components/layout/PanelBackButton";
 import AdHeader from "../components/detail/AdHeader";
 import AdBody from "../components/detail/AdBody";
 import ReviewActions from "../components/detail/ReviewActions";

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { toProfilePageUser } from "@/features/dash/user/profile";
 import { useNavBadges } from "../../hooks/useNavBadges";
 import { useNavSearch } from "../../hooks/useNavSearch";
-import { useBodyScrollLock } from "../../hooks/useBodyScrollLock";
+import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 import { useLogout } from "../../hooks/useLogout";
 import MobileHeader from "./MobileHeader";
 import DesktopHeader from "./DesktopHeader";

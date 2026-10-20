@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
-import { useLayoutChrome } from '@/shared/context/LayoutChromeContext';
+import { useLayoutChrome } from '@/shared/context/useLayoutChrome';
+import { useBodyScrollLock } from '@/shared/hooks/useBodyScrollLock';
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery';
 import { MOBILE_QUERY } from '../constant/constants';
 
 /**
@@ -8,27 +10,14 @@ import { MOBILE_QUERY } from '../constant/constants';
  */
 export function useMobileChatLayout({ isPanel, mobilePanel }) {
   const { setBottomNavHidden } = useLayoutChrome();
+  const isMobile = useMediaQuery(MOBILE_QUERY);
+  const fillsViewport = !isPanel && isMobile;
+
+  useBodyScrollLock(fillsViewport, { includeRoot: true });
 
   useEffect(() => {
     if (isPanel) return undefined;
-
-    const media = window.matchMedia(MOBILE_QUERY);
-
-    const syncLayout = () => {
-      const isMobile = media.matches;
-      setBottomNavHidden(isMobile && mobilePanel === 'chat');
-      document.documentElement.style.overflow = isMobile ? 'hidden' : '';
-      document.body.style.overflow = isMobile ? 'hidden' : '';
-    };
-
-    syncLayout();
-    media.addEventListener('change', syncLayout);
-
-    return () => {
-      media.removeEventListener('change', syncLayout);
-      setBottomNavHidden(false);
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-    };
-  }, [mobilePanel, setBottomNavHidden, isPanel]);
+    setBottomNavHidden(isMobile && mobilePanel === 'chat');
+    return () => setBottomNavHidden(false);
+  }, [isPanel, isMobile, mobilePanel, setBottomNavHidden]);
 }

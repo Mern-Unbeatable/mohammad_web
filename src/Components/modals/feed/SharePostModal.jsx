@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import { messagesApi } from "@/features/messages";
 import { RecipientPicker } from "@/modules/messages";
 import { MAX_POST_LENGTH } from "@/modules/dash/user/feed/constants";
+import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 
 const shareOptions = [
   {
@@ -49,14 +50,12 @@ const SharePostModal = ({
     closeTimer.current = setTimeout(onClose, ms);
   };
 
+  useBodyScrollLock(open);
+
   useEffect(() => {
-    if (!open) return undefined;
-    document.body.style.overflow = "hidden";
+    if (!open) return;
     setCopied(false);
     setSentTo(null);
-    return () => {
-      document.body.style.overflow = "";
-    };
   }, [open]);
 
   const loadRecipients = useCallback(async (search) => {

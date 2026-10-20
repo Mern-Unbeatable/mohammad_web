@@ -18,6 +18,7 @@ import {
   X,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useBodyScrollLock } from '@/shared/hooks/useBodyScrollLock';
 import StatusBadge from '@/components/data-display/DataTable/StatusBadge';
 import { AdDetailCard } from '@/modules/dash/supplier/ads';
 import { AD_CATEGORIES, getCategoryById } from '@/modules/dash/supplier/data/advertisements';
@@ -30,7 +31,7 @@ import {
   toDurationTiers,
   defaultDurationId,
 } from '@/features/dash/supplier/advertisements';
-import { panelPrimaryBtn, panelSecondaryBtn } from '@/components/navigation/panel/panelPageTheme';
+import { panelPrimaryBtn, panelSecondaryBtn } from '@/components/layout/panelPageTheme';
 import { FormLabel, Input, RichTextArea } from '@/components/form-controls';
 
 const STEPPER_STEPS_INITIAL = [
@@ -100,13 +101,7 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
     if (open) dispatch(fetchSupplierAdPricing());
   }, [open, dispatch]);
 
-  useEffect(() => {
-    if (!open) return undefined;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [open]);
+  useBodyScrollLock(open);
 
   useEffect(() => {
     if (!open) return undefined;

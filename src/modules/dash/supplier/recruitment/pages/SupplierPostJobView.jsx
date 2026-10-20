@@ -1,5 +1,5 @@
 import { useParams } from "react-router";
-import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPage from "@/components/layout/PanelPage";
 import BackLink from "../components/layout/BackLink";
 import JobFormLoading from "../components/form/JobFormLoading";
 import JobFormCard from "../components/form/JobFormCard";

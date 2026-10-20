@@ -1,4 +1,4 @@
-import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPage from "@/components/layout/PanelPage";
 import { DashboardHeader, StatsSection } from "@/modules/dash/admin/dashboard";
 import StatisticsCharts from "../components/StatisticsCharts";
 import { useAdminStatistics } from "../hooks/useAdminStatistics";

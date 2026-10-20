@@ -60,15 +60,13 @@ const MessagesPageContent = ({
   }
 
   return (
-    <main
-      className={`fixed inset-x-0 top-14 z-20 flex flex-col overflow-hidden bg-[#F3F4F6] xl:static xl:z-auto xl:block xl:overflow-visible xl:py-8 ${
-        isMobileChat
-          ? 'bottom-0'
-          : 'bottom-[calc(3.5rem+env(safe-area-inset-bottom))] sm:bottom-0'
+    <div
+      className={`fixed inset-x-0 top-(--dashboard-header-h) z-20 flex flex-col overflow-hidden bg-[#F3F4F6] xl:static xl:z-auto xl:block xl:overflow-visible xl:py-8 ${
+        isMobileChat ? 'bottom-0' : 'bottom-safe-nav sm:bottom-0'
       }`}
     >
       <Container className="flex h-full min-h-0 flex-col max-xl:!px-0">{messenger}</Container>
-    </main>
+    </div>
   );
 };
 

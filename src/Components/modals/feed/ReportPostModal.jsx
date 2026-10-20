@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 import { useDispatch, useSelector } from "react-redux";
 import { X } from "lucide-react";
 import { toast } from "react-hot-toast";
@@ -42,13 +43,7 @@ const ReportPostModal = ({ open, post, onClose }) => {
   const [reason, setReason] = useState("");
   const [details, setDetails] = useState("");
 
-  useEffect(() => {
-    if (!open) return undefined;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
+  useBodyScrollLock(open);
 
   if (!open) return null;
 

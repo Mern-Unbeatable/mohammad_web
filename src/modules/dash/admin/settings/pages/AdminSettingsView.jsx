@@ -1,6 +1,6 @@
 import { AdminSettingsSkeleton } from "@/components/loader";
-import PanelPage from "@/components/navigation/panel/PanelPage";
-import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
+import PanelPage from "@/components/layout/PanelPage";
+import PanelPageHeader from "@/components/layout/PanelPageHeader";
 import SettingsLoadError from "../components/common/SettingsLoadError";
 import SubscriptionSection from "../components/sections/SubscriptionSection";
 import SponsoredSection from "../components/sections/SponsoredSection";

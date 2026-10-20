@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import { createPost } from "@/features/dash/user/feed";
-import { useFeedActions } from "./useFeedActions";
+import { useCreatePostAction } from "@/shared/context/useCreatePostAction";
 import { DEFAULT_POST_OPTION } from "../utils/postTypeOptions";
 import { toCreatePostPayload } from "../utils/postPayload";
 
@@ -12,7 +12,7 @@ import { toCreatePostPayload } from "../utils/postPayload";
  */
 export function useCreatePost({ onPublished } = {}) {
   const dispatch = useDispatch();
-  const { registerOpenCreatePost } = useFeedActions();
+  const { registerOpenCreatePost } = useCreatePostAction();
   const [open, setOpen] = useState(false);
   const [option, setOption] = useState(DEFAULT_POST_OPTION);
 

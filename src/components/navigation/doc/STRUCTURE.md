@@ -2,10 +2,10 @@
 
 App chrome: the public (marketing) navbar; the user dashboard's top navbar
 (search, nav links, hover previews, profile menu, mobile drawer), mobile
-bottom nav and the feed's left/right sidebars; the supplier / admin panel
-shell; and the site footer.
-Rendered by `layouts/*Layout.jsx`, `modules/dash/user/feed/FeedView`
-(sidebars) and the supplier / admin pages (panel page frame).
+bottom nav and the feed's left/right sidebars; and the site footer.
+Rendered by `layouts/*Layout.jsx` and `modules/dash/user/feed/FeedView`
+(sidebars). The supplier / admin panel shell lives in `layouts/panel/` and the
+page frames (`PanelPage`, `DashboardPage`) in `@/components/layout/`.
 
 ```
 components/navigation/
@@ -31,7 +31,6 @@ components/navigation/
 ├── hooks/
 │   ├── useNavBadges.js          # unread / pending / application counts + labels
 │   ├── useNavSearch.js          # debounced global search + dropdown handlers
-│   ├── useBodyScrollLock.js     # while the mobile drawer is open
 │   ├── useLogout.js
 │   ├── useDropdown.js           # click-outside / Escape menu state
 │   ├── useHoverMenu.js          # delayed hover open/close
@@ -40,12 +39,6 @@ components/navigation/
 │   ├── useRightSidebar.js       # people / listings / jobs + Connect
 │   ├── usePublicNavbar.js       # public navbar: mobile menu, section scroll / `/#section` navigation
 │   └── usePublicAuthActions.js  # public navbar: auth state, logout back to `/`
-├── panel/                       # supplier / admin panel chrome
-│   ├── PanelLayout.jsx          # sidebar, top bar, account menu
-│   ├── PanelPage.jsx            # page frame (width + theme)
-│   ├── PanelPageHeader.jsx
-│   ├── PanelBackButton.jsx
-│   └── panelPageTheme.js        # panelPageTheme, panelPageWidths, button classes
 ├── footer/AppFooter.jsx         # site footer (RootLayout, UserLayout)
 ├── test/                        # navUtils.test.js covers @/shared/utils/nav
 └── doc/STRUCTURE.md
@@ -59,11 +52,18 @@ components/navigation/
 | `DashboardNavbar`, `MobileBottomNav` | `layouts/UserLayout` |
 | `LeftSidebar`, `RightSidebar` | `modules/dash/user/feed/FeedView` |
 
-`panel/*` and `footer/AppFooter` are imported by file path:
-`@/components/navigation/panel/PanelLayout` (Supplier / Admin layouts),
-`panel/PanelPage`, `PanelPageHeader`, `PanelBackButton`, `panelPageTheme`
-(supplier / admin pages, `CreateAdModal`, `AdminAccountForm`, `GeneralToolbar`)
-and `footer/AppFooter` (Root / User layouts).
+`footer/AppFooter` is imported by file path (Root / User layouts).
+
+Related chrome outside this folder:
+
+- `layouts/panel/PanelLayout.jsx`: supplier / admin sidebar, top bar and
+  account menu (Supplier / Admin layouts).
+- `@/components/layout/`: `PanelPage`, `PanelPageHeader`, `PanelBackButton`,
+  `panelPageTheme` (panel pages) and `DashboardPage` (user pages).
+- `@/shared/hooks/useBodyScrollLock`: ref-counted scroll lock used by the
+  mobile drawers and modals.
+- `@/shared/context/useCreatePostAction` and `useLayoutChrome`: the bottom
+  nav's "create post" action and hide flag, provided by `UserLayout`.
 
 ## Rules
 

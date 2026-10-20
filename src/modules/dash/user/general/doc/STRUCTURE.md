@@ -32,10 +32,8 @@ general/
 │   │   ├── GeneralPostBody.jsx      Paragraphs, or the summary when there is no body
 │   │   └── PostActions.jsx          Download (documents) and Share
 │   │
-│   ├── layout/
-│   │   └── GeneralPage.jsx          <main> + Container frame
-│   │
-│   └── (CreateGeneralPostModal: @/components/modals/general — also used by supplier pages;
+│   └── (page frame: @/components/layout/DashboardPage;
+│        CreateGeneralPostModal: @/components/modals/general — also used by supplier pages;
 │        DeletePostModal: @/components/modals/common)
 │
 ├── hooks/

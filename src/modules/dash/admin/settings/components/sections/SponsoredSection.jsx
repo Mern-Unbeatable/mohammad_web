@@ -3,7 +3,7 @@ import Card from "@/components/ui/Card";
 import {
   panelPageTheme,
   panelPrimaryBtn,
-} from "@/components/navigation/panel/panelPageTheme";
+} from "@/components/layout/panelPageTheme";
 import { Input } from "@/components/form-controls";
 import SectionHeader from "../common/SectionHeader";
 import PriceField from "../common/PriceField";

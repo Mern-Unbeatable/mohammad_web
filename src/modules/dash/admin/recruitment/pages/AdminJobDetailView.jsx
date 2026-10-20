@@ -1,7 +1,7 @@
 import JobDetailCard from "@/components/data-display/JobDetailCard/JobDetailCard";
 import { JobDetailSkeleton } from "@/components/loader";
-import PanelPage from "@/components/navigation/panel/PanelPage";
-import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
+import PanelPage from "@/components/layout/PanelPage";
+import PanelBackButton from "@/components/layout/PanelBackButton";
 import NotFound from "@/modules/error/NotFound";
 import JobSidebar from "../components/detail/JobSidebar";
 import { useAdminJobDetail } from "../hooks/useAdminJobDetail";

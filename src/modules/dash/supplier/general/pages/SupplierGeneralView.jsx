@@ -1,6 +1,6 @@
 import GeneralPostCard from "@/components/data-display/GeneralPostCard/GeneralPostCard";
 import { CreateGeneralPostModal } from "@/modules/dash/user/general";
-import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPage from "@/components/layout/PanelPage";
 import SupplierGeneralToolbar from "../components/posts/SupplierGeneralToolbar";
 import PostsGrid from "../components/posts/PostsGrid";
 import { useGeneralPosts } from "../hooks/useGeneralPosts";

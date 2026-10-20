@@ -2,7 +2,7 @@ import { Link } from 'react-router';
 
 const NotFound = () => {
   return (
-    <section className="flex min-h-[calc(100vh-72px-80px)] items-center justify-center bg-[#F7F8FA] px-6 py-16 lg:min-h-[calc(100vh-76px-80px)] xl:min-h-[calc(100vh-84px-80px)]">
+    <section className="flex min-h-[60vh] flex-1 items-center justify-center bg-[#F7F8FA] px-6 py-16">
       <div className="text-center">
         <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-primary">
           404 error

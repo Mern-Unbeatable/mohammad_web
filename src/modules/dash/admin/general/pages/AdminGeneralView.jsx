@@ -1,6 +1,6 @@
 import Pagination from "@/components/common/Pagination/Pagination";
 import { GeneralToolbar } from "@/modules/dash/user/general";
-import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPage from "@/components/layout/PanelPage";
 import PostsGrid from "../components/list/PostsGrid";
 import DeletePostModal from "../components/list/DeletePostModal";
 import ErrorBanner from "../components/common/ErrorBanner";

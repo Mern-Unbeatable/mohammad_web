@@ -1,5 +1,5 @@
 import { AdminAccountFormSkeleton } from "@/components/loader";
-import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPage from "@/components/layout/PanelPage";
 import AdminAccountForm from "../components/form/AdminAccountForm";
 import { useAdminProfile } from "../hooks/useAdminProfile";
 

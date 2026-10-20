@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Loader2, X } from 'lucide-react';
 import ChatListingCard from '@/components/data-display/Messenger/ChatListingCard';
 import RecipientPicker from '@/modules/messages/components/recipients/RecipientPicker';
 import { FormLabel, Textarea } from '@/components/form-controls';
+import { useBodyScrollLock } from '@/shared/hooks/useBodyScrollLock';
 
 const NewMessageForm = ({
   onClose,
@@ -18,12 +19,7 @@ const NewMessageForm = ({
   const [selected, setSelected] = useState(initialRecipientId ? [initialRecipientId] : []);
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, []);
+  useBodyScrollLock();
 
   const recipientId = selected[0] || '';
   const listingId = listing && !listing.loading ? listing.id : undefined;

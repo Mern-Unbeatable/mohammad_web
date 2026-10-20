@@ -23,8 +23,8 @@ const MobileMenuDrawer = ({
       className="fixed inset-0 z-[60] bg-[#0A1A44]/50 motion-safe:animate-fade-in xl:hidden"
     />
 
-    <div className="fixed bottom-0 right-0 top-14 z-[65] w-[min(20rem,85vw)] overflow-y-auto border-l border-[#E4E7EC] bg-white shadow-xl motion-safe:animate-drawer-in-right xl:hidden">
-      <div className="px-4 pb-[calc(3.5rem+env(safe-area-inset-bottom))] pt-4 sm:pb-4">
+    <div className="fixed bottom-0 right-0 top-(--dashboard-header-h) z-[65] w-[min(20rem,85vw)] overflow-y-auto border-l border-[#E4E7EC] bg-white shadow-xl motion-safe:animate-drawer-in-right xl:hidden">
+      <div className="px-4 pb-safe-nav pt-4 sm:pb-4">
         <div className="mb-4 flex items-center gap-3 border-b border-[#E4E7EC] pb-4 motion-safe:animate-menu-item-in">
           <Avatar
             src={profileUser?.avatar}

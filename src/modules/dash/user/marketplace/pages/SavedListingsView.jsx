@@ -1,5 +1,5 @@
 import ListingCard from '@/components/data-display/ListingCard/ListingCard';
-import MarketplacePage from '../components/layout/MarketplacePage';
+import DashboardPage from '@/components/layout/DashboardPage';
 import MarketplaceToolbar from '../components/toolbar/MarketplaceToolbar';
 import ListingsSection from '../components/listings/ListingsSection';
 import { useSavedListings } from '../hooks/useSavedListings';
@@ -9,7 +9,7 @@ const SavedListingsView = () => {
   const saved = useSavedListings();
 
   return (
-    <MarketplacePage>
+    <DashboardPage>
       <MarketplaceToolbar
         query={saved.query}
         onQueryChange={saved.setQuery}
@@ -28,7 +28,7 @@ const SavedListingsView = () => {
         emptyTitle="No saved listings"
         emptyText="Browse the marketplace and tap the heart icon to save equipment here."
       />
-    </MarketplacePage>
+    </DashboardPage>
   );
 };
 

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 import { FileText, ImagePlus, Newspaper, Paperclip, X } from "lucide-react";
 import { toast } from "react-hot-toast";
 import Avatar from "@/components/ui/Avatar";
@@ -187,13 +188,7 @@ const CreateGeneralPostModal = ({
     setDocumentName("");
   };
 
-  useEffect(() => {
-    if (!open) return undefined;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
+  useBodyScrollLock(open);
 
   useEffect(() => {
     if (!open) {
@@ -394,10 +389,11 @@ const CreateGeneralPostModal = ({
                   id,
                   label,
                   sublabel,
-                  icon: Icon,
+                  icon,
                   activeBorder,
                   activeText,
                 }) => {
+                  const Icon = icon;
                   const active = postType === id;
                   return (
                     <button

@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router';
-import PanelLayout from '@/components/navigation/panel/PanelLayout';
+import PanelLayout from './panel/PanelLayout';
 import { supplierNavItems } from '@/components/navigation/navbar/nav';
 import { PROFILE_PATH } from '@/modules/dash/supplier/profile';
 import {

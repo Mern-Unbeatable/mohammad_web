@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useBodyScrollLock } from '@/shared/hooks/useBodyScrollLock';
 import { X } from 'lucide-react';
 import { Textarea } from '@/components/form-controls';
 
@@ -13,18 +14,14 @@ const ReasonModal = ({
   submitClassName = 'bg-pink-light hover:opacity-90',
 }) => {
   const [reason, setReason] = useState('');
+  const [wasOpen, setWasOpen] = useState(open);
 
-  useEffect(() => {
-    if (!open) return undefined;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [open]);
-
-  useEffect(() => {
+  if (open !== wasOpen) {
+    setWasOpen(open);
     if (!open) setReason('');
-  }, [open]);
+  }
+
+  useBodyScrollLock(open);
 
   if (!open) return null;
 

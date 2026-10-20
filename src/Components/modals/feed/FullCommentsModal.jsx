@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
@@ -10,10 +11,10 @@ import { X } from "lucide-react";
 const FullCommentsModal = ({ open, title, onClose, children }) => {
   const dialogRef = useRef(null);
 
+  useBodyScrollLock(open);
+
   useEffect(() => {
     if (!open) return undefined;
-    const overflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     dialogRef.current?.focus();
 
     const handleKey = (event) => {
@@ -26,7 +27,6 @@ const FullCommentsModal = ({ open, title, onClose, children }) => {
 
     return () => {
       document.removeEventListener("keydown", handleKey);
-      document.body.style.overflow = overflow;
     };
   }, [open, onClose]);
 

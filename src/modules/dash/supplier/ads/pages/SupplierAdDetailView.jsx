@@ -1,7 +1,7 @@
 import { Navigate, useParams } from "react-router";
 import { AdvertisementDetailSkeleton } from "@/components/loader";
-import PanelPage from "@/components/navigation/panel/PanelPage";
-import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
+import PanelPage from "@/components/layout/PanelPage";
+import PanelPageHeader from "@/components/layout/PanelPageHeader";
 import AdDetailCard from "../components/detail/AdDetailCard";
 import AdComments from "../components/detail/AdComments";
 import BackToAdsLink from "../components/detail/BackToAdsLink";

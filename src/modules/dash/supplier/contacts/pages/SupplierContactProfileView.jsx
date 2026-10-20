@@ -1,6 +1,6 @@
 import ContactProfilePageContent from "@/components/data-display/ContactProfilePageContent/ContactProfilePageContent";
 import { ContactProfilePageSkeleton } from "@/components/loader";
-import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPage from "@/components/layout/PanelPage";
 import { ReportPostModal } from "@/modules/dash/user/feed";
 import NotFound from "@/modules/error/NotFound";
 import { CHAT_BASE_PATHS, chatPath } from "@/features/messages/chatPaths";

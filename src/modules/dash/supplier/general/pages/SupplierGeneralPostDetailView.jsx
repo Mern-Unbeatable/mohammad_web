@@ -1,4 +1,4 @@
-import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPage from "@/components/layout/PanelPage";
 import { GeneralPostDetailSkeleton } from "@/components/loader";
 import NotFound from "@/modules/error/NotFound";
 import BackToGeneralLink from "../components/detail/BackToGeneralLink";

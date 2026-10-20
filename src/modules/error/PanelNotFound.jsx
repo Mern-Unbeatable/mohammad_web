@@ -9,7 +9,7 @@ const PanelNotFound = () => {
       <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-primary">404</p>
       <h2 className="mt-3 text-[22px] font-bold text-deep-blue">Page not found</h2>
       <p className="mx-auto mt-2 max-w-md text-[14px] text-[#64748B]">
-        This panel URL does not exist or has been moved.
+        This page does not exist or has been moved.
       </p>
       <Link
         to={homePath}

@@ -1,16 +1,10 @@
-import { useEffect } from 'react';
+import { useBodyScrollLock } from '@/shared/hooks/useBodyScrollLock';
 import { ExternalLink, History, MapPin, Mail, X } from 'lucide-react';
 import Avatar from '@/components/ui/Avatar';
 import StatusBadge from '@/components/data-display/DataTable/StatusBadge';
 
 const ModerationHistoryModal = ({ open, user, onClose, onOpenCase }) => {
-  useEffect(() => {
-    if (!open) return undefined;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [open]);
+  useBodyScrollLock(open);
 
   if (!open || !user) return null;
 

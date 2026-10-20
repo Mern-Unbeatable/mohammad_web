@@ -1,5 +1,5 @@
-import PanelPage from "@/components/navigation/panel/PanelPage";
-import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
+import PanelPage from "@/components/layout/PanelPage";
+import PanelPageHeader from "@/components/layout/PanelPageHeader";
 import ReportStats from "../components/list/ReportStats";
 import ReportsTable from "../components/list/ReportsTable";
 import ErrorBanner from "../components/common/ErrorBanner";

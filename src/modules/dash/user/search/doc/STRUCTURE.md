@@ -25,7 +25,7 @@ search/
 │   │   ├── SearchResultsList.jsx   Groups for the active tab, "See all", empty / searching text
 │   │   └── SearchResultRow.jsx     Avatar or type tile, title, details
 │   │
-│   └── layout/               Page frame
+│   └── layout/               Page sections (the frame is @/components/layout/DashboardPage)
 │       ├── SearchFilterSidebar.jsx "Filter results" card with vertical tabs
 │       ├── SearchHeader.jsx        Title and "Showing … for “query”"
 │       └── SearchPrompt.jsx        Shown before a query is entered

@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import {
   panelPrimaryBtn,
   panelSecondaryBtn,
-} from "@/components/navigation/panel/panelPageTheme";
+} from "@/components/layout/panelPageTheme";
 import { BLOGS_PATH } from "../../constant/constants";
 
 /** Submit (label from `submitLabel`) and Cancel back to the list. */

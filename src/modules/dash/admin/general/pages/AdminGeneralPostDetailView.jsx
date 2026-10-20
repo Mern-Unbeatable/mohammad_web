@@ -1,6 +1,6 @@
 import { GeneralPostDetailSkeleton } from "@/components/loader";
-import PanelPage from "@/components/navigation/panel/PanelPage";
-import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
+import PanelPage from "@/components/layout/PanelPage";
+import PanelBackButton from "@/components/layout/PanelBackButton";
 import NotFound from "@/modules/error/NotFound";
 import PostHeader from "../components/detail/PostHeader";
 import PostBody from "../components/detail/PostBody";

@@ -1,6 +1,6 @@
 import Pagination from '@/components/common/Pagination/Pagination';
 import ListingCard from '@/components/data-display/ListingCard/ListingCard';
-import MarketplacePage from '../components/layout/MarketplacePage';
+import DashboardPage from '@/components/layout/DashboardPage';
 import MarketplaceToolbar from '../components/toolbar/MarketplaceToolbar';
 import ListingsSection from '../components/listings/ListingsSection';
 import { useMarketplaceListings } from '../hooks/useMarketplaceListings';
@@ -12,7 +12,7 @@ const MarketplaceView = () => {
   const toggleSave = useToggleSaveListing();
 
   return (
-    <MarketplacePage>
+    <DashboardPage>
       <MarketplaceToolbar
         query={browse.query}
         onQueryChange={browse.setQuery}
@@ -45,7 +45,7 @@ const MarketplaceView = () => {
           className="mt-8"
         />
       </ListingsSection>
-    </MarketplacePage>
+    </DashboardPage>
   );
 };
 

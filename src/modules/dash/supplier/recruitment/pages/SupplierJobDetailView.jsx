@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import JobDetailCard from "@/components/data-display/JobDetailCard/JobDetailCard";
 import { JobDetailPageSkeleton } from "@/components/loader";
-import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPage from "@/components/layout/PanelPage";
 import NotFound from "@/modules/error/NotFound";
 import { toJobDetailModel } from "@/features/dash/supplier/recruitment";
 import { isJobOpen, jobClosedNotice } from "@/features/recruitment/jobStatus";

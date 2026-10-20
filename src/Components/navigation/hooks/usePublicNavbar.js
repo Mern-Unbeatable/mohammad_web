@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { useBodyScrollLock } from './useBodyScrollLock';
+import { useBodyScrollLock } from '@/shared/hooks/useBodyScrollLock';
 import { PUBLIC_TOP_SECTION } from '../constant/constants';
 
 const HOME_PATH = '/';
