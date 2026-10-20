@@ -49,7 +49,7 @@ profile/
     └── profileSetup.test.js
 ```
 
-Post editing reuses `usePostEditor` (`@/modules/dash/user/hooks`) and the feed's
+Post editing reuses `usePostEditor` (`@/modules/dash/user/pages/feed/hooks/usePostEditor`) and the feed's
 `CreatePostModal` / `ReportPostModal` from `@/modules/dash/user/pages/feed`.
 
 ## Layers and rules

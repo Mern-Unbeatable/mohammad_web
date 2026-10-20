@@ -2,7 +2,7 @@ import Container from "@/components/ui/Container";
 import { ProfilePageSkeleton } from "@/components/loader";
 import ProfilePageContent from "@/components/data-display/ProfilePageContent/ProfilePageContent";
 import { CreatePostModal, ReportPostModal } from "@/modules/dash/user/pages/feed";
-import { usePostEditor } from "@/modules/dash/user/hooks/usePostEditor";
+import { usePostEditor } from "@/modules/dash/user/pages/feed/hooks/usePostEditor";
 import SubscriptionDetailsCard from "./components/subscription/SubscriptionDetailsCard";
 import MyReportsCard from "./components/reports/MyReportsCard";
 import MembershipPrompt from "./components/layout/MembershipPrompt";

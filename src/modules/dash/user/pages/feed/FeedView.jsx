@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Container from "@/components/ui/Container";
 import ConfirmModal from "@/components/modals/common/ConfirmModal";
 import { LeftSidebar, RightSidebar } from "@/components/navigation";
-import { usePostEditor } from "@/modules/dash/user/hooks/usePostEditor";
+import { usePostEditor } from "./hooks/usePostEditor";
 import { fetchUserProfile, toProfilePageUser } from "@/features/dash/user/profile";
 import CreatePostModal from "@/components/modals/feed/CreatePostModal";
 import FeedComposer from "./components/composer/FeedComposer";
