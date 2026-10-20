@@ -30,8 +30,11 @@ general/
 │   │   ├── GeneralPostBody.jsx      Paragraphs, or the summary when there is no body
 │   │   └── PostActions.jsx          Download (documents) and Share
 │   │
-│   └── layout/
-│       └── GeneralPage.jsx          <main> + Container frame
+│   ├── layout/
+│   │   └── GeneralPage.jsx          <main> + Container frame
+│   │
+│   └── modals/
+│       └── CreateGeneralPostModal.jsx  Create / edit form (also used by supplier pages)
 │                             (DeletePostModal: @/components/common/DeletePostModal)
 │
 ├── hooks/
@@ -65,8 +68,8 @@ general/
 - Changing the category resets to page 1 in the same handler (no effect).
 - "Not found" is tracked per post id (`missingId === postId`), so it resets
   when the id changes.
-- The create / edit modal is `@/shared/pages/general/CreateGeneralPostModal`,
-  shared with supplier and admin; it is not part of this module.
+- The create / edit modal `components/modals/CreateGeneralPostModal.jsx` is
+  also used by the supplier General pages through `index.js`.
 
 ## How the pages work
 
@@ -78,7 +81,8 @@ flowchart TD
   MyGeneralPostsView --> DeletePostModal
   GeneralPostDetailView --> useGeneralPostDetail
   GeneralPostDetailView --> GeneralPostHeader & GeneralPostBody & PostActions
-  SupplierGeneralView & AdminGeneralView & GeneralPageContent --> GeneralToolbar
+  SupplierGeneralView & AdminGeneralView --> GeneralToolbar
+  SupplierGeneralView & SupplierMyGeneralPostsView --> CreateGeneralPostModal
 ```
 
 ## Public API (`index.js`)
@@ -89,6 +93,8 @@ Code outside this folder imports from `@/modules/dash/user/pages/general` only:
   and `AdminGeneralView`. Its props
   (`activeView` `'browse' | 'mine'`, `browseHref`, `myPostHref`, `show*`) are part
   of the contract; change them together with those pages.
+- `CreateGeneralPostModal` — used by `SupplierGeneralView` and
+  `SupplierMyGeneralPostsView`.
 
 Routes lazy-load the `*View.jsx` files directly.
 
