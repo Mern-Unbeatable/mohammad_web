@@ -53,6 +53,7 @@ export {
 } from "./messagesMappers";
 export { useMessagesSocket, useTypingEmitter, queryPresence } from "./realtime";
 export { useUnreadMessages } from "./useUnreadMessages";
+export { olderMessagesParams, nextConversationsParams } from "./pagination";
 export {
   parseLegacyChatLink,
   resolveLegacyChatLink,

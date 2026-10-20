@@ -70,8 +70,23 @@ describe("AdminChatModerationView", () => {
     expect(html).toContain("Load older messages");
     expect(html).toContain("Ana joined");
     expect(html).toContain("Hello");
-    expect(html).toContain('aria-label="Remove message"');
+    expect(html).toContain('aria-label="Remove message from Ben"');
     expect(html).not.toContain("Select a conversation");
+  });
+
+  it("keeps moderation actions reachable and visible for keyboard users", () => {
+    const html = renderModeration({
+      conversations: [conversation],
+      selectedId: "c1",
+      selected: conversation,
+      messages: [{ id: "m2", type: "TEXT", body: "Hello", sender: "Ben", time: "2026-10-01T10:01:00Z" }],
+    });
+    const remove = html.match(/<button[^>]*aria-label="Remove message from Ben"[^>]*>/)?.[0] ?? "";
+    expect(remove).toContain('type="button"');
+    expect(remove).toContain("focus-visible:opacity-100");
+    expect(remove).toContain("group-focus-within:opacity-100");
+    expect(remove).not.toMatch(/\bhidden\b/);
+    expect(html).toMatch(/role="log"[^>]*aria-label="Messages in Lab team"/);
   });
 });
 

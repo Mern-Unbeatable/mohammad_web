@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MemoryRouter } from 'react-router';
-import Messenger from './Messenger';
+import Messenger, { NewMessagesButton } from './Messenger';
 import { memberProfilePath } from '@/modules/messages/constant/memberProfilePaths';
 
 const direct = {
@@ -166,6 +166,66 @@ describe('Messenger message editing', () => {
     const html = render({ activeChat: { ...direct, messages: [mine] }, onDeleteMessage: () => {} });
     expect(html).not.toContain('Edit message');
     expect(html).toContain('Delete message');
+  });
+});
+
+describe('Messenger keyboard and screen-reader access', () => {
+  const html = () =>
+    render({
+      activeChat: {
+        ...direct,
+        messages: [
+          { id: 'm1', from: 'me', text: 'Mine', time: '12:30' },
+          { id: 'm2', from: 'them', text: 'Theirs', time: '12:31' },
+        ],
+      },
+      onEditMessage: () => true,
+      onDeleteMessage: () => {},
+    });
+
+  it('keeps Copy, Edit and Delete in the tab order and reveals them on keyboard focus', () => {
+    const toolbars = html().match(/<div class="absolute (?:right|left)-full[^"]*"/g) ?? [];
+    expect(toolbars).toHaveLength(2);
+    toolbars.forEach((toolbar) => {
+      expect(toolbar).not.toMatch(/\bhidden\b/);
+      expect(toolbar).toContain('group-focus-within:opacity-100');
+      expect(toolbar).toContain('group-focus-within:pointer-events-auto');
+    });
+    ['Copy message', 'Edit message', 'Delete message'].forEach((label) => {
+      const button = html().match(new RegExp(`<button[^>]*aria-label="${label}"[^>]*>`))?.[0] ?? '';
+      expect(button).toContain('focus-visible:ring-2');
+      expect(button).not.toContain('tabindex="-1"');
+    });
+  });
+
+  it('exposes the thread as a focusable log without live-announcing every change', () => {
+    const thread = html().match(/<div[^>]*role="log"[^>]*>/)?.[0] ?? '';
+    expect(thread).toContain('aria-label="Messages with Ismail Molla"');
+    expect(thread).toContain('aria-live="off"');
+    expect(thread).toContain('tabindex="0"');
+  });
+
+  it('has one polite, atomic status region for concise arrival announcements', () => {
+    const status = html().match(/<p[^>]*role="status"[^>]*>(.*?)<\/p>/);
+    expect(status?.[0]).toContain('aria-live="polite"');
+    expect(status?.[0]).toContain('aria-atomic="true"');
+    expect(status?.[1]).toBe('');
+  });
+});
+
+describe('Messenger new-messages indicator', () => {
+  it('is not shown when a thread first renders', () => {
+    const html = render({
+      activeChat: { ...direct, messages: [{ id: 'm1', from: 'them', text: 'Hi' }] },
+    });
+    expect(html).not.toMatch(/new messages?</);
+  });
+
+  it('is a keyboard-focusable button announcing how many messages arrived', () => {
+    const html = renderToStaticMarkup(<NewMessagesButton count={3} onClick={() => {}} />);
+    expect(html).toMatch(/^<button type="button"[^>]*focus-visible:ring-2/);
+    expect(html).toContain('3 new messages</button>');
+    expect(html).toContain('aria-hidden="true"');
   });
 });
 

@@ -22,8 +22,14 @@ export const patchAttachment = (items = [], localId, patch) =>
     item.localId !== localId ? [item] : patch ? [{ ...item, ...patch }] : [],
   );
 
-/** Uploaded attachments in the shape the send API expects. */
+/** True once the upload finished and the server returned a reference to send. */
+export const isUploadedAttachment = (a) => Boolean((a.key || a.url) && !a.uploading);
+
+/**
+ * Uploaded attachments in the shape the send API expects. The server reads
+ * type and size from the stored file, so only the reference and name are sent.
+ */
 export const readyAttachments = (attachments) =>
   attachments
-    .filter((a) => a.url && !a.uploading)
-    .map(({ url, name, mimeType, size }) => ({ url, name, mimeType, size }));
+    .filter(isUploadedAttachment)
+    .map(({ key, url, name }) => (key ? { key, name } : { url, name }));

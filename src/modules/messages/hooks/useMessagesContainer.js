@@ -14,6 +14,8 @@ import {
   fetchThread,
   leaveConversation,
   messagesApi,
+  nextConversationsParams,
+  olderMessagesParams,
   removeParticipant,
   renameGroup,
   resetMessages,
@@ -26,7 +28,7 @@ import { marketplaceListingPath } from '@/modules/messages/constant/marketplaceP
 import { memberProfilePath } from '@/modules/messages/constant/memberProfilePaths';
 import { CHAT_TAB } from '../constant/constants';
 import { sectionForTab, tabForSection, typeForTab } from '../utils/chatTabs';
-import { findConversation, hasMorePages, memberNameFor, nextPage } from '../utils/chatModels';
+import { findConversation, hasMorePages, memberNameFor } from '../utils/chatModels';
 import { useTypingIndicators } from './useTypingIndicators';
 import { useConversationSearch } from './useConversationSearch';
 import { useListingDraft } from './useListingDraft';
@@ -303,13 +305,15 @@ export function useMessagesContainer({ variant, basePath, section, targetId }) {
         dispatch(
           fetchThread({
             conversationId: activeConversationId,
-            before: messages[0]?.time,
+            ...olderMessagesParams(messages),
           }),
         ),
       hasMoreChats: hasMorePages(conversationsMeta),
       loadingMoreChats: conversationsLoadingMore,
       onLoadMoreChats: () =>
-        dispatch(fetchConversations({ type, search, page: nextPage(conversationsMeta) })),
+        dispatch(
+          fetchConversations({ type, search, ...nextConversationsParams(conversationsMeta) }),
+        ),
       seen,
       pendingListing: composeUserId ? null : pendingListing,
       onRemovePendingListing: dropListingParam,

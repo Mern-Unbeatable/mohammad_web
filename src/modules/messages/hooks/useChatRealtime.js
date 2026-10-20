@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import {
@@ -19,6 +19,7 @@ import {
 } from '@/features/messages';
 import { POLL_INTERVAL_MS } from '../constant/constants';
 import { presenceIdsKey } from '../utils/chatModels';
+import { createHiddenReadTracker } from '../utils/hiddenReads';
 
 /**
  * Socket events, typing emitter, polling while disconnected and presence
@@ -39,6 +40,21 @@ export function useChatRealtime({
   const dispatch = useDispatch();
   const socketRef = useRef(null);
   const hasConnectedRef = useRef(false);
+  const [hiddenReads] = useState(createHiddenReadTracker);
+
+  // Messages that arrived in the open thread while the tab was hidden are
+  // marked read on return; the server's `conversation:read` echo then
+  // re-syncs the nav badge.
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState !== 'visible') return;
+      if (hiddenReads.takeOnVisible(activeConversationId)) {
+        dispatch(markConversationRead(activeConversationId));
+      }
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    return () => document.removeEventListener('visibilitychange', onVisible);
+  }, [activeConversationId, dispatch, hiddenReads]);
 
   const refreshVisible = useCallback(() => {
     dispatch(fetchConversations({ type, search, page: 1, silent: true }));
@@ -59,13 +75,13 @@ export function useChatRealtime({
       const known = conversations.some((c) => c.id === conversationId);
       dispatch(messageReceived({ conversationId, message, currentUserId }));
       if (!known) dispatch(fetchConversation(conversationId));
-      if (
-        conversationId === activeConversationId &&
-        message?.senderId !== currentUserId &&
-        document.visibilityState === 'visible'
-      ) {
-        dispatch(markConversationRead(conversationId));
-      }
+      const readNow = hiddenReads.noteIncoming({
+        conversationId,
+        activeConversationId,
+        fromSelf: message?.senderId === currentUserId,
+        visible: document.visibilityState === 'visible',
+      });
+      if (readNow) dispatch(markConversationRead(conversationId));
     },
     'message:updated': (payload) => {
       dispatch(messageUpdated(payload));
