@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useLocation, useMatches } from 'react-router';
 import { roleHomePath } from '@/shared/constants/roles';
-import { useAuth } from '@/shared/auth/useAuth';
+import { useAuth } from '../hooks/useAuth';
+import SessionCheckingFallback from './SessionCheckingFallback';
 
 /**
  * Protects panel routes. Redirects unauthenticated users to login and
@@ -13,11 +14,7 @@ const RequireRole = ({ allowedRoles = [] }) => {
   const matches = useMatches();
 
   if (!sessionReady) {
-    return (
-      <div className="flex min-h-[40vh] items-center justify-center text-sm text-[#64748B]">
-        Checking session…
-      </div>
-    );
+    return <SessionCheckingFallback />;
   }
 
   // Missing or unknown role is treated as unauthenticated
