@@ -24,9 +24,13 @@ supplier/
 │   ├── constant/ test/ doc/
 │   └── index.js                             Public API: BLOG_BASE_PATH, blogDetailPath
 │
-├── contacts/pages/
-│   ├── SupplierContactsView.jsx             Directory with filters and pagination
-│   └── SupplierContactProfileView.jsx       Member profile
+├── contacts/                                Full feature layout; see contacts/doc/STRUCTURE.md
+│   ├── pages/        SupplierContactsView, SupplierContactProfileView
+│   ├── components/   directory/ (DirectoryFilters, ContactsResults, ResultsMessage), profile/ (BackToDirectoryLink)
+│   ├── hooks/        useContactsDirectory, useContactProfile
+│   ├── utils/        contactsQuery, contactsLabels
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: CONTACTS_PATH, contactProfilePath
 │
 ├── dashboard/pages/
 │   └── SupplierDashboardView.jsx            KPI cards and charts
@@ -57,9 +61,6 @@ supplier/
 │   └── components/
 │       └── SupplierRecruitmentActions.jsx   Browse / My jobs / Post job buttons
 │
-├── config/
-│   └── nav.js                               Sidebar items (used by layouts/SupplierLayout)
-│
 ├── data/
 │   ├── advertisements.js                    AD_CATEGORIES, getCategoryById (used by CreateAdModal) + demo ad rows
 │   └── dashboard.js                         Demo dashboard data — not imported anywhere
@@ -72,8 +73,9 @@ supplier/
 - Routes (`shared/router/routes/supplier.routes.jsx`) lazy-load
   `@/modules/dash/supplier/<feature>/pages/<View>` directly.
 - Code outside supplier imports `@/modules/dash/supplier/ads` (index) for
-  `AdDetailCard`, `config/nav` for the sidebar, and `data/advertisements` for
-  ad categories.
+  `AdDetailCard`, and `data/advertisements` for ad categories.
+- The sidebar items (`supplierNavItems`) live in
+  `@/components/navigation/navbar/nav.js`, used by `layouts/SupplierLayout`.
 - Supplier pages reuse user features through their public indexes:
   `@/modules/dash/user/{feed,general,recruitment,profile}`.
 

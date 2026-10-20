@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router';
 import PanelLayout from '@/components/navigation/panel/PanelLayout';
-import { supplierNavItems } from '@/modules/dash/supplier/config/nav';
+import { supplierNavItems } from '@/components/navigation/navbar/nav';
 import {
   fetchSupplierUnreadNotificationCount,
   selectSupplierUnreadNotificationCount,

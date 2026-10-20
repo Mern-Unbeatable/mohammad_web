@@ -1,55 +1,19 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { ChevronLeft } from "lucide-react";
-import { toast } from "react-hot-toast";
 import ContactProfilePageContent from "@/components/data-display/ContactProfilePageContent/ContactProfilePageContent";
 import { ContactProfilePageSkeleton } from "@/components/loader";
-import { ReportPostModal } from "@/modules/dash/user/feed";
-import {
-  fetchContactDetails,
-  requestContactConnection,
-  clearContactsError,
-  clearSelectedContact,
-  toContactProfileModel,
-} from "@/features/dash/supplier/contacts";
 import PanelPage from "@/components/navigation/panel/PanelPage";
+import { ReportPostModal } from "@/modules/dash/user/feed";
 import NotFound from "@/modules/error/NotFound";
 import { CHAT_BASE_PATHS, chatPath } from "@/features/messages/chatPaths";
+import BackToDirectoryLink from "../components/profile/BackToDirectoryLink";
+import { useContactProfile } from "../hooks/useContactProfile";
 
 const SupplierContactProfileView = () => {
-  const { contactId } = useParams();
-  const dispatch = useDispatch();
-  const {
-    selectedContact,
-    selectedContactLoading,
-    connectingId,
-    error,
-  } = useSelector((state) => state.supplierContacts);
+  const profile = useContactProfile();
+  const { contact } = profile;
 
-  const [reportPost, setReportPost] = useState(null);
-  const [notFound, setNotFound] = useState(false);
+  if (profile.notFound) return <NotFound />;
 
-  useEffect(() => {
-    if (!contactId) return undefined;
-    dispatch(clearContactsError());
-    dispatch(fetchContactDetails(contactId)).then((result) => {
-      if (fetchContactDetails.rejected.match(result)) {
-        setNotFound(true);
-      }
-    });
-    return () => {
-      dispatch(clearSelectedContact());
-    };
-  }, [dispatch, contactId]);
-
-  useEffect(() => {
-    if (error && !selectedContactLoading) toast.error(error);
-  }, [error, selectedContactLoading]);
-
-  if (notFound) return <NotFound />;
-
-  if (selectedContactLoading || (!selectedContact && !error)) {
+  if (profile.loading) {
     return (
       <PanelPage>
         <ContactProfilePageSkeleton />
@@ -57,45 +21,28 @@ const SupplierContactProfileView = () => {
     );
   }
 
-  const contact = toContactProfileModel(selectedContact);
   if (!contact) return <NotFound />;
-
-  const handleConnect = async () => {
-    if (contact.connected || contact.pending || connectingId === contact.id) {
-      return;
-    }
-    const result = await dispatch(requestContactConnection(contact.id));
-    if (requestContactConnection.fulfilled.match(result)) {
-      toast.success("Connection request sent");
-    }
-  };
 
   return (
     <>
       <PanelPage>
-        <Link
-          to="/supplier/contacts"
-          className="inline-flex items-center gap-1.5 rounded-full px-1 py-1 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
-        >
-          <ChevronLeft className="h-4 w-4" />
-          Back to directory
-        </Link>
+        <BackToDirectoryLink />
 
         <ContactProfilePageContent
           contact={contact}
           posts={[]}
-          onReport={setReportPost}
+          onReport={profile.setReportPost}
           connected={contact.connected}
-          pending={contact.pending || connectingId === contact.id}
-          onConnect={handleConnect}
+          pending={contact.pending || profile.connecting}
+          onConnect={profile.connect}
           messageHref={chatPath(CHAT_BASE_PATHS.SUPPLIER, { id: contact.id })}
         />
       </PanelPage>
 
       <ReportPostModal
-        open={Boolean(reportPost)}
-        post={reportPost}
-        onClose={() => setReportPost(null)}
+        open={Boolean(profile.reportPost)}
+        post={profile.reportPost}
+        onClose={profile.closeReport}
       />
     </>
   );
