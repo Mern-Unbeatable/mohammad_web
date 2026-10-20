@@ -8,12 +8,12 @@ loading lives in `@/features/dash/supplier/*` (Redux slices and thunks).
 
 ```
 supplier/
-├── ads/
-│   ├── pages/
-│   │   ├── SupplierAdsView.jsx              Ad list with status tabs, create-ad modal
-│   │   └── SupplierAdDetailView.jsx         Ad detail, preview card, comments
-│   ├── components/
-│   │   └── AdDetailCard.jsx                 Ad card (detail page and create-ad preview)
+├── ads/                                     Full feature layout; see ads/doc/STRUCTURE.md
+│   ├── pages/        SupplierAdsView, SupplierAdDetailView
+│   ├── components/   list/ (AdsTable, AdCell), detail/ (AdDetailCard, RejectionNotice, BackToAdsLink, AdComments)
+│   ├── hooks/        useSupplierAds, useSupplierAdDetail, useAdEngagement
+│   ├── utils/        adsQuery, adRowActions, localComments
+│   ├── constant/ test/ doc/
 │   └── index.js                             Public API: AdDetailCard
 │
 ├── blogs/pages/
