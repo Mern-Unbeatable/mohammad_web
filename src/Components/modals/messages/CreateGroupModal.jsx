@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import RecipientPicker from '@/modules/messages/components/recipients/RecipientPicker';
-
-const fieldClass =
-  'w-full rounded-lg border border-[#E4E7EC] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10';
+import { FormLabel, Input } from '@/components/form-controls';
 
 const CreateGroupForm = ({
   onClose,
@@ -63,17 +61,14 @@ const CreateGroupForm = ({
           onSubmit={handleSubmit}
           className="overflow-y-auto px-5 py-5 pb-[max(1.25rem,env(safe-area-inset-bottom))]"
         >
-          <label htmlFor="groupName" className="mb-1.5 block text-[13px] font-semibold text-deep-blue">
-            Group Name
-          </label>
-          <input
+          <FormLabel htmlFor="groupName">Group Name</FormLabel>
+          <Input
             id="groupName"
             type="text"
             value={groupName}
             onChange={(e) => setGroupName(e.target.value)}
             maxLength={160}
             placeholder="e.g. Microbiology Network EU"
-            className={fieldClass}
             required
           />
 

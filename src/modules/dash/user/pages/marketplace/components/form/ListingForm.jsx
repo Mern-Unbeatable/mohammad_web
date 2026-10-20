@@ -1,9 +1,9 @@
 import { conditions, years } from '@/modules/dash/user/data/marketplace';
 import { DESCRIPTION_MAX_LENGTH, TITLE_MAX_LENGTH } from '../../constant/constants';
 import { LISTING_CATEGORY_OPTIONS, listingSubmitLabel } from '../../utils/listingForm';
-import { fieldClass, labelClass } from './formStyles';
 import PhotoPicker from './PhotoPicker';
 import SelectField from './SelectField';
+import { FormLabel, Input, Textarea } from '@/components/form-controls';
 
 const ListingForm = ({
   form,
@@ -20,16 +20,15 @@ const ListingForm = ({
 }) => (
   <form onSubmit={onSubmit} className="space-y-4 p-5 sm:p-6">
     <div>
-      <label htmlFor="title" className={labelClass}>
+      <FormLabel htmlFor="title">
         Product name
-      </label>
-      <input
+      </FormLabel>
+      <Input
         id="title"
         type="text"
         value={form.title}
         onChange={update('title')}
         placeholder="e.g. Agilent 1260 Infinity II HPLC System"
-        className={fieldClass}
         maxLength={TITLE_MAX_LENGTH}
         required
         disabled={busy}
@@ -37,16 +36,16 @@ const ListingForm = ({
     </div>
 
     <div>
-      <label htmlFor="description" className={labelClass}>
+      <FormLabel htmlFor="description">
         Description
-      </label>
-      <textarea
+      </FormLabel>
+      <Textarea
         id="description"
         value={form.description}
         onChange={update('description')}
         rows={4}
         placeholder="Describe condition, accessories, validation status and delivery options..."
-        className={`${fieldClass} resize-y`}
+        className="resize-y"
         maxLength={DESCRIPTION_MAX_LENGTH}
         required
         disabled={busy}
@@ -84,10 +83,10 @@ const ListingForm = ({
         }
       />
       <div>
-        <label htmlFor="price" className={labelClass}>
+        <FormLabel htmlFor="price">
           Price (€)
-        </label>
-        <input
+        </FormLabel>
+        <Input
           id="price"
           type="number"
           min="0"
@@ -95,7 +94,6 @@ const ListingForm = ({
           value={form.price}
           onChange={update('price')}
           placeholder="1850"
-          className={fieldClass}
           required
           disabled={busy}
         />

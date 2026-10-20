@@ -1,16 +1,15 @@
-import { fieldClass, labelClass } from './formStyles';
+import { FormLabel, Select } from '@/components/form-controls';
 
 /** Labelled select; `extraOption` renders first (e.g. a stored value missing from `options`). */
 const SelectField = ({ id, label, value, onChange, options, disabled, extraOption = null }) => (
   <div>
-    <label htmlFor={id} className={labelClass}>
+    <FormLabel htmlFor={id}>
       {label}
-    </label>
-    <select
+    </FormLabel>
+    <Select
       id={id}
       value={value}
       onChange={onChange}
-      className={fieldClass}
       disabled={disabled}
       required
     >
@@ -20,7 +19,7 @@ const SelectField = ({ id, label, value, onChange, options, disabled, extraOptio
           {item}
         </option>
       ))}
-    </select>
+    </Select>
   </div>
 );
 

@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { AlertCircle, Loader2, Send, X } from "lucide-react";
+import { Loader2, Send, X } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import ChatListingCard from "@/components/data-display/Messenger/ChatListingCard";
 import { getApiErrorMessage } from "@/config";
 import { toChatListingModel } from "@/features/messages";
 import { START_CONVERSATION_MAX_LENGTH } from "@/modules/messages/constant/constants";
-
-const fieldClass =
-  "w-full rounded-lg border border-[#E4E7EC] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10 disabled:bg-[#F9FAFB]";
+import { FormError, FormLabel, Textarea } from "@/components/form-controls";
 
 /** Profile models fill missing fields with "—"; those are left out. */
 const isShown = (value) =>
@@ -153,13 +151,10 @@ const StartConversationForm = ({
             </>
           ) : null}
 
-          <label
-            htmlFor="start-conversation-message"
-            className="mb-1.5 mt-5 block text-[13px] font-semibold text-deep-blue"
-          >
+          <FormLabel htmlFor="start-conversation-message" className="mt-5">
             Message<span className="text-pink-light"> *</span>
-          </label>
-          <textarea
+          </FormLabel>
+          <Textarea
             id="start-conversation-message"
             value={message}
             onChange={(event) => {
@@ -172,19 +167,10 @@ const StartConversationForm = ({
             disabled={sending}
             aria-invalid={Boolean(error)}
             aria-describedby={error ? "start-conversation-error" : undefined}
-            className={`${fieldClass} resize-y`}
+            className="disabled:bg-[#F9FAFB] resize-y"
           />
 
-          {error ? (
-            <p
-              id="start-conversation-error"
-              role="alert"
-              className="mt-2 flex items-start gap-1.5 text-[13px] text-[#CC1016]"
-            >
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-              {error}
-            </p>
-          ) : null}
+          <FormError id="start-conversation-error">{error}</FormError>
 
           <div className="mt-6 grid grid-cols-2 gap-3">
             <button

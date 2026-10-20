@@ -1,4 +1,5 @@
-import { ArrowRight, Search, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
+import { SearchInput } from '@/components/form-controls';
 import Container from '@/components/ui/Container';
 import { LATEST_HUB_SECTION_ID } from '../../constant/constants';
 
@@ -26,16 +27,12 @@ const BlogsHero = ({ query, onQueryChange }) => (
       </p>
 
       <div className="mx-auto mt-5 max-w-xl sm:mt-6">
-        <div className="relative">
-          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#98A2B3]" />
-          <input
-            type="search"
-            value={query}
-            onChange={(e) => onQueryChange(e.target.value)}
-            placeholder="Search articles, topics, research..."
-            className="w-full rounded-full border border-[#E4E7EC] bg-white py-2.5 pl-11 pr-4 text-[13px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10 sm:py-3 sm:text-[14px]"
-          />
-        </div>
+        <SearchInput
+          variant="hero"
+          value={query}
+          onChange={(e) => onQueryChange(e.target.value)}
+          placeholder="Search articles, topics, research..."
+        />
       </div>
 
       <button

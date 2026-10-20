@@ -1,5 +1,6 @@
 import { Link } from "react-router";
-import { Briefcase, List, Search } from "lucide-react";
+import { Briefcase, List } from "lucide-react";
+import { SearchInput } from "@/components/form-controls";
 import CountBadge from "@/components/ui/CountBadge";
 import { levels } from "@/modules/dash/user/data/recruitment";
 import { SEARCH_MAX_LENGTH } from "@/shared/utils/urlFilters";
@@ -83,17 +84,13 @@ const RecruitmentToolbar = ({
     )}
 
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-      <div className="relative flex-1">
-        <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#98A2B3]" />
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => onQueryChange(e.target.value)}
-          maxLength={SEARCH_MAX_LENGTH}
-          placeholder="Search by title, company, or location..."
-          className="w-full rounded-lg border border-[#E4E7EC] bg-white py-2.5 pl-10 pr-4 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10"
-        />
-      </div>
+      <SearchInput
+        className="flex-1"
+        value={query}
+        onChange={(e) => onQueryChange(e.target.value)}
+        maxLength={SEARCH_MAX_LENGTH}
+        placeholder="Search by title, company, or location..."
+      />
 
       {filters ? (
         filters

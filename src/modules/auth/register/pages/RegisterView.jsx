@@ -5,14 +5,10 @@ import { toast } from "react-hot-toast";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { getSafeRedirectPath } from "@/shared/router/utils/safeRedirect";
 import { PRIVACY_PATH, TERMS_PATH } from "@/modules/public/pages/legal/constant/constants";
-import {
-  inputClass,
-  labelClass,
-  PasswordField,
-  PasswordStrength,
-} from "@/modules/auth/components/AuthFormFields";
+import { PasswordField, PasswordStrength } from "@/modules/auth/components/AuthFormFields";
 import SelectField from "../components/SelectField";
 import { COUNTRIES, PROFILE_OPTIONS } from "../constant/constants";
+import { Checkbox, FormLabel, Input, Textarea } from "@/components/form-controls";
 
 const RegisterView = () => {
   const navigate = useNavigate();
@@ -114,30 +110,30 @@ const RegisterView = () => {
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <div>
-                <label htmlFor="firstName" className={labelClass}>
+                <FormLabel variant="auth" htmlFor="firstName">
                   First Name
-                </label>
-                <input
+                </FormLabel>
+                <Input
+                  variant="auth"
                   id="firstName"
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className={inputClass}
                   placeholder="Jane"
                   disabled={loading}
                   required
                 />
               </div>
               <div>
-                <label htmlFor="lastName" className={labelClass}>
+                <FormLabel variant="auth" htmlFor="lastName">
                   Last Name
-                </label>
-                <input
+                </FormLabel>
+                <Input
+                  variant="auth"
                   id="lastName"
                   type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  className={inputClass}
                   placeholder="Doe"
                   disabled={loading}
                   required
@@ -146,15 +142,15 @@ const RegisterView = () => {
             </div>
 
             <div>
-              <label htmlFor="jobTitle" className={labelClass}>
+              <FormLabel variant="auth" htmlFor="jobTitle">
                 Job Title / Position
-              </label>
-              <input
+              </FormLabel>
+              <Input
+                variant="auth"
                 id="jobTitle"
                 type="text"
                 value={jobTitle}
                 onChange={(e) => setJobTitle(e.target.value)}
-                className={inputClass}
                 placeholder="Lab Manager"
                 disabled={loading}
                 required
@@ -162,15 +158,15 @@ const RegisterView = () => {
             </div>
 
             <div>
-              <label htmlFor="company" className={labelClass}>
+              <FormLabel variant="auth" htmlFor="company">
                 Company or Laboratory Name
-              </label>
-              <input
+              </FormLabel>
+              <Input
+                variant="auth"
                 id="company"
                 type="text"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
-                className={inputClass}
                 placeholder="Acme Labs"
                 disabled={loading}
                 required
@@ -178,16 +174,16 @@ const RegisterView = () => {
             </div>
 
             <div>
-              <label htmlFor="email" className={labelClass}>
+              <FormLabel variant="auth" htmlFor="email">
                 Email Address
-              </label>
-              <input
+              </FormLabel>
+              <Input
+                variant="auth"
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@laboratory.com"
-                className={inputClass}
                 disabled={loading}
                 required
               />
@@ -195,16 +191,16 @@ const RegisterView = () => {
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <div>
-                <label htmlFor="phone" className={labelClass}>
+                <FormLabel variant="auth" htmlFor="phone">
                   Phone Number
-                </label>
-                <input
+                </FormLabel>
+                <Input
+                  variant="auth"
                   id="phone"
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+49123456789"
-                  className={inputClass}
                   disabled={loading}
                   required
                 />
@@ -225,16 +221,17 @@ const RegisterView = () => {
             </div>
 
             <div>
-              <label htmlFor="professionalInfo" className={labelClass}>
+              <FormLabel variant="auth" htmlFor="professionalInfo">
                 Professional Information
-              </label>
-              <textarea
+              </FormLabel>
+              <Textarea
+                variant="auth"
                 id="professionalInfo"
                 rows={4}
                 value={professionalInfo}
                 onChange={(e) => setProfessionalInfo(e.target.value)}
                 placeholder="Write professional information about yourself..."
-                className={`${inputClass} resize-none`}
+                className="resize-none"
                 disabled={loading}
               />
             </div>
@@ -263,12 +260,11 @@ const RegisterView = () => {
             <PasswordStrength password={password} />
 
             <label className="flex cursor-pointer items-start gap-2.5">
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={acceptedTerms}
                 onChange={(e) => setAcceptedTerms(e.target.checked)}
                 disabled={loading}
-                className="mt-0.5 h-4 w-4 rounded border-[#D0D5DD] text-primary focus:ring-primary/20"
+                className="mt-0.5"
               />
               <span className="text-[14px] leading-[1.6] text-[#475467]">
                 I accept the Lab Unity{" "}

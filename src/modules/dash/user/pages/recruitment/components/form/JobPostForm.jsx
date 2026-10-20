@@ -3,9 +3,7 @@ import { Loader2 } from "lucide-react";
 import { Link } from "react-router";
 import { WORKPLACE_TYPE_OPTIONS } from "@/features/recruitment/jobWorkplace";
 import JobImageField from "./JobImageField";
-
-const fieldClass =
-  "w-full rounded-lg border border-[#D0D5DD] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none transition-colors placeholder:text-[#98A2B3] hover:border-[#98A2B3] focus:border-primary focus:ring-4 focus:ring-primary/10 disabled:cursor-not-allowed disabled:bg-[#F9FAFB]";
+import { Input, Select, Textarea } from "@/components/form-controls";
 
 const FormSection = ({ title, description, children }) => (
   <section className="grid gap-5 px-5 py-6 sm:px-8 sm:py-7 lg:grid-cols-[180px_minmax(0,1fr)] lg:gap-16">
@@ -52,11 +50,11 @@ const Field = ({
 );
 
 const SelectField = ({ id, value, onChange, options, disabled }) => (
-  <select
+  <Select
+    variant="prominent"
     id={id}
     value={value}
     onChange={onChange}
-    className={fieldClass}
     disabled={disabled}
   >
     {options.map((item) => (
@@ -64,7 +62,7 @@ const SelectField = ({ id, value, onChange, options, disabled }) => (
         {item}
       </option>
     ))}
-  </select>
+  </Select>
 );
 
 /**
@@ -113,25 +111,25 @@ const JobPostForm = ({
           ) : null}
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <Field id="title" label="Job title" required>
-              <input
+              <Input
+                variant="prominent"
                 id="title"
                 type="text"
                 value={form.title}
                 onChange={onFieldChange("title")}
                 placeholder="e.g. Quality Control Analyst"
-                className={fieldClass}
                 required
                 disabled={saving}
               />
             </Field>
             <Field id="company" label="Company / Laboratory" required>
-              <input
+              <Input
+                variant="prominent"
                 id="company"
                 type="text"
                 value={form.company}
                 onChange={onFieldChange("company")}
                 placeholder="e.g. EuroLab Sciences"
-                className={fieldClass}
                 required
                 disabled={saving}
               />
@@ -139,13 +137,13 @@ const JobPostForm = ({
           </div>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <Field id="location" label="Location" required>
-              <input
+              <Input
+                variant="prominent"
                 id="location"
                 type="text"
                 value={form.location}
                 onChange={onFieldChange("location")}
                 placeholder="e.g. Brussels, Belgium"
-                className={fieldClass}
                 required
                 disabled={saving}
               />
@@ -201,13 +199,13 @@ const JobPostForm = ({
         >
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <Field id="salary" label="Salary range" optional>
-              <input
+              <Input
+                variant="prominent"
                 id="salary"
                 type="text"
                 value={form.salary}
                 onChange={onFieldChange("salary")}
                 placeholder="e.g. €35,000 – €45,000"
-                className={fieldClass}
                 disabled={saving}
               />
             </Field>
@@ -233,12 +231,13 @@ const JobPostForm = ({
             required
             hint="Cover responsibilities, team, and what makes the role exciting. Line breaks, lists (- item) and **bold** are kept."
           >
-            <textarea
+            <Textarea
+              variant="prominent"
               id="description"
               value={form.description}
               onChange={onFieldChange("description")}
               rows={7}
-              className={`${fieldClass} resize-y leading-relaxed`}
+              className="resize-y leading-relaxed"
               required
               disabled={saving}
             />
@@ -249,7 +248,8 @@ const JobPostForm = ({
             required
             hint="Add one requirement per line."
           >
-            <textarea
+            <Textarea
+              variant="prominent"
               id="requirements"
               value={form.requirements}
               onChange={onFieldChange("requirements")}
@@ -257,7 +257,7 @@ const JobPostForm = ({
               placeholder={
                 "e.g.\nBSc in Chemistry\n3+ years QC experience\nHPLC proficiency"
               }
-              className={`${fieldClass} resize-y leading-relaxed`}
+              className="resize-y leading-relaxed"
               required
               disabled={saving}
             />
@@ -274,13 +274,13 @@ const JobPostForm = ({
             optional
             hint="Leave empty to receive applications directly on Lab Unity."
           >
-            <input
+            <Input
+              variant="prominent"
               id="applyLink"
               type="url"
               value={form.applyLink}
               onChange={onFieldChange("applyLink")}
               placeholder="e.g. https://careers.example.com/qc-analyst"
-              className={fieldClass}
               disabled={saving}
             />
           </Field>

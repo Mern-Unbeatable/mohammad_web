@@ -4,6 +4,7 @@ import { toast } from "react-hot-toast";
 import Avatar from "@/components/ui/Avatar";
 import { generalApi } from "@/features/dash/user/general";
 import { useAuth } from "@/modules/auth";
+import { FormLabel, Input, Textarea } from "@/components/form-controls";
 
 const postTypes = [
   {
@@ -23,11 +24,6 @@ const postTypes = [
     activeText: "text-[#E67E22]",
   },
 ];
-
-const fieldClass =
-  "w-full rounded-lg border border-[#E4E7EC] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10";
-
-const labelClass = "mb-1.5 block text-[13px] font-semibold text-deep-blue";
 
 const IMAGE_ACCEPT = "image/jpeg,image/png,image/webp,image/gif";
 const IMAGE_MIME = new Set([
@@ -61,10 +57,10 @@ const UploadZone = ({
 
   return (
     <div>
-      <p className={labelClass}>
+      <FormLabel as="p">
         {label}
         {required ? <span className="text-pink-light"> *</span> : null}
-      </p>
+      </FormLabel>
 
       <input
         ref={inputRef}
@@ -433,50 +429,48 @@ const CreateGeneralPostModal = ({
             {postType === "news" ? (
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="headline" className={labelClass}>
+                  <FormLabel htmlFor="headline">
                     Headline<span className="text-pink-light"> *</span>
-                  </label>
-                  <input
+                  </FormLabel>
+                  <Input
                     id="headline"
                     type="text"
                     value={headline}
                     onChange={(e) => setHeadline(e.target.value)}
                     placeholder="e.g. FDA Issues New Draft Guidance on Analytical Procedures"
-                    className={fieldClass}
                     required
                     disabled={busy}
                   />
                 </div>
                 <div>
-                  <label htmlFor="summary" className={labelClass}>
+                  <FormLabel htmlFor="summary">
                     Summary / Description
                     <span className="text-pink-light"> *</span>
-                  </label>
-                  <textarea
+                  </FormLabel>
+                  <Textarea
                     id="summary"
                     value={summary}
                     onChange={(e) => setSummary(e.target.value)}
                     rows={3}
                     placeholder="Write a brief summary of the news article..."
-                    className={`${fieldClass} resize-y`}
+                    className="resize-y"
                     required
                     disabled={busy}
                   />
                 </div>
                 <div>
-                  <label htmlFor="source" className={labelClass}>
+                  <FormLabel htmlFor="source">
                     Source / Publisher{" "}
                     <span className="font-normal text-[#98A2B3]">
                       (optional)
                     </span>
-                  </label>
-                  <input
+                  </FormLabel>
+                  <Input
                     id="source"
                     type="text"
                     value={source}
                     onChange={(e) => setSource(e.target.value)}
                     placeholder="e.g. EMA, FDA, Nature, LabManager"
-                    className={fieldClass}
                     disabled={busy}
                   />
                 </div>
@@ -494,34 +488,33 @@ const CreateGeneralPostModal = ({
             ) : (
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="docTitle" className={labelClass}>
+                  <FormLabel htmlFor="docTitle">
                     Document Title<span className="text-pink-light"> *</span>
-                  </label>
-                  <input
+                  </FormLabel>
+                  <Input
                     id="docTitle"
                     type="text"
                     value={docTitle}
                     onChange={(e) => setDocTitle(e.target.value)}
                     placeholder="e.g. HPLC Method Validation SOP v2.1"
-                    className={fieldClass}
                     required
                     disabled={busy}
                   />
                 </div>
                 <div>
-                  <label htmlFor="description" className={labelClass}>
+                  <FormLabel htmlFor="description">
                     Description{" "}
                     <span className="font-normal text-[#98A2B3]">
                       (optional)
                     </span>
-                  </label>
-                  <textarea
+                  </FormLabel>
+                  <Textarea
                     id="description"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={3}
                     placeholder="Briefly describe what this document covers..."
-                    className={`${fieldClass} resize-y`}
+                    className="resize-y"
                     disabled={busy}
                   />
                 </div>
@@ -538,11 +531,11 @@ const CreateGeneralPostModal = ({
                 />
                 {!documentFile && !documentUrl ? (
                   <div>
-                    <label htmlFor="documentUrl" className={labelClass}>
+                    <FormLabel htmlFor="documentUrl">
                       Or paste Document URL
                       <span className="text-pink-light"> *</span>
-                    </label>
-                    <input
+                    </FormLabel>
+                    <Input
                       id="documentUrl"
                       type="url"
                       value={documentUrl}
@@ -552,7 +545,6 @@ const CreateGeneralPostModal = ({
                         setDocumentFile(null);
                       }}
                       placeholder="https://example.com/document.pdf"
-                      className={fieldClass}
                       required={!documentFile}
                       disabled={busy}
                     />

@@ -2,11 +2,7 @@ import { useEffect, useState } from 'react';
 import { Loader2, X } from 'lucide-react';
 import ChatListingCard from '@/components/data-display/Messenger/ChatListingCard';
 import RecipientPicker from '@/modules/messages/components/recipients/RecipientPicker';
-
-const fieldClass =
-  'w-full rounded-lg border border-[#E4E7EC] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10';
-
-const labelClass = 'mb-1.5 block text-[13px] font-semibold text-deep-blue';
+import { FormLabel, Textarea } from '@/components/form-controls';
 
 const NewMessageForm = ({
   onClose,
@@ -81,9 +77,9 @@ const NewMessageForm = ({
           className="overflow-y-auto px-5 py-5 pb-[max(1.25rem,env(safe-area-inset-bottom))]"
         >
           <div className="mb-4">
-            <p className={labelClass}>
+            <FormLabel as="p">
               Select User<span className="text-pink-light"> *</span>
-            </p>
+            </FormLabel>
             <RecipientPicker
               recipients={recipients}
               loading={recipientsLoading}
@@ -94,13 +90,13 @@ const NewMessageForm = ({
           </div>
 
           <div>
-            <label htmlFor="new-message-body" className={labelClass}>
+            <FormLabel htmlFor="new-message-body">
               Message{listing ? null : <span className="text-pink-light"> *</span>}
-            </label>
+            </FormLabel>
             {listing ? (
               <ChatListingCard listing={listing} onRemove={onRemoveListing} className="mb-2" />
             ) : null}
-            <textarea
+            <Textarea
               id="new-message-body"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
@@ -109,7 +105,7 @@ const NewMessageForm = ({
               placeholder={
                 listing ? 'Hi, is this still available?' : 'Write your message...'
               }
-              className={`${fieldClass} resize-y`}
+              className="resize-y"
               required={!listing}
             />
           </div>

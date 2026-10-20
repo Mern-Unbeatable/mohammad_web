@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { ImagePlus, X } from 'lucide-react';
 import { IMAGE_ACCEPT, MAX_PHOTOS } from '../../constant/constants';
-import { labelClass } from './formStyles';
+import { FormLabel } from '@/components/form-controls';
 
 const PhotoPicker = ({ photos, onPick, onRemove, disabled }) => {
   const fileInputRef = useRef(null);
@@ -9,12 +9,12 @@ const PhotoPicker = ({ photos, onPick, onRemove, disabled }) => {
 
   return (
     <div>
-      <p className={labelClass}>
+      <FormLabel as="p">
         Photos{' '}
         <span className="font-normal text-[#98A2B3]">
           (optional · up to {MAX_PHOTOS} · JPG, PNG, WebP, GIF)
         </span>
-      </p>
+      </FormLabel>
 
       <input
         ref={fileInputRef}

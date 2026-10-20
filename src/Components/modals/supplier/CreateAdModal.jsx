@@ -32,6 +32,7 @@ import {
   defaultDurationId,
 } from '@/features/dash/supplier/advertisements';
 import { panelPrimaryBtn, panelSecondaryBtn } from '@/components/navigation/panel/panelPageTheme';
+import { FormLabel, Input } from '@/components/form-controls';
 
 const STEPPER_STEPS_INITIAL = [
   { id: 'type', label: 'Type' },
@@ -65,11 +66,6 @@ const CATEGORY_ICONS = {
   promo: Tag,
   webinar: GraduationCap,
 };
-
-const fieldClass =
-  'w-full rounded-lg border border-[#E4E7EC] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10 sm:text-[15px]';
-
-const labelClass = 'mb-1.5 block text-[13px] font-semibold text-deep-blue sm:text-[14px]';
 
 const defaultForm = {
   categoryId: 'product',
@@ -501,10 +497,10 @@ const DetailsStep = ({ categoryId, form, onChange }) => {
       <CategoryBadge categoryId={categoryId} />
 
       <div>
-        <label htmlFor="ad-title" className={labelClass}>
+        <FormLabel htmlFor="ad-title" className="sm:text-[14px]">
           Advertisement Title <span className="text-pink-light">*</span>
-        </label>
-        <input
+        </FormLabel>
+        <Input
           id="ad-title"
           type="text"
           value={form.title}
@@ -514,7 +510,7 @@ const DetailsStep = ({ categoryId, form, onChange }) => {
               ? 'Advanced Mass Spectrometry Webinar 2026'
               : 'e.g. ProSpec Elite Series Spectrophotometer'
           }
-          className={fieldClass}
+          className="sm:text-[15px]"
         />
       </div>
 
@@ -522,72 +518,72 @@ const DetailsStep = ({ categoryId, form, onChange }) => {
         <>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label htmlFor="event-date" className={labelClass}>
+              <FormLabel htmlFor="event-date" className="sm:text-[14px]">
                 Event Date <span className="text-pink-light">*</span>
-              </label>
-              <input
+              </FormLabel>
+              <Input
                 id="event-date"
                 type="date"
                 value={form.eventDate}
                 onChange={(e) => onChange('eventDate', e.target.value)}
-                className={fieldClass}
+                className="sm:text-[15px]"
               />
             </div>
             <div>
-              <label htmlFor="event-time" className={labelClass}>
+              <FormLabel htmlFor="event-time" className="sm:text-[14px]">
                 Event Time <span className="text-pink-light">*</span>
-              </label>
-              <input
+              </FormLabel>
+              <Input
                 id="event-time"
                 type="time"
                 value={form.eventTime}
                 onChange={(e) => onChange('eventTime', e.target.value)}
-                className={fieldClass}
+                className="sm:text-[15px]"
               />
             </div>
           </div>
           <div>
-            <label htmlFor="location" className={labelClass}>
+            <FormLabel htmlFor="location" className="sm:text-[14px]">
               Location / Online
-            </label>
-            <input
+            </FormLabel>
+            <Input
               id="location"
               type="text"
               value={form.location}
               onChange={(e) => onChange('location', e.target.value)}
               placeholder="Online (Zoom) / Dublin Convention Centre"
-              className={fieldClass}
+              className="sm:text-[15px]"
             />
           </div>
           <div>
-            <label htmlFor="price" className={labelClass}>
+            <FormLabel htmlFor="price" className="sm:text-[14px]">
               Price
-            </label>
+            </FormLabel>
             <div className="relative">
               <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[14px] font-medium text-[#64748B]">
                 $
               </span>
-              <input
+              <Input
                 id="price"
                 type="text"
                 value={form.price}
                 onChange={(e) => onChange('price', e.target.value)}
                 placeholder="60"
-                className={`${fieldClass} pl-8`}
+                className="sm:text-[15px] pl-8"
               />
             </div>
           </div>
           <div>
-            <label htmlFor="organizer" className={labelClass}>
+            <FormLabel htmlFor="organizer" className="sm:text-[14px]">
               Organizer
-            </label>
-            <input
+            </FormLabel>
+            <Input
               id="organizer"
               type="text"
               value={form.organizer}
               onChange={(e) => onChange('organizer', e.target.value)}
               placeholder="BioLab Corp"
-              className={fieldClass}
+              className="sm:text-[15px]"
             />
           </div>
         </>
@@ -595,40 +591,40 @@ const DetailsStep = ({ categoryId, form, onChange }) => {
 
       {categoryId === 'service' ? (
         <div>
-          <label htmlFor="contact" className={labelClass}>
+          <FormLabel htmlFor="contact" className="sm:text-[14px]">
             Contact Information
-          </label>
-          <input
+          </FormLabel>
+          <Input
             id="contact"
             type="text"
             value={form.contact}
             onChange={(e) => onChange('contact', e.target.value)}
             placeholder="email@company.com / +353 1 234 5678"
-            className={fieldClass}
+            className="sm:text-[15px]"
           />
         </div>
       ) : null}
 
       {(categoryId === 'product' || categoryId === 'promo') && (
         <div>
-          <label htmlFor="price" className={labelClass}>
+          <FormLabel htmlFor="price" className="sm:text-[14px]">
             {categoryId === 'promo' ? 'Offer Price' : 'Price (€)'}
-          </label>
-          <input
+          </FormLabel>
+          <Input
             id="price"
             type="text"
             value={form.price}
             onChange={(e) => onChange('price', e.target.value)}
             placeholder={categoryId === 'product' ? '8200 per unit' : '60'}
-            className={fieldClass}
+            className="sm:text-[15px]"
           />
         </div>
       )}
 
       <div>
-        <label htmlFor="description" className={labelClass}>
+        <FormLabel htmlFor="description" className="sm:text-[14px]">
           Description <span className="text-pink-light">*</span>
-        </label>
+        </FormLabel>
         <RichTextArea
           id="description"
           value={form.description}
@@ -672,7 +668,7 @@ const MediaStep = ({ imageName, videoName, onImageSelect, onVideoSelect }) => (
     </label>
 
     <div>
-      <p className={`${labelClass} mb-2`}>Video (Optional)</p>
+      <FormLabel as="p" className="sm:text-[14px] mb-2">Video (Optional)</FormLabel>
       <label className="flex w-full cursor-pointer items-center gap-3 rounded-xl border border-[#E4E7EC] bg-white px-4 py-4 hover:border-primary hover:bg-secondary/10">
         <Video className="h-5 w-5 shrink-0 text-[#98A2B3]" />
         <div className="min-w-0 text-left">
@@ -832,23 +828,23 @@ const PaymentStep = ({ total }) => (
       <p className="text-[24px] font-bold text-deep-blue">{total}</p>
     </div>
     <div>
-      <label htmlFor="card-number" className={labelClass}>
+      <FormLabel htmlFor="card-number" className="sm:text-[14px]">
         Card Number
-      </label>
-      <input id="card-number" type="text" placeholder="4242 4242 4242 4242" className={fieldClass} />
+      </FormLabel>
+      <Input id="card-number" type="text" placeholder="4242 4242 4242 4242" className="sm:text-[15px]" />
     </div>
     <div className="grid grid-cols-2 gap-3">
       <div>
-        <label htmlFor="expiry" className={labelClass}>
+        <FormLabel htmlFor="expiry" className="sm:text-[14px]">
           Expiry
-        </label>
-        <input id="expiry" type="text" placeholder="MM/YY" className={fieldClass} />
+        </FormLabel>
+        <Input id="expiry" type="text" placeholder="MM/YY" className="sm:text-[15px]" />
       </div>
       <div>
-        <label htmlFor="cvc" className={labelClass}>
+        <FormLabel htmlFor="cvc" className="sm:text-[14px]">
           CVC
-        </label>
-        <input id="cvc" type="text" placeholder="123" className={fieldClass} />
+        </FormLabel>
+        <Input id="cvc" type="text" placeholder="123" className="sm:text-[15px]" />
       </div>
     </div>
   </div>

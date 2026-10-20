@@ -1,44 +1,20 @@
-import { Camera, Eye, EyeOff, Loader2 } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { Camera, Loader2 } from 'lucide-react';
+import { useRef } from 'react';
 import Avatar from '@/components/ui/Avatar';
 import Card from '@/components/ui/Card';
 import PanelPage from '@/components/navigation/panel/PanelPage';
 import PanelPageHeader from '@/components/navigation/panel/PanelPageHeader';
 import { panelPrimaryBtn } from '@/components/navigation/panel/panelPageTheme';
+import { FormLabel, Input, PasswordInput } from '@/components/form-controls';
 
-const fieldClass =
-  'w-full rounded-lg border border-[#E4E7EC] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10';
-
-const labelClass = 'mb-1.5 block text-[13px] font-semibold text-deep-blue';
-
-const PasswordField = ({ id, label, value, onChange }) => {
-  const [visible, setVisible] = useState(false);
-
-  return (
-    <div>
-      <label htmlFor={id} className={labelClass}>
-        {label}
-      </label>
-      <div className="relative">
-        <input
-          id={id}
-          type={visible ? 'text' : 'password'}
-          value={value}
-          onChange={onChange}
-          className={`${fieldClass} pr-10`}
-        />
-        <button
-          type="button"
-          onClick={() => setVisible((v) => !v)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-[#98A2B3] hover:text-deep-blue"
-          aria-label={visible ? 'Hide password' : 'Show password'}
-        >
-          {visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-        </button>
-      </div>
-    </div>
-  );
-};
+const PasswordField = ({ id, label, value, onChange }) => (
+  <div>
+    <FormLabel htmlFor={id}>
+      {label}
+    </FormLabel>
+    <PasswordInput id={id} value={value} onChange={onChange} />
+  </div>
+);
 
 const IMAGE_ACCEPT = 'image/jpeg,image/png,image/webp';
 
@@ -127,27 +103,25 @@ const AdminAccountForm = ({
           className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2"
         >
           <div>
-            <label htmlFor="admin-name" className={labelClass}>
+            <FormLabel htmlFor="admin-name">
               Name
-            </label>
-            <input
+            </FormLabel>
+            <Input
               id="admin-name"
               type="text"
               value={profileValues.name}
               onChange={(e) => onProfileChange('name', e.target.value)}
-              className={fieldClass}
             />
           </div>
           <div>
-            <label htmlFor="admin-email" className={labelClass}>
+            <FormLabel htmlFor="admin-email">
               Email
-            </label>
-            <input
+            </FormLabel>
+            <Input
               id="admin-email"
               type="email"
               value={profileValues.email}
               onChange={(e) => onProfileChange('email', e.target.value)}
-              className={fieldClass}
             />
           </div>
           <div className="sm:col-span-2 flex justify-end">

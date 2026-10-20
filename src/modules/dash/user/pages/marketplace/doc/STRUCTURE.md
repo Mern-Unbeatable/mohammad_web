@@ -38,9 +38,9 @@ marketplace/
 │   ├── form/                 Create / edit form
 │   │   ├── ListingForm.jsx          All fields, seller line, submit button
 │   │   ├── SelectField.jsx          Labelled select
-│   │   ├── PhotoPicker.jsx          Hidden file input, previews, add / remove
-│   │   └── formStyles.js            fieldClass, labelClass
-│   │                         (ListingFormLoading: @/components/loader/spinners)
+│   │   └── PhotoPicker.jsx          Hidden file input, previews, add / remove
+│   │                         (inputs / labels: @/components/form-controls;
+│   │                          ListingFormLoading: @/components/loader/spinners)
 │   │
 │   ├── layout/
 │   │   └── MarketplacePage.jsx      <main> + Container, with an `overlays` slot for modals

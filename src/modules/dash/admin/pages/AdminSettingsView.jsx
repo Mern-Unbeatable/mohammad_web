@@ -20,9 +20,7 @@ import {
   DEFAULT_MARKETPLACE_CATEGORIES,
   DEFAULT_GENERAL_CATEGORIES,
 } from "@/features/dash/admin/settings";
-
-const inputClass =
-  "w-full rounded-lg border border-[#D0D5DD] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 lg:text-[15px]";
+import { Input } from "@/components/form-controls";
 
 const CategoryTag = ({ label, onRemove }) => (
   <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-green-secondary bg-green-secondary/40 px-3 py-1.5 text-[12px] font-semibold text-green-primary sm:text-[13px] lg:text-[14px]">
@@ -47,13 +45,13 @@ const PriceField = ({ id, label, value, onChange }) => (
       {label}
     </label>
     <div className="relative">
-      <input
+      <Input
+        variant="settings"
         id={id}
         type="text"
         inputMode="decimal"
         value={value}
         onChange={onChange}
-        className={inputClass}
       />
       <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[13px] text-[#64748B]">
         €
@@ -306,11 +304,11 @@ const AdminSettingsForm = ({ settings }) => {
                   >
                     Day
                   </label>
-                  <input
+                  <Input
+                    variant="settings"
                     type="text"
                     value={tier.label}
                     readOnly
-                    className={inputClass}
                   />
                 </div>
                 <PriceField
@@ -363,12 +361,12 @@ const AdminSettingsForm = ({ settings }) => {
             </button>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <input
+            <Input
+              variant="settings"
               type="text"
               value={newMarketplaceCategory}
               onChange={(event) => setNewMarketplaceCategory(event.target.value)}
               placeholder="New category"
-              className={inputClass}
             />
             <button
               type="button"
@@ -422,12 +420,12 @@ const AdminSettingsForm = ({ settings }) => {
             </button>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <input
+            <Input
+              variant="settings"
               type="text"
               value={newGeneralCategory}
               onChange={(event) => setNewGeneralCategory(event.target.value)}
               placeholder="New category"
-              className={inputClass}
             />
             <button
               type="button"

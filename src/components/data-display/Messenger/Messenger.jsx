@@ -14,11 +14,11 @@ import {
   Paperclip,
   Pencil,
   Plus,
-  Search,
   Send,
   Trash2,
   X,
 } from "lucide-react";
+import { SearchInput } from "@/components/form-controls";
 import Avatar from "@/components/ui/Avatar";
 import Dots from "@/components/ui/Dots";
 import {
@@ -615,16 +615,12 @@ const Messenger = ({
         </div>
 
         <div className="shrink-0 border-b border-[#E4E7EC] p-3 sm:p-4">
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#98A2B3]" />
-            <input
-              type="search"
-              value={query}
-              onChange={(e) => onSearchChange?.(e.target.value)}
-              placeholder="Search conversations..."
-              className="w-full rounded-full border border-[#E4E7EC] bg-[#F9FAFB] py-2.5 pl-10 pr-4 text-[13px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10"
-            />
-          </div>
+          <SearchInput
+            variant="pill"
+            value={query}
+            onChange={(e) => onSearchChange?.(e.target.value)}
+            placeholder="Search conversations..."
+          />
 
           {showNewMessageButton ? (
             <button

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Check, Loader2, Search } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
+import { SearchInput } from "@/components/form-controls";
 import Avatar from "@/components/ui/Avatar";
 import { emptyResultsText } from "../../utils/recipientPickerText";
 
@@ -45,16 +46,12 @@ const RecipientPicker = ({
 
   return (
     <div>
-      <div className="relative">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#98A2B3]" />
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search by name or email..."
-          className="w-full rounded-lg border border-[#E4E7EC] bg-white py-2.5 pl-9 pr-3 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10"
-        />
-      </div>
+      <SearchInput
+        variant="compact"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search by name or email..."
+      />
 
       <ul
         className="mt-2 max-h-[400px] space-y-0.5 overflow-y-auto px-2"

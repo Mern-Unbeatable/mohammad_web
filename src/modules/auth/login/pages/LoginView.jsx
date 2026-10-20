@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { getSafeRedirectPath } from '@/shared/router/utils/safeRedirect';
-import { inputClass, labelClass } from '@/modules/auth/components/AuthFormFields';
 import SuspensionNotice from '../components/SuspensionNotice';
+import { Checkbox, FormLabel, Input, PasswordInput } from '@/components/form-controls';
 
 const LoginView = () => {
   const navigate = useNavigate();
@@ -58,10 +58,11 @@ const LoginView = () => {
         <div className="rounded-xl bg-white p-6 sm:p-8">
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className={labelClass}>
+              <FormLabel variant="auth" htmlFor="email">
                 Email Address
-              </label>
-              <input
+              </FormLabel>
+              <Input
+                variant="auth"
                 id="email"
                 type="email"
                 value={email}
@@ -69,7 +70,6 @@ const LoginView = () => {
                   setEmail(e.target.value);
                   setSuspension(null);
                 }}
-                className={inputClass}
                 placeholder="Enter Your email"
                 disabled={loading}
                 required
@@ -77,41 +77,28 @@ const LoginView = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className={labelClass}>
+              <FormLabel variant="auth" htmlFor="password">
                 Password
-              </label>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className={`${inputClass} pr-10`}
-                  placeholder="Enter your password"
-                  disabled={loading}
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  disabled={loading}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#98A2B3] hover:text-[#64748B]"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
+              </FormLabel>
+              <PasswordInput
+                variant="auth"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                visible={showPassword}
+                onToggleVisible={() => setShowPassword((prev) => !prev)}
+                placeholder="Enter your password"
+                disabled={loading}
+                required
+              />
             </div>
-
 
             <div className="flex items-center justify-between gap-4">
               <label className="flex cursor-pointer items-center gap-2">
-                <input
-                  type="checkbox"
+                <Checkbox
                   checked={keepSignedIn}
                   onChange={(e) => setKeepSignedIn(e.target.checked)}
                   disabled={loading}
-                  className="h-4 w-4 rounded border-[#D0D5DD] text-primary focus:ring-primary/20"
                 />
                 <span className="text-[14px] text-[#475467]">Keep me signed in</span>
               </label>

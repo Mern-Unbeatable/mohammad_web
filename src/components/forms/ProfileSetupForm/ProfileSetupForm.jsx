@@ -2,11 +2,7 @@ import { useRef } from 'react';
 import { Camera } from 'lucide-react';
 import Avatar from '@/components/ui/Avatar';
 import Card from '@/components/ui/Card';
-
-const fieldClass =
-  'w-full rounded-lg border border-[#E4E7EC] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10';
-
-const labelClass = 'mb-1.5 block text-[13px] font-semibold text-deep-blue';
+import { FormLabel, Input, Select, Textarea } from '@/components/form-controls';
 
 const IMAGE_ACCEPT = 'image/jpeg,image/png,image/webp';
 
@@ -137,70 +133,65 @@ const ProfileSetupForm = ({
     <form onSubmit={onSubmit} className="space-y-5 px-5 py-6 sm:px-8 sm:py-8">
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="firstName" className={labelClass}>
+          <FormLabel htmlFor="firstName">
             First Name
-          </label>
-          <input
+          </FormLabel>
+          <Input
             id="firstName"
             type="text"
             value={values.firstName}
             onChange={(e) => onChange('firstName', e.target.value)}
-            className={fieldClass}
             required
           />
         </div>
         <div>
-          <label htmlFor="lastName" className={labelClass}>
+          <FormLabel htmlFor="lastName">
             Last Name
-          </label>
-          <input
+          </FormLabel>
+          <Input
             id="lastName"
             type="text"
             value={values.lastName}
             onChange={(e) => onChange('lastName', e.target.value)}
-            className={fieldClass}
             required
           />
         </div>
       </div>
 
       <div>
-        <label htmlFor="title" className={labelClass}>
+        <FormLabel htmlFor="title">
           Job Title / Position
-        </label>
-        <input
+        </FormLabel>
+        <Input
           id="title"
           type="text"
           value={values.title}
           onChange={(e) => onChange('title', e.target.value)}
-          className={fieldClass}
           required
         />
       </div>
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="company" className={labelClass}>
+          <FormLabel htmlFor="company">
             Company / Laboratory Name
-          </label>
-          <input
+          </FormLabel>
+          <Input
             id="company"
             type="text"
             value={values.company}
             onChange={(e) => onChange('company', e.target.value)}
-            className={fieldClass}
             required
           />
         </div>
         <div>
-          <label htmlFor="country" className={labelClass}>
+          <FormLabel htmlFor="country">
             Country
-          </label>
-          <select
+          </FormLabel>
+          <Select
             id="country"
             value={values.country}
             onChange={(e) => onChange('country', e.target.value)}
-            className={fieldClass}
             required
           >
             {countries.map((country) => (
@@ -208,49 +199,48 @@ const ProfileSetupForm = ({
                 {country}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="email" className={labelClass}>
+          <FormLabel htmlFor="email">
             Email
-          </label>
-          <input
+          </FormLabel>
+          <Input
             id="email"
             type="email"
             value={values.email}
             readOnly
-            className={`${fieldClass} cursor-not-allowed bg-[#F9FAFB] text-[#64748B]`}
+            className="cursor-not-allowed bg-[#F9FAFB] text-[#64748B]"
             title="Email cannot be changed here"
           />
         </div>
         <div>
-          <label htmlFor="phone" className={labelClass}>
+          <FormLabel htmlFor="phone">
             Phone number
-          </label>
-          <input
+          </FormLabel>
+          <Input
             id="phone"
             type="tel"
             value={values.phone}
             onChange={(e) => onChange('phone', e.target.value)}
-            className={fieldClass}
             required
           />
         </div>
       </div>
 
       <div>
-        <label htmlFor="about" className={labelClass}>
+        <FormLabel htmlFor="about">
           Professional information
-        </label>
-        <textarea
+        </FormLabel>
+        <Textarea
           id="about"
           rows={5}
           value={values.about}
           onChange={(e) => onChange('about', e.target.value)}
-          className={`${fieldClass} resize-y`}
+          className="resize-y"
           required
         />
       </div>

@@ -16,10 +16,7 @@ import {
   updateBlogPost,
 } from "@/features/dash/admin/blogs";
 import { BLOG_CATEGORY_OPTIONS } from "@/features/dash/admin/blogs/blogsMappers";
-
-const labelClass = "mb-1.5 block text-[14px] font-medium text-deep-blue";
-const inputClass =
-  "w-full rounded-lg border border-[#D0D5DD] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none transition-colors placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/15";
+import { FormLabel, Input, Select, Textarea } from "@/components/form-controls";
 
 const IMAGE_ACCEPT = "image/jpeg,image/png,image/webp,image/gif";
 const IMAGE_MIME = new Set([
@@ -160,30 +157,30 @@ const AdminCreateBlogView = () => {
       <Card className="p-4 sm:p-5">
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="blog-headline" className={labelClass}>
+            <FormLabel variant="editor" htmlFor="blog-headline">
               Headline
-            </label>
-            <input
+            </FormLabel>
+            <Input
+              variant="editor"
               id="blog-headline"
               type="text"
               value={title}
               onChange={(event) => setTitle(event.target.value)}
               placeholder="Write title"
-              className={inputClass}
               required
               disabled={busy}
             />
           </div>
 
           <div>
-            <label htmlFor="blog-category" className={labelClass}>
+            <FormLabel variant="editor" htmlFor="blog-category">
               Category
-            </label>
-            <select
+            </FormLabel>
+            <Select
+              variant="editor"
               id="blog-category"
               value={category}
               onChange={(event) => setCategory(event.target.value)}
-              className={inputClass}
               required
               disabled={busy}
             >
@@ -192,43 +189,45 @@ const AdminCreateBlogView = () => {
                   {option}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
 
           <div>
-            <label htmlFor="blog-description" className={labelClass}>
+            <FormLabel variant="editor" htmlFor="blog-description">
               Excerpt
-            </label>
-            <textarea
+            </FormLabel>
+            <Textarea
+              variant="editor"
               id="blog-description"
               value={excerpt}
               onChange={(event) => setExcerpt(event.target.value)}
               placeholder="Short summary shown on cards"
               rows={3}
-              className={`${inputClass} resize-none`}
+              className="resize-none"
               required
               disabled={busy}
             />
           </div>
 
           <div>
-            <label htmlFor="blog-body" className={labelClass}>
+            <FormLabel variant="editor" htmlFor="blog-body">
               Body
-            </label>
-            <textarea
+            </FormLabel>
+            <Textarea
+              variant="editor"
               id="blog-body"
               value={body}
               onChange={(event) => setBody(event.target.value)}
               placeholder="Full article content"
               rows={8}
-              className={`${inputClass} resize-y`}
+              className="resize-y"
               required
               disabled={busy}
             />
           </div>
 
           <div>
-            <p className={labelClass}>Cover image</p>
+            <FormLabel as="p" variant="editor">Cover image</FormLabel>
             <input
               ref={fileInputRef}
               type="file"
@@ -288,10 +287,11 @@ const AdminCreateBlogView = () => {
 
             {!imageFile ? (
               <div className="mt-3">
-                <label htmlFor="blog-image-url" className={labelClass}>
+                <FormLabel variant="editor" htmlFor="blog-image-url">
                   Or paste image URL
-                </label>
-                <input
+                </FormLabel>
+                <Input
+                  variant="editor"
                   id="blog-image-url"
                   type="url"
                   value={imageUrl}
@@ -303,7 +303,6 @@ const AdminCreateBlogView = () => {
                     setImagePreview(next.trim());
                   }}
                   placeholder="https://…"
-                  className={inputClass}
                   disabled={busy}
                 />
               </div>
@@ -312,16 +311,16 @@ const AdminCreateBlogView = () => {
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label htmlFor="blog-read-time" className={labelClass}>
+              <FormLabel variant="editor" htmlFor="blog-read-time">
                 Read time
-              </label>
-              <input
+              </FormLabel>
+              <Input
+                variant="editor"
                 id="blog-read-time"
                 type="text"
                 value={readTime}
                 onChange={(event) => setReadTime(event.target.value)}
                 placeholder="5 min read"
-                className={inputClass}
                 disabled={busy}
               />
             </div>

@@ -15,7 +15,7 @@ modules/auth/
 │   ├── ResetPasswordView.jsx
 │   └── ContactSupportView.jsx
 ├── components/
-│   └── AuthFormFields.jsx        # input / label classes, PasswordField, PasswordStrength
+│   └── AuthFormFields.jsx        # PasswordField, PasswordStrength (built on @/components/form-controls, variant "auth")
 ├── hooks/
 │   └── useAuth.js                # user, role, homePath + login / register / logout / password actions
 ├── session/

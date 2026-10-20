@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
+import { Textarea } from '@/components/form-controls';
 
 const ReasonModal = ({
   open,
@@ -68,14 +69,15 @@ const ReasonModal = ({
             <label htmlFor="reason-modal-input" className="mb-1.5 block text-[14px] font-medium text-deep-blue">
               Reason <span className="text-pink-light">*</span>
             </label>
-            <textarea
+            <Textarea
+              variant="editor"
               id="reason-modal-input"
               value={reason}
               onChange={(event) => setReason(event.target.value)}
               placeholder={placeholder}
               required
               rows={5}
-              className="w-full resize-none rounded-lg border border-[#D0D5DD] px-3.5 py-2.5 text-[14px] text-deep-blue outline-none transition-colors placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/15"
+              className="resize-none"
             />
           </div>
 

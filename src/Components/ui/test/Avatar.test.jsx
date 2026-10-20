@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import Avatar from "./Avatar";
+import Avatar from "../Avatar";
 
 const render = (props) => renderToStaticMarkup(<Avatar {...props} />);
 const hasIcon = (html) => html.includes("<svg");

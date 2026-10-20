@@ -1,4 +1,5 @@
 import Card from "@/components/ui/Card";
+import { Textarea } from "@/components/form-controls";
 
 /** In-app application form with an optional cover letter. */
 const ApplyForm = ({ coverLetter, onCoverLetterChange, applying, onSubmit, onCancel }) => (
@@ -10,12 +11,12 @@ const ApplyForm = ({ coverLetter, onCoverLetterChange, applying, onSubmit, onCan
           Optionally include a short cover letter with your application.
         </p>
       </div>
-      <textarea
+      <Textarea
         value={coverLetter}
         onChange={(e) => onCoverLetterChange(e.target.value)}
         rows={4}
         placeholder="Cover letter (optional)"
-        className="w-full resize-y rounded-lg border border-[#E4E7EC] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10"
+        className="resize-y"
       />
       <div className="flex flex-wrap gap-2">
         <button

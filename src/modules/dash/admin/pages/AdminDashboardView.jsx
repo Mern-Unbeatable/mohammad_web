@@ -8,6 +8,7 @@ import {
   LineChartCardSkeleton,
 } from "@/components/loader";
 import PanelPage from "@/components/navigation/panel/PanelPage";
+import { Select } from "@/components/form-controls";
 import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
 import {
   fetchAdminDashboardStats,
@@ -173,17 +174,17 @@ const AdminDashboardView = () => {
         />
         <label className="relative inline-flex min-w-[120px] shrink-0 items-center self-start">
           <span className="sr-only">Statistics year</span>
-          <select
+          <Select
+            variant="compact"
             value={chartYear}
             onChange={(e) => setChartYear(e.target.value)}
-            className="h-9 w-full cursor-pointer appearance-none rounded-lg border border-[#E4E7EC] bg-white py-1.5 pl-3 pr-8 text-[13px] font-medium text-deep-blue outline-none focus:border-primary"
           >
             {YEAR_OPTIONS.map((year) => (
               <option key={year} value={year}>
                 {year}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
       </div>
 
