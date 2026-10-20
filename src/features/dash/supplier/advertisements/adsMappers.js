@@ -1,4 +1,5 @@
 /** Map API advertisements onto supplier list / detail UI props. */
+import { formatDate, formatIsoDate } from "@/shared/utils/date";
 
 const STATUS_LABEL = {
   PENDING: "Pending",
@@ -54,21 +55,11 @@ const initialsFromName = (name = "") =>
     .join("") || "AD";
 
 export function formatUploadDate(dateValue) {
-  if (!dateValue) return "—";
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return "—";
-  return date.toISOString().slice(0, 10);
+  return formatIsoDate(dateValue, { fallback: "—" });
 }
 
 export function formatDisplayDate(dateValue) {
-  if (!dateValue) return "—";
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
+  return formatDate(dateValue, { format: "short", locale: "en-GB", fallback: "—" });
 }
 
 export function formatPrice(price) {

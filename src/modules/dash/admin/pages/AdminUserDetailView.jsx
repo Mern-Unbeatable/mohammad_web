@@ -23,15 +23,9 @@ import {
 import ProfileActivityTabs from "@/modules/dash/admin/components/ProfileActivityTabs";
 import { toProfilePageUser } from "@/features/dash/user/profile";
 import { fetchAuthorPosts, toFeedPostModel } from "@/features/dash/user/feed";
+import { formatDate as formatSharedDate } from "@/shared/utils/date";
 
-const formatDate = (value) =>
-  value
-    ? new Date(value).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      })
-    : "—";
+const formatDate = (value) => formatSharedDate(value, { format: "short", fallback: "—" });
 
 const STATUS_CLASS = {
   ACTIVE: "bg-green-secondary text-green-primary",

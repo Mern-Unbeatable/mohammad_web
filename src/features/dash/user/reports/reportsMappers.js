@@ -1,4 +1,5 @@
 /** Map user-filed reports onto list UI props. */
+import { formatDate } from "@/shared/utils/date";
 
 const STATUS_LABEL = {
   PENDING: "Pending",
@@ -45,10 +46,7 @@ const TARGET_LABEL = {
 };
 
 export function formatReportDate(dateValue) {
-  if (!dateValue) return "—";
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleDateString("en-GB");
+  return formatDate(dateValue, { locale: "en-GB", fallback: "—" });
 }
 
 export function toMyReportModel(report) {

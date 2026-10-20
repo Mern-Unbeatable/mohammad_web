@@ -5,6 +5,7 @@ import {
   workplaceLabel,
   workplaceToApi,
 } from "@/features/recruitment/jobWorkplace";
+import { formatPostedAgo } from "@/features/recruitment/postedAgo";
 
 const LEVEL_LABEL = {
   ENTRY_LEVEL: "Entry-level",
@@ -53,24 +54,7 @@ export const employmentToApi = (label) => EMPLOYMENT_API[label] || "FULL_TIME";
 const PLACEHOLDER_IMAGE =
   "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=200&h=200&fit=crop";
 
-export function formatPostedAgo(dateValue) {
-  if (!dateValue) return "";
-  const posted = new Date(dateValue);
-  if (Number.isNaN(posted.getTime())) return "";
-
-  const days = Math.floor((Date.now() - posted.getTime()) / 86_400_000);
-  if (days <= 0) return "Posted today";
-  if (days === 1) return "Posted 1 day ago";
-  if (days < 7) return `Posted ${days} days ago`;
-  const weeks = Math.floor(days / 7);
-  if (weeks === 1) return "Posted 1 week ago";
-  if (weeks < 5) return `Posted ${weeks} weeks ago`;
-  return posted.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
+export { formatPostedAgo };
 
 export function toJobCardModel(job) {
   if (!job) return null;

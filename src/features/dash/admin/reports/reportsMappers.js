@@ -1,4 +1,5 @@
 /** Map API reports onto admin table / detail UI props. */
+import { formatDate, formatDateTime as formatSharedDateTime } from "@/shared/utils/date";
 
 const STATUS_LABEL = {
   PENDING: "Pending",
@@ -62,23 +63,11 @@ const initialsFromName = (name = "") =>
     .join("") || "U";
 
 export function formatReportDate(dateValue) {
-  if (!dateValue) return "—";
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleDateString("en-GB");
+  return formatDate(dateValue, { locale: "en-GB", fallback: "—" });
 }
 
 export function formatDateTime(dateValue) {
-  if (!dateValue) return "—";
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  });
+  return formatSharedDateTime(dateValue, { fallback: "—" });
 }
 
 export function toPersonModel(person) {

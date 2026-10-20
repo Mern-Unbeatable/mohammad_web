@@ -1,4 +1,5 @@
 /** Map API general posts onto GeneralPostCard / detail UI props. */
+import { formatDate } from "@/shared/utils/date";
 
 export const GENERAL_CATEGORY_OPTIONS = ["All", "News", "Document"];
 
@@ -18,24 +19,11 @@ const CATEGORY_TO_API = {
 export const categoryToApi = (label) => CATEGORY_TO_API[label];
 
 export function formatPostDate(dateValue) {
-  if (!dateValue) return "";
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  return formatDate(dateValue, { format: "long" });
 }
 
 export function formatDisplayDate(dateValue) {
-  if (!dateValue) return "";
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-  });
+  return formatDate(dateValue, { format: "monthYear" });
 }
 
 export function toGeneralPostModel(post) {

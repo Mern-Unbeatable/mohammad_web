@@ -6,6 +6,7 @@ import {
   Megaphone,
   Send,
 } from "lucide-react";
+import { formatIsoDate, formatRelativeTime } from "@/shared/utils/date";
 
 /** Map ads + notifications onto supplier dashboard UI props. */
 
@@ -38,29 +39,7 @@ const CHART_MONTHS = [
   "Dec",
 ];
 
-const formatUploadDate = (dateValue) => {
-  if (!dateValue) return "—";
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return "—";
-  return date.toISOString().slice(0, 10);
-};
-
-const formatRelativeTime = (dateValue) => {
-  if (!dateValue) return "";
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return "";
-
-  const diffMs = Date.now() - date.getTime();
-  const minutes = Math.floor(diffMs / 60000);
-  if (minutes < 1) return "Just now";
-  if (minutes < 60) return `${minutes} min ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
-  const days = Math.floor(hours / 24);
-  if (days === 1) return "Yesterday";
-  if (days < 7) return `${days} days ago`;
-  return date.toLocaleDateString("en-US");
-};
+const formatUploadDate = (dateValue) => formatIsoDate(dateValue, { fallback: "—" });
 
 const notificationVisual = (type) => {
   switch (type) {

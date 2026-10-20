@@ -1,10 +1,10 @@
 import { SUBSCRIPTION_STATUS } from '../constant/constants';
 import { toApiPlan } from './plans';
+import { formatDate } from '@/shared/utils/date';
 
 const { TRIAL, ACTIVE, CANCELLED, EXPIRED } = SUBSCRIPTION_STATUS;
 
-const formatAccessDate = (value) =>
-  new Date(value).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+const formatAccessDate = (value) => formatDate(value, { format: 'short', locale: 'en-GB' });
 
 /** Active, not cancelling, and already on the selected cycle. */
 export const isAlreadyOnPlan = (sub, cycle) =>

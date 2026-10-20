@@ -1,14 +1,8 @@
 /** Map API blogs onto BlogAdminCard / create form props. */
+import { formatDate } from "@/shared/utils/date";
 
 export function formatBlogDate(dateValue) {
-  if (!dateValue) return "";
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  return formatDate(dateValue, { format: "long" });
 }
 
 export function toBlogCardModel(blog) {

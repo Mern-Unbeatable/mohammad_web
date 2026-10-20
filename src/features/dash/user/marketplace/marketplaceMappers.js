@@ -1,4 +1,5 @@
 /** Map API listings onto ListingCard / detail UI props (user marketplace). */
+import { formatDate } from "@/shared/utils/date";
 
 export const MARKETPLACE_CATEGORY_OPTIONS = [
   "All",
@@ -55,13 +56,7 @@ export const conditionFromApi = (apiKey) =>
   CONDITION_LABEL[apiKey] || "Good";
 
 export function formatListedAt(dateValue) {
-  if (!dateValue) return "";
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-  });
+  return formatDate(dateValue, { format: "monthYear" });
 }
 
 export function toListingCardModel(listing) {

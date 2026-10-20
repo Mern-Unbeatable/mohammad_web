@@ -1,17 +1,11 @@
 /** Map API blogs onto hub cards / detail UI props. */
+import { formatDate } from "@/shared/utils/date";
 
 const PLACEHOLDER_IMAGE =
   "https://images.unsplash.com/photo-1581093458791-9f302e6d64fb?w=800&h=450&fit=crop";
 
 export function formatBlogDate(dateValue) {
-  if (!dateValue) return "";
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  return formatDate(dateValue, { format: "long" });
 }
 
 export function toBlogCardModel(blog) {

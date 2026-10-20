@@ -1,11 +1,7 @@
-const formatFullDate = (value) => {
-  const date = value ? new Date(value) : null;
-  if (!date || Number.isNaN(date.getTime())) return undefined;
-  return date.toLocaleString('en-US', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  });
-};
+import { formatDateTime } from '@/shared/utils/date';
+
+const formatFullDate = (value) =>
+  formatDateTime(value, { format: { dateStyle: 'medium', timeStyle: 'short' } }) || undefined;
 
 /** Country · time · Edited line under a post author's name. */
 const PostMeta = ({ post, className = '' }) => {

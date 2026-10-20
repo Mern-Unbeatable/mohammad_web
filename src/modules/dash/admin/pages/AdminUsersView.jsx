@@ -11,6 +11,7 @@ import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
 import SuspendUserModal from "@/modules/dash/admin/components/SuspendUserModal";
 import SubscriptionPill from "@/modules/dash/admin/components/SubscriptionPill";
 import { fetchUsersList, updateUserStatus } from "@/features/dash/admin/users";
+import { formatDate } from "@/shared/utils/date";
 
 const PAGE_SIZE = 10;
 
@@ -155,13 +156,7 @@ const AdminUsersView = () => {
         company: u.profile?.company || u.profile?.country || "N/A",
         role: u.role || "USER",
         subscription: planCapitalized,
-        joinedDate: u.createdAt
-          ? new Date(u.createdAt).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            })
-          : "N/A",
+        joinedDate: formatDate(u.createdAt, { format: "short", fallback: "N/A" }),
         status: rawStatus,
       };
     });

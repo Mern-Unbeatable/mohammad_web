@@ -1,19 +1,14 @@
 /**
  * Map API user ↔ ProfileSetupForm / ProfilePageContent shape.
  */
+import { formatDate } from "@/shared/utils/date";
 
 const formatDisplayDate = (value) => {
   if (!value) return null;
   if (typeof value === "string" && !/^\d{4}-\d{2}-\d{2}/.test(value)) {
     return value;
   }
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return String(value);
-  return date.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  return formatDate(value, { format: "long", locale: "en-GB", fallback: String(value) });
 };
 
 const formatPlanName = (plan) => {

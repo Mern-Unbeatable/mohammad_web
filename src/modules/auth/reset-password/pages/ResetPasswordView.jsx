@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { PasswordField, PasswordStrength } from '@/modules/auth/components/AuthFormFields';
 import { isStrongPassword } from '@/shared/utils/auth/passwordRules';
+import { formatTime } from '@/shared/utils/date';
 
 /** Reset tokens are 32 random bytes, hex-encoded. */
 const TOKEN_PATTERN = /^[a-f0-9]{64}$/i;
@@ -32,11 +33,8 @@ const Notice = ({ children }) => (
   </div>
 );
 
-const formatExpiry = (value) => {
-  const date = value ? new Date(value) : null;
-  if (!date || Number.isNaN(date.getTime())) return '';
-  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-};
+const formatExpiry = (value) =>
+  formatTime(value, { format: { hour: '2-digit', minute: '2-digit' }, locale: [] });
 
 const HEADINGS = {
   checking: ['Set a new password', 'Checking your reset link...'],

@@ -1,4 +1,5 @@
 /** Map API advertisements onto admin table / detail UI props. */
+import { formatDate, formatIsoDate } from "@/shared/utils/date";
 
 const STATUS_LABEL = {
   PENDING: "Pending",
@@ -40,17 +41,11 @@ const initialsFromName = (name = "") =>
     .join("") || "AD";
 
 export function formatUploadDate(dateValue) {
-  if (!dateValue) return "—";
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return "—";
-  return date.toISOString().slice(0, 10);
+  return formatIsoDate(dateValue, { fallback: "—" });
 }
 
 export function formatDisplayDate(dateValue) {
-  if (!dateValue) return "—";
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleDateString("en-US");
+  return formatDate(dateValue, { fallback: "—" });
 }
 
 export function formatPrice(price) {

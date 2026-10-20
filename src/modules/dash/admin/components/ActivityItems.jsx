@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { Eye, ImageOff, MousePointerClick, Users } from "lucide-react";
+import { formatDate as formatSharedDate } from "@/shared/utils/date";
 
 const STATUS_CLASS = {
   ACTIVE: "bg-green-secondary text-green-primary",
@@ -12,14 +13,7 @@ const STATUS_CLASS = {
   REMOVED: "bg-[#FEF3F2] text-[#D92D20]",
 };
 
-const formatDate = (value) =>
-  value
-    ? new Date(value).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      })
-    : "";
+const formatDate = (value) => formatSharedDate(value, { format: "short" });
 
 const formatPrice = (value) =>
   value == null
