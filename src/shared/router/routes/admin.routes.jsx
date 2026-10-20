@@ -1,4 +1,4 @@
-import { RequireRole } from '@/shared/guards';
+import { RequireRole } from '@/shared/router/guards';
 import { USER_ROLES } from '@/shared/constants/roles';
 import { CHAT_BASE_PATHS } from '@/features/messages/chatPaths';
 import { lazyPage } from '@/shared/router/utils/lazyPage';
