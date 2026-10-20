@@ -26,14 +26,14 @@ import ProfileDropdown from "./ProfileDropdown";
 import NotificationsHoverMenu from "./NotificationsHoverMenu";
 import MessagesHoverMenu from "./MessagesHoverMenu";
 import { navItems } from "@/modules/user/data/dashboard";
-import SearchTabs from "@/modules/user/components/search/SearchTabs";
-import SearchResultsList from "@/modules/user/components/search/SearchResultsList";
 import {
+  SearchTabs,
+  SearchResultsList,
   DEFAULT_SEARCH_TAB,
   SEARCH_PATH,
   buildSearchPath,
   toSearchGroups,
-} from "@/modules/user/components/search/searchResults";
+} from "@/modules/user/pages/search";
 import {
   fetchGlobalSearch,
   clearSearchResults,

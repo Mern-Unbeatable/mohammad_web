@@ -4,9 +4,11 @@ import { toast } from "react-hot-toast";
 import Pagination from "@/components/common/Pagination/Pagination";
 import { CardSkeleton } from "@/components/common/Skeleton";
 import JobCard from "@/components/data-display/JobCard/JobCard";
-import RecruitmentToolbar from "@/modules/user/components/recruitment/RecruitmentToolbar";
-import JobsSectionHeader from "@/modules/user/components/recruitment/JobsSectionHeader";
-import { jobCount } from "@/modules/user/components/recruitment/jobsSection";
+import {
+  RecruitmentToolbar,
+  JobsSectionHeader,
+  jobCount,
+} from "@/modules/user/pages/recruitment";
 import SupplierRecruitmentActions from "@/modules/supplier/components/SupplierRecruitmentActions";
 import {
   fetchSupplierJobs,

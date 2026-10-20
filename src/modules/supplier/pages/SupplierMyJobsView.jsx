@@ -7,14 +7,14 @@ import Pagination from "@/components/common/Pagination/Pagination";
 import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
 import { CardSkeleton } from "@/components/common/Skeleton";
 import JobCard from "@/components/data-display/JobCard/JobCard";
-import RecruitmentToolbar from "@/modules/user/components/recruitment/RecruitmentToolbar";
-import JobsSectionHeader from "@/modules/user/components/recruitment/JobsSectionHeader";
 import {
+  RecruitmentToolbar,
+  JobsSectionHeader,
   buildMyJobsQuery,
   jobCount,
   matchesStatusFilter,
   nextJobStatus,
-} from "@/modules/user/components/recruitment/jobsSection";
+} from "@/modules/user/pages/recruitment";
 import SupplierRecruitmentActions from "@/modules/supplier/components/SupplierRecruitmentActions";
 import {
   fetchSupplierJobs,

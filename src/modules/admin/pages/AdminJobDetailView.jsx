@@ -6,8 +6,7 @@ import { JobDetailSkeleton } from "@/components/common/Skeleton";
 import PanelPage from "@/shared/layout/PanelLayout/PanelPage";
 import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
 import NotFound from "@/shared/pages/NotFound";
-import JobPosterCard from "@/modules/user/components/recruitment/JobPosterCard";
-import AppliedCandidatesPanel from "@/modules/user/components/recruitment/AppliedCandidatesPanel";
+import { AppliedCandidatesPanel, JobPosterCard } from "@/modules/user/pages/recruitment";
 import {
   fetchJobDetails,
   clearSelectedJob,

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ChevronLeft, Loader2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import Card from "@/components/ui/Card";
-import JobPostForm from "@/modules/user/components/recruitment/JobPostForm";
+import { JobPostForm } from "@/modules/user/pages/recruitment";
 import { DEFAULT_WORKPLACE_TYPE } from "@/shared/constants/jobWorkplace";
 import {
   createSupplierJob,

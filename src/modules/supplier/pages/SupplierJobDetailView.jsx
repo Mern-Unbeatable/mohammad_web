@@ -6,8 +6,7 @@ import { toast } from "react-hot-toast";
 import Card from "@/components/ui/Card";
 import JobDetailCard from "@/components/data-display/JobDetailCard/JobDetailCard";
 import { JobDetailSkeleton } from "@/components/common/Skeleton";
-import JobPosterCard from "@/modules/user/components/recruitment/JobPosterCard";
-import AppliedCandidatesPanel from "@/modules/user/components/recruitment/AppliedCandidatesPanel";
+import { AppliedCandidatesPanel, JobPosterCard } from "@/modules/user/pages/recruitment";
 import {
   fetchSupplierJobDetails,
   clearSelectedJob,

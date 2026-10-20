@@ -1,141 +1,25 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router";
 import { ChevronLeft, Loader2 } from "lucide-react";
-import { toast } from "react-hot-toast";
 import Container from "@/components/ui/Container";
 import Card from "@/components/ui/Card";
-import JobPostForm from "@/modules/user/components/recruitment/JobPostForm";
-import { DEFAULT_WORKPLACE_TYPE } from "@/shared/constants/jobWorkplace";
-import {
-  createJob,
-  updateJob,
-  formToCreatePayload,
-  jobToFormValues,
-  EMPLOYMENT_TYPE_OPTIONS,
-  RECRUITMENT_LEVEL_OPTIONS,
-  recruitmentApi,
-} from "@/features/user/recruitment";
-
-const LEVEL_OPTIONS = RECRUITMENT_LEVEL_OPTIONS.filter(
-  (item) => item !== "All",
-);
-
-const emptyForm = () => ({
-  title: "",
-  company: "",
-  applyLink: "",
-  location: "",
-  salary: "",
-  employmentType: EMPLOYMENT_TYPE_OPTIONS[0],
-  workplaceType: DEFAULT_WORKPLACE_TYPE,
-  level: LEVEL_OPTIONS[1] || LEVEL_OPTIONS[0],
-  description: "",
-  requirements: "",
-  imageUrl: "",
-});
+import { EMPLOYMENT_TYPE_OPTIONS } from "@/features/user/recruitment";
+import JobPostForm from "./components/form/JobPostForm";
+import { useJobForm } from "./hooks/useJobForm";
+import { MY_JOBS_PATH } from "./constant/constants";
+import { JOB_LEVEL_OPTIONS } from "./utils/jobForm";
 
 const PostJobView = () => {
   const { jobId } = useParams();
-  const isEdit = Boolean(jobId);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { saving } = useSelector((state) => state.userRecruitment);
-  const [loadingJob, setLoadingJob] = useState(isEdit);
-  const [form, setForm] = useState(emptyForm);
+  const jobForm = useJobForm(jobId);
+  const { isEdit } = jobForm;
 
-  useEffect(() => {
-    if (!isEdit) return undefined;
-
-    let cancelled = false;
-    setLoadingJob(true);
-
-    (async () => {
-      try {
-        const job = await recruitmentApi.getJobById(jobId);
-        if (cancelled || !job) return;
-        setForm(jobToFormValues(job));
-      } catch (err) {
-        if (!cancelled) {
-          toast.error(
-            recruitmentApi.getApiErrorMessage(err, "Failed to load job"),
-          );
-          navigate("/recruitment/my-jobs");
-        }
-      } finally {
-        if (!cancelled) setLoadingJob(false);
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [isEdit, jobId, navigate]);
-
-  const update = (key) => (e) =>
-    setForm((prev) => ({ ...prev, [key]: e.target.value }));
-
-  const setImageUrl = (imageUrl) =>
-    setForm((prev) => ({ ...prev, imageUrl }));
-
-  const uploadImage = async (file) => {
-    try {
-      return await recruitmentApi.uploadJobImage(file);
-    } catch (err) {
-      throw new Error(
-        recruitmentApi.getApiErrorMessage(err, "Logo upload failed"),
-      );
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (saving || loadingJob) return;
-
-    const payload = formToCreatePayload(form);
-    if (isEdit && !payload.imageUrl) payload.imageUrl = null;
-    if (
-      !payload.title ||
-      !payload.company ||
-      !payload.location ||
-      !payload.about
-    ) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
-    if (!payload.requirements.length) {
-      toast.error("Add at least one requirement");
-      return;
-    }
-
-    const result = isEdit
-      ? await dispatch(updateJob({ jobId, payload }))
-      : await dispatch(createJob(payload));
-
-    const ok = isEdit
-      ? updateJob.fulfilled.match(result)
-      : createJob.fulfilled.match(result);
-
-    if (ok) {
-      toast.success(isEdit ? "Job updated" : "Job published");
-      navigate("/recruitment/my-jobs");
-      return;
-    }
-    toast.error(
-      result.payload ||
-        (isEdit ? "Failed to update job" : "Failed to publish job"),
-    );
-  };
-
-  if (loadingJob) {
+  if (jobForm.loadingJob) {
     return (
       <main className="pt-6 pb-8 sm:pt-8">
         <Container className="max-w-6xl">
           <div className="flex h-64 items-center justify-center rounded-xl bg-white shadow-sm">
             <Loader2 className="mr-2 h-6 w-6 animate-spin text-primary" />
-            <span className="text-[14px] font-medium text-[#64748B]">
-              Loading job…
-            </span>
+            <span className="text-[14px] font-medium text-[#64748B]">Loading job…</span>
           </div>
         </Container>
       </main>
@@ -146,7 +30,7 @@ const PostJobView = () => {
     <main className="pt-6 pb-8 sm:pt-8">
       <Container className="max-w-6xl">
         <Link
-          to="/recruitment/my-jobs"
+          to={MY_JOBS_PATH}
           className="mb-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
         >
           <ChevronLeft className="h-4 w-4" />
@@ -166,17 +50,17 @@ const PostJobView = () => {
           </div>
 
           <JobPostForm
-            form={form}
-            onFieldChange={update}
-            onSubmit={handleSubmit}
-            saving={saving}
+            form={jobForm.form}
+            onFieldChange={jobForm.fieldChange}
+            onSubmit={jobForm.submit}
+            saving={jobForm.saving}
             employmentOptions={EMPLOYMENT_TYPE_OPTIONS}
-            levelOptions={LEVEL_OPTIONS}
+            levelOptions={JOB_LEVEL_OPTIONS}
             submitLabel={isEdit ? "Save changes" : "Publish Job"}
             savingLabel={isEdit ? "Saving…" : "Publishing…"}
-            cancelHref="/recruitment/my-jobs"
-            onImageChange={setImageUrl}
-            onUploadImage={uploadImage}
+            cancelHref={MY_JOBS_PATH}
+            onImageChange={jobForm.setImageUrl}
+            onUploadImage={jobForm.uploadImage}
           />
         </Card>
       </Container>
