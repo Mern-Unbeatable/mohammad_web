@@ -547,6 +547,8 @@ const Messenger = ({
   onEditMessage,
   onOpenInfo,
   loading = false,
+  listError = null,
+  onRetryList,
   threadLoading = false,
   hasMoreMessages = false,
   olderLoading = false,
@@ -723,6 +725,19 @@ const Messenger = ({
         <div className="min-h-0 flex-1 overflow-y-auto scrollbar-thin xl:divide-y xl:divide-[#E4E7EC]">
           {loading && chats.length === 0 ? (
             <ConversationListSkeleton />
+          ) : listError && chats.length === 0 ? (
+            <div role="alert" className="px-4 py-10 text-center">
+              <p className="text-[13px] text-[#B42318]">{listError}</p>
+              {onRetryList ? (
+                <button
+                  type="button"
+                  onClick={onRetryList}
+                  className="mt-3 inline-flex items-center justify-center rounded-lg border border-[#E4E7EC] px-4 py-2 text-[12px] font-semibold text-[#475467] hover:bg-[#F9FAFB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  Try again
+                </button>
+              ) : null}
+            </div>
           ) : chats.length > 0 ? (
             <>
               {chats.map((chat) => (

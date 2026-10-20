@@ -31,6 +31,10 @@ export const initialState = {
   conversationsMeta: { page: 1, pageSize: 30, total: 0, totalPages: 1 },
   conversationsLoading: false,
   conversationsLoadingMore: false,
+  /** Latest visible list request; responses from earlier ones are stale. */
+  conversationsRequestId: null,
+  /** Why the current tab's first page failed to load (shown with a retry). */
+  conversationsError: null,
   activeConversationId: null,
   /** Latest detail of the active conversation, even if it is not in the loaded list page. */
   activeDetail: null,
@@ -190,18 +194,34 @@ const messagesSlice = createSlice({
     builder
       .addCase(fetchConversations.pending, (state, action) => {
         const { page = 1, silent, type } = action.meta.arg || {};
-        state.error = null;
-        if (type) state.listType = type;
+        // Background refreshes never switch tabs or touch loading state.
         if (silent) return;
+        state.error = null;
+        state.conversationsError = null;
+        state.conversationsRequestId = action.meta.requestId;
+        if (type && type !== state.listType) {
+          // Another tab: drop the previous tab's rows and pagination so they
+          // are not shown (or paged) as this tab's list while it loads.
+          state.listType = type;
+          state.conversations = [];
+          state.conversationsMeta = initialState.conversationsMeta;
+          state.conversationsLoadingMore = false;
+        }
         if (page > 1) state.conversationsLoadingMore = true;
         else state.conversationsLoading = true;
       })
       .addCase(fetchConversations.fulfilled, (state, action) => {
-        const { page = 1, type } = action.meta.arg || {};
-        state.conversationsLoading = false;
-        state.conversationsLoadingMore = false;
-        // Ignore responses for a tab the user already left.
+        const { page = 1, silent, type } = action.meta.arg || {};
         if (type && type !== state.listType) return;
+        if (silent) {
+          // A visible request in flight will bring fresher data.
+          if (state.conversationsLoading || state.conversationsLoadingMore) return;
+        } else {
+          const latest = state.conversationsRequestId;
+          if (latest && action.meta.requestId !== latest) return;
+          state.conversationsLoading = false;
+          state.conversationsLoadingMore = false;
+        }
         const rows = action.payload.data;
         if (page > 1) {
           const seen = new Set(state.conversations.map((c) => c.id));
@@ -212,8 +232,16 @@ const messagesSlice = createSlice({
         state.conversationsMeta = action.payload.meta;
       })
       .addCase(fetchConversations.rejected, (state, action) => {
+        const { page = 1, silent } = action.meta.arg || {};
+        // Failed background refreshes are retried by the next poll or reconnect.
+        if (silent) return;
+        const latest = state.conversationsRequestId;
+        if (latest && action.meta.requestId !== latest) return;
+        const message = action.payload || action.error?.message || "Something went wrong";
+        state.conversationsLoading = false;
         state.conversationsLoadingMore = false;
-        setRejected("conversationsLoading")(state, action);
+        if (page > 1) state.error = message;
+        else state.conversationsError = message;
       })
 
       .addCase(fetchConversation.fulfilled, (state, action) => {

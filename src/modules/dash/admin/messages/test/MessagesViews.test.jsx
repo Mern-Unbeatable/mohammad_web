@@ -43,6 +43,20 @@ describe("AdminChatModerationView", () => {
     expect(html).toContain("Select a conversation");
   });
 
+  it("shows the list error with a retry button instead of the empty message", () => {
+    const html = renderModeration({ listError: "Failed to load conversations" });
+    expect(html).toContain('role="alert"');
+    expect(html).toContain("Failed to load conversations");
+    expect(html).toMatch(/<button type="button"[^>]*>Try again<\/button>/);
+    expect(html).not.toContain("No conversations found.");
+  });
+
+  it("shows the spinner rather than an error or empty message while loading", () => {
+    const html = renderModeration({ listLoading: true, listError: null });
+    expect(html).not.toContain("No conversations found.");
+    expect(html).not.toContain('role="alert"');
+  });
+
   it("renders rows with counts and Load more", () => {
     const html = renderModeration({
       conversations: [conversation],
