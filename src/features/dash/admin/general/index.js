@@ -13,4 +13,9 @@ export {
   fetchGeneralPostDetails,
   removeGeneralPost,
 } from "./generalThunks";
+export {
+  GENERAL_CATEGORY_OPTIONS,
+  categoryToApi,
+  toGeneralPostModel,
+} from "./generalMappers";
 export * as generalApi from "./generalApi";

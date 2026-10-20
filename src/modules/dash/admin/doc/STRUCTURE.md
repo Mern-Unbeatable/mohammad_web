@@ -37,13 +37,21 @@ admin/
 │   └── components/
 │       └── ChatModerationPanel.jsx          Moderation page (/admin/chat/moderation)
 │
-├── general/pages/
-│   ├── AdminGeneralView.jsx                 General posts (/admin/general)
-│   └── AdminGeneralPostDetailView.jsx       Post detail (/admin/general/:postId)
+├── general/                                 Full feature layout; see general/doc/STRUCTURE.md
+│   ├── pages/        AdminGeneralView (/admin/general), AdminGeneralPostDetailView (/admin/general/:postId)
+│   ├── components/   list/ (PostsGrid, DeletePostModal), detail/ (PostHeader, PostBody, PostActions), common/ (ErrorBanner)
+│   ├── hooks/        useAdminGeneral, useAdminGeneralPost
+│   ├── utils/        generalPosts
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: GENERAL_PATH, postDetailPath
 │
-├── marketplace/pages/
-│   ├── AdminMarketplaceView.jsx             Listings (/admin/marketplace)
-│   └── AdminListingDetailView.jsx           Listing detail (/admin/marketplace/:listingId)
+├── marketplace/                             Full feature layout; see marketplace/doc/STRUCTURE.md
+│   ├── pages/        AdminMarketplaceView (/admin/marketplace), AdminListingDetailView (/admin/marketplace/:listingId)
+│   ├── components/   list/ (CategoryFilter, ListingsGrid, DeleteListingModal), detail/ (ListingGallery, ListingInfoCard, PriceCard, SellerCard), common/ (ErrorBanner)
+│   ├── hooks/        useAdminListings, useAdminListingDetail
+│   ├── utils/        listings
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: MARKETPLACE_PATH, listingDetailPath
 │
 ├── reports/pages/
 │   ├── AdminReportsView.jsx                 Reports (/admin/reports)
@@ -93,13 +101,15 @@ admin/
   `messages/components/ChatModerationPanel` for `/admin/chat/moderation`.
 - The sidebar items (`adminNavItems`) live in
   `@/components/navigation/navbar/nav.js`, used by `layouts/AdminLayout`.
-- Nothing outside admin imports admin files. `ads/`, `blogs/` and
-  `dashboard/` have an `index.js`; the other features have none yet.
+- Nothing outside admin imports admin files. `ads/`, `blogs/`, `dashboard/`,
+  `general/` and `marketplace/` have an `index.js`; the other features have
+  none yet.
 
 ## Not done yet
 
 The `hooks/`, `utils/`, `constant/`, `test/` and `doc/` split has been
-applied to `ads/`, `blogs/` and `dashboard/`. The other views still hold their
+applied to `ads/`, `blogs/`, `dashboard/`, `general/` and `marketplace/`. The
+other views still hold their
 own state and effects, and several are large: `AdminSettingsView` (463 lines),
 `ChatModerationPanel` (365), `AdminUsersView` (351),
 `AdminReportDetailView` (326), `AdminUserDetailView` (309) and

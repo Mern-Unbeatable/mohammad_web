@@ -16,4 +16,9 @@ export {
   fetchListingDetails,
   removeListing,
 } from "./marketplaceThunks";
+export {
+  MARKETPLACE_CATEGORY_OPTIONS,
+  categoryToApi,
+  toListingCardModel,
+} from "./marketplaceMappers";
 export * as marketplaceApi from "./marketplaceApi";
