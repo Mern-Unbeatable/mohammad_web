@@ -26,9 +26,13 @@ admin/
 │       ├── ProfileActivityTabs.jsx          Activity tabs on the user detail page
 │       └── ActivityItems.jsx                Rows used by ProfileActivityTabs
 │
-├── recruitment/pages/
-│   ├── AdminRecruitmentView.jsx             Job list (/admin/recruitment)
-│   └── AdminJobDetailView.jsx               Job detail (/admin/recruitment/:jobId)
+├── recruitment/                             Full feature layout; see recruitment/doc/STRUCTURE.md
+│   ├── pages/        AdminRecruitmentView (/admin/recruitment), AdminJobDetailView (/admin/recruitment/:jobId)
+│   ├── components/   list/ (JobFilters, FilterSelect, JobsList, DeleteJobModal), detail/ (JobSidebar), common/ (ErrorBanner)
+│   ├── hooks/        useAdminJobs, useAdminJobDetail
+│   ├── utils/        jobsQuery
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: RECRUITMENT_PATH, jobDetailPath
 │
 ├── messages/                                Full feature layout; see messages/doc/STRUCTURE.md
 │   ├── pages/        AdminChatView (/admin/chat shell), AdminChatInboxView, AdminChatModerationView (/admin/chat/moderation)
@@ -54,9 +58,13 @@ admin/
 │   ├── constant/ test/ doc/
 │   └── index.js                             Public API: MARKETPLACE_PATH, listingDetailPath
 │
-├── reports/pages/
-│   ├── AdminReportsView.jsx                 Reports (/admin/reports)
-│   └── AdminReportDetailView.jsx            Report detail (/admin/reports/:reportId)
+├── reports/                                 Full feature layout; see reports/doc/STRUCTURE.md
+│   ├── pages/        AdminReportsView (/admin/reports), AdminReportDetailView (/admin/reports/:reportId)
+│   ├── components/   list/ (ReportStats, ReportsTable, ReportedUserCell), detail/ (ReasonBanner, PersonCard, ReportedTarget, DecisionActions), common/ (ErrorBanner)
+│   ├── hooks/        useAdminReports, useAdminReportDetail
+│   ├── utils/        reports
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: REPORTS_PATH, reportDetailPath
 │
 ├── ads/                                     Full feature layout; see ads/doc/STRUCTURE.md
 │   ├── pages/        AdminAdvertisementView, AdminAdvertisementDetailView
@@ -74,11 +82,21 @@ admin/
 │   ├── constant/ test/ doc/
 │   └── index.js                             Public API: BLOGS_PATH, NEW_BLOG_PATH
 │
-├── statistics/pages/
-│   └── AdminStatisticsView.jsx              Statistics (/admin/statistics)
+├── statistics/                              Full feature layout; see statistics/doc/STRUCTURE.md
+│   ├── pages/        AdminStatisticsView (/admin/statistics)
+│   ├── components/   StatisticsCharts (header, stats and states come from dashboard/)
+│   ├── hooks/        useAdminStatistics
+│   ├── utils/        charts
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: STATISTICS_PATH
 │
-├── settings/pages/
-│   └── AdminSettingsView.jsx                Settings (/admin/settings)
+├── settings/                                Full feature layout; see settings/doc/STRUCTURE.md
+│   ├── pages/        AdminSettingsView (/admin/settings)
+│   ├── components/   sections/ (SubscriptionSection, SponsoredSection, CategorySection), common/ (SectionHeader, PriceField, SettingsLoadError)
+│   ├── hooks/        useAdminSettings, useSettingsForm
+│   ├── utils/        settingsForm
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: SETTINGS_PATH
 │
 ├── profile/                                 Full feature layout; see profile/doc/STRUCTURE.md
 │   ├── pages/        AdminProfileView (/admin/profile)
@@ -103,16 +121,13 @@ admin/
   `@/modules/dash/admin/<feature>/pages/<View>` directly.
 - The sidebar items (`adminNavItems`) live in
   `@/components/navigation/navbar/nav.js`, used by `layouts/AdminLayout`.
-- Nothing outside admin imports admin files. `ads/`, `blogs/`, `dashboard/`,
-  `general/`, `marketplace/`, `messages/` and `profile/` have an `index.js`;
-  the other features have none yet.
+- Nothing outside admin imports admin files. Every feature except `users/`
+  has an `index.js`. `statistics/` imports chart helpers and overview pieces
+  from the `dashboard/` index.
 
 ## Not done yet
 
 The `hooks/`, `utils/`, `constant/`, `test/` and `doc/` split has been
-applied to `ads/`, `blogs/`, `dashboard/`, `general/`, `marketplace/`,
-`messages/` and `profile/`. The other views still hold their own state and
-effects, and several are large: `AdminSettingsView` (463 lines),
-`AdminUsersView` (351),
-`AdminReportDetailView` (326), `AdminUserDetailView` (309) and
-`AdminStatisticsView` (297). The unused files in `data/` can be deleted.
+applied to every feature except `users/`, which still holds its own state and
+effects: `AdminUsersView` (351 lines) and `AdminUserDetailView` (309). The
+unused files in `data/` can be deleted.

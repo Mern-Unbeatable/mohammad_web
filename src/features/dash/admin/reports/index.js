@@ -15,4 +15,11 @@ export {
   updateReportStatus,
   moderateReport,
 } from "./reportsThunks";
+export {
+  statusFilterToApi,
+  statusLabelToApi,
+  toReportRowModel,
+  toReportDetailModel,
+  toStatCards,
+} from "./reportsMappers";
 export * as reportsApi from "./reportsApi";

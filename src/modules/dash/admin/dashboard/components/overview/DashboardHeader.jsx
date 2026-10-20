@@ -2,9 +2,15 @@ import { Select } from "@/components/form-controls";
 import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
 
 /** Page title and the statistics year picker. */
-const DashboardHeader = ({ years, year, onYearChange }) => (
+const DashboardHeader = ({
+  years,
+  year,
+  onYearChange,
+  title = "Dashboard",
+  subtitle = "Overview of your Lab Unity platform.",
+}) => (
   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-    <PanelPageHeader title="Dashboard" subtitle="Overview of your Lab Unity platform." />
+    <PanelPageHeader title={title} subtitle={subtitle} />
     <label className="relative inline-flex min-w-[120px] shrink-0 items-center self-start">
       <span className="sr-only">Statistics year</span>
       <Select variant="compact" value={year} onChange={(e) => onYearChange(e.target.value)}>
