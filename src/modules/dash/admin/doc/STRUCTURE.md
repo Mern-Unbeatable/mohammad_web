@@ -44,9 +44,13 @@ admin/
 │   ├── AdminReportsView.jsx                 Reports (/admin/reports)
 │   └── AdminReportDetailView.jsx            Report detail (/admin/reports/:reportId)
 │
-├── ads/pages/
-│   ├── AdminAdvertisementView.jsx           Ads review (/admin/advertisement)
-│   └── AdminAdvertisementDetailView.jsx     Ad detail (/admin/advertisement/:adId)
+├── ads/                                     Full feature layout; see ads/doc/STRUCTURE.md
+│   ├── pages/        AdminAdvertisementView, AdminAdvertisementDetailView
+│   ├── components/   list/ (AdsTable, AdCell), detail/ (AdHeader, AdBody, ReviewActions, AdLoadError), common/ (RejectAdModal, ErrorBanner)
+│   ├── hooks/        useAdminAds, useAdminAdDetail, useAdReview
+│   ├── utils/        adsQuery, adRowActions
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: ADS_PATH, adDetailPath
 │
 ├── blogs/pages/
 │   ├── AdminBlogsView.jsx                   Blog list (/admin/blogs)
@@ -80,13 +84,13 @@ admin/
   `messages/components/ChatModerationPanel` for `/admin/chat/moderation`.
 - The sidebar items (`adminNavItems`) live in
   `@/components/navigation/navbar/nav.js`, used by `layouts/AdminLayout`.
-- Nothing outside admin imports admin files, so no feature has an `index.js`
-  yet.
+- Nothing outside admin imports admin files. `ads/` has an `index.js` for
+  its paths; the other features have none yet.
 
 ## Not done yet
 
-The `hooks/`, `utils/`, `constant/`, `test/` and `doc/` split per feature has
-not been applied. The views still hold their own state and effects, and
+The `hooks/`, `utils/`, `constant/`, `test/` and `doc/` split has only been
+applied to `ads/`. The other views still hold their own state and effects, and
 several are large: `AdminSettingsView` (463 lines), `AdminCreateBlogView`
 (368), `ChatModerationPanel` (365), `AdminUsersView` (351),
 `AdminReportDetailView` (326), `AdminUserDetailView` (309) and
