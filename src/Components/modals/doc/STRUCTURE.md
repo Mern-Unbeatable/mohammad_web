@@ -52,7 +52,7 @@ components/modals/
   lazy-loaded page only pulls in the modals it uses. `index.js` lists every
   modal for discovery and for non-lazy code.
 - Older page-level public APIs still re-export their modals from here
-  (`@/modules/dash/user/pages/feed` → `CreatePostModal`, `ReportPostModal`;
+  (`@/modules/dash/user/feed` → `CreatePostModal`, `ReportPostModal`;
   `.../general` → `CreateGeneralPostModal`; `.../subscription` →
   `CancelSubscriptionModal`; `@/modules/messages` → `StartConversationModal`).
 

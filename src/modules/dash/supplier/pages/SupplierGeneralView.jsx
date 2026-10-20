@@ -4,7 +4,7 @@ import { toast } from "react-hot-toast";
 import Pagination from "@/components/common/Pagination/Pagination";
 import { CardSkeleton } from "@/components/loader";
 import GeneralPostCard from "@/components/data-display/GeneralPostCard/GeneralPostCard";
-import { GeneralToolbar, CreateGeneralPostModal } from "@/modules/dash/user/pages/general";
+import { GeneralToolbar, CreateGeneralPostModal } from "@/modules/dash/user/general";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import {
   fetchSupplierGeneralPosts,

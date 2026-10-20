@@ -5,7 +5,7 @@ import { ChevronLeft } from "lucide-react";
 import { toast } from "react-hot-toast";
 import ContactProfilePageContent from "@/components/data-display/ContactProfilePageContent/ContactProfilePageContent";
 import { ContactProfilePageSkeleton } from "@/components/loader";
-import { ReportPostModal } from "@/modules/dash/user/pages/feed";
+import { ReportPostModal } from "@/modules/dash/user/feed";
 import {
   fetchContactDetails,
   requestContactConnection,

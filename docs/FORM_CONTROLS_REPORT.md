@@ -84,7 +84,7 @@ or checkboxes from `form-controls`:
 - **Feature forms:** `AdminAccountForm` and `ProfileSetupForm`, which were in
   `Components/forms/` when migrated. They have since moved to
   `modules/dash/admin/components/profile/` and
-  `modules/dash/user/pages/profile/components/setup/`. `RichTextArea` moved
+  `modules/dash/user/profile/components/setup/`. `RichTextArea` moved
   into `form-controls/`, and `Components/forms/` was removed.
 - **Modals:** `messages/{NewMessage,CreateGroup,ConversationInfo,StartConversation}Modal.jsx`,
   `general/CreateGeneralPostModal.jsx`, `supplier/CreateAdModal.jsx`,
@@ -99,9 +99,9 @@ or checkboxes from `form-controls`:
 - **Supplier:** `pages/SupplierBlogsView.jsx`, `pages/SupplierJobDetailView.jsx`.
 - **Other:** `Components/data-display/{LineChartCard,BarChartCard,Messenger}`,
   `modules/messages/components/recipients/RecipientPicker.jsx`,
-  `modules/dash/user/pages/blogs/components/hub/BlogsHero.jsx`.
+  `modules/dash/user/blogs/components/hub/BlogsHero.jsx`.
 - **Docs:** `modules/auth/doc/STRUCTURE.md`,
-  `modules/dash/user/pages/marketplace/doc/STRUCTURE.md`.
+  `modules/dash/user/marketplace/doc/STRUCTURE.md`.
 - **Unrelated path fix:** `Components/ui/test/Avatar.test.jsx` imported
   `./Avatar` after commit `6bd6d16` moved it into `test/`. It now imports
   `../Avatar`, which fixed a failing test file.

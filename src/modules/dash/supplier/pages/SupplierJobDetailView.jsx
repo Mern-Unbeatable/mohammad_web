@@ -7,7 +7,7 @@ import Card from "@/components/ui/Card";
 import { Textarea } from "@/components/form-controls";
 import JobDetailCard from "@/components/data-display/JobDetailCard/JobDetailCard";
 import { JobDetailSkeleton } from "@/components/loader";
-import { AppliedCandidatesPanel, JobPosterCard } from "@/modules/dash/user/pages/recruitment";
+import { AppliedCandidatesPanel, JobPosterCard } from "@/modules/dash/user/recruitment";
 import {
   fetchSupplierJobDetails,
   clearSelectedJob,

@@ -3,7 +3,7 @@
 App chrome: the user dashboard's top navbar (search, nav links, hover
 previews, profile menu, mobile drawer), mobile bottom nav and the feed's
 left/right sidebars; the supplier / admin panel shell; and the site footer.
-Rendered by `layouts/*Layout.jsx`, `modules/dash/user/pages/feed/FeedView`
+Rendered by `layouts/*Layout.jsx`, `modules/dash/user/feed/FeedView`
 (sidebars) and the supplier / admin pages (panel page frame).
 
 ```
@@ -51,7 +51,7 @@ components/navigation/
 | Export | Used by |
 |---|---|
 | `DashboardNavbar`, `MobileBottomNav` | `layouts/UserLayout` |
-| `LeftSidebar`, `RightSidebar` | `modules/dash/user/pages/feed/FeedView` |
+| `LeftSidebar`, `RightSidebar` | `modules/dash/user/feed/FeedView` |
 
 `panel/*` and `footer/AppFooter` are imported by file path:
 `@/components/navigation/panel/PanelLayout` (Supplier / Admin layouts),

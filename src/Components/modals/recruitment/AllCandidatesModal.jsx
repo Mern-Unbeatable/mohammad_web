@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
-import CandidateRow from "@/modules/dash/user/pages/recruitment/components/candidates/CandidateRow";
+import CandidateRow from "@/modules/dash/user/recruitment/components/candidates/CandidateRow";
 
 /** Full applicant list; Escape is ignored while a stacked dialog is open. */
 const AllCandidatesModal = ({

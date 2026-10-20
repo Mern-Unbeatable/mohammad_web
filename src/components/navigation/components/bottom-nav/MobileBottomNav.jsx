@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import CountBadge from '@/components/ui/CountBadge';
 import { selectUserUnreadNotificationCount } from '@/features/dash/user/notifications';
 import { selectPendingRequestCount } from '@/features/dash/user/contacts';
-import { useFeedActions } from '@/modules/dash/user/pages/feed/hooks/useFeedActions';
+import { useFeedActions } from '@/modules/dash/user/feed/hooks/useFeedActions';
 import { useLayoutChrome } from '@/shared/context/LayoutChromeContext';
 import { BOTTOM_NAV_TABS } from '../../constant/constants';
 import { isBottomTabActive } from '@/shared/utils/nav/navActive';

@@ -14,7 +14,7 @@ import {
   jobCount,
   matchesStatusFilter,
   nextJobStatus,
-} from "@/modules/dash/user/pages/recruitment";
+} from "@/modules/dash/user/recruitment";
 import SupplierRecruitmentActions from "@/modules/dash/supplier/components/SupplierRecruitmentActions";
 import {
   fetchSupplierJobs,

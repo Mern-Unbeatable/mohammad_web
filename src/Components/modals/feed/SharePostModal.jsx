@@ -4,7 +4,7 @@ import { Check, Link2, Loader2, Repeat2, Send, X } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { messagesApi } from "@/features/messages";
 import { RecipientPicker } from "@/modules/messages";
-import { MAX_POST_LENGTH } from "@/modules/dash/user/pages/feed/constants";
+import { MAX_POST_LENGTH } from "@/modules/dash/user/feed/constants";
 
 const shareOptions = [
   {

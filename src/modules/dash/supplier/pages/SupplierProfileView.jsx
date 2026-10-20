@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
-import { ProfileSetupForm } from "@/modules/dash/user/pages/profile";
+import { ProfileSetupForm } from "@/modules/dash/user/profile";
 import { ProfileSetupFormSkeleton } from "@/components/loader";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import { profileCountries } from "@/modules/dash/user/data/subscription";
