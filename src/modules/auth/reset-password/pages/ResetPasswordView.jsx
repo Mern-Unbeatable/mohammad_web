@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { PasswordField, PasswordStrength } from '@/modules/auth/components/AuthFormFields';
 import { isStrongPassword } from '@/shared/utils/auth/passwordRules';
-import { formatTime } from '@/shared/utils/date';
+import { formatTime } from '@/shared/utils/dates/date';
 
 /** Reset tokens are 32 random bytes, hex-encoded. */
 const TOKEN_PATTERN = /^[a-f0-9]{64}$/i;

@@ -1,5 +1,5 @@
 /** Map API blogs onto BlogAdminCard / create form props. */
-import { formatDate } from "@/shared/utils/date";
+import { formatDate } from "@/shared/utils/dates/date";
 
 export function formatBlogDate(dateValue) {
   return formatDate(dateValue, { format: "long" });

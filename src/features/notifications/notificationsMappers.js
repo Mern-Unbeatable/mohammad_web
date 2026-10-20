@@ -7,7 +7,7 @@ import {
   MessageSquare,
   UserPlus,
 } from "lucide-react";
-import { formatRelativeTime } from "@/shared/utils/date";
+import { formatRelativeTime } from "@/shared/utils/dates/date";
 
 /** Map API notifications onto the notifications list UI. */
 

@@ -1,5 +1,5 @@
 /** Map API feed posts onto Home feed card props. */
-import { formatRelativeTime as relativeTime } from "@/shared/utils/date";
+import { formatRelativeTime as relativeTime } from "@/shared/utils/dates/date";
 
 const TYPE_LABEL = {
   QUESTION: "question",

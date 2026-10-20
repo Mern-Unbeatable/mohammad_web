@@ -1,4 +1,4 @@
-import { formatDate, toDate } from "@/shared/utils/date";
+import { formatDate, toDate } from "@/shared/utils/dates/date";
 
 const DAY_MS = 86_400_000;
 

@@ -1,5 +1,5 @@
 /** Map API blogs onto hub cards / detail UI props. */
-import { formatDate } from "@/shared/utils/date";
+import { formatDate } from "@/shared/utils/dates/date";
 
 const PLACEHOLDER_IMAGE =
   "https://images.unsplash.com/photo-1581093458791-9f302e6d64fb?w=800&h=450&fit=crop";

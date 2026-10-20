@@ -15,7 +15,7 @@ import {
 import ZoomableAvatar from '@/components/data-display/ZoomableAvatar/ZoomableAvatar';
 import Card from '@/components/ui/Card';
 import { currentUser } from '@/modules/dash/user/data/dashboard';
-import { coverGradientClass } from '@/shared/utils/coverGradient';
+import { coverGradientClass } from '@/shared/utils/gradient/coverGradient';
 
 export const InfoTile = ({ icon, label, value }) => {
   const Icon = icon;

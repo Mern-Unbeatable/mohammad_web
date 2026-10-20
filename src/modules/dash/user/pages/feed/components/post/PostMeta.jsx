@@ -1,4 +1,4 @@
-import { formatDateTime } from '@/shared/utils/date';
+import { formatDateTime } from '@/shared/utils/dates/date';
 
 const formatFullDate = (value) =>
   formatDateTime(value, { format: { dateStyle: 'medium', timeStyle: 'short' } }) || undefined;

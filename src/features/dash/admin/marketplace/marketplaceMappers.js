@@ -1,5 +1,5 @@
 /** Map API listings onto ListingCard / detail UI props. */
-import { formatDate } from "@/shared/utils/date";
+import { formatDate } from "@/shared/utils/dates/date";
 
 export const MARKETPLACE_CATEGORY_OPTIONS = [
   "All",

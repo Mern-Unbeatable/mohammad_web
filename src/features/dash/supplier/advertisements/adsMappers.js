@@ -1,5 +1,5 @@
 /** Map API advertisements onto supplier list / detail UI props. */
-import { formatDate, formatIsoDate } from "@/shared/utils/date";
+import { formatDate, formatIsoDate } from "@/shared/utils/dates/date";
 
 const STATUS_LABEL = {
   PENDING: "Pending",

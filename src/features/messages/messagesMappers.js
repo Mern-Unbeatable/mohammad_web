@@ -1,6 +1,6 @@
 /** Map API conversations / messages onto the Messenger UI models. */
 import { stripFormatting } from "./messageFormat";
-import { formatDate, toDate } from "@/shared/utils/date";
+import { formatDate, toDate } from "@/shared/utils/dates/date";
 
 const sameDay = (a, b) =>
   a.getFullYear() === b.getFullYear() &&

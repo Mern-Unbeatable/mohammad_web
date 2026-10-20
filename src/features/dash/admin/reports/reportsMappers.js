@@ -1,5 +1,5 @@
 /** Map API reports onto admin table / detail UI props. */
-import { formatDate, formatDateTime as formatSharedDateTime } from "@/shared/utils/date";
+import { formatDate, formatDateTime as formatSharedDateTime } from "@/shared/utils/dates/date";
 
 const STATUS_LABEL = {
   PENDING: "Pending",

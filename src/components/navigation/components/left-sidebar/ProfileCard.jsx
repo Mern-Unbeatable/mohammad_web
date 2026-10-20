@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { Building2, MapPin, Users } from "lucide-react";
 import Card from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
-import { coverGradientClass } from "@/shared/utils/coverGradient";
+import { coverGradientClass } from "@/shared/utils/gradient/coverGradient";
 import { PROFILE_PATH } from "../../constant/constants";
 import MetaLine from "./MetaLine";
 

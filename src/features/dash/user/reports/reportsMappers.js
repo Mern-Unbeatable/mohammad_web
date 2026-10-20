@@ -1,5 +1,5 @@
 /** Map user-filed reports onto list UI props. */
-import { formatDate } from "@/shared/utils/date";
+import { formatDate } from "@/shared/utils/dates/date";
 
 const STATUS_LABEL = {
   PENDING: "Pending",

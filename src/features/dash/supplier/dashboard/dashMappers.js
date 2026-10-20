@@ -6,7 +6,7 @@ import {
   Megaphone,
   Send,
 } from "lucide-react";
-import { formatIsoDate, formatRelativeTime } from "@/shared/utils/date";
+import { formatIsoDate, formatRelativeTime } from "@/shared/utils/dates/date";
 
 /** Map ads + notifications onto supplier dashboard UI props. */
 

@@ -1,6 +1,6 @@
 import { SUBSCRIPTION_STATUS } from '../constant/constants';
 import { toApiPlan } from './plans';
-import { formatDate } from '@/shared/utils/date';
+import { formatDate } from '@/shared/utils/dates/date';
 
 const { TRIAL, ACTIVE, CANCELLED, EXPIRED } = SUBSCRIPTION_STATUS;
 

@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { Eye, ImageOff, MousePointerClick, Users } from "lucide-react";
-import { formatDate as formatSharedDate } from "@/shared/utils/date";
+import { formatDate as formatSharedDate } from "@/shared/utils/dates/date";
 
 const STATUS_CLASS = {
   ACTIVE: "bg-green-secondary text-green-primary",

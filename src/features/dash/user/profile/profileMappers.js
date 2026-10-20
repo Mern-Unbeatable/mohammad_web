@@ -1,7 +1,7 @@
 /**
  * Map API user ↔ ProfileSetupForm / ProfilePageContent shape.
  */
-import { formatDate } from "@/shared/utils/date";
+import { formatDate } from "@/shared/utils/dates/date";
 
 const formatDisplayDate = (value) => {
   if (!value) return null;

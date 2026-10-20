@@ -1,5 +1,5 @@
 /** Map API general posts onto GeneralPostCard / detail UI props. */
-import { formatDate } from "@/shared/utils/date";
+import { formatDate } from "@/shared/utils/dates/date";
 
 export const GENERAL_CATEGORY_OPTIONS = ["All", "News", "Document"];
 
