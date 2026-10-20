@@ -1,7 +1,12 @@
 import { useMemo } from "react";
 import DataTable from "@/components/data-display/DataTable/DataTable";
+<<<<<<< HEAD
 import PanelPage from "@/components/layout/PanelPage";
 import PanelPageHeader from "@/components/layout/PanelPageHeader";
+=======
+import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
+>>>>>>> 4be7aaadd8b0604c5a1813a9e3ae180bf9a9456f
 import SuspendUserModal from "@/components/modals/admin/SuspendUserModal";
 import { getUserColumns } from "../components/list/userColumns";
 import { useAdminUsers } from "../hooks/useAdminUsers";

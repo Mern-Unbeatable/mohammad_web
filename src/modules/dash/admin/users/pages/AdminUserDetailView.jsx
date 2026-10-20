@@ -2,8 +2,13 @@ import SuspendUserModal from "@/components/modals/admin/SuspendUserModal";
 import ProfilePageContent from "@/components/data-display/ProfilePageContent/ProfilePageContent";
 import { ProfilePageSkeleton } from "@/components/loader";
 import { SubscriptionDetailsCard } from "@/modules/dash/user/profile";
+<<<<<<< HEAD
 import PanelPage from "@/components/layout/PanelPage";
 import PanelBackButton from "@/components/layout/PanelBackButton";
+=======
+import PanelPage from "@/components/navigation/panel/PanelPage";
+import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
+>>>>>>> 4be7aaadd8b0604c5a1813a9e3ae180bf9a9456f
 import { StartConversationModal } from "@/modules/messages";
 import AccountDetailsCard from "../components/detail/AccountDetailsCard";
 import ProfileActivityTabs from "../components/detail/ProfileActivityTabs";
