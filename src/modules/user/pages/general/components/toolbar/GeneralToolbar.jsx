@@ -3,6 +3,7 @@ import { List, Newspaper, Plus } from "lucide-react";
 import PanelPageHeader from "@/shared/layout/PanelLayout/PanelPageHeader";
 import { panelPrimaryBtn } from "@/shared/layout/PanelLayout/panelPageTheme";
 import { generalCategories } from "@/modules/user/data/general";
+import { GENERAL_PATH, GENERAL_VIEW, MY_GENERAL_POSTS_PATH } from "../../constant/constants";
 
 const actionBtn =
   "inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-2 text-[12px] font-semibold transition-colors";
@@ -10,13 +11,13 @@ const actionBtn =
 const GeneralToolbar = ({
   category,
   onCategoryChange,
-  activeView = "browse",
+  activeView = GENERAL_VIEW.BROWSE,
   onCreatePost,
   showBrowse = true,
   showMyPost = true,
   showCreatePost = true,
-  browseHref = "/general",
-  myPostHref = "/general/my-posts",
+  browseHref = GENERAL_PATH,
+  myPostHref = MY_GENERAL_POSTS_PATH,
 }) => (
   <div className="mb-4 space-y-3 md:mb-6 lg:mb-8">
     <PanelPageHeader
@@ -28,7 +29,7 @@ const GeneralToolbar = ({
             <Link
               to={browseHref}
               className={`${actionBtn} w-full sm:w-auto ${
-                activeView === "browse"
+                activeView === GENERAL_VIEW.BROWSE
                   ? "bg-[#E8F3FB] text-primary"
                   : "border border-primary/30 text-primary hover:bg-[#E8F3FB]"
               }`}
@@ -41,7 +42,7 @@ const GeneralToolbar = ({
             <Link
               to={myPostHref}
               className={`${actionBtn} w-full sm:w-auto ${
-                activeView === "mine"
+                activeView === GENERAL_VIEW.MINE
                   ? "bg-green-secondary text-green-primary"
                   : "border border-green-primary/30 text-green-primary hover:bg-green-secondary"
               }`}
