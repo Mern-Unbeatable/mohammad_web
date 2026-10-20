@@ -13,6 +13,11 @@ shared/router/
 │   ├── supplier.routes.jsx     # RequireRole(SUPPLIER) + SupplierLayout
 │   ├── admin.routes.jsx        # RequireRole(ADMIN) + AdminLayout
 │   └── chat.routes.jsx         # buildChatRoute / legacyChatRoute, shared by the role routes
+├── guards/                     # route elements used by routes/*.routes.jsx
+│   ├── index.js                # RequireRole, GuestOnly, SessionCheckingFallback
+│   ├── RequireRole.jsx         # login redirect, wrong-role redirect (handle.roleRedirect)
+│   ├── GuestOnly.jsx           # sends signed-in users to their home path
+│   └── SessionCheckingFallback.jsx
 ├── components/
 │   ├── RouterErrorPage.jsx     # root errorElement
 │   ├── PageLoadingFallback.jsx # Suspense fallback for lazy pages (also ChatRedirect)
@@ -24,4 +29,4 @@ shared/router/
 └── doc/STRUCTURE.md
 ```
 
-Route guards live in `@/shared/guards`; route layouts in `@/layouts`.
+Guards import `useAuth` from `@/modules/auth`. Route layouts live in `@/layouts`.

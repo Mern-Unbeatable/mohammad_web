@@ -1,5 +1,5 @@
 import AuthLayout from '@/layouts/AuthLayout';
-import { GuestOnly } from '@/shared/guards';
+import { GuestOnly } from '@/shared/router/guards';
 import LoginView from '@/modules/auth/pages/LoginView';
 import RegisterView from '@/modules/auth/pages/RegisterView';
 import ForgotPasswordView from '@/modules/auth/pages/ForgotPasswordView';

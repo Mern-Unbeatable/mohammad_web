@@ -3,7 +3,7 @@
 Everything auth-related in the UI: the guest pages (login, register, password
 reset, support), app-wide session bootstrapping and the `useAuth` hook.
 State and HTTP live in the Redux layer at `@/features/auth`; route guards
-(`RequireRole`, `GuestOnly`) live in `@/shared/guards` and use `useAuth`.
+(`RequireRole`, `GuestOnly`) live in `@/shared/router/guards` and use `useAuth`.
 
 ```
 modules/auth/
@@ -32,7 +32,7 @@ modules/auth/
 | Export | Used by |
 |---|---|
 | `AuthSessionBridge` | `main.jsx` (wraps the app) |
-| `useAuth` | `shared/guards`, public navbar / home, panels, navigation, messenger, role pages |
+| `useAuth` | `shared/router/guards`, public navbar / home, panels, navigation, messenger, role pages |
 | `toAccountIdentity` | `PanelLayout` |
 
 ## Rules
