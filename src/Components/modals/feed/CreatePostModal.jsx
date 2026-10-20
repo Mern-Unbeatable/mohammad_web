@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
-import { MAX_POST_LENGTH } from "../../constants";
-import { usePostDraft } from "../../hooks/usePostDraft";
-import { DEFAULT_POST_OPTION } from "../../utils/postTypeOptions";
-import ComposerFooter from "./ComposerFooter";
-import DraftDocumentCard from "./DraftDocumentCard";
-import DraftImageGrid from "./DraftImageGrid";
-import PostTypeChips from "./PostTypeChips";
+import { MAX_POST_LENGTH } from "@/modules/dash/user/pages/feed/constants";
+import { usePostDraft } from "@/modules/dash/user/pages/feed/hooks/usePostDraft";
+import { DEFAULT_POST_OPTION } from "@/modules/dash/user/pages/feed/utils/postTypeOptions";
+import ComposerFooter from "@/modules/dash/user/pages/feed/components/composer/ComposerFooter";
+import DraftDocumentCard from "@/modules/dash/user/pages/feed/components/composer/DraftDocumentCard";
+import DraftImageGrid from "@/modules/dash/user/pages/feed/components/composer/DraftImageGrid";
+import PostTypeChips from "@/modules/dash/user/pages/feed/components/composer/PostTypeChips";
 
 const useBodyScrollLock = () => {
   useEffect(() => {

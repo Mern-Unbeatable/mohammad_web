@@ -33,9 +33,8 @@ general/
 │   ├── layout/
 │   │   └── GeneralPage.jsx          <main> + Container frame
 │   │
-│   └── modals/
-│       └── CreateGeneralPostModal.jsx  Create / edit form (also used by supplier pages)
-│                             (DeletePostModal: @/components/common/DeletePostModal)
+│   └── (CreateGeneralPostModal: @/components/modals/general — also used by supplier pages;
+│        DeletePostModal: @/components/modals/common)
 │
 ├── hooks/
 │   ├── useGeneralPosts.js       Browse: category, page, fetch, create
@@ -68,8 +67,8 @@ general/
 - Changing the category resets to page 1 in the same handler (no effect).
 - "Not found" is tracked per post id (`missingId === postId`), so it resets
   when the id changes.
-- The create / edit modal `components/modals/CreateGeneralPostModal.jsx` is
-  also used by the supplier General pages through `index.js`.
+- The create / edit modal `@/components/modals/general/CreateGeneralPostModal.jsx`
+  is also used by the supplier General pages (re-exported from `index.js`).
 
 ## How the pages work
 

@@ -45,8 +45,7 @@ marketplace/
 │   ├── layout/
 │   │   └── MarketplacePage.jsx      <main> + Container, with an `overlays` slot for modals
 │   │
-│   └── modals/
-│       └── DeleteListingModal.jsx
+│   └── (DeleteListingModal lives in @/components/modals/marketplace)
 │
 ├── hooks/
 │   ├── useMarketplaceListings.js  Browse: URL filters, debounced search, paging, fetch

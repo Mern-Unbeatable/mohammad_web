@@ -6,7 +6,7 @@ import {
   continueList,
   formatShortcutFor,
 } from "@/features/messages/composerFormat";
-import FormatToolbar from "./FormatToolbar";
+import FormatToolbar from "@/components/data-display/Messenger/FormatToolbar";
 
 /**
  * `onSave(body)` resolves true when saved; `canBeEmpty` allows clearing the text

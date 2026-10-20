@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { CardSkeleton } from "@/components/loader";
-import AllCandidatesModal from "./AllCandidatesModal";
-import ApplicantDetailsModal from "./ApplicantDetailsModal";
+import AllCandidatesModal from "@/components/modals/recruitment/AllCandidatesModal";
+import ApplicantDetailsModal from "@/components/modals/recruitment/ApplicantDetailsModal";
 import CandidateRow from "./CandidateRow";
 import { sortByFirstApplied, toCandidateModel } from "../../utils/candidates";
 

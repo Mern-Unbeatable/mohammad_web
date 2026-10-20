@@ -26,8 +26,7 @@ subscription/
 │   │   ├── PlanPricePanel.jsx       Price, perks, subscribe and cancel buttons
 │   │   └── PlanFeaturesPanel.jsx    Included features, "membership ended" note, profile link
 │   │
-│   └── modals/
-│       └── CancelSubscriptionModal.jsx  Also used by the profile page
+│   └── (CancelSubscriptionModal lives in @/components/modals/subscription; also used by the profile page)
 │
 ├── hooks/
 │   ├── useSubscriptionPage.js  Fetch plans / subscription / profile, derived state, checkout, cancel

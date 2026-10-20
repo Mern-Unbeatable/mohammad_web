@@ -7,7 +7,7 @@ import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
 import CategoryPill from "@/components/data-display/CategoryPill/CategoryPill";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
-import ReasonModal from "@/modules/dash/admin/components/ReasonModal";
+import ReasonModal from "@/components/modals/admin/ReasonModal";
 import {
   fetchAdsList,
   reviewAdvertisement,

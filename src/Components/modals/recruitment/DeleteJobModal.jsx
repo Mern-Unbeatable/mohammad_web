@@ -1,4 +1,4 @@
-import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
+import ConfirmModal from "@/components/modals/common/ConfirmModal";
 
 /** Confirms permanently deleting one of the caller's job posts. */
 const DeleteJobModal = ({ job, deleting, onClose, onConfirm }) => (

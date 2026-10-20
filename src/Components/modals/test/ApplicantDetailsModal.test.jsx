@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter } from "react-router";
-import ApplicantDetailsModal from "../components/candidates/ApplicantDetailsModal";
+import ApplicantDetailsModal from "@/components/modals/recruitment/ApplicantDetailsModal";
 
 const render = (application) =>
   renderToStaticMarkup(

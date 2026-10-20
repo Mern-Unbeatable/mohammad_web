@@ -8,7 +8,7 @@ import RichText from "@/components/data-display/RichText/RichText";
 import { AdvertisementDetailSkeleton } from "@/components/loader";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
-import ReasonModal from "@/modules/dash/admin/components/ReasonModal";
+import ReasonModal from "@/components/modals/admin/ReasonModal";
 import {
   fetchAdDetails,
   clearSelectedAd,

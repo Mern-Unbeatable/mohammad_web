@@ -6,7 +6,7 @@ import DataTable from "@/components/data-display/DataTable/DataTable";
 import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
 import CategoryPill from "@/components/data-display/CategoryPill/CategoryPill";
 import Card from "@/components/ui/Card";
-import CreateAdModal from "@/modules/dash/supplier/components/CreateAdModal";
+import CreateAdModal from "@/components/modals/supplier/CreateAdModal";
 import {
   fetchSupplierAds,
   clearSupplierAdsError,

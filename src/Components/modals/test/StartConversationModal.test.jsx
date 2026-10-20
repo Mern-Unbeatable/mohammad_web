@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MemoryRouter } from 'react-router';
-import StartConversationModal from '../components/start/StartConversationModal';
+import StartConversationModal from '@/components/modals/messages/StartConversationModal';
 
 const recipient = {
   id: 'seller-1',

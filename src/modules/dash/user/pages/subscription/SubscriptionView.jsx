@@ -6,7 +6,7 @@ import SubscriptionHeader from './components/layout/SubscriptionHeader';
 import CycleToggle from './components/plans/CycleToggle';
 import PlanPricePanel from './components/plans/PlanPricePanel';
 import PlanFeaturesPanel from './components/plans/PlanFeaturesPanel';
-import CancelSubscriptionModal from './components/modals/CancelSubscriptionModal';
+import CancelSubscriptionModal from '@/components/modals/subscription/CancelSubscriptionModal';
 import { useSubscriptionPage } from './hooks/useSubscriptionPage';
 
 const SubscriptionView = () => {

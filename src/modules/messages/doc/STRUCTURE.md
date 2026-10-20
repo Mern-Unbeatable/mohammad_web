@@ -13,10 +13,10 @@ modules/messages/
 ├── constant/constants.js         # tabs, timings, media queries, limits, messages
 ├── components/
 │   ├── layout/MessagesPageContent.jsx   # Messenger shell (dashboard / panel)
-│   ├── modals/                   # NewMessage, CreateGroup, ConversationInfo,
-│   │                             # AddMembers, DeleteMessage, LeaveGroup
-│   ├── recipients/RecipientPicker.jsx
-│   └── start/StartConversationModal.jsx # "Message" button flow outside the inbox
+│   └── recipients/RecipientPicker.jsx
+│   (modals live in @/components/modals/messages: NewMessage, CreateGroup,
+│    ConversationInfo, AddMembers, DeleteMessage, LeaveGroup, EditMessage and
+│    StartConversation — the "Message" button flow outside the inbox)
 ├── hooks/
 │   ├── useMessagesContainer.js   # orchestrator: slice, handlers, modal state
 │   ├── useTypingIndicators.js    # who is typing, with expiry timers

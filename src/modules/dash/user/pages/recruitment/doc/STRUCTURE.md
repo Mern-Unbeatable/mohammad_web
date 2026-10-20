@@ -43,14 +43,11 @@ recruitment/
 │   │   └── JobImageField.jsx       Logo upload / remove
 │   │
 │   ├── candidates/           Owner's view of applicants
-│   │   ├── AppliedCandidatesPanel.jsx  Sidebar list, opens the modals below
-│   │   ├── AllCandidatesModal.jsx      Every applicant
-│   │   ├── ApplicantDetailsModal.jsx   One applicant with cover letter
+│   │   ├── AppliedCandidatesPanel.jsx  Sidebar list, opens AllCandidates / ApplicantDetails modals
 │   │   └── CandidateRow.jsx            Applicant row
 │   │
-│   └── modals/
-│       ├── DeleteJobModal.jsx           Confirm deleting a job post
-│       └── WithdrawApplicationModal.jsx Confirm withdrawing an application
+│   └── (modals live in @/components/modals/recruitment: AllCandidatesModal,
+│        ApplicantDetailsModal, DeleteJobModal, WithdrawApplicationModal)
 │
 ├── hooks/
 │   ├── usePublicJobs.js      URL filters (?page, level, type, workplace, q), debounced search, fetch, paging
@@ -70,7 +67,6 @@ recruitment/
 └── test/
     ├── RecruitmentView.test.jsx
     ├── JobPostForm.test.jsx
-    ├── ApplicantDetailsModal.test.jsx
     ├── AppliedCandidatesPanel.test.jsx
     ├── jobsSection.test.js
     ├── recruitmentUrlFilters.test.js

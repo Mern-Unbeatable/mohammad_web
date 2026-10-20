@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 import Pagination from "@/components/common/Pagination/Pagination";
-import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
+import ConfirmModal from "@/components/modals/common/ConfirmModal";
 import { CardSkeleton } from "@/components/loader";
 import BlogAdminCard from "@/components/data-display/BlogAdminCard/BlogAdminCard";
 import PanelPage from "@/components/navigation/panel/PanelPage";

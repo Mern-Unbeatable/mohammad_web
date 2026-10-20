@@ -6,7 +6,7 @@ import { usePostEditor } from "@/modules/dash/user/hooks/usePostEditor";
 import SubscriptionDetailsCard from "./components/subscription/SubscriptionDetailsCard";
 import MyReportsCard from "./components/reports/MyReportsCard";
 import MembershipPrompt from "./components/layout/MembershipPrompt";
-import DeletePostModal from "@/components/common/DeletePostModal/DeletePostModal";
+import DeletePostModal from "@/components/modals/common/DeletePostModal";
 import { DELETE_POST_DESCRIPTION } from "./constant/constants";
 import { useProfilePage } from "./hooks/useProfilePage";
 import { useMyPosts } from "./hooks/useMyPosts";

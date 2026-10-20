@@ -28,7 +28,7 @@ import {
   formatShortcutFor,
 } from "@/features/messages/composerFormat";
 import ChatListingCard from "./ChatListingCard";
-import EditMessageModal from "./EditMessageModal";
+import EditMessageModal from "@/components/modals/messages/EditMessageModal";
 import FormatToolbar, { ComposerToolButton } from "./FormatToolbar";
 import FormattedMessage from "./FormattedMessage";
 
