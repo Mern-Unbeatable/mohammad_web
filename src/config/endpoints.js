@@ -44,7 +44,9 @@ export const API_ENDPOINTS = {
     DIRECT_WITH: (userId) => `/messages/direct/${userId}`,
     GROUP: "/messages/group",
     DETAILS: (conversationId) => `/messages/${conversationId}`,
-    RENAME: (conversationId) => `/messages/${conversationId}`,
+    UPDATE_GROUP: (conversationId) => `/messages/${conversationId}`,
+    /** Public upload; group photos are shown to every member. */
+    GROUP_PHOTO_UPLOAD: "/uploads",
     THREAD: (conversationId) => `/messages/${conversationId}/messages`,
     SEND: (conversationId) => `/messages/${conversationId}/messages`,
     DELETE_MESSAGE: (conversationId, messageId) =>

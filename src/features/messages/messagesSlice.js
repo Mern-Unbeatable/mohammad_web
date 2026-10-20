@@ -12,7 +12,7 @@ import {
   editMessage,
   deleteMessage,
   leaveConversation,
-  renameGroup,
+  updateGroup,
   addParticipants,
   removeParticipant,
   fetchUnreadSummary,
@@ -370,7 +370,7 @@ const messagesSlice = createSlice({
     });
 
     // Group management returns the refreshed conversation.
-    [renameGroup, addParticipants, removeParticipant].forEach((thunk) => {
+    [updateGroup, addParticipants, removeParticipant].forEach((thunk) => {
       builder
         .addCase(thunk.pending, setPending("actionLoading"))
         .addCase(thunk.fulfilled, (state, action) => {

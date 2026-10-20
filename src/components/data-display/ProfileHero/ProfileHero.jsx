@@ -14,18 +14,21 @@ import {
 } from 'lucide-react';
 import ZoomableAvatar from '@/components/data-display/ZoomableAvatar/ZoomableAvatar';
 import Card from '@/components/ui/Card';
+import RichText from '@/components/data-display/RichText/RichText';
 import { currentUser } from '@/modules/dash/user/data/dashboard';
 import { coverGradientClass } from '@/shared/utils/gradient/coverGradient';
 
 export const InfoTile = ({ icon, label, value }) => {
   const Icon = icon;
   return (
-    <div className="rounded-lg border border-[#E4E7EC] bg-white p-4 transition-colors hover:border-[#D0D5DD]">
-      <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-secondary text-primary">
+    <div className="flex items-center gap-3 rounded-lg border border-[#E4E7EC] bg-white p-4 transition-colors hover:border-[#D0D5DD]">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
         <Icon className="h-4 w-4" strokeWidth={2} />
       </div>
-      <p className="text-[12px] font-medium leading-none text-[#64748B]">{label}</p>
-      <p className="mt-2 break-words text-[14px] font-semibold leading-snug text-deep-blue">{value}</p>
+      <div className="min-w-0">
+        <p className="text-[12px] font-medium leading-none text-[#64748B]">{label}</p>
+        <p className="mt-2 break-words text-[14px] font-semibold leading-snug text-deep-blue">{value}</p>
+      </div>
     </div>
   );
 };
@@ -172,9 +175,9 @@ export const ProfessionalInfoCard = ({ user = currentUser, extended = false }) =
       <h2 className="text-[16px] font-bold text-deep-blue">Professional information</h2>
     </div>
     <div className="space-y-4 px-5 py-5 sm:px-6">
-      <p className="text-[14px] leading-[1.7] text-[#475467]">{user.about}</p>
+      <RichText text={user.about} className="text-[14px] leading-[1.7] text-[#475467]" />
       {extended && user.aboutExtended ? (
-        <p className="text-[14px] leading-[1.7] text-[#475467]">{user.aboutExtended}</p>
+        <RichText text={user.aboutExtended} className="text-[14px] leading-[1.7] text-[#475467]" />
       ) : null}
     </div>
   </Card>
@@ -209,9 +212,9 @@ export const ContactInfoCard = ({
         <div className="mt-5 border-t border-[#E4E7EC] pt-5">
           <h3 className="mb-3 text-[14px] font-bold text-deep-blue">Professional information</h3>
           <div className="space-y-4">
-            <p className="text-[14px] leading-[1.7] text-[#475467]">{user.about}</p>
+            <RichText text={user.about} className="text-[14px] leading-[1.7] text-[#475467]" />
             {user.aboutExtended ? (
-              <p className="text-[14px] leading-[1.7] text-[#475467]">{user.aboutExtended}</p>
+              <RichText text={user.aboutExtended} className="text-[14px] leading-[1.7] text-[#475467]" />
             ) : null}
           </div>
         </div>

@@ -10,6 +10,7 @@ import { useHoverMenu } from "../../hooks/useHoverMenu";
 const NavHoverMenu = ({
   children,
   title,
+  icon: Icon,
   footerLabel,
   footerTo,
   onOpen,
@@ -19,7 +20,7 @@ const NavHoverMenu = ({
 
   return (
     <div
-      className="relative"
+      className="relative h-full"
       onMouseEnter={show}
       onMouseLeave={hide}
       onFocus={show}
@@ -41,7 +42,12 @@ const NavHoverMenu = ({
           aria-label={title}
           className="absolute right-0 top-[calc(100%+8px)] z-[80] origin-top-right motion-safe:animate-dropdown-in w-[360px] max-w-[calc(100vw-24px)] overflow-hidden rounded-xl border border-[#E4E7EC] bg-white shadow-[0_8px_24px_rgba(15,23,42,0.12)]"
         >
-          <div className="border-b border-[#E4E7EC] px-4 py-3">
+          <div className="flex items-center gap-2.5 border-b border-[#E4E7EC] px-4 py-3">
+            {Icon ? (
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
+                <Icon aria-hidden className="h-4 w-4" strokeWidth={2} />
+              </span>
+            ) : null}
             <p className="text-[15px] font-bold text-deep-blue">{title}</p>
           </div>
 
