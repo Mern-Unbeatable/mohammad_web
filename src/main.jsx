@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 import "./store/registerSessionBridge";
 import App from "./App";
-import AuthSessionBridge from "./shared/auth/AuthSessionBridge";
+import { AuthSessionBridge } from "@/modules/auth";
 import "./index.css";
 
 createRoot(document.getElementById("root")).render(

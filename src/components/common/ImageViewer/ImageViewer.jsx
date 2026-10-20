@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 
 /** Full-screen image overlay; closes on Escape, backdrop click or the X button. */
 const ImageViewer = ({ images, index = 0, onChange, onClose, alt = "" }) => {
   const count = images.length;
   const go = (step) => onChange?.((index + step + count) % count);
+
+  useBodyScrollLock();
 
   useEffect(() => {
     const handleKey = (event) => {
@@ -15,11 +18,8 @@ const ImageViewer = ({ images, index = 0, onChange, onClose, alt = "" }) => {
         onChange?.((index + 1) % count);
     };
     document.addEventListener("keydown", handleKey);
-    const overflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", handleKey);
-      document.body.style.overflow = overflow;
     };
   }, [count, index, onChange, onClose]);
 

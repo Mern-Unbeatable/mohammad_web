@@ -1,11 +1,6 @@
 /** Map API conversations / messages onto the Messenger UI models. */
 import { stripFormatting } from "./messageFormat";
-
-const toDate = (value) => {
-  if (!value) return null;
-  const date = value instanceof Date ? value : new Date(value);
-  return Number.isNaN(date.getTime()) ? null : date;
-};
+import { formatDate, toDate } from "@/shared/utils/dates/date";
 
 const sameDay = (a, b) =>
   a.getFullYear() === b.getFullYear() &&
@@ -160,11 +155,7 @@ export function toConversationModel(
 export function formatEventTime(value) {
   const date = toDate(value);
   if (!date) return "";
-  const day = date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  const day = formatDate(date, { format: "short" });
   return `${day} · ${clockTime(date)}`;
 }
 

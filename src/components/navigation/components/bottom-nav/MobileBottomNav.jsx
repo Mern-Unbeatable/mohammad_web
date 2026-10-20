@@ -1,0 +1,84 @@
+import { Link, useLocation } from 'react-router';
+import { useSelector } from 'react-redux';
+import CountBadge from '@/components/ui/CountBadge';
+import { selectUserUnreadNotificationCount } from '@/features/dash/user/notifications';
+import { selectPendingRequestCount } from '@/features/dash/user/contacts';
+import { useCreatePostAction } from '@/shared/context/useCreatePostAction';
+import { useLayoutChrome } from '@/shared/context/useLayoutChrome';
+import { BOTTOM_NAV_TABS } from '../../constant/constants';
+import { isBottomTabActive } from '@/shared/utils/nav/navActive';
+
+const MobileBottomNav = () => {
+  const { pathname } = useLocation();
+  const { openCreatePost } = useCreatePostAction();
+  const { bottomNavHidden } = useLayoutChrome();
+  // Kept fresh by `useNavBadges` in DashboardNavbar.
+  const unreadNotifications = useSelector(selectUserUnreadNotificationCount);
+  const pendingRequests = useSelector(selectPendingRequestCount);
+
+  if (bottomNavHidden) return null;
+
+  const badges = { notifications: unreadNotifications, network: pendingRequests };
+
+  return (
+    <nav
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-[#E4E7EC] bg-white pb-[env(safe-area-inset-bottom)] sm:hidden"
+      aria-label="Mobile navigation"
+    >
+      <ul className="mx-auto flex h-(--bottom-nav-h) max-w-lg items-stretch">
+        {BOTTOM_NAV_TABS.map((tab) => {
+          const { id, label, to, action } = tab;
+          const Icon = tab.icon;
+          const isActive = isBottomTabActive(tab, pathname);
+          const badge = badges[id] ?? 0;
+          const isPost = action === 'create';
+
+          const content = (
+            <>
+              {isActive && (
+                <span className="absolute top-0 left-1/2 h-0.5 w-10 -translate-x-1/2 rounded-full bg-deep-blue" />
+              )}
+              <span className="relative">
+                <Icon
+                  className={`h-6 w-6 ${isActive ? 'text-deep-blue' : 'text-[#64748B]'}`}
+                  strokeWidth={isActive ? 2.2 : 1.8}
+                />
+                <CountBadge count={badge} className="absolute -right-2 -top-1" />
+              </span>
+              <span
+                className={`text-[10px] font-medium leading-none ${
+                  isActive ? 'text-deep-blue' : 'text-[#64748B]'
+                }`}
+              >
+                {label}
+              </span>
+            </>
+          );
+
+          return (
+            <li key={id} className="flex flex-1">
+              {isPost ? (
+                <button
+                  type="button"
+                  onClick={openCreatePost}
+                  className="relative flex flex-1 flex-col items-center justify-center gap-0.5"
+                >
+                  {content}
+                </button>
+              ) : (
+                <Link
+                  to={to}
+                  className="relative flex flex-1 flex-col items-center justify-center gap-0.5"
+                >
+                  {content}
+                </Link>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+};
+
+export default MobileBottomNav;

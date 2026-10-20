@@ -67,9 +67,56 @@
   }
 }
 
-:root {
-  /* Change this once — navbar, feed, landing sections all follow it */
-  --app-container-max: 75rem;
+/*
+ * User dashboard shell layout contract. UserLayout applies `.dashboard-shell`;
+ * the mobile header, bottom nav and everything that must clear them (page
+ * padding, mobile menu, full-viewport messenger) read these variables.
+ */
+.dashboard-shell {
+  --dashboard-header-h: 3.5rem;
+  --bottom-nav-h: 3.5rem;
+}
+
+/* Room to leave for the bottom nav, including the device safe area. */
+@utility pb-safe-nav {
+  padding-bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom));
+}
+
+@utility bottom-safe-nav {
+  bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom));
+}
+
+/*
+ * Panel shell layout contract. PanelLayout applies `.panel-shell`; its mobile
+ * header height and <main> padding come from these variables, and PanelPage
+ * variants read them instead of repeating the numbers.
+ */
+.panel-shell {
+  --panel-header-h: 3.5rem;
+  --panel-gutter: 1rem;
+}
+
+@media (width >= 40rem) {
+  .panel-shell {
+    --panel-gutter: 1.25rem;
+  }
+}
+
+@media (width >= 64rem) {
+  .panel-shell {
+    --panel-header-h: 0px;
+    --panel-gutter: 1.5rem;
+  }
+}
+
+/* Fills the viewport below the panel's mobile header, inside the gutter. */
+@utility panel-fill-height {
+  height: calc(100dvh - var(--panel-header-h) - 2 * var(--panel-gutter));
+}
+
+/* Cancels the panel gutter so a page can run edge to edge. */
+@utility panel-bleed {
+  margin: calc(-1 * var(--panel-gutter));
 }
 
 html {

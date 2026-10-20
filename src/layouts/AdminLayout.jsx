@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router';
-import PanelLayout from '@/shared/layout/PanelLayout/PanelLayout';
-import { adminNavItems } from '@/modules/admin/config/nav';
+import PanelLayout from './panel/PanelLayout';
+import { adminNavItems } from '@/components/navigation/navbar/nav';
 
 const AdminLayout = () => (
   <PanelLayout navItems={adminNavItems} profilePath="/admin/profile">

@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import { Heart } from 'lucide-react';
 import Card from '@/components/ui/Card';
-import { formatPrice } from '@/modules/user/data/marketplace';
+import { formatPrice } from '@/modules/dash/user/data/marketplace';
 
 const ListingCard = ({
   listing,

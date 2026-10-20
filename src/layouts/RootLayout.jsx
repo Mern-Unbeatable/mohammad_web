@@ -1,21 +1,16 @@
 import { Outlet } from 'react-router';
-import NavbarLayout from '@/modules/public/layout/NavbarLayout';
-import AppFooter from '@/shared/layout/FooterLayout';
-import ScrollToTop from '@/shared/routing/ScrollToTop';
+import { PublicNavbar } from '@/components/navigation';
+import AppFooter from '@/components/navigation/footer/AppFooter';
 
-const RootLayout = () => (
-  <>
-    <ScrollToTop />
+/** Public site shell. `children` replaces the outlet when rendered outside the route tree (catch-all). */
+const RootLayout = ({ children }) => (
+  <div className="flex min-h-screen flex-col">
     <header>
-      <NavbarLayout />
+      <PublicNavbar />
     </header>
-    <main>
-      <Outlet />
-    </main>
-    <footer>
-      <AppFooter />
-    </footer>
-  </>
+    <main className="flex flex-1 flex-col">{children ?? <Outlet />}</main>
+    <AppFooter />
+  </div>
 );
 
 export default RootLayout;

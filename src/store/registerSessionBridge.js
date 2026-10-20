@@ -1,5 +1,5 @@
 import { store } from "@/store/store";
-import { router } from "@/store/router/index.jsx";
+import { router } from "@/shared/router/index.jsx";
 import { resetAuth, tokenRefreshed } from "@/features/auth";
 import { registerSessionBridge } from "@/config";
 

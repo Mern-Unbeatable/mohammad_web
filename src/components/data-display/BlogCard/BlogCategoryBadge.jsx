@@ -1,4 +1,4 @@
-import { categoryStyles } from '@/modules/user/data/blogs';
+import { categoryStyles } from '@/modules/dash/user/data/blogs';
 
 const BlogCategoryBadge = ({ category }) => (
   <span

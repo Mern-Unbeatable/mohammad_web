@@ -13,7 +13,7 @@ import { Link } from "react-router";
 import Card from "@/components/ui/Card";
 import ZoomableAvatar from "@/components/data-display/ZoomableAvatar/ZoomableAvatar";
 import { MetaItem } from "@/components/data-display/ProfileHero/ProfileHero";
-import { coverGradientClass } from "@/shared/utils/coverGradient";
+import { coverGradientClass } from "@/shared/utils/gradient/coverGradient";
 
 /** The contact model fills missing fields with "—"; those rows are hidden. */
 const isShown = (value) =>
