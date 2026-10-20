@@ -12,10 +12,10 @@ modules/auth/
 ├── register/                     # pages/RegisterView, components/SelectField, constant/
 ├── forgot-password/              # full feature layout; see forgot-password/doc/STRUCTURE.md
 ├── reset-password/               # full feature layout; see reset-password/doc/STRUCTURE.md
-├── contact-support/              # pages/ContactSupportView
+├── contact-support/              # full feature layout; see contact-support/doc/STRUCTURE.md
 ├── components/
 │   ├── AuthFormFields.jsx        # PasswordField, PasswordStrength (built on @/components/form-controls, variant "auth")
-│   ├── BackToSignIn.jsx          # "← Back to Sign In" link (forgot-password, reset-password)
+│   ├── BackToSignIn.jsx          # "← Back to Sign In" link (forgot-password, reset-password, contact-support)
 │   └── AuthSessionBridge.jsx     # boot: revalidates the token via /auth/me, shows boot screen
 ├── test/
 └── doc/STRUCTURE.md
