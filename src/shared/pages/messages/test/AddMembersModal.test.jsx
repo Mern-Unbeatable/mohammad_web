@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import AddMembersModal from './AddMembersModal';
+import AddMembersModal from '../components/modals/AddMembersModal';
 
 const recipients = [
   { id: 'u1', name: 'Anna Kowalska' },

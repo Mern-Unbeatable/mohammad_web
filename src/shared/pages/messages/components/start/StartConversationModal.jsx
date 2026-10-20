@@ -4,8 +4,7 @@ import Avatar from "@/components/ui/Avatar";
 import ChatListingCard from "@/components/data-display/Messenger/ChatListingCard";
 import { getApiErrorMessage } from "@/config";
 import { toChatListingModel } from "@/features/messages";
-
-export const START_CONVERSATION_MAX_LENGTH = 5000;
+import { START_CONVERSATION_MAX_LENGTH } from "../../constant/constants";
 
 const fieldClass =
   "w-full rounded-lg border border-[#E4E7EC] bg-white px-3.5 py-2.5 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10 disabled:bg-[#F9FAFB]";

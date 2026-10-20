@@ -230,7 +230,7 @@ export const ApplicationRowSkeleton = () => (
   </div>
 );
 
-/** Matches notification list row (NotificationsPageContent) */
+/** Matches notification list row (user notifications NotificationItem) */
 export const NotificationRowSkeleton = () => (
   <li className="flex w-full items-start gap-4 px-5 py-4 sm:px-6">
     <Skeleton className="h-10 w-10 shrink-0" rounded="lg" />

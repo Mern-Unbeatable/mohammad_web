@@ -12,8 +12,7 @@ import PanelBackButton from "@/shared/layout/PanelLayout/PanelBackButton";
 import NotFound from "@/shared/pages/NotFound";
 import { useAuth } from "@/shared/auth/useAuth";
 import { CHAT_BASE_PATHS } from "@/shared/constants/chat";
-import StartConversationModal from "@/shared/pages/messages/StartConversationModal";
-import { useStartConversation } from "@/shared/pages/messages/useStartConversation";
+import { StartConversationModal, useStartConversation } from "@/shared/pages/messages";
 import {
   fetchListingDetails,
   clearSelectedListing,

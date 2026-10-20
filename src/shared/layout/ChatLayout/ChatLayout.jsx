@@ -1,4 +1,4 @@
-import MessagesContainer from '@/shared/pages/messages/MessagesContainer';
+import { MessagesContainer } from '@/shared/pages/messages';
 import { useChatRoute } from './useChatRoute';
 
 /**

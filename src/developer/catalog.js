@@ -862,15 +862,15 @@ export const COMPONENT_DOCS = [
   },
   {
     id: 'notifications-page-content',
-    name: 'NotificationsPageContent',
+    name: 'NotificationsPanel',
     category: 'pages',
-    summary: 'Shared notifications list card with mark-read actions. Wrap in Container or PanelPage per layout.',
-    path: 'src/shared/pages/notifications/NotificationsPageContent.jsx',
+    summary: 'User notifications list card with mark-read actions. Wrap in Container or PanelPage per layout.',
+    path: 'src/modules/user/pages/notifications/components/list/NotificationsPanel.jsx',
     importExample:
-      "import NotificationsPageContent from '@/shared/pages/notifications/NotificationsPageContent'\n\n<PanelPage className=\"max-w-[760px]\">\n  <NotificationsPageContent />\n</PanelPage>",
+      "import { NotificationsPanel } from '@/modules/user/pages/notifications'\n\n<PanelPage className=\"max-w-[760px]\">\n  <NotificationsPanel />\n</PanelPage>",
     props: [],
-    requiredExample: `<NotificationsPageContent />`,
-    optionalExample: `<Container className="max-w-[760px]">\n  <NotificationsPageContent />\n</Container>`,
+    requiredExample: `<NotificationsPanel />`,
+    optionalExample: `<Container className="max-w-[760px]">\n  <NotificationsPanel />\n</Container>`,
     previewId: 'notifications-page-content',
   },
 ];

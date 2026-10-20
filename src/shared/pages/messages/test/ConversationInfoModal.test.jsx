@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MemoryRouter } from 'react-router';
-import ConversationInfoModal from './ConversationInfoModal';
+import ConversationInfoModal from '../components/modals/ConversationInfoModal';
 import { memberProfilePath } from '@/shared/constants/profile';
 
 const group = {

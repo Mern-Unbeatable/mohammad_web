@@ -2,7 +2,7 @@ import { Link } from 'react-router';
 import { ChevronLeft } from 'lucide-react';
 import { ListingDetailSkeleton } from '@/components/common/Skeleton';
 import NotFound from '@/shared/pages/NotFound';
-import StartConversationModal from '@/shared/pages/messages/StartConversationModal';
+import { StartConversationModal } from '@/shared/pages/messages';
 import MarketplacePage from './components/layout/MarketplacePage';
 import ImageGallery from './components/detail/ImageGallery';
 import ListingOverviewCard from './components/detail/ListingOverviewCard';

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import RecipientPicker from './RecipientPicker';
-import { emptyResultsText } from './recipientPickerText';
-import CreateGroupModal from './CreateGroupModal';
+import RecipientPicker from '../components/recipients/RecipientPicker';
+import { emptyResultsText } from '../utils/recipientPickerText';
+import CreateGroupModal from '../components/modals/CreateGroupModal';
 
 describe('RecipientPicker empty states', () => {
   it('names the search term when nobody matches', () => {

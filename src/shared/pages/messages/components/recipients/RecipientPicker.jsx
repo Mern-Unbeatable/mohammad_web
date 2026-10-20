@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Check, Loader2, Search } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
-import { emptyResultsText } from "./recipientPickerText";
+import { emptyResultsText } from "../../utils/recipientPickerText";
 
 const SEARCH_DEBOUNCE_MS = 300;
 

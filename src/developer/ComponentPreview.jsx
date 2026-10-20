@@ -29,7 +29,7 @@ import ProfilePageContent from "@/components/data-display/ProfilePageContent/Pro
 import ContactProfilePageContent from "@/components/data-display/ContactProfilePageContent/ContactProfilePageContent";
 import BlogsPageContent from "@/shared/pages/blogs/BlogsPageContent";
 import BlogDetailPageContent from "@/shared/pages/blogs/BlogDetailPageContent";
-import NotificationsPageContent from "@/shared/pages/notifications/NotificationsPageContent";
+import { NotificationsPanel } from "@/modules/user/pages/notifications";
 import { SubscriptionDetailsCard } from "@/modules/user/pages/profile";
 import {
   DEMO_ADMIN_PASSWORD,
@@ -599,10 +599,10 @@ function BlogDetailPageContentPreview() {
   );
 }
 
-function NotificationsPageContentPreview() {
+function NotificationsPanelPreview() {
   return (
     <div className="max-w-[760px]">
-      <NotificationsPageContent />
+      <NotificationsPanel />
     </div>
   );
 }
@@ -667,7 +667,7 @@ export default function ComponentPreview({ previewId, variantId }) {
     case "blog-detail-page-content":
       return <BlogDetailPageContentPreview />;
     case "notifications-page-content":
-      return <NotificationsPageContentPreview />;
+      return <NotificationsPanelPreview />;
     default:
       return <p className="text-sm text-[#64748B]">No preview available.</p>;
   }
