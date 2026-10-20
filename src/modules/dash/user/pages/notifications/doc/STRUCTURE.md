@@ -49,12 +49,11 @@ There is no `utils/` folder: mapping lives in `@/features/user/notifications`
 flowchart TD
   NotificationsView --> NotificationsPanel --> useNotifications
   NotificationsPanel --> NotificationsHeader & NotificationList --> NotificationItem
-  ComponentPreview[developer ComponentPreview] --> NotificationsPanel
 ```
 
 ## Public API (`index.js`)
 
-- `NotificationsPanel` — used by the developer component preview / catalog.
+- `NotificationsPanel` — reusable notifications card for other layouts.
   No props; needs the `userNotifications` store slice and a router.
 
 The route lazy-loads `NotificationsView.jsx` directly.
@@ -73,4 +72,3 @@ The route lazy-loads `NotificationsView.jsx` directly.
   and split into the panel, header, list, item and `useNotifications`.
 - Its unused "controlled" mode (`items` / `loading` / `onMarkRead` /
   `onMarkAllRead` props) was removed; nothing passed them.
-- The developer preview and catalog now use `NotificationsPanel` from `index.js`.

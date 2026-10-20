@@ -1,6 +1,4 @@
 import { AlertTriangle, CheckCircle2, Clock, Eye, Megaphone, Send } from 'lucide-react';
-import { DEMO_CHART_MONTHS } from '@/data/demoData';
-
 export const SUPPLIER_DASHBOARD_STATS = [
   {
     id: 'active',
@@ -56,7 +54,20 @@ export const SUPPLIER_AD_PERFORMANCE_CHART = {
   ],
 };
 
-export const SUPPLIER_CHART_MONTHS = DEMO_CHART_MONTHS;
+export const SUPPLIER_CHART_MONTHS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
 
 export const SUPPLIER_DASHBOARD_NOTIFICATIONS = [
   {

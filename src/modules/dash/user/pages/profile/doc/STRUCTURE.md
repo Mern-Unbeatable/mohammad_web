@@ -3,7 +3,7 @@
 The signed-in user's own profile (`/profile`): hero, subscription details,
 "My Posts" activity with edit / report / delete, and submitted reports; plus the
 edit-profile form (`/profile/setup`). The subscription card is reused by the
-admin user detail page and the developer component preview.
+admin user detail page.
 
 ## Folder layout
 
@@ -86,7 +86,7 @@ Code outside this folder must import from `@/modules/dash/user/pages/profile` on
 
 - `SubscriptionDetailsCard` (props: `subscription`, `manageable`, `accent`)
 
-Used by `AdminUserDetailView` and `developer/ComponentPreview`. The routes
+Used by `AdminUserDetailView`. The routes
 lazy-load the `*View.jsx` files directly.
 
 ## Where to add things
