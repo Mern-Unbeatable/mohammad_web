@@ -1,4 +1,4 @@
-import { CardSkeleton } from '@/components/common/Skeleton';
+import { CardSkeleton } from '@/components/loader';
 import ContactCard from '@/components/data-display/ContactCard/ContactCard';
 import {
   CONTACTS_GRID_CLASS,

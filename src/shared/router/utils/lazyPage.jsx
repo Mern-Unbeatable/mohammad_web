@@ -1,5 +1,5 @@
 import { Suspense, lazy } from "react";
-import PageLoadingFallback from "@/shared/router/components/PageLoadingFallback";
+import PageLoadingFallback from "@/components/loader/fallbacks/PageLoadingFallback";
 
 /**
  * Wraps a dynamic import in React.lazy + Suspense for route elements.

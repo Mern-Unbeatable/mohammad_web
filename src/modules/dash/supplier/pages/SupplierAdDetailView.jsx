@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AlertTriangle, ChevronLeft } from "lucide-react";
 import { toast } from "react-hot-toast";
 import AdDetailCard from "@/modules/dash/supplier/components/AdDetailCard";
-import { AdvertisementDetailSkeleton } from "@/components/common/Skeleton";
+import { AdvertisementDetailSkeleton } from "@/components/loader";
 import { PostComments } from "@/modules/dash/user/pages/feed";
 import {
   fetchSupplierAdDetails,

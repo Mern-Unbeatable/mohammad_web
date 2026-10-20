@@ -1,5 +1,5 @@
 import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import { MY_APPLICATION_FILTERS } from "@/features/recruitment/jobStatus";
 import JobsSectionHeader from "../jobs/JobsSectionHeader";
 import { jobCount } from "../../utils/jobsSection";

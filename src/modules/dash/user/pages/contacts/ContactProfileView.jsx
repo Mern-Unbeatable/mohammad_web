@@ -1,4 +1,4 @@
-import { ContactProfilePageSkeleton } from '@/components/common/Skeleton';
+import { ContactProfilePageSkeleton } from '@/components/loader';
 import ContactProfilePageContent from '@/components/data-display/ContactProfilePageContent/ContactProfilePageContent';
 import { ReportPostModal } from '@/modules/dash/user/pages/feed';
 import NotFound from '@/modules/error/NotFound';

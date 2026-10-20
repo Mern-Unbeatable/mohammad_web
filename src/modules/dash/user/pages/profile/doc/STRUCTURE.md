@@ -25,9 +25,9 @@ profile/
 │   │   └── ReportRow.jsx           Reason · type, snippet, date, status
 │   │
 │   └── layout/
-│       ├── MembershipPrompt.jsx    "Want full access?" link for inactive accounts
-│       └── ProfileSetupLoading.jsx Spinner while the edit form loads
-│                             (DeletePostModal: @/components/common/DeletePostModal)
+│       └── MembershipPrompt.jsx    "Want full access?" link for inactive accounts
+│                             (DeletePostModal: @/components/common/DeletePostModal;
+│                              ProfileSetupLoading: @/components/loader/spinners)
 │
 ├── hooks/
 │   ├── useProfilePage.js         Load profile + reports, error toasts, premium / subscription flags

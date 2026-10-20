@@ -17,7 +17,8 @@ components/navigation/
 │   │                            # MobileMenuDrawer
 │   ├── menus/                   # NavHoverMenu, MessagesHoverMenu,
 │   │                            # NotificationsHoverMenu, NotificationPreviewItem,
-│   │                            # ConversationSkeleton, PreviewEmpty, ProfileDropdown
+│   │                            # PreviewEmpty, ProfileDropdown
+│   │                            # (ConversationSkeleton: @/components/loader)
 │   ├── bottom-nav/MobileBottomNav.jsx
 │   ├── left-sidebar/            # LeftSidebar, ProfileCard, TrialCard,
 │   │                            # QuickLinksCard, MetaLine

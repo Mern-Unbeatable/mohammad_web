@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
 import Pagination from "@/components/common/Pagination/Pagination";
 import SegmentedTabs from "@/components/common/SegmentedTabs/SegmentedTabs";
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import JobCard from "@/components/data-display/JobCard/JobCard";
 import {
   RecruitmentToolbar,

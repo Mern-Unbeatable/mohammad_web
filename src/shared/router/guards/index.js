@@ -1,3 +1,3 @@
 export { default as RequireRole } from './RequireRole';
 export { default as GuestOnly } from './GuestOnly';
-export { default as SessionCheckingFallback } from './SessionCheckingFallback';
+export { default as SessionCheckingFallback } from '@/components/loader/fallbacks/SessionCheckingFallback';

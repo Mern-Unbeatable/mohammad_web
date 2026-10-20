@@ -1,6 +1,6 @@
 import Container from '@/components/ui/Container';
 import Pagination from '@/components/common/Pagination/Pagination';
-import { CardSkeleton } from '@/components/common/Skeleton';
+import { CardSkeleton } from '@/components/loader';
 import BlogGridCard from '@/components/data-display/BlogCard/BlogGridCard';
 import { BLOG_BASE_PATH, BLOG_GRID_CLASS, BLOGS_PAGE_SIZE } from '../../constant/constants';
 

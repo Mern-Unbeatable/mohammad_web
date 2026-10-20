@@ -1,6 +1,6 @@
 import Container from "@/components/ui/Container";
 import ProfileSetupForm from "@/components/forms/ProfileSetupForm/ProfileSetupForm";
-import ProfileSetupLoading from "./components/layout/ProfileSetupLoading";
+import ProfileSetupLoading from "@/components/loader/spinners/ProfileSetupLoading";
 import { useProfileSetup } from "./hooks/useProfileSetup";
 
 const ProfileSetupView = () => {

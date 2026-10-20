@@ -14,13 +14,11 @@ shared/router/
 │   ├── admin.routes.jsx        # RequireRole(ADMIN) + AdminLayout
 │   └── chat.routes.jsx         # buildChatRoute / legacyChatRoute, shared by the role routes
 ├── guards/                     # route elements used by routes/*.routes.jsx
-│   ├── index.js                # RequireRole, GuestOnly, SessionCheckingFallback
+│   ├── index.js                # RequireRole, GuestOnly, SessionCheckingFallback (re-export)
 │   ├── RequireRole.jsx         # login redirect, wrong-role redirect (handle.roleRedirect)
-│   ├── GuestOnly.jsx           # sends signed-in users to their home path
-│   └── SessionCheckingFallback.jsx
+│   └── GuestOnly.jsx           # sends signed-in users to their home path
 ├── components/
 │   ├── RouterErrorPage.jsx     # root errorElement
-│   ├── PageLoadingFallback.jsx # Suspense fallback for lazy pages (also ChatRedirect)
 │   └── ScrollToTop.jsx         # rendered by the layouts and PanelLayout
 ├── utils/
 │   ├── lazyPage.jsx            # React.lazy + Suspense wrapper used by the role routes
@@ -29,4 +27,5 @@ shared/router/
 └── doc/STRUCTURE.md
 ```
 
-Guards import `useAuth` from `@/modules/auth`. Route layouts live in `@/layouts`.
+Guards import `useAuth` from `@/modules/auth`. Loading UI (`PageLoadingFallback`,
+`SessionCheckingFallback`) lives in `@/components/loader/fallbacks`. Route layouts live in `@/layouts`.

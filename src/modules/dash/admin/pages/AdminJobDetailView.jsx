@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import JobDetailCard from "@/components/data-display/JobDetailCard/JobDetailCard";
-import { JobDetailSkeleton } from "@/components/common/Skeleton";
+import { JobDetailSkeleton } from "@/components/loader";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
 import NotFound from "@/modules/error/NotFound";

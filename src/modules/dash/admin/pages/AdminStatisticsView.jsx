@@ -6,7 +6,7 @@ import LineChartCard from "@/components/data-display/LineChartCard/LineChartCard
 import {
   CardSkeleton,
   LineChartCardSkeleton,
-} from "@/components/common/Skeleton";
+} from "@/components/loader";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
 import {

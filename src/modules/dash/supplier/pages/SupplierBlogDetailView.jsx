@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import Container from "@/components/ui/Container";
-import { BlogDetailSkeleton } from "@/components/common/Skeleton";
+import { BlogDetailSkeleton } from "@/components/loader";
 import NotFound from "@/modules/error/NotFound";
 import {
   fetchSupplierBlogBySlug,

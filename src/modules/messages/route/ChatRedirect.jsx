@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router';
 import { toast } from 'react-hot-toast';
 import { parseLegacyChatLink, resolveLegacyChatLink } from '@/features/messages';
 import { chatPath } from '@/features/messages/chatPaths';
-import PageLoadingFallback from '@/shared/router/components/PageLoadingFallback';
+import PageLoadingFallback from '@/components/loader/fallbacks/PageLoadingFallback';
 import { useChatRoute } from './useChatRoute';
 
 /**

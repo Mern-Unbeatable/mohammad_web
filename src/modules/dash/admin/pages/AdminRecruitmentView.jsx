@@ -4,7 +4,7 @@ import { toast } from "react-hot-toast";
 import { ChevronDown } from "lucide-react";
 import Pagination from "@/components/common/Pagination/Pagination";
 import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import JobCard from "@/components/data-display/JobCard/JobCard";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";

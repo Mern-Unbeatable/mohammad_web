@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import JobCard from "@/components/data-display/JobCard/JobCard";
 import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
 import { editJobPath, jobDetailPath } from "../../constant/constants";

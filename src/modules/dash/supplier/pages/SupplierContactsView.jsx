@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import { Clock, Handshake, UserCheck, Users } from "lucide-react";
 import Pagination from "@/components/common/Pagination/Pagination";
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import ContactCard from "@/components/data-display/ContactCard/ContactCard";
 import {
   fetchContactsList,

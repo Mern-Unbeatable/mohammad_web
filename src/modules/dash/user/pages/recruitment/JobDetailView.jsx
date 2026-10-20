@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router";
 import { ChevronLeft } from "lucide-react";
 import Container from "@/components/ui/Container";
-import { JobDetailPageSkeleton } from "@/components/common/Skeleton";
+import { JobDetailPageSkeleton } from "@/components/loader";
 import JobDetailCard from "@/components/data-display/JobDetailCard/JobDetailCard";
 import { toJobDetailModel } from "@/features/dash/user/recruitment";
 import NotFound from "@/modules/error/NotFound";

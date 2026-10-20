@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserProfile, setSessionReady } from "@/features/auth";
 import { tokenService } from "@/config";
-import AppBootLoadingScreen from "@/components/ui/AppBootLoadingScreen";
+import AppBootLoadingScreen from "@/components/loader/screens/AppBootLoadingScreen";
 
 /**
  * Bootstraps auth when a token cookie exists: revalidates via /auth/me.

@@ -5,7 +5,7 @@ import { ChevronLeft } from "lucide-react";
 import { toast } from "react-hot-toast";
 import Card from "@/components/ui/Card";
 import JobDetailCard from "@/components/data-display/JobDetailCard/JobDetailCard";
-import { JobDetailSkeleton } from "@/components/common/Skeleton";
+import { JobDetailSkeleton } from "@/components/loader";
 import { AppliedCandidatesPanel, JobPosterCard } from "@/modules/dash/user/pages/recruitment";
 import {
   fetchSupplierJobDetails,

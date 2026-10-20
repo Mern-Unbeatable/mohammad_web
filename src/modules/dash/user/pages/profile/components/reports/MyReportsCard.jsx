@@ -1,5 +1,5 @@
 import Card from "@/components/ui/Card";
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import ReportRow from "./ReportRow";
 
 /** Sidebar card listing the reports the user has submitted. */

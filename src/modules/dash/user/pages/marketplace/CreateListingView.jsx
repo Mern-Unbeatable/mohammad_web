@@ -3,7 +3,7 @@ import { ChevronLeft } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import MarketplacePage from './components/layout/MarketplacePage';
 import ListingForm from './components/form/ListingForm';
-import ListingFormLoading from './components/form/ListingFormLoading';
+import ListingFormLoading from '@/components/loader/spinners/ListingFormLoading';
 import { useListingForm } from './hooks/useListingForm';
 import { MY_LISTINGS_PATH } from './constant/constants';
 

@@ -1,4 +1,4 @@
-import { CardSkeleton } from '@/components/common/Skeleton';
+import { CardSkeleton } from '@/components/loader';
 import { NOTIFICATIONS_SKELETON_COUNT } from '../../constant/constants';
 import NotificationItem from './NotificationItem';
 

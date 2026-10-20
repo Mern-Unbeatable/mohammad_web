@@ -1,5 +1,5 @@
 import Pagination from '@/components/common/Pagination/Pagination';
-import { CardSkeleton } from '@/components/common/Skeleton';
+import { CardSkeleton } from '@/components/loader';
 import { POSTS_GRID_CLASS, POSTS_PAGE_SIZE } from '../../constant/constants';
 import PostsEmptyState from './PostsEmptyState';
 

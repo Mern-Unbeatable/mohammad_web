@@ -1,4 +1,4 @@
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import FeedPost from "./post/FeedPost";
 import LoadMorePosts from "./LoadMorePosts";
 

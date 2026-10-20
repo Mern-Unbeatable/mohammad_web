@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import { Ban, Calendar, CheckCircle2, Clock3, RefreshCw } from "lucide-react";
 import Card from "@/components/ui/Card";
 import RichText from "@/components/data-display/RichText/RichText";
-import { AdvertisementDetailSkeleton } from "@/components/common/Skeleton";
+import { AdvertisementDetailSkeleton } from "@/components/loader";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
 import ReasonModal from "@/modules/dash/admin/components/ReasonModal";

@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import Pagination from "@/components/common/Pagination/Pagination";
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import Container from "@/components/ui/Container";
 import LatestHubCard from "@/components/data-display/BlogCard/LatestHubCard";
 import BlogGridCard from "@/components/data-display/BlogCard/BlogGridCard";

@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import Pagination from "@/components/common/Pagination/Pagination";
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import GeneralPostCard from "@/components/data-display/GeneralPostCard/GeneralPostCard";
 import { GeneralToolbar, CreateGeneralPostModal } from "@/modules/dash/user/pages/general";
 import PanelPage from "@/components/navigation/panel/PanelPage";

@@ -1,4 +1,4 @@
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import { NOTIFICATIONS_PATH } from "../../constant/constants";
 import { useNotificationsPreview } from "../../hooks/useNotificationsPreview";
 import NavHoverMenu from "./NavHoverMenu";

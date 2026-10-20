@@ -1,4 +1,4 @@
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import JobCard from "@/components/data-display/JobCard/JobCard";
 import { PUBLIC_JOBS_PAGE_SIZE, VIEW_MODE, jobDetailPath } from "../../constant/constants";
 

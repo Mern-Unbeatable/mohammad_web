@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { Briefcase } from "lucide-react";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import { SIDEBAR_LIMIT } from "../../constant/constants";
 import { EmptyRow, SectionTitle } from "./SidebarSection";
 

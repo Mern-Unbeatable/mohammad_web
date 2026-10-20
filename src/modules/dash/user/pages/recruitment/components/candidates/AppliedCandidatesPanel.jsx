@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import AllCandidatesModal from "./AllCandidatesModal";
 import ApplicantDetailsModal from "./ApplicantDetailsModal";
 import CandidateRow from "./CandidateRow";

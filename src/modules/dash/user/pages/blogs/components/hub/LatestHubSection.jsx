@@ -1,5 +1,5 @@
 import Container from '@/components/ui/Container';
-import { CardSkeleton } from '@/components/common/Skeleton';
+import { CardSkeleton } from '@/components/loader';
 import LatestHubCard from '@/components/data-display/BlogCard/LatestHubCard';
 import { useHubCarousel } from '../../hooks/useHubCarousel';
 import {

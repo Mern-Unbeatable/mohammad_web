@@ -2,7 +2,7 @@ import { ConversationItem } from "@/components/data-display/Messenger/Messenger"
 import { CHAT_BASE_PATHS } from "@/features/messages/chatPaths";
 import { useMessagesPreview } from "../../hooks/useMessagesPreview";
 import NavHoverMenu from "./NavHoverMenu";
-import ConversationSkeleton from "./ConversationSkeleton";
+import ConversationSkeleton from "@/components/loader/skeletons/rows/ConversationSkeleton";
 import PreviewEmpty from "./PreviewEmpty";
 
 /** Latest conversations on hover; the wrapped link still opens the inbox. */

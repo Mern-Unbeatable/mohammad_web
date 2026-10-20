@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 import Pagination from "@/components/common/Pagination/Pagination";
 import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import BlogAdminCard from "@/components/data-display/BlogAdminCard/BlogAdminCard";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";

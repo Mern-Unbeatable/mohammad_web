@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Calculator, Check, RefreshCw, Trash2, Wallet } from "lucide-react";
 import { toast } from "react-hot-toast";
 import Card from "@/components/ui/Card";
-import { AdminSettingsSkeleton } from "@/components/common/Skeleton";
+import { AdminSettingsSkeleton } from "@/components/loader";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelPageHeader from "@/components/navigation/panel/PanelPageHeader";
 import {

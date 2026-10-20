@@ -11,7 +11,7 @@ import {
   BarChartCardSkeleton,
   NotificationRowSkeleton,
   StatCardSkeleton,
-} from "@/components/common/Skeleton";
+} from "@/components/loader";
 import Card from "@/components/ui/Card";
 import CreateAdModal from "@/modules/dash/supplier/components/CreateAdModal";
 import {

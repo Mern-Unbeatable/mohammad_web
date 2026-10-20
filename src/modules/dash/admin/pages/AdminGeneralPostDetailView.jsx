@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { Calendar, MapPin, Share2 } from "lucide-react";
-import { GeneralPostDetailSkeleton } from "@/components/common/Skeleton";
+import { GeneralPostDetailSkeleton } from "@/components/loader";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelBackButton from "@/components/navigation/panel/PanelBackButton";
 import NotFound from "@/modules/error/NotFound";

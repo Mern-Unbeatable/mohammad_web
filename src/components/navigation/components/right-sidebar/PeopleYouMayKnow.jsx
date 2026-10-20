@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { Check, Clock, UserPlus } from "lucide-react";
 import Card from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
-import { CardSkeleton } from "@/components/common/Skeleton";
+import { CardSkeleton } from "@/components/loader";
 import { SIDEBAR_LIMIT } from "../../constant/constants";
 import { EmptyRow, SectionTitle } from "./SidebarSection";
 

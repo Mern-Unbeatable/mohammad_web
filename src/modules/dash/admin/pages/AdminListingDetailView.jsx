@@ -5,7 +5,7 @@ import { BadgeCheck, MessageCircle } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
-import { ListingDetailSkeleton } from "@/components/common/Skeleton";
+import { ListingDetailSkeleton } from "@/components/loader";
 import { formatPrice } from "@/modules/dash/user/data/marketplace";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelBackButton from "@/components/navigation/panel/PanelBackButton";

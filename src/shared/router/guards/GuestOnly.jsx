@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router';
 import { useAuth } from '@/modules/auth';
-import SessionCheckingFallback from './SessionCheckingFallback';
+import SessionCheckingFallback from '@/components/loader/fallbacks/SessionCheckingFallback';
 
 /**
  * Blocks authenticated users from guest pages (login / register).

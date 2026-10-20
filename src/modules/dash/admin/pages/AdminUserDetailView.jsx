@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 import SuspendUserModal from "@/modules/dash/admin/components/SuspendUserModal";
 import Card from "@/components/ui/Card";
 import ProfilePageContent from "@/components/data-display/ProfilePageContent/ProfilePageContent";
-import { ProfilePageSkeleton } from "@/components/common/Skeleton";
+import { ProfilePageSkeleton } from "@/components/loader";
 import { SubscriptionDetailsCard } from "@/modules/dash/user/pages/profile";
 import PanelPage from "@/components/navigation/panel/PanelPage";
 import PanelBackButton from "@/components/navigation/panel/PanelBackButton";

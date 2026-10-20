@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useLocation, useMatches } from 'react-router';
 import { roleHomePath } from '@/shared/constants/roles';
 import { useAuth } from '@/modules/auth';
-import SessionCheckingFallback from './SessionCheckingFallback';
+import SessionCheckingFallback from '@/components/loader/fallbacks/SessionCheckingFallback';
 
 /**
  * Protects panel routes. Redirects unauthenticated users to login and
