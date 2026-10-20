@@ -1,4 +1,4 @@
-import Skeleton from '@/components/loader/Skeleton';
+import Skeleton from '@/components/loader/common/Skeleton';
 import SkeletonText from '@/components/loader/primitives/SkeletonText';
 
 /** Matches BlogDetailView / SupplierBlogDetailView */

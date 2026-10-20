@@ -1,5 +1,5 @@
 import Card from '@/components/ui/Card';
-import Skeleton from '@/components/loader/Skeleton';
+import Skeleton from '@/components/loader/common/Skeleton';
 import ReportRowSkeleton from '@/components/loader/skeletons/rows/ReportRowSkeleton';
 
 /** Matches MyReportsCard shell + rows */

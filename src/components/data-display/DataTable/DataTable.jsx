@@ -2,7 +2,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronDown, MoreVertical } from 'lucide-react';
 import SegmentedTabs from '@/components/common/SegmentedTabs/SegmentedTabs';
-import Skeleton from '@/components/loader/Skeleton';
+import Skeleton from '@/components/loader/common/Skeleton';
 import StatusBadge from './StatusBadge';
 
 /**

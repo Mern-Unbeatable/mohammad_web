@@ -1,5 +1,5 @@
 import Card from '@/components/ui/Card';
-import Skeleton from '@/components/loader/Skeleton';
+import Skeleton from '@/components/loader/common/Skeleton';
 
 /** Matches StatCard (+ optional hint line used on supplier dashboard) */
 const StatCardSkeleton = ({ showHint = false }) => (

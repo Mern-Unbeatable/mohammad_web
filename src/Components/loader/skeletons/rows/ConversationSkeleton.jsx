@@ -1,4 +1,4 @@
-import Skeleton from '@/components/loader/Skeleton';
+import Skeleton from '@/components/loader/common/Skeleton';
 
 /** Matches the conversation rows in the navbar messages preview. */
 const ConversationSkeleton = ({ rows = 3 }) => (

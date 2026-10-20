@@ -1,4 +1,4 @@
-import Skeleton from '@/components/loader/Skeleton';
+import Skeleton from '@/components/loader/common/Skeleton';
 
 /**
  * Paragraph placeholder: one line per entry in `widths` (full Tailwind width

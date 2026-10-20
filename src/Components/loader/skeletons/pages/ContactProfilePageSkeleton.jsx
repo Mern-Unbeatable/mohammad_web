@@ -1,4 +1,4 @@
-import Skeleton from '@/components/loader/Skeleton';
+import Skeleton from '@/components/loader/common/Skeleton';
 import FeedPostCardSkeleton from '@/components/loader/skeletons/cards/FeedPostCardSkeleton';
 import ProfileHeroSkeleton from '@/components/loader/skeletons/cards/ProfileHeroSkeleton';
 import ContactInfoCardSkeleton from '@/components/loader/skeletons/cards/ContactInfoCardSkeleton';

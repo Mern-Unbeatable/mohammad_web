@@ -1,5 +1,5 @@
 import Card from '@/components/ui/Card';
-import Skeleton from '@/components/loader/Skeleton';
+import Skeleton from '@/components/loader/common/Skeleton';
 
 /** Matches ContactCard layout (Avatar size="lg" = h-14) */
 const ContactCardSkeleton = () => (

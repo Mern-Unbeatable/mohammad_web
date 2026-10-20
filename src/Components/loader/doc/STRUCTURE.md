@@ -7,8 +7,9 @@ the app boot screen and page spinners.
 ```
 components/loader/
 ├── index.js                    # public API: every loader by name (+ default Skeleton)
-├── Skeleton.jsx                # base pulse block: <Skeleton className rounded tone>
-├── CardSkeleton.jsx            # <CardSkeleton variant count as itemClassName> + CARD_SKELETONS
+├── common/
+│   ├── Skeleton.jsx            # base pulse block: <Skeleton className rounded tone>
+│   └── CardSkeleton.jsx        # <CardSkeleton variant count as itemClassName> + CARD_SKELETONS
 ├── test/CardSkeleton.test.jsx
 ├── primitives/                 # reusable shapes built from Skeleton
 │   ├── SkeletonText.jsx        # paragraph: <SkeletonText widths={['w-full', 'w-3/4']} className />

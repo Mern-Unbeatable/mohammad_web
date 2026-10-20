@@ -1,6 +1,6 @@
-export { default } from './Skeleton';
-export { default as Skeleton } from './Skeleton';
-export { CardSkeleton, CARD_SKELETONS } from './CardSkeleton';
+export { default } from './common/Skeleton';
+export { default as Skeleton } from './common/Skeleton';
+export { CardSkeleton, CARD_SKELETONS } from './common/CardSkeleton';
 
 // primitives
 export { default as SkeletonText } from './primitives/SkeletonText';

@@ -1,4 +1,4 @@
-import Skeleton from '@/components/loader/Skeleton';
+import Skeleton from '@/components/loader/common/Skeleton';
 
 /** Matches a row in the job owner's "Applied Candidates" list */
 const CandidateRowSkeleton = () => (

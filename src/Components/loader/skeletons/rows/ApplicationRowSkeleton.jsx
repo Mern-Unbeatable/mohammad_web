@@ -1,4 +1,4 @@
-import Skeleton from '@/components/loader/Skeleton';
+import Skeleton from '@/components/loader/common/Skeleton';
 
 /** Matches My Applications row on MyJobsView */
 const ApplicationRowSkeleton = () => (

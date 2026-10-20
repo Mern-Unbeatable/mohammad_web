@@ -1,4 +1,4 @@
-import Skeleton from '@/components/loader/Skeleton';
+import Skeleton from '@/components/loader/common/Skeleton';
 
 /** Form field placeholder: label line above an input box. */
 const SkeletonField = ({ labelWidth = 'w-20', inputClassName = 'h-10 w-full' }) => (
