@@ -60,14 +60,13 @@ supplier/
 │   ├── constant/ test/ doc/
 │   └── index.js                             Public API: PROFILE_PATH
 │
-├── recruitment/
-│   ├── pages/
-│   │   ├── SupplierRecruitmentView.jsx      Public job posts
-│   │   ├── SupplierMyJobsView.jsx           Own job posts
-│   │   ├── SupplierJobDetailView.jsx        Job detail and applying
-│   │   └── SupplierPostJobView.jsx          Create / edit job
-│   └── components/
-│       └── SupplierRecruitmentActions.jsx   Browse / My jobs / Post job buttons
+├── recruitment/                             Full feature layout; see recruitment/doc/STRUCTURE.md
+│   ├── pages/        SupplierRecruitmentView, SupplierMyJobsView, SupplierJobDetailView, SupplierPostJobView
+│   ├── components/   layout/ (RecruitmentHeader, RecruitmentActions, BackLink), jobs/ (PublicJobsList, MyJobsList, JobsEmptyState, DeleteJobModal), detail/ (ApplyForm, JobNotices), form/ (JobFormCard, JobFormLoading)
+│   ├── hooks/        useJobSearch, useJobsList, usePublicJobs, useMyJobs, useJobDetail, useApplyToJob, useJobForm
+│   ├── utils/        jobsQuery, jobForm
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: JOB_BASE, MY_JOBS_PATH, jobDetailPath
 │
 ├── data/
 │   ├── advertisements.js                    AD_CATEGORIES, getCategoryById (used by CreateAdModal) + demo ad rows
