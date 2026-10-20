@@ -39,13 +39,13 @@ supplier/
 │   ├── utils/        dashboardUtils
 │   └── constant/ test/ doc/
 │
-├── general/pages/
-│   ├── SupplierGeneralView.jsx              Browse general posts
-│   ├── SupplierMyGeneralPostsView.jsx       Own posts with edit / delete
-│   └── SupplierGeneralPostDetailView.jsx    Post page
-│
-├── marketplace/pages/
-│   └── SupplierListingsView.jsx             Listings page
+├── general/                                 Full feature layout; see general/doc/STRUCTURE.md
+│   ├── pages/        SupplierGeneralView, SupplierMyGeneralPostsView, SupplierGeneralPostDetailView
+│   ├── components/   posts/ (SupplierGeneralToolbar, PostsGrid, PostsEmptyState), detail/ (BackToGeneralLink, GeneralPostHeader, GeneralPostBody, PostActions)
+│   ├── hooks/        usePostsListing, useGeneralPostsState, useGeneralPosts, useMyGeneralPosts, useGeneralPostDetail
+│   ├── utils/        generalQueries, postForm
+│   ├── constant/ test/ doc/
+│   └── index.js                             Public API: GENERAL_PATH, generalPostPath
 │
 ├── messages/pages/
 │   └── SupplierMessagesView.jsx             Chat layout (supplier variant)
