@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
-import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { Flag, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 
-/** "…" menu with Edit / Delete for content the viewer owns (posts, comments). */
+/** "…" menu with Edit / Delete for content the viewer owns, or Report for anyone else's. */
 const OwnerActionsMenu = ({
   onEdit,
   onDelete,
+  onReport,
   label = 'Options',
   editLabel = 'Edit',
   deleteLabel = 'Delete',
+  reportLabel = 'Report',
   size = 'md',
   className = '',
 }) => {
@@ -70,6 +72,20 @@ const OwnerActionsMenu = ({
             >
               <Pencil className="h-4 w-4" strokeWidth={1.8} />
               {editLabel}
+            </button>
+          ) : null}
+          {onReport ? (
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setOpen(false);
+                onReport();
+              }}
+              className="flex w-full items-center gap-2.5 px-3.5 py-2 text-[13px] font-semibold text-[#475467] transition-colors hover:bg-[#F9FAFB]"
+            >
+              <Flag className="h-4 w-4" strokeWidth={1.8} />
+              {reportLabel}
             </button>
           ) : null}
           {onDelete ? (

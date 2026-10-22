@@ -1,4 +1,4 @@
-import { MoreHorizontal, Repeat2, Tag } from "lucide-react";
+import { Repeat2, Tag } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import Badge from "@/components/ui/Badge";
 import { POST_BADGES } from "../../constants";
@@ -19,15 +19,14 @@ const PostMenu = ({ post, isOwner, onReport, onEdit, onDelete }) => {
     );
   }
 
+  if (!onReport) return null;
+
   return (
-    <button
-      type="button"
-      onClick={() => onReport?.(post)}
-      className="rounded-full p-1.5 text-[#98A2B3] hover:bg-[#F9FAFB] hover:text-[#64748B]"
-      aria-label="Report post"
-    >
-      <MoreHorizontal className="h-5 w-5" />
-    </button>
+    <OwnerActionsMenu
+      label="Post options"
+      reportLabel="Report post"
+      onReport={() => onReport(post)}
+    />
   );
 };
 

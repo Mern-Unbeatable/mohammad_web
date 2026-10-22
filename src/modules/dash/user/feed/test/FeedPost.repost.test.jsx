@@ -70,7 +70,7 @@ describe("FeedPost reposts after reload", () => {
     const store = reloadWith({ feed: [originalPost()] });
     const html = render(store, "posts");
 
-    expect(html).toContain("0 shares");
+    expect(html).not.toContain("0 shares");
     expect(html).not.toContain(">Shared<");
   });
 });

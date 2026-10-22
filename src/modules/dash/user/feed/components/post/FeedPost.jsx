@@ -53,13 +53,17 @@ const FeedPost = ({ post, onReport, onEdit, onDelete }) => {
           isOwner={isOwner}
         />
         <FeedPostBody post={post} />
-        {statsBar}
+        <PostStats
+          stats={stats}
+          reactionId={reactionId}
+          reactionCounts={reactionCounts}
+          onCommentsClick={() => setCommentsOpen(true)}
+        />
         <PostActions
           reactionId={reactionId}
           onReact={engagement.react}
           commentsOpen={commentsOpen}
           onToggleComments={() => setCommentsOpen((open) => !open)}
-          commentCount={stats?.comments ?? 0}
           onShare={() => setShareOpen(true)}
           shared={post.sharedByMe}
         />
