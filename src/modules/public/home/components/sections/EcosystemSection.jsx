@@ -162,7 +162,9 @@ const EcosystemSection = () => {
 
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:items-stretch xl:gap-6">
           {/* Network Card */}
-          <article className={`${cardBase} flex h-full flex-col p-6 lg:p-7 xl:p-8`}>
+          <article
+            className={`${cardBase} flex h-full flex-col bg-gradient-to-br from-secondary via-white to-secondary/60 p-6 lg:p-7 xl:p-8`}
+          >
             <p className={`${cardLabel} text-primary`}>Core</p>
             <h3 className={cardHeading}>Professional Network</h3>
             <p className={cardText}>
