@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Box,
   Briefcase,
@@ -8,7 +8,7 @@ import {
   ShoppingBag,
   User,
 } from 'lucide-react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { animate, motion, useInView, useReducedMotion } from 'framer-motion';
 import Container from '@/components/ui/Container';
 import { FadeUp } from '@/shared/motion/LandingMotion';
 import {
@@ -63,6 +63,37 @@ const OrbitRing = ({ size, border, dot, duration, reverse = false }) => {
         className={`absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-white ${dot}`}
       />
     </MotionDiv>
+  );
+};
+
+/** Counts a stat like "2,500+" or "12K+" up from zero once it scrolls into view. */
+const CountUp = ({ value }) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-40px' });
+  const reduceMotion = useReducedMotion();
+  const [, digits, suffix] = value.match(/^([\d,]+)(.*)$/) ?? [null, '0', value];
+  const target = Number(digits.replace(/,/g, ''));
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!inView || reduceMotion) return undefined;
+    const controls = animate(0, target, {
+      duration: 1.6,
+      ease: 'easeOut',
+      onUpdate: (latest) => setCurrent(Math.round(latest)),
+    });
+    return () => controls.stop();
+  }, [inView, reduceMotion, target]);
+
+  const shown = reduceMotion ? target : current;
+  return (
+    <span ref={ref}>
+      <span className="sr-only">{value}</span>
+      <span aria-hidden="true">
+        {shown.toLocaleString('en-US')}
+        {suffix}
+      </span>
+    </span>
   );
 };
 
@@ -232,7 +263,9 @@ const EcosystemSection = () => {
             <div className="mt-auto grid grid-cols-3 gap-4 border-t border-[#ECEEF2] pt-6 lg:pt-5 xl:pt-6">
               {stats.map(({ value, label }) => (
                 <div key={label} className="text-center">
-                  <p className="text-[18px] font-bold text-deep-blue xl:text-[20px]">{value}</p>
+                  <p className="text-[18px] font-bold tabular-nums text-deep-blue xl:text-[20px]">
+                    <CountUp value={value} />
+                  </p>
                   <p className="mt-1 text-[10px] font-medium tracking-[0.08em] text-[#64748B] xl:text-[11px]">
                     {label}
                   </p>
