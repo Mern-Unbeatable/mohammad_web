@@ -4,7 +4,6 @@ import {
   FlaskConical,
   GraduationCap,
   Newspaper,
-  Wrench,
 } from 'lucide-react';
 
 export const HOME_PATH = '/';
@@ -28,7 +27,6 @@ export const HERO_FEATURES = [
 
 export const DISCOVER_TAGS = [
   { label: 'Research', icon: FlaskConical, color: 'text-pink-light', bg: 'bg-[#FDF0F6]' },
-  { label: 'Equipment', icon: Wrench, color: 'text-[#E67E22]', bg: 'bg-[#FEF3E8]' },
   { label: 'Jobs', icon: Briefcase, color: 'text-primary', bg: 'bg-[#E8F3FB]' },
   { label: 'Events', icon: CalendarDays, color: 'text-green-primary', bg: 'bg-green-secondary' },
   { label: 'Training', icon: GraduationCap, color: 'text-[#6B7280]', bg: 'bg-[#F3F4F6]' },
@@ -37,7 +35,7 @@ export const DISCOVER_TAGS = [
 
 export const CONNECT_AVATARS = [
   'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=160&h=160&fit=crop&crop=face',
-  'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=160&h=160&fit=crop&crop=face',
+  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&h=160&fit=crop&crop=face',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqy5ShEFSxwHTFMoD48GNhTteRdlLb51azWU0ibObL5g&s=10',
 ];
 
