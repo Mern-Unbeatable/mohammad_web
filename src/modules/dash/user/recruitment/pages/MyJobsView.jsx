@@ -35,7 +35,7 @@ const MyJobsView = () => {
             onTabChange={jobs.changeStatusFilter}
             standalone
             ariaLabel="Filter my job posts by status"
-            className="shrink-0 self-start border border-[#E4E7EC] sm:self-auto"
+            className="shrink-0 self-end border border-[#E4E7EC] sm:self-auto"
           />
         }
         activeView="mine"
@@ -50,7 +50,7 @@ const MyJobsView = () => {
         >
           <Link
             to={CREATE_JOB_PATH}
-            className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-md bg-primary px-3 py-2 text-[12px] font-semibold text-white transition-colors hover:bg-[#066BB0] sm:self-auto"
+            className="inline-flex shrink-0 items-center gap-1.5 self-end rounded-md bg-primary px-3 py-2 text-[12px] font-semibold text-white transition-colors hover:bg-[#066BB0] sm:self-auto"
           >
             <Plus className="h-3.5 w-3.5" />
             Post Job

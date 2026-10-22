@@ -36,18 +36,18 @@ const MobileBottomNav = () => {
           const content = (
             <>
               {isActive && (
-                <span className="absolute top-0 left-1/2 h-0.5 w-10 -translate-x-1/2 rounded-full bg-deep-blue" />
+                <span className="absolute top-0 left-1/2 h-0.5 w-10 -translate-x-1/2 rounded-full bg-primary" />
               )}
               <span className="relative">
                 <Icon
-                  className={`h-6 w-6 ${isActive ? 'text-deep-blue' : 'text-[#64748B]'}`}
+                  className={`h-6 w-6 ${isActive ? 'text-primary' : 'text-[#64748B]'}`}
                   strokeWidth={isActive ? 2.2 : 1.8}
                 />
                 <CountBadge count={badge} className="absolute -right-2 -top-1" />
               </span>
               <span
-                className={`text-[10px] font-medium leading-none ${
-                  isActive ? 'text-deep-blue' : 'text-[#64748B]'
+                className={`text-[10px] leading-none ${
+                  isActive ? 'font-semibold text-primary' : 'font-medium text-[#64748B]'
                 }`}
               >
                 {label}

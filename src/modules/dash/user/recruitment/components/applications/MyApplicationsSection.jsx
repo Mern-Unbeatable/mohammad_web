@@ -30,7 +30,7 @@ const MyApplicationsSection = ({
           onTabChange={onFilterChange}
           standalone
           ariaLabel="Filter my applications by status"
-          className="border border-[#E4E7EC]"
+          className="shrink-0 self-end border border-[#E4E7EC] sm:self-auto"
         />
       </JobsSectionHeader>
     </div>
