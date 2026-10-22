@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import { Globe, Heart, List, Plus } from 'lucide-react';
+import ScrollRow from '@/components/common/scrolls/ScrollRow';
 import { SearchInput } from '@/components/form-controls';
 import { categories } from '@/modules/dash/user/data/marketplace';
 import { SEARCH_MAX_LENGTH } from '@/shared/utils/urlFilters';
@@ -78,7 +79,10 @@ const MarketplaceToolbar = ({
     />
 
     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-      <div className="flex flex-wrap gap-2">
+      <ScrollRow
+        ariaLabel="Filter by category"
+        className="snap-x gap-2 px-0.5 py-0.5 sm:flex-wrap sm:overflow-visible"
+      >
         {categories.map((item) => {
           const isActive = category === item;
           return (
@@ -86,8 +90,15 @@ const MarketplaceToolbar = ({
               key={item}
               type="button"
               aria-pressed={isActive}
-              onClick={() => onCategoryChange(item)}
-              className={`rounded-full px-3.5 py-1.5 text-[12px] font-semibold transition-colors ${
+              onClick={(event) => {
+                event.currentTarget.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'nearest',
+                  inline: 'center',
+                });
+                onCategoryChange(item);
+              }}
+              className={`shrink-0 snap-start whitespace-nowrap rounded-full px-3.5 py-1.5 text-[12px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 ${
                 isActive
                   ? 'bg-[#E67E22] text-white'
                   : 'border border-[#E4E7EC] bg-white text-[#475467] hover:border-[#D0D5DD] hover:text-deep-blue'
@@ -97,12 +108,12 @@ const MarketplaceToolbar = ({
             </button>
           );
         })}
-      </div>
+      </ScrollRow>
 
       {activeView === MARKETPLACE_VIEW.MINE && (
         <Link
           to={CREATE_LISTING_PATH}
-          className={`${actionBtn} shrink-0 self-start bg-primary text-white hover:bg-[#066BB0]`}
+          className={`${actionBtn} shrink-0 self-end bg-primary sm:self-start text-white hover:bg-[#066BB0]`}
         >
           <Plus className="h-3.5 w-3.5" />
           Create Listing
