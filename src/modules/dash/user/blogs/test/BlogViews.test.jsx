@@ -49,7 +49,7 @@ describe('BlogDetailView', () => {
 
   it('renders the article and popular posts without the current one', () => {
     const html = renderDetail({ selectedBlog: blog(1), latestBlogs: [blog(1), blog(2)] });
-    expect(html).toContain('← Back to Blogs');
+    expect(html).toContain('Back to Blogs');
     expect(html).toContain('href="/blogs/post-2"');
     expect(html).not.toContain('href="/blogs/post-1"');
   });

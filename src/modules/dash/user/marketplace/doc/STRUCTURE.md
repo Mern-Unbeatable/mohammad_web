@@ -23,7 +23,7 @@ marketplace/
 │
 ├── components/
 │   ├── toolbar/
-│   │   └── MarketplaceToolbar.jsx   Title, Saved / My / Create links, search, category pills
+│   │   └── MarketplaceToolbar.jsx   Title, Public / Saved / My links (+ Create on My listings), search, category pills
 │   │
 │   ├── listings/             Shared list rendering
 │   │   ├── ListingsSection.jsx      Titled grid with skeleton, error + retry, empty state
@@ -35,7 +35,7 @@ marketplace/
 │   │   ├── SpecTile.jsx
 │   │   ├── ListingPriceCard.jsx     Price, save toggle, Edit or Contact / Email / WhatsApp
 │   │   ├── ContactLinkButton.jsx    Contact link, or disabled button when unavailable
-│   │   └── SellerCard.jsx           Seller avatar, title, profile link
+│   │   └── (seller card: JobPosterCard from user/recruitment, titled "Seller")
 │   │
 │   ├── form/                 Create / edit form
 │   │   ├── ListingForm.jsx          All fields, seller line, submit button
@@ -108,7 +108,7 @@ flowchart TD
   CreateListingView --> useListingForm --> useListingPhotos
   CreateListingView --> ListingForm --> SelectField & PhotoPicker
   ListingDetailView --> useListingDetail --> useToggleSaveListing
-  ListingDetailView --> ImageGallery & ListingOverviewCard & ListingPriceCard & SellerCard
+  ListingDetailView --> ImageGallery & ListingOverviewCard & ListingPriceCard & JobPosterCard
 ```
 
 ## Public API (`index.js`)

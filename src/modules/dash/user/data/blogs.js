@@ -1,14 +1,17 @@
 import { withProductImages } from './productImages';
 
 export const categoryStyles = {
-  'Industry News': 'bg-green-secondary text-green-primary',
-  Research: 'bg-[#FEF3E8] text-[#E67E22]',
-  'Laboratory Technology': 'bg-pink-secondary text-pink-light',
-  Equipment: 'bg-secondary text-primary',
-  Training: 'bg-[#E8F3FB] text-primary',
-  Events: 'bg-[#FEF9E6] text-[#B8860B]',
-  Careers: 'bg-green-secondary text-green-primary',
-  Resources: 'bg-pink-secondary text-pink-light',
+  'Industry News': 'bg-green-secondary text-green-primary ring-green-primary/20',
+  Research: 'bg-[#FEF3E8] text-[#E67E22] ring-[#E67E22]/20',
+  'Laboratory Technology': 'bg-pink-secondary text-pink-light ring-pink-light/15',
+  Technology: 'bg-pink-secondary text-pink-light ring-pink-light/15',
+  Equipment: 'bg-secondary text-primary ring-primary/15',
+  Marketplace: 'bg-secondary text-primary ring-primary/15',
+  Quality: 'bg-[#EEF2FF] text-[#4F46E5] ring-[#4F46E5]/15',
+  Training: 'bg-[#E8F3FB] text-primary ring-primary/15',
+  Events: 'bg-[#FEF9E6] text-[#B8860B] ring-[#B8860B]/20',
+  Careers: 'bg-green-secondary text-green-primary ring-green-primary/20',
+  Resources: 'bg-pink-secondary text-pink-light ring-pink-light/15',
 };
 
 const latestArticlesRaw = [

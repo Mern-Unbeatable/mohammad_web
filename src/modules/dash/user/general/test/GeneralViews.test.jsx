@@ -66,4 +66,22 @@ describe('GeneralPostDetailView', () => {
   it('has no Download for news', () => {
     expect(renderDetail(post('p1'))).not.toContain('Download');
   });
+
+  it('shows the author details beside the post', () => {
+    const html = renderDetail({
+      ...post('p1'),
+      author: {
+        id: 'a1',
+        name: 'Ana Lab',
+        title: 'Research Scientist',
+        company: 'BioCore',
+        location: 'Dhaka',
+      },
+    });
+    expect(html).toContain('Posted by');
+    expect(html).toContain('Ana Lab');
+    expect(html).toContain('Research Scientist · BioCore');
+    expect(html).toContain('Dhaka');
+    expect(html).toContain('href="/contacts/a1"');
+  });
 });

@@ -1,5 +1,6 @@
-import { Link, useParams } from "react-router";
-import { ChevronLeft, Loader2 } from "lucide-react";
+import { useParams } from "react-router";
+import { Loader2 } from "lucide-react";
+import BackLink from "@/components/layout/BackLink";
 import DashboardPage from "@/components/layout/DashboardPage";
 import Card from "@/components/ui/Card";
 import { EMPLOYMENT_TYPE_OPTIONS } from "@/features/dash/user/recruitment";
@@ -26,13 +27,9 @@ const PostJobView = () => {
 
   return (
     <DashboardPage width="6xl">
-      <Link
-        to={MY_JOBS_PATH}
-        className="mb-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
-      >
-        <ChevronLeft className="h-4 w-4" />
+      <BackLink to={MY_JOBS_PATH} className="mb-5">
         Back to my jobs
-      </Link>
+      </BackLink>
 
       <Card>
         <div className="border-b border-[#EAECF0] px-5 py-5 sm:px-8 sm:py-6">

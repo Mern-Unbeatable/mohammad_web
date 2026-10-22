@@ -8,7 +8,7 @@ import ArchiveSection from './ArchiveSection';
  * the role's `useBlogsHub()` result; `basePath` builds article links.
  */
 const BlogsHub = ({ hub, basePath, pageSize }) => (
-  <div className="pb-8 pt-0 sm:pb-10">
+  <div>
     <BlogsHero query={hub.query} onQueryChange={hub.setQuery} />
     <LatestHubSection items={hub.latestItems} loading={hub.latestLoading} basePath={basePath} />
     <ArchiveSection

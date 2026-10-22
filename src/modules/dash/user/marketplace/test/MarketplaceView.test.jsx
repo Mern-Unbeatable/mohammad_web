@@ -39,6 +39,15 @@ const loadedPage = (page, totalPages = 3) => ({
   listingsMeta: { page, pageSize: 8, total: totalPages * 8, totalPages },
 });
 
+describe('MarketplaceView toolbar', () => {
+  it('marks Public Listing current and hides Create Listing', () => {
+    const html = render('/marketplace', loadedPage(1));
+    expect(html).toMatch(/<a[^>]*aria-current="page"[^>]*>(?:(?!<\/a>).)*Public Listing/);
+    expect(html).toContain('href="/marketplace/my-listings"');
+    expect(html).not.toContain('Create Listing');
+  });
+});
+
 describe('MarketplaceView pagination', () => {
   it("highlights the page from the URL and shows that page's listings", () => {
     const html = render('/marketplace?page=2', loadedPage(2));

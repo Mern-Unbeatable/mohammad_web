@@ -48,7 +48,7 @@ const render = ({ user = { id: ME, role: 'USER' }, selectedListing }) => {
 };
 
 const sellerProfileHref = (html) =>
-  html.match(/href="([^"]*)"[^>]*>(?:(?!<a\b).)*?View seller profile</)?.[1] ?? null;
+  html.match(/href="([^"]*)"[^>]*>(?:(?!<a\b).)*?View profile</)?.[1] ?? null;
 
 const descriptionParagraph = (html) =>
   html.match(/<p class="([^"]*)">([^<]*Line one[^<]*)<\/p>/) ?? [];

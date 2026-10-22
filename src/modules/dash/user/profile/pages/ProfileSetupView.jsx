@@ -1,5 +1,4 @@
-import { Link } from "react-router";
-import { ChevronLeft } from "lucide-react";
+import BackLink from "@/components/layout/BackLink";
 import DashboardPage from "@/components/layout/DashboardPage";
 import ProfileSetupForm from "../components/setup/ProfileSetupForm";
 import ProfileSetupLoading from "@/components/loader/spinners/ProfileSetupLoading";
@@ -11,13 +10,9 @@ const ProfileSetupView = () => {
 
   return (
     <DashboardPage width="narrow" spacing="relaxed">
-      <Link
-        to={PROFILE_PATH}
-        className="inline-flex items-center gap-1.5 self-start rounded-full px-1 py-1 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
-      >
-        <ChevronLeft className="h-4 w-4" />
+      <BackLink to={PROFILE_PATH} className="self-start">
         Back to profile
-      </Link>
+      </BackLink>
       {setup.loading ? (
         <ProfileSetupLoading />
       ) : (

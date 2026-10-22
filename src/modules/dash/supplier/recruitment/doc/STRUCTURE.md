@@ -40,7 +40,7 @@ recruitment/
 │   ├── layout/
 │   │   ├── RecruitmentHeader.jsx    PanelPageHeader + shared RecruitmentToolbar
 │   │   ├── RecruitmentActions.jsx   Public Job Posts / My Job Posts (new-application badge)
-│   │   └── BackLink.jsx
+│   │   └── (BackLink: @/components/layout/BackLink)
 │   └── form/
 │       ├── JobFormCard.jsx          Create / edit heading + shared JobPostForm
 │       └── JobFormLoading.jsx

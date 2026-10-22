@@ -1,5 +1,4 @@
-import { Link } from 'react-router';
-import { ChevronLeft } from 'lucide-react';
+import BackLink from '@/components/layout/BackLink';
 import Card from '@/components/ui/Card';
 import DashboardPage from '@/components/layout/DashboardPage';
 import ListingForm from '../components/form/ListingForm';
@@ -21,13 +20,9 @@ const CreateListingView = () => {
 
   return (
     <DashboardPage width="narrow">
-      <Link
-        to={MY_LISTINGS_PATH}
-        className="mb-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
-      >
-        <ChevronLeft className="h-4 w-4" />
+      <BackLink to={MY_LISTINGS_PATH} className="mb-4">
         Back to my listings
-      </Link>
+      </BackLink>
 
       <Card>
         <div className="border-b border-[#E4E7EC] px-5 py-4 sm:px-6">

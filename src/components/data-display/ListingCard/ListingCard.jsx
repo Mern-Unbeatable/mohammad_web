@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
-import { Heart } from 'lucide-react';
+import { Heart, MapPin } from 'lucide-react';
+import Avatar from '@/components/ui/Avatar';
 import Card from '@/components/ui/Card';
 import { formatPrice } from '@/modules/dash/user/data/marketplace';
 
@@ -13,7 +14,10 @@ const ListingCard = ({
   onEdit,
 }) => {
   const href = detailHref || `/marketplace/${listing.id}`;
-  const sellerLine = `${listing.seller.company} · ${listing.location}`;
+  const seller = listing.seller || {};
+  const sellerMeta = [seller.company, listing.location]
+    .filter((part) => part && part !== '—')
+    .join(' · ');
 
   return (
     <Card className="flex h-full flex-col">
@@ -53,10 +57,27 @@ const ListingCard = ({
         <p className="mt-1.5 text-[12px] text-[#64748B]">
           {listing.condition} · {listing.year}
         </p>
-        <p className="mt-2 text-[18px] font-bold text-green-primary">
+        <p className="mb-3 mt-2 text-[18px] font-bold text-green-primary">
           {formatPrice(listing.price)}
         </p>
-        <p className="mt-1 line-clamp-1 text-[12px] text-[#98A2B3]">{sellerLine}</p>
+
+        <div className="mt-auto flex items-center gap-2.5 border-t border-[#EEF2F6] pt-3">
+          <Avatar
+            src={seller.avatar}
+            alt={seller.name}
+            initials={seller.initials}
+            size="sm"
+          />
+          <div className="min-w-0">
+            <p className="truncate text-[12px] font-semibold text-deep-blue">{seller.name}</p>
+            {sellerMeta ? (
+              <p className="mt-0.5 flex items-center gap-1 text-[11px] text-[#98A2B3]">
+                <MapPin className="h-3 w-3 shrink-0 text-pink-light" aria-hidden="true" />
+                <span className="truncate">{sellerMeta}</span>
+              </p>
+            ) : null}
+          </div>
+        </div>
 
         <div className="mt-4">
           {variant === 'admin' ? (

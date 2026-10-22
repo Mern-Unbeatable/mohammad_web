@@ -1,10 +1,11 @@
 import { Link } from 'react-router';
-import { Heart, List, Plus } from 'lucide-react';
+import { Globe, Heart, List, Plus } from 'lucide-react';
 import { SearchInput } from '@/components/form-controls';
 import { categories } from '@/modules/dash/user/data/marketplace';
 import { SEARCH_MAX_LENGTH } from '@/shared/utils/urlFilters';
 import {
   CREATE_LISTING_PATH,
+  MARKETPLACE_PATH,
   MARKETPLACE_VIEW,
   MY_LISTINGS_PATH,
   SAVED_LISTINGS_PATH,
@@ -31,7 +32,20 @@ const MarketplaceToolbar = ({
 
       <div className="flex flex-wrap gap-2">
         <Link
+          to={MARKETPLACE_PATH}
+          aria-current={activeView === MARKETPLACE_VIEW.BROWSE ? 'page' : undefined}
+          className={`${actionBtn} ${
+            activeView === MARKETPLACE_VIEW.BROWSE
+              ? 'bg-secondary text-primary'
+              : 'border border-primary/30 text-primary hover:bg-secondary'
+          }`}
+        >
+          <Globe className="h-3.5 w-3.5" />
+          Public Listing
+        </Link>
+        <Link
           to={SAVED_LISTINGS_PATH}
+          aria-current={activeView === MARKETPLACE_VIEW.SAVED ? 'page' : undefined}
           className={`${actionBtn} ${
             activeView === MARKETPLACE_VIEW.SAVED
               ? 'bg-pink-secondary text-pink-light'
@@ -43,6 +57,7 @@ const MarketplaceToolbar = ({
         </Link>
         <Link
           to={MY_LISTINGS_PATH}
+          aria-current={activeView === MARKETPLACE_VIEW.MINE ? 'page' : undefined}
           className={`${actionBtn} ${
             activeView === MARKETPLACE_VIEW.MINE
               ? 'bg-green-secondary text-green-primary'
@@ -51,13 +66,6 @@ const MarketplaceToolbar = ({
         >
           <List className="h-3.5 w-3.5" />
           My Listing
-        </Link>
-        <Link
-          to={CREATE_LISTING_PATH}
-          className={`${actionBtn} bg-primary text-white hover:bg-[#066BB0]`}
-        >
-          <Plus className="h-3.5 w-3.5" />
-          Create Listing
         </Link>
       </div>
     </div>
@@ -69,25 +77,37 @@ const MarketplaceToolbar = ({
       placeholder="Search equipment, category or location..."
     />
 
-    <div className="flex flex-wrap gap-2">
-      {categories.map((item) => {
-        const isActive = category === item;
-        return (
-          <button
-            key={item}
-            type="button"
-            aria-pressed={isActive}
-            onClick={() => onCategoryChange(item)}
-            className={`rounded-full px-3.5 py-1.5 text-[12px] font-semibold transition-colors ${
-              isActive
-                ? 'bg-[#E67E22] text-white'
-                : 'border border-[#E4E7EC] bg-white text-[#475467] hover:border-[#D0D5DD] hover:text-deep-blue'
-            }`}
-          >
-            {item}
-          </button>
-        );
-      })}
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex flex-wrap gap-2">
+        {categories.map((item) => {
+          const isActive = category === item;
+          return (
+            <button
+              key={item}
+              type="button"
+              aria-pressed={isActive}
+              onClick={() => onCategoryChange(item)}
+              className={`rounded-full px-3.5 py-1.5 text-[12px] font-semibold transition-colors ${
+                isActive
+                  ? 'bg-[#E67E22] text-white'
+                  : 'border border-[#E4E7EC] bg-white text-[#475467] hover:border-[#D0D5DD] hover:text-deep-blue'
+              }`}
+            >
+              {item}
+            </button>
+          );
+        })}
+      </div>
+
+      {activeView === MARKETPLACE_VIEW.MINE && (
+        <Link
+          to={CREATE_LISTING_PATH}
+          className={`${actionBtn} shrink-0 self-start bg-primary text-white hover:bg-[#066BB0]`}
+        >
+          <Plus className="h-3.5 w-3.5" />
+          Create Listing
+        </Link>
+      )}
     </div>
   </div>
 );
