@@ -1,4 +1,5 @@
 import { Box, Briefcase, CalendarDays, MessageSquare, ShoppingBag, User } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 import Container from '@/components/ui/Container';
 import { FadeUp, Float } from '@/shared/motion/LandingMotion';
 import {
@@ -16,8 +17,44 @@ const cardText = 'mt-1.5 text-[13px] leading-[1.6] text-[#64748B] xl:text-[14px]
 const cardBase =
   'rounded-2xl border border-[#E8ECF0] bg-white transition-all duration-300 hover:border-[#D8DEE6] hover:shadow-md';
 
-const ringClass =
-  'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#ECEEF2]';
+const MotionDiv = motion.div;
+
+const NETWORK_RINGS = [
+  {
+    size: 'h-[260px] w-[260px] sm:h-[300px] sm:w-[300px] xl:h-[340px] xl:w-[340px]',
+    border: 'border-dashed border-[#DCE2EA]',
+    dot: 'bg-primary',
+    duration: 40,
+  },
+  {
+    size: 'h-[190px] w-[190px] sm:h-[220px] sm:w-[220px] xl:h-[250px] xl:w-[250px]',
+    border: 'border-[#E6EAF0]',
+    dot: 'bg-pink-light',
+    duration: 28,
+    reverse: true,
+  },
+  {
+    size: 'h-[120px] w-[120px] sm:h-[140px] sm:w-[140px] xl:h-[160px] xl:w-[160px]',
+    border: 'border-dashed border-[#DCE2EA]',
+    dot: 'bg-green-primary',
+    duration: 18,
+  },
+];
+
+const OrbitRing = ({ size, border, dot, duration, reverse = false }) => {
+  const reduceMotion = useReducedMotion();
+  return (
+    <MotionDiv
+      className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border ${border} ${size}`}
+      animate={reduceMotion ? undefined : { rotate: reverse ? -360 : 360 }}
+      transition={{ duration, ease: 'linear', repeat: Infinity }}
+    >
+      <span
+        className={`absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-white ${dot}`}
+      />
+    </MotionDiv>
+  );
+};
 
 const FeatureCard = ({ icon, iconColor, label, heading, text, delay, children }) => {
   const Icon = icon;
@@ -64,15 +101,9 @@ const EcosystemSection = () => {
             </p>
 
             <div className="relative mx-auto my-6 h-[360px] w-full max-w-[540px] lg:my-7 lg:h-[380px] xl:my-8 xl:h-[420px]">
-              <div
-                className={`${ringClass} h-[260px] w-[260px] sm:h-[300px] sm:w-[300px] xl:h-[340px] xl:w-[340px]`}
-              />
-              <div
-                className={`${ringClass} h-[190px] w-[190px] sm:h-[220px] sm:w-[220px] xl:h-[250px] xl:w-[250px]`}
-              />
-              <div
-                className={`${ringClass} h-[120px] w-[120px] sm:h-[140px] sm:w-[140px] xl:h-[160px] xl:w-[160px]`}
-              />
+              {NETWORK_RINGS.map((ring) => (
+                <OrbitRing key={ring.size} {...ring} />
+              ))}
 
               <svg
                 className="absolute inset-0 h-full w-full"
