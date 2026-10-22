@@ -11,7 +11,8 @@ components/layout/
 ├── PanelPage.jsx          # supplier / admin frame: width + layout (stack | fill | bleed)
 ├── panelPageTheme.js      # panelPageTheme, panelPageWidths, panelPageLayouts, button classes
 ├── PanelPageHeader.jsx
-├── PanelBackButton.jsx
+├── BackLink.jsx            Round blue "back" control (link with `to`, button with `onClick`)
+├── PanelBackButton.jsx     BackLink that goes back in history, with a fallback route
 └── doc/STRUCTURE.md
 ```
 

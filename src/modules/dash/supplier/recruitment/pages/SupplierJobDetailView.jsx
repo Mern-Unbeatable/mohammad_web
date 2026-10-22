@@ -12,7 +12,7 @@ import {
 } from "@/modules/dash/user/recruitment";
 import { contactProfilePath } from "@/modules/dash/supplier/contacts";
 import { PROFILE_PATH } from "@/modules/dash/supplier/profile";
-import BackLink from "../components/layout/BackLink";
+import BackLink from "@/components/layout/BackLink";
 import { useJobDetail } from "../hooks/useJobDetail";
 import { useApplyToJob } from "../hooks/useApplyToJob";
 import { JOB_BASE, editJobPath } from "../constant/constants";

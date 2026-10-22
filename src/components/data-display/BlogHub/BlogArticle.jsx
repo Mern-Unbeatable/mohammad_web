@@ -1,13 +1,10 @@
-import { Link } from 'react-router';
+import BackLink from '@/components/layout/BackLink';
 
 const BlogArticle = ({ detail, basePath }) => (
   <article className="min-w-0">
-    <Link
-      to={basePath}
-      className="mb-4 inline-flex text-[13px] font-medium text-primary hover:underline sm:mb-5"
-    >
-      ← Back to Blogs
-    </Link>
+    <BackLink to={basePath} className="mb-4 sm:mb-5">
+      Back to Blogs
+    </BackLink>
 
     <h1 className="text-[22px] font-bold leading-tight text-deep-blue sm:text-[28px] lg:text-[32px]">
       {detail.title}

@@ -1,5 +1,4 @@
-import { Link } from 'react-router';
-import { ChevronLeft } from 'lucide-react';
+import BackLink from '@/components/layout/BackLink';
 import { GeneralPostDetailSkeleton } from '@/components/loader';
 import NotFound from '@/modules/error/NotFound';
 import DashboardPage from '@/components/layout/DashboardPage';
@@ -32,13 +31,9 @@ const GeneralPostDetailView = () => {
 
   return (
     <DashboardPage>
-      <Link
-        to={GENERAL_PATH}
-        className="mb-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
-      >
-        <ChevronLeft className="h-4 w-4" />
+      <BackLink to={GENERAL_PATH} className="mb-5">
         Back to General
-      </Link>
+      </BackLink>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px] xl:gap-10">
         <article className="min-w-0">

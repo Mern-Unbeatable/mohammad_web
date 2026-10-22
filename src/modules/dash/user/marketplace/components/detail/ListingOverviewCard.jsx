@@ -1,3 +1,4 @@
+import { BadgeCheck, CalendarDays, Clock, MapPin, Tag, UserRound } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import SpecTile from './SpecTile';
@@ -22,12 +23,12 @@ const ListingOverviewCard = ({ listing }) => (
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <SpecTile label="Category" value={listing.category} />
-        <SpecTile label="Condition" value={listing.condition} />
-        <SpecTile label="Year" value={listing.year} />
-        <SpecTile label="Location" value={listing.location} />
-        <SpecTile label="Seller" value={listing.seller.name} />
-        <SpecTile label="Listed" value={listing.listedAt} />
+        <SpecTile icon={Tag} label="Category" value={listing.category} />
+        <SpecTile icon={BadgeCheck} label="Condition" value={listing.condition} />
+        <SpecTile icon={CalendarDays} label="Year" value={listing.year} />
+        <SpecTile icon={MapPin} label="Location" value={listing.location} />
+        <SpecTile icon={UserRound} label="Seller" value={listing.seller.name} />
+        <SpecTile icon={Clock} label="Listed" value={listing.listedAt} />
       </div>
     </div>
   </Card>

@@ -1,5 +1,5 @@
-import { Link, useParams } from "react-router";
-import { ChevronLeft } from "lucide-react";
+import { useParams } from "react-router";
+import BackLink from "@/components/layout/BackLink";
 import DashboardPage from "@/components/layout/DashboardPage";
 import { JobDetailPageSkeleton } from "@/components/loader";
 import JobDetailCard from "@/components/data-display/JobDetailCard/JobDetailCard";
@@ -39,13 +39,9 @@ const JobDetailView = () => {
   return (
     <DashboardPage width="wide" className={PAGE_GRID}>
       <div className="min-w-0">
-        <Link
-          to={JOB_BASE}
-          className="mb-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#64748B] transition-colors hover:text-primary"
-        >
-          <ChevronLeft className="h-4 w-4" />
+        <BackLink to={JOB_BASE} className="mb-5">
           Back to Jobs
-        </Link>
+        </BackLink>
 
         <JobDetailCard
           job={job}
