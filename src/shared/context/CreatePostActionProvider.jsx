@@ -1,33 +1,26 @@
-import { useCallback, useMemo, useRef } from 'react';
-import { useNavigate } from 'react-router';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { CreatePostActionContext } from './useCreatePostAction';
 
 /**
- * Lets shell controls (e.g. the mobile "Post" tab) open the page-owned
- * create-post dialog. When no page has registered an opener it navigates to
- * `composerPath` and opens the dialog once that page registers.
+ * Lets shell controls (e.g. the mobile "Post" tab) open the create-post dialog.
+ * A page that owns its own dialog (the feed) registers an opener; on every
+ * other page `renderFallback({ onClose })` is shown in place, so the dialog
+ * opens without leaving the current page.
  */
-export const CreatePostActionProvider = ({ composerPath, children }) => {
-  const navigate = useNavigate();
+export const CreatePostActionProvider = ({ renderFallback, children }) => {
   const handlerRef = useRef(null);
-  const openWhenRegistered = useRef(false);
+  const [fallbackOpen, setFallbackOpen] = useState(false);
 
   const openCreatePost = useCallback(() => {
-    if (handlerRef.current) {
-      handlerRef.current();
-      return;
-    }
-    openWhenRegistered.current = true;
-    navigate(composerPath);
-  }, [navigate, composerPath]);
+    if (handlerRef.current) handlerRef.current();
+    else setFallbackOpen(true);
+  }, []);
+
+  const closeFallback = useCallback(() => setFallbackOpen(false), []);
 
   /** Returns an unregister function for effect cleanup. */
   const registerOpenCreatePost = useCallback((handler) => {
     handlerRef.current = handler;
-    if (openWhenRegistered.current) {
-      openWhenRegistered.current = false;
-      handler();
-    }
     return () => {
       if (handlerRef.current === handler) handlerRef.current = null;
     };
@@ -39,6 +32,9 @@ export const CreatePostActionProvider = ({ composerPath, children }) => {
   );
 
   return (
-    <CreatePostActionContext.Provider value={value}>{children}</CreatePostActionContext.Provider>
+    <CreatePostActionContext.Provider value={value}>
+      {children}
+      {fallbackOpen && renderFallback ? renderFallback({ onClose: closeFallback }) : null}
+    </CreatePostActionContext.Provider>
   );
 };

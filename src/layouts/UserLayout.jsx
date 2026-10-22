@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Outlet } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { DashboardNavbar, MobileBottomNav } from "@/components/navigation";
@@ -7,7 +7,15 @@ import { LayoutChromeProvider } from "@/shared/context/LayoutChromeContext";
 import AppFooter from "@/components/navigation/footer/AppFooter";
 import { fetchUserProfile } from "@/features/dash/user/profile";
 
-const FEED_PATH = "/feed";
+const QuickCreatePost = lazy(
+  () => import("@/modules/dash/user/feed/components/composer/QuickCreatePost"),
+);
+
+const renderQuickCreatePost = ({ onClose }) => (
+  <Suspense fallback={null}>
+    <QuickCreatePost onClose={onClose} />
+  </Suspense>
+);
 
 /**
  * User dashboard shell; owns the `<main>` landmark (pages render `DashboardPage`).
@@ -22,7 +30,7 @@ const UserLayout = ({ children }) => {
   }, [dispatch, user]);
 
   return (
-    <CreatePostActionProvider composerPath={FEED_PATH}>
+    <CreatePostActionProvider renderFallback={renderQuickCreatePost}>
       <LayoutChromeProvider>
         <div className="dashboard-shell flex min-h-screen flex-col bg-[#F3F4F6]">
           <DashboardNavbar />
