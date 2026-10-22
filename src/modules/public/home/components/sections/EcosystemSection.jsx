@@ -63,65 +63,64 @@ const EcosystemSection = () => {
               Researchers, laboratories and suppliers linked in one verified professional graph.
             </p>
 
-            <div className="relative mx-auto mt-6 h-[280px] w-full max-w-[420px] lg:mt-7 lg:h-[260px] xl:mt-8 xl:h-[300px]">
-              <div className={`${ringClass} h-[220px] w-[220px]`} />
-              <div className={`${ringClass} h-[170px] w-[170px]`} />
-              <div className={`${ringClass} h-[120px] w-[120px]`} />
+            <div className="relative mx-auto my-6 h-[360px] w-full max-w-[540px] lg:my-7 lg:h-[380px] xl:my-8 xl:h-[420px]">
+              <div
+                className={`${ringClass} h-[260px] w-[260px] sm:h-[300px] sm:w-[300px] xl:h-[340px] xl:w-[340px]`}
+              />
+              <div
+                className={`${ringClass} h-[190px] w-[190px] sm:h-[220px] sm:w-[220px] xl:h-[250px] xl:w-[250px]`}
+              />
+              <div
+                className={`${ringClass} h-[120px] w-[120px] sm:h-[140px] sm:w-[140px] xl:h-[160px] xl:w-[160px]`}
+              />
 
               <svg
                 className="absolute inset-0 h-full w-full"
-                viewBox="0 0 420 280"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
                 fill="none"
                 aria-hidden="true"
               >
-                <line
-                  x1="210"
-                  y1="140"
-                  x2="70"
-                  y2="55"
-                  stroke="#D1D5DB"
-                  strokeWidth="1"
-                  strokeDasharray="4 4"
-                />
-                <line
-                  x1="210"
-                  y1="140"
-                  x2="350"
-                  y2="55"
-                  stroke="#D1D5DB"
-                  strokeWidth="1"
-                  strokeDasharray="4 4"
-                />
-                <line
-                  x1="210"
-                  y1="140"
-                  x2="210"
-                  y2="230"
-                  stroke="#D1D5DB"
-                  strokeWidth="1"
-                  strokeDasharray="4 4"
-                />
+                {[
+                  [20, 14],
+                  [80, 14],
+                  [50, 86],
+                ].map(([x, y]) => (
+                  <line
+                    key={`${x}-${y}`}
+                    x1="50"
+                    y1="50"
+                    x2={x}
+                    y2={y}
+                    stroke="#CBD2DB"
+                    strokeWidth="1.5"
+                    strokeDasharray="6 6"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                ))}
               </svg>
 
               <div className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
-                <span className="inline-block rounded-full bg-deep-blue px-5 py-2.5 text-[12px] font-semibold text-white shadow-md shadow-deep-blue/20 xl:px-6 xl:py-3 xl:text-[13px]">
+                <span className="inline-block whitespace-nowrap rounded-full bg-deep-blue px-6 py-3 text-[14px] font-semibold text-white shadow-lg shadow-deep-blue/25 xl:px-7 xl:py-3.5 xl:text-[15px]">
                   Lab Unity Network
                 </span>
               </div>
 
               {networkNodes.map(({ role, label, avatar, className }) => (
                 <div key={role} className={`absolute z-10 ${className}`}>
-                  <div className="flex items-center gap-2 rounded-full border border-[#ECEEF2] bg-white py-1.5 pl-1.5 pr-3 shadow-sm transition-shadow hover:shadow-md">
+                  <div className="flex items-center gap-2 rounded-full border border-[#ECEEF2] bg-white py-1.5 pl-1.5 pr-3 shadow-md shadow-black/5 transition-shadow hover:shadow-lg sm:gap-2.5 sm:py-2 sm:pl-2 sm:pr-4 xl:gap-3 xl:pr-5">
                     <img
                       src={avatar}
                       alt=""
-                      className="h-8 w-8 rounded-full object-cover ring-1 ring-black/5 xl:h-9 xl:w-9"
+                      className="h-9 w-9 rounded-full object-cover ring-2 ring-white sm:h-11 sm:w-11 xl:h-12 xl:w-12"
                     />
                     <div className="leading-tight">
-                      <p className="text-[11px] font-semibold text-deep-blue xl:text-[12px]">
+                      <p className="text-[12px] font-semibold text-deep-blue sm:text-[13px] xl:text-[14px]">
                         {role}
                       </p>
-                      <p className="text-[10px] text-[#64748B] xl:text-[11px]">{label}</p>
+                      <p className="mt-0.5 text-[10px] text-[#64748B] sm:text-[11px] xl:text-[12px]">
+                        {label}
+                      </p>
                     </div>
                   </div>
                 </div>

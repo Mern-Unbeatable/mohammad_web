@@ -45,21 +45,21 @@ export const NETWORK_NODES = [
     label: 'Biochemistry',
     avatar:
       'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&h=80&fit=crop&crop=face',
-    className: 'left-[8%] top-[8%]',
+    className: 'left-0 top-[6%] sm:left-[4%]',
   },
   {
     role: 'Laboratory',
     label: 'Nordic Analytics',
     avatar:
       'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=80&h=80&fit=crop&crop=face',
-    className: 'right-[8%] top-[8%]',
+    className: 'right-0 top-[6%] sm:right-[4%]',
   },
   {
     role: 'Supplier',
     label: 'Chromatography',
     avatar:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqy5ShEFSxwHTFMoD48GNhTteRdlLb51azWU0ibObL5g&s=10',
-    className: 'bottom-[6%] left-1/2 -translate-x-1/2',
+    className: 'bottom-[4%] left-1/2 -translate-x-1/2',
   },
 ];
 
