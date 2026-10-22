@@ -1,10 +1,15 @@
-import { Loader2, LogOut } from "lucide-react";
+import { Loader2, LogOut, UserRound } from "lucide-react";
 import { Link } from "react-router";
 import Avatar from "@/components/ui/Avatar";
 import CountBadge from "@/components/ui/CountBadge";
-import { AVATAR_ACCENT_CLASS, NAV_ITEMS } from "../../constant/constants";
+import {
+  AVATAR_ACCENT_CLASS,
+  NAV_ITEMS,
+  PROFILE_PATH,
+} from "../../constant/constants";
 import { isNavItemActive } from "@/shared/utils/nav/navActive";
 import { profileSubtitle } from "@/shared/utils/nav/membership";
+import TrialCard from "../left-sidebar/TrialCard";
 
 /** Mobile slide-in menu; mount only while open so closed layers never cover the header. */
 const MobileMenuDrawer = ({
@@ -15,17 +20,24 @@ const MobileMenuDrawer = ({
   onClose,
   onLogout,
   loggingOut,
-}) => (
-  <>
-    <div
-      aria-hidden="false"
-      onClick={onClose}
-      className="fixed inset-0 z-[60] bg-[#0A1A44]/50 motion-safe:animate-fade-in xl:hidden"
-    />
+}) => {
+  const profileActive =
+    pathname === PROFILE_PATH || pathname?.startsWith(`${PROFILE_PATH}/`);
 
-    <div className="fixed bottom-0 right-0 top-(--dashboard-header-h) z-[65] w-[min(20rem,85vw)] overflow-y-auto border-l border-[#E4E7EC] bg-white shadow-xl motion-safe:animate-drawer-in-right xl:hidden">
-      <div className="px-4 pb-safe-nav pt-4 sm:pb-4">
-        <div className="mb-4 flex items-center gap-3 border-b border-[#E4E7EC] pb-4 motion-safe:animate-menu-item-in">
+  return (
+    <>
+      <div
+        aria-hidden="false"
+        onClick={onClose}
+        className="fixed inset-0 z-[60] bg-[#0A1A44]/50 motion-safe:animate-fade-in xl:hidden"
+      />
+
+      <div className="fixed bottom-0 right-0 top-(--dashboard-header-h) z-[65] flex w-[min(20rem,85vw)] flex-col border-l border-[#E4E7EC] bg-white shadow-xl motion-safe:animate-drawer-in-right xl:hidden">
+        <Link
+          to={PROFILE_PATH}
+          onClick={onClose}
+          className="flex shrink-0 items-center gap-3 border-b border-[#E4E7EC] px-4 py-4 motion-safe:animate-menu-item-in"
+        >
           <Avatar
             src={profileUser?.avatar}
             alt={profileUser?.name || "Member"}
@@ -41,62 +53,86 @@ const MobileMenuDrawer = ({
               {profileSubtitle(profileUser)}
             </p>
           </div>
+        </Link>
+
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4">
+          <div className="mb-4 empty:hidden motion-safe:animate-menu-item-in">
+            <TrialCard user={profileUser} onNavigate={onClose} />
+          </div>
+
+          <ul className="space-y-1">
+            {NAV_ITEMS.map((item, index) => {
+              const { id, label, to } = item;
+              const active = isNavItemActive(item, pathname);
+              return (
+                <li
+                  key={id}
+                  className="motion-safe:animate-menu-item-in"
+                  style={{ animationDelay: `${60 + index * 30}ms` }}
+                >
+                  <Link
+                    to={to}
+                    onClick={onClose}
+                    className={`flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-[13px] font-medium transition-colors ${
+                      active
+                        ? "bg-secondary text-primary"
+                        : "text-[#475467] hover:bg-[#F9FAFB]"
+                    }`}
+                  >
+                    <item.icon className="h-5 w-5 shrink-0" />
+                    {label}
+                    <CountBadge
+                      count={badgeFor(id)}
+                      label={badgeLabelFor(id)}
+                      className="ml-auto"
+                    />
+                  </Link>
+                </li>
+              );
+            })}
+            <li
+              className="motion-safe:animate-menu-item-in"
+              style={{ animationDelay: `${60 + NAV_ITEMS.length * 30}ms` }}
+            >
+              <Link
+                to={PROFILE_PATH}
+                onClick={onClose}
+                aria-current={profileActive ? "page" : undefined}
+                className={`flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-[13px] font-medium transition-colors ${
+                  profileActive
+                    ? "bg-secondary text-primary"
+                    : "text-[#475467] hover:bg-[#F9FAFB]"
+                }`}
+              >
+                <UserRound className="h-5 w-5 shrink-0" />
+                My profile
+              </Link>
+            </li>
+          </ul>
         </div>
 
-        <ul className="space-y-1">
-          {NAV_ITEMS.map((item, index) => {
-            const { id, label, to } = item;
-            const active = isNavItemActive(item, pathname);
-            return (
-              <li
-                key={id}
-                className="motion-safe:animate-menu-item-in"
-                style={{ animationDelay: `${60 + index * 30}ms` }}
-              >
-                <Link
-                  to={to}
-                  onClick={onClose}
-                  className={`flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-[13px] font-medium transition-colors ${
-                    active
-                      ? "bg-secondary text-primary"
-                      : "text-[#475467] hover:bg-[#F9FAFB]"
-                  }`}
-                >
-                  <item.icon className="h-5 w-5 shrink-0" />
-                  {label}
-                  <CountBadge
-                    count={badgeFor(id)}
-                    label={badgeLabelFor(id)}
-                    className="ml-auto"
-                  />
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-
         <div
-          className="mt-6 border-t border-[#E4E7EC] pt-4 motion-safe:animate-menu-item-in"
-          style={{ animationDelay: `${60 + NAV_ITEMS.length * 30}ms` }}
+          className="shrink-0 border-t border-[#E4E7EC] px-4 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] motion-safe:animate-menu-item-in"
+          style={{ animationDelay: `${60 + (NAV_ITEMS.length + 1) * 30}ms` }}
         >
           <button
             type="button"
             onClick={onLogout}
             disabled={loggingOut}
             aria-busy={loggingOut}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#E4E7EC] px-4 py-3 text-[14px] font-semibold text-[#475467] transition-colors hover:border-[#D0D5DD] hover:bg-[#F9FAFB] disabled:cursor-wait disabled:opacity-70"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left bg-[#FEF2F2] text-[13px] font-semibold text-[#DC2626] transition-colors hover:bg-[#FEE2E2] active:bg-[#FECACA] disabled:cursor-wait disabled:opacity-70"
           >
             {loggingOut ? (
               <Loader2 className="h-5 w-5 animate-spin" />
             ) : (
               <LogOut className="h-5 w-5" />
             )}
-            {loggingOut ? "Logging out…" : "Log out"}
+            {loggingOut ? "Logging out…" : "Logout"}
           </button>
         </div>
       </div>
-    </div>
-  </>
-);
+    </>
+  );
+};
 
 export default MobileMenuDrawer;

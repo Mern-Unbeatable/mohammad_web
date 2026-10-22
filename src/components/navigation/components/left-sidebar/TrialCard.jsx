@@ -7,7 +7,7 @@ import {
 } from "@/shared/utils/nav/membership";
 import ViewPlansLink from "../membership/ViewPlansLink";
 
-const TrialCard = ({ user }) => {
+const TrialCard = ({ user, onNavigate }) => {
   const card = sidebarMembershipCard(user);
 
   if (card === "trial") {
@@ -31,7 +31,7 @@ const TrialCard = ({ user }) => {
             style={{ width: `${remainingPercent}%` }}
           />
         </div>
-        <ViewPlansLink />
+        <ViewPlansLink onClick={onNavigate} />
       </Card>
     );
   }
@@ -46,7 +46,7 @@ const TrialCard = ({ user }) => {
         <p className="mt-1 text-[12px] text-red-500">
           {expiredOrUpgradeText(user.membershipStatus)}
         </p>
-        <ViewPlansLink />
+        <ViewPlansLink onClick={onNavigate} />
       </Card>
     );
   }

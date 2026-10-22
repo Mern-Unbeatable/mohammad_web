@@ -41,8 +41,9 @@ const PublicMobileMenu = ({ open, onClose, onSectionNav }) => (
           ))}
         </ul>
         <PublicAuthActions
+          variant="mobile"
           onNavigate={onClose}
-          className="mt-5 flex flex-col gap-3 border-t border-[#F0F0F0] pt-5 [&_a:last-child]:text-center [&_button]:text-center"
+          className="mt-5 flex flex-col gap-3 border-t border-[#F0F0F0] pt-5"
         />
       </Container>
     </div>
