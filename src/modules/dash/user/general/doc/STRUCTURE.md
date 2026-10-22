@@ -30,7 +30,9 @@ general/
 │   ├── detail/               Post page
 │   │   ├── GeneralPostHeader.jsx    Cover, type badge, title, date, category
 │   │   ├── GeneralPostBody.jsx      Paragraphs, or the summary when there is no body
-│   │   └── PostActions.jsx          Download (documents) and Share
+│   │   ├── PostActions.jsx          Download (documents) and Share
+│   │   └── RelatedPosts.jsx         Sidebar: latest posts of the same type
+│   │                                (author card: JobPosterCard from user/recruitment)
 │   │
 │   └── (page frame: @/components/layout/DashboardPage;
 │        CreateGeneralPostModal: @/components/modals/general — also used by supplier pages;
@@ -40,10 +42,12 @@ general/
 │   ├── useGeneralPosts.js       Browse: category, page, fetch, create
 │   ├── useMyGeneralPosts.js     Mine: category, page, fetch, create / edit modal, delete flow
 │   ├── useGeneralPostsState.js  Store list state as card models; toasts store errors
-│   └── useGeneralPostDetail.js  Fetch by id, not-found tracking, share link
+│   ├── useGeneralPostDetail.js  Fetch by id, not-found tracking, share link
+│   └── useRelatedGeneralPosts.js  Same-type posts for the sidebar (outside the store)
 │
 ├── utils/
 │   ├── generalQueries.js     buildPostsQuery
+│   ├── postDetail.js         pickRelatedPosts
 │   └── postForm.js           buildPostPayload (validation + edit image clearing)
 │
 ├── test/
@@ -80,6 +84,7 @@ flowchart TD
   MyGeneralPostsView --> DeletePostModal
   GeneralPostDetailView --> useGeneralPostDetail
   GeneralPostDetailView --> GeneralPostHeader & GeneralPostBody & PostActions
+  GeneralPostDetailView --> useRelatedGeneralPosts & JobPosterCard & RelatedPosts
   SupplierGeneralView & AdminGeneralView --> GeneralToolbar
   SupplierGeneralView & SupplierMyGeneralPostsView --> CreateGeneralPostModal
 ```

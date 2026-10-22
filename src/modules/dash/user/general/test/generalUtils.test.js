@@ -1,7 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { buildPostsQuery } from '../utils/generalQueries';
 import { buildPostPayload } from '../utils/postForm';
+import { pickRelatedPosts } from '../utils/postDetail';
 import { POSTS_PAGE_SIZE } from '../constant/constants';
+
+describe('pickRelatedPosts', () => {
+  it('drops the current post and caps the list', () => {
+    const posts = ['a', 'b', 'c', 'd', 'e', 'f'].map((id) => ({ id }));
+    expect(pickRelatedPosts(posts, 'b').map((p) => p.id)).toEqual(['a', 'c', 'd', 'e']);
+    expect(pickRelatedPosts(undefined, 'b')).toEqual([]);
+  });
+});
 
 describe('buildPostsQuery', () => {
   it('sends no type for All and no mine flag by default', () => {

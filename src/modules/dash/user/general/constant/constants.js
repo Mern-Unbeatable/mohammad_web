@@ -9,6 +9,7 @@ export const GENERAL_VIEW = { BROWSE: 'browse', MINE: 'mine' };
 
 export const DEFAULT_CATEGORY = 'All';
 export const POSTS_PAGE_SIZE = GRID_PAGE_SIZE;
+export const RELATED_POSTS_LIMIT = 4;
 export const POSTS_GRID_CLASS = 'grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
 
 export const POST_TYPE = { NEWS: 'news', DOCUMENT: 'document' };
