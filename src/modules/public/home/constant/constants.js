@@ -27,11 +27,11 @@ export const HERO_FEATURES = [
 ];
 
 export const DISCOVER_TAGS = [
-  { label: 'Research', icon: FlaskConical, color: 'text-pink-light', bg: 'bg-[#FDF0F6]' },
-  { label: 'Jobs', icon: Briefcase, color: 'text-primary', bg: 'bg-[#E8F3FB]' },
-  { label: 'Events', icon: CalendarDays, color: 'text-green-primary', bg: 'bg-green-secondary' },
-  { label: 'Training', icon: GraduationCap, color: 'text-[#6B7280]', bg: 'bg-[#F3F4F6]' },
-  { label: 'Industry News', icon: Newspaper, color: 'text-primary', bg: 'bg-[#E8F3FB]' },
+  { label: 'Research', icon: FlaskConical },
+  { label: 'Jobs', icon: Briefcase },
+  { label: 'Events', icon: CalendarDays },
+  { label: 'Training', icon: GraduationCap },
+  { label: 'Industry News', icon: Newspaper },
 ];
 
 export const CONNECT_AVATARS = [

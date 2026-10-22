@@ -55,10 +55,9 @@ describe('HomeView', () => {
 });
 
 describe('DiscoverTag', () => {
-  it('renders every tag with its colours', () => {
+  it('renders a tag with its label and icon', () => {
     const html = renderToStaticMarkup(<DiscoverTag {...DISCOVER_TAGS[0]} />);
     expect(html).toContain('Research');
-    expect(html).toContain('bg-[#FDF0F6] text-pink-light');
     expect(html).toContain('<svg');
   });
 });
