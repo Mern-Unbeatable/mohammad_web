@@ -81,7 +81,7 @@ export const AVATAR_ACCENT_CLASS = 'bg-[#FEF3C7] text-[#B45309]';
 
 /** Public (marketing) navbar: in-page sections of the home page. */
 export const PUBLIC_NAV_LINKS = [
-  { label: 'Platform', sectionId: 'platform', active: true },
+  { label: 'Platform', sectionId: 'platform' },
   { label: 'Community', sectionId: 'community' },
   { label: 'Marketplace', sectionId: 'marketplace' },
 ];

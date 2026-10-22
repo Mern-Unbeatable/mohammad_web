@@ -123,10 +123,49 @@ const FeaturesSection = () => {
 
           {/* Right Column */}
           <div className="flex flex-col gap-5 xl:gap-6">
-            {/* Collaborate Card */}
+            {/* Share Knowledge Card */}
             <FadeUp
               as="article"
               delay={0.12}
+              className={`${cardBase} bg-gradient-to-br from-secondary to-secondary/60 shadow-sm hover:shadow-md`}
+            >
+              <div className="flex items-start gap-3.5 xl:gap-4">
+                <CardIcon
+                  icon={BookOpen}
+                  color="text-primary"
+                  ring="ring-primary/10"
+                />
+                <div className="min-w-0">
+                  <h3 className={cardTitle}>Share Knowledge &amp; Resources</h3>
+                  <p className={cardBody}>
+                    Share protocols, documents, and resources with trusted
+                    professional groups and communities.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-5 flex items-center gap-3.5 rounded-xl bg-white/90 p-4 shadow-sm ring-1 ring-black/[0.03] transition-colors hover:bg-white xl:mt-6 xl:gap-4 xl:p-5">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#E8F3FB] xl:h-12 xl:w-12">
+                  <FileText
+                    className="h-5 w-5 text-primary xl:h-[22px] xl:w-[22px]"
+                    strokeWidth={2}
+                  />
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-[14px] font-semibold leading-snug text-deep-blue xl:text-[15px]">
+                    Validation protocol — ISO 17025.pdf
+                  </p>
+                  <p className="mt-1 text-[12px] text-[#64748B] xl:text-[13px]">
+                    Shared with Analytical Chemistry group
+                  </p>
+                </div>
+              </div>
+            </FadeUp>
+
+            {/* Collaborate Card */}
+            <FadeUp
+              as="article"
+              delay={0.2}
               className={`${cardBase} bg-gradient-to-br from-green-secondary to-green-secondary/70 shadow-sm hover:shadow-md`}
             >
               <div className="flex items-start gap-3.5 xl:gap-4">
@@ -162,45 +201,6 @@ const FeaturesSection = () => {
                 <span className="text-[12px] font-medium text-white xl:text-[13px]">
                   6 lab specialists replied
                 </span>
-              </div>
-            </FadeUp>
-
-            {/* Share Knowledge Card */}
-            <FadeUp
-              as="article"
-              delay={0.2}
-              className={`${cardBase} bg-gradient-to-br from-secondary to-secondary/60 shadow-sm hover:shadow-md`}
-            >
-              <div className="flex items-start gap-3.5 xl:gap-4">
-                <CardIcon
-                  icon={BookOpen}
-                  color="text-primary"
-                  ring="ring-primary/10"
-                />
-                <div className="min-w-0">
-                  <h3 className={cardTitle}>Share Knowledge &amp; Resources</h3>
-                  <p className={cardBody}>
-                    Share protocols, documents, and resources with trusted
-                    professional groups and communities.
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-5 flex items-center gap-3.5 rounded-xl bg-white/90 p-4 shadow-sm ring-1 ring-black/[0.03] transition-colors hover:bg-white xl:mt-6 xl:gap-4 xl:p-5">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#E8F3FB] xl:h-12 xl:w-12">
-                  <FileText
-                    className="h-5 w-5 text-primary xl:h-[22px] xl:w-[22px]"
-                    strokeWidth={2}
-                  />
-                </div>
-                <div className="min-w-0">
-                  <p className="truncate text-[14px] font-semibold leading-snug text-deep-blue xl:text-[15px]">
-                    Validation protocol — ISO 17025.pdf
-                  </p>
-                  <p className="mt-1 text-[12px] text-[#64748B] xl:text-[13px]">
-                    Shared with Analytical Chemistry group
-                  </p>
-                </div>
               </div>
             </FadeUp>
 
