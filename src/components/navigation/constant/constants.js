@@ -45,14 +45,14 @@ export const BOTTOM_NAV_TABS = [
   { id: 'home', label: 'Home', icon: Home, to: FEED_PATH },
   { id: 'network', label: 'Network', icon: Users, to: '/contacts' },
   { id: 'post', label: 'Post', icon: SquarePlus, action: 'create' },
-  { id: 'notifications', label: 'Notifications', icon: Bell, to: NOTIFICATIONS_PATH },
+  { id: 'messages', label: 'Messages', icon: MessageSquare, to: CHAT_BASE_PATHS.USER },
   { id: 'jobs', label: 'Jobs', icon: Briefcase, to: '/recruitment' },
 ];
 
 export const BOTTOM_NAV_ACTIVE_PREFIX = {
   network: '/contacts',
   jobs: '/recruitment',
-  notifications: NOTIFICATIONS_PATH,
+  messages: CHAT_BASE_PATHS.USER,
 };
 
 export const QUICK_LINKS = [
@@ -81,7 +81,7 @@ export const AVATAR_ACCENT_CLASS = 'bg-[#FEF3C7] text-[#B45309]';
 
 /** Public (marketing) navbar: in-page sections of the home page. */
 export const PUBLIC_NAV_LINKS = [
-  { label: 'Platform', sectionId: 'platform', active: true },
+  { label: 'Platform', sectionId: 'platform' },
   { label: 'Community', sectionId: 'community' },
   { label: 'Marketplace', sectionId: 'marketplace' },
 ];

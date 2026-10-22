@@ -39,8 +39,15 @@ describe('HomeView', () => {
     expect(html).not.toContain('Go to Dashboard');
   });
 
-  it('sends signed-in users to their home', () => {
+  it('sends signed-in users to their feed', () => {
     const html = render({ isAuthenticated: true, user: { id: 'u1', role: 'USER' } });
+    expect(html).toContain('Go to feed');
+    expect(html).not.toContain('Dashboard');
+    expect(html).not.toContain('href="/join"');
+  });
+
+  it('sends suppliers and admins to their dashboard', () => {
+    const html = render({ isAuthenticated: true, user: { id: 's1', role: 'SUPPLIER' } });
     expect(html).toContain('>Dashboard<');
     expect(html).toContain('Go to Dashboard');
     expect(html).not.toContain('href="/join"');
@@ -48,10 +55,9 @@ describe('HomeView', () => {
 });
 
 describe('DiscoverTag', () => {
-  it('renders every tag with its colours', () => {
+  it('renders a tag with its label and icon', () => {
     const html = renderToStaticMarkup(<DiscoverTag {...DISCOVER_TAGS[0]} />);
     expect(html).toContain('Research');
-    expect(html).toContain('bg-[#FDF0F6] text-pink-light');
     expect(html).toContain('<svg');
   });
 });

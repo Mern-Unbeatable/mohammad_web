@@ -21,7 +21,7 @@ export const buildNavBadges = ({ pendingRequests, newApplications, unreadChats, 
 });
 
 /** Badges announced on the mobile menu button, in reading order. */
-const MENU_ALERT_IDS = ['notifications', 'contacts', 'recruitment'];
+const MENU_ALERT_IDS = ['messages', 'contacts', 'recruitment'];
 
 export const hasMenuAlerts = (badges) => MENU_ALERT_IDS.some((id) => badges[id].count);
 

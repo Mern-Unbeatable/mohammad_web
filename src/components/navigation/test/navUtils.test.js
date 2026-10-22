@@ -27,6 +27,7 @@ describe('navActive', () => {
     expect(isBottomTabActive(tab('network'), '/contacts/5')).toBe(true);
     expect(isBottomTabActive(tab('jobs'), '/recruitment')).toBe(true);
     expect(isBottomTabActive(tab('post'), '/feed')).toBe(false);
+    expect(isBottomTabActive(tab('messages'), '/chat/groups/1')).toBe(true);
   });
 });
 
@@ -49,13 +50,13 @@ describe('badges', () => {
   it('builds the mobile menu toggle label', () => {
     expect(menuToggleLabel(true, badges)).toBe('Close menu');
     expect(menuToggleLabel(false, badges)).toBe(
-      'Open menu, 3 unread notifications, 1 pending connection request',
+      'Open menu, 2 unread conversations, 1 pending connection request',
     );
     const quiet = buildNavBadges({
       pendingRequests: 0,
       newApplications: 0,
-      unreadChats: 5,
-      unreadNotifications: 0,
+      unreadChats: 0,
+      unreadNotifications: 5,
     });
     expect(hasMenuAlerts(quiet)).toBe(false);
     expect(menuToggleLabel(false, quiet)).toBe('Open menu');

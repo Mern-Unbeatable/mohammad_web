@@ -16,7 +16,7 @@ const DashboardNavbar = () => {
   const { handleLogout, loggingOut } = useLogout();
   const { user } = useSelector((state) => state.userProfile);
   const profileUser = useMemo(() => toProfilePageUser(user), [user]);
-  const { badges, unreadChats, badgeFor, badgeLabelFor } = useNavBadges();
+  const { badges, badgeFor, badgeLabelFor } = useNavBadges();
   useBodyScrollLock(menuOpen);
   const search = useNavSearch();
 
@@ -28,7 +28,6 @@ const DashboardNavbar = () => {
         <MobileHeader
           search={search}
           badges={badges}
-          unreadChats={unreadChats}
           menuOpen={menuOpen}
           onToggleMenu={() => setMenuOpen((prev) => !prev)}
           onCloseMenu={closeMenu}

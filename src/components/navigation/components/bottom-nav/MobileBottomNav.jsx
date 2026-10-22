@@ -1,7 +1,6 @@
 import { Link, useLocation } from 'react-router';
 import { useSelector } from 'react-redux';
 import CountBadge from '@/components/ui/CountBadge';
-import { selectUserUnreadNotificationCount } from '@/features/dash/user/notifications';
 import { selectPendingRequestCount } from '@/features/dash/user/contacts';
 import { useCreatePostAction } from '@/shared/context/useCreatePostAction';
 import { useLayoutChrome } from '@/shared/context/useLayoutChrome';
@@ -13,12 +12,12 @@ const MobileBottomNav = () => {
   const { openCreatePost } = useCreatePostAction();
   const { bottomNavHidden } = useLayoutChrome();
   // Kept fresh by `useNavBadges` in DashboardNavbar.
-  const unreadNotifications = useSelector(selectUserUnreadNotificationCount);
+  const unreadChats = useSelector((state) => state.messages.unread?.conversations ?? 0);
   const pendingRequests = useSelector(selectPendingRequestCount);
 
   if (bottomNavHidden) return null;
 
-  const badges = { notifications: unreadNotifications, network: pendingRequests };
+  const badges = { messages: unreadChats, network: pendingRequests };
 
   return (
     <nav

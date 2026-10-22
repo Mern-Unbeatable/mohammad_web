@@ -3,7 +3,7 @@ import PublicAuthActions from './PublicAuthActions';
 import { PUBLIC_NAV_LINKS } from '../../constant/constants';
 
 /** Backdrop + slide-down drawer below the navbar (hidden from `lg`). */
-const PublicMobileMenu = ({ open, onClose, onSectionNav }) => (
+const PublicMobileMenu = ({ open, onClose, onSectionNav, activeSection }) => (
   <>
     <div
       aria-hidden="true"
@@ -24,13 +24,14 @@ const PublicMobileMenu = ({ open, onClose, onSectionNav }) => (
     >
       <Container className="py-5">
         <ul className="flex flex-col gap-4">
-          {PUBLIC_NAV_LINKS.map(({ label, sectionId, active }) => (
+          {PUBLIC_NAV_LINKS.map(({ label, sectionId }) => (
             <li key={label}>
               <a
                 href={`/#${sectionId}`}
                 onClick={onSectionNav(sectionId)}
+                aria-current={activeSection === sectionId ? 'location' : undefined}
                 className={`block text-[16px] leading-none transition-colors ${
-                  active
+                  activeSection === sectionId
                     ? 'font-medium text-primary'
                     : 'font-normal text-[#6B7280] hover:text-primary'
                 }`}
@@ -41,8 +42,9 @@ const PublicMobileMenu = ({ open, onClose, onSectionNav }) => (
           ))}
         </ul>
         <PublicAuthActions
+          variant="mobile"
           onNavigate={onClose}
-          className="mt-5 flex flex-col gap-3 border-t border-[#F0F0F0] pt-5 [&_a:last-child]:text-center [&_button]:text-center"
+          className="mt-5 flex flex-col gap-3 border-t border-[#F0F0F0] pt-5"
         />
       </Container>
     </div>
