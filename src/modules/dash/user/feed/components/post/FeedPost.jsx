@@ -6,12 +6,14 @@ import { COMMENT_PREVIEW_LIMIT } from "../../constants";
 import { usePostCommentActions } from "../../hooks/usePostCommentActions";
 import { usePostEngagement } from "../../hooks/usePostEngagement";
 import { useRepost } from "../../hooks/useRepost";
+import { visibleReactors } from "../../utils/reactions";
 import FullCommentsModal from "@/components/modals/feed/FullCommentsModal";
 import PostComments from "../comments/PostComments";
 import SharePostModal from "@/components/modals/feed/SharePostModal";
 import FeedPostBody from "./FeedPostBody";
 import FeedPostHeader from "./FeedPostHeader";
 import { PostActions, PostStats } from "./PostActionsBar";
+import ReactionsModal from "./ReactionsModal";
 
 const FeedPost = ({ post, onReport, onEdit, onDelete }) => {
   const { user } = useSelector((state) => state.userProfile);
@@ -26,11 +28,24 @@ const FeedPost = ({ post, onReport, onEdit, onDelete }) => {
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [fullCommentsOpen, setFullCommentsOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [reactionsOpen, setReactionsOpen] = useState(false);
   const closeFullComments = useCallback(() => setFullCommentsOpen(false), []);
+  const closeReactions = useCallback(() => setReactionsOpen(false), []);
+  const openReactions = useCallback(() => setReactionsOpen(true), []);
 
   const { stats, reactionId, reactionCounts } = engagement;
+  const reactors = useMemo(
+    () => visibleReactors(post.recentReactors, viewer, Boolean(reactionId)),
+    [post.recentReactors, viewer, reactionId],
+  );
   const statsBar = (
-    <PostStats stats={stats} reactionId={reactionId} reactionCounts={reactionCounts} />
+    <PostStats
+      stats={stats}
+      reactionId={reactionId}
+      reactionCounts={reactionCounts}
+      reactors={reactors}
+      onReactionsClick={openReactions}
+    />
   );
   const commentProps = {
     comments: engagement.comments,
@@ -57,7 +72,9 @@ const FeedPost = ({ post, onReport, onEdit, onDelete }) => {
           stats={stats}
           reactionId={reactionId}
           reactionCounts={reactionCounts}
+          reactors={reactors}
           onCommentsClick={() => setCommentsOpen(true)}
+          onReactionsClick={openReactions}
         />
         <PostActions
           reactionId={reactionId}
@@ -86,6 +103,16 @@ const FeedPost = ({ post, onReport, onEdit, onDelete }) => {
         {statsBar}
         <PostComments {...commentProps} emptyText="No comments yet. Start the conversation." />
       </FullCommentsModal>
+
+      {reactionsOpen ? (
+        <ReactionsModal
+          postId={post.id}
+          total={stats?.reactions ?? 0}
+          reactionCounts={reactionCounts}
+          viewerId={viewer?.id}
+          onClose={closeReactions}
+        />
+      ) : null}
 
       {shareOpen ? (
         <SharePostModal

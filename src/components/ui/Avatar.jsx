@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { UserRound } from 'lucide-react';
 
 const sizes = {
+  xs: 'h-5 w-5 text-[9px]',
   sm: 'h-9 w-9 text-[12px]',
   md: 'h-11 w-11 text-[13px]',
   lg: 'h-14 w-14 text-[16px]',
@@ -9,6 +10,7 @@ const sizes = {
 };
 
 const iconSizes = {
+  xs: 'h-2.5 w-2.5',
   sm: 'h-[18px] w-[18px]',
   md: 'h-5 w-5',
   lg: 'h-7 w-7',

@@ -185,6 +185,23 @@ export async function reactToPost(postId, type) {
   return unwrapApiData(response) || response;
 }
 
+/** One page of a post's reactions (newest first) plus per-type totals. */
+export async function getPostReactions(postId, { page = 1, pageSize = 20, type } = {}) {
+  const response = await crudService.get(API_ENDPOINTS.USER.FEED.REACTIONS(postId), {
+    page,
+    pageSize,
+    ...(type ? { type } : {}),
+  });
+  const data = unwrapApiData(response) || {};
+  const meta = response?.meta ||
+    response?.data?.meta || { page, pageSize, total: 0, totalPages: 1 };
+  return {
+    items: Array.isArray(data.reactions) ? data.reactions : [],
+    reactionCounts: data.reactionCounts || null,
+    meta,
+  };
+}
+
 export async function repostPost(postId, content = "") {
   const response = await crudService.post(
     API_ENDPOINTS.USER.FEED.REPOST(postId),

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
@@ -8,8 +8,9 @@ import { X } from "lucide-react";
  * inside (delete confirm, image viewer) render after this one in the DOM, so
  * Escape is left to whichever dialog is on top.
  */
-const FullCommentsModal = ({ open, title, onClose, children }) => {
+const FullCommentsModal = ({ open, title, onClose, children, className = "max-w-[700px]" }) => {
   const dialogRef = useRef(null);
+  const titleId = useId();
 
   useBodyScrollLock(open);
 
@@ -41,15 +42,15 @@ const FullCommentsModal = ({ open, title, onClose, children }) => {
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className="flex h-[92dvh] w-full max-w-[700px] flex-col overflow-hidden rounded-t-2xl bg-white shadow-xl outline-none sm:h-auto sm:max-h-[90dvh] sm:rounded-xl"
+        className={`flex h-[92dvh] w-full ${className} flex-col overflow-hidden rounded-t-2xl bg-white shadow-xl outline-none sm:h-auto sm:max-h-[90dvh] sm:rounded-xl`}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="full-comments-title"
+        aria-labelledby={titleId}
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex shrink-0 items-center justify-between gap-3 border-b border-[#E4E7EC] px-4 py-3.5 sm:px-5 sm:py-4">
           <h2
-            id="full-comments-title"
+            id={titleId}
             className="min-w-0 truncate text-[17px] font-bold text-deep-blue sm:text-[18px]"
           >
             {title}
