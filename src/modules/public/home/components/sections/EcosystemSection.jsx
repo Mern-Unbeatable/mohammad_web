@@ -1,8 +1,18 @@
-import { Box, Briefcase, CalendarDays, MessageSquare, ShoppingBag, User } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import {
+  Box,
+  Briefcase,
+  CalendarDays,
+  MessageSquare,
+  SendHorizontal,
+  ShoppingBag,
+  User,
+} from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import Container from '@/components/ui/Container';
-import { FadeUp, Float } from '@/shared/motion/LandingMotion';
+import { FadeUp } from '@/shared/motion/LandingMotion';
 import {
+  CONNECT_AVATARS as chatAvatars,
   HOME_SECTIONS,
   KNOWLEDGE_TAGS as knowledgeTags,
   MARKETPLACE_ITEMS as marketplaceItems,
@@ -53,6 +63,64 @@ const OrbitRing = ({ size, border, dot, duration, reverse = false }) => {
         className={`absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-white ${dot}`}
       />
     </MotionDiv>
+  );
+};
+
+const COMPOSER_PHRASES = [
+  'Thanks! Reviewing it now…',
+  'Can we schedule a call tomorrow?',
+  'Sharing the validation data…',
+];
+
+const useTypewriter = (phrases, enabled) => {
+  const [index, setIndex] = useState(0);
+  const [text, setText] = useState('');
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    if (!enabled) return undefined;
+    const full = phrases[index];
+    let delay = deleting ? 35 : 70;
+    let next;
+
+    if (!deleting && text === full) {
+      delay = 1600;
+      next = () => setDeleting(true);
+    } else if (deleting && text === '') {
+      delay = 400;
+      next = () => {
+        setDeleting(false);
+        setIndex((i) => (i + 1) % phrases.length);
+      };
+    } else {
+      next = () =>
+        setText(deleting ? full.slice(0, text.length - 1) : full.slice(0, text.length + 1));
+    }
+
+    const id = setTimeout(next, delay);
+    return () => clearTimeout(id);
+  }, [phrases, index, text, deleting, enabled]);
+
+  return enabled ? text : phrases[0];
+};
+
+const TypingComposer = () => {
+  const reduceMotion = useReducedMotion();
+  const text = useTypewriter(COMPOSER_PHRASES, !reduceMotion);
+
+  return (
+    <div
+      aria-hidden="true"
+      className="mt-4 flex items-center gap-2 rounded-full border border-[#E6EAF0] bg-[#F8FAFC] py-1.5 pl-4 pr-1.5"
+    >
+      <p className="min-w-0 flex-1 truncate text-[12px] text-deep-blue xl:text-[13px]">
+        {text}
+        <span className="ml-0.5 inline-block h-3.5 w-px translate-y-0.5 animate-pulse bg-deep-blue" />
+      </p>
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-pink-light text-white xl:h-8 xl:w-8">
+        <SendHorizontal className="h-3.5 w-3.5" strokeWidth={2.25} />
+      </span>
+    </div>
   );
 };
 
@@ -268,16 +336,27 @@ const EcosystemSection = () => {
               delay={0.32}
             >
               <div className="space-y-3">
-                <div className="w-fit max-w-[85%] rounded-2xl rounded-bl-md bg-[#F3F0F8] px-3.5 py-2.5 shadow-sm xl:px-4 xl:py-3">
-                  <p className="text-[12px] text-[#64748B] xl:text-[13px]">
+                <div className="flex items-end gap-2">
+                  <img
+                    src={chatAvatars[0]}
+                    alt=""
+                    className="h-8 w-8 shrink-0 rounded-full object-cover ring-2 ring-white shadow-sm"
+                  />
+                  <p className="max-w-[80%] rounded-2xl rounded-bl-md bg-[#F3F0F8] px-3.5 py-2.5 text-[12px] text-[#64748B] shadow-sm xl:px-4 xl:py-3 xl:text-[13px]">
                     Can you share the SOP template?
                   </p>
                 </div>
-                <Float y={4} duration={4} delay={0.5} className="flex justify-end">
-                  <span className="rounded-full bg-green-primary px-4 py-2 text-[11px] font-medium text-white shadow-sm shadow-green-primary/20 xl:px-5 xl:py-2.5 xl:text-[12px]">
+                <div className="flex items-end justify-end gap-2">
+                  <p className="max-w-[80%] rounded-2xl rounded-br-md bg-green-primary px-3.5 py-2.5 text-[12px] font-medium text-white shadow-sm shadow-green-primary/20 xl:px-4 xl:py-3 xl:text-[13px]">
                     Sent — see attachment
-                  </span>
-                </Float>
+                  </p>
+                  <img
+                    src={chatAvatars[1]}
+                    alt=""
+                    className="h-8 w-8 shrink-0 rounded-full object-cover ring-2 ring-white shadow-sm"
+                  />
+                </div>
+                <TypingComposer />
               </div>
             </FeatureCard>
           </div>
