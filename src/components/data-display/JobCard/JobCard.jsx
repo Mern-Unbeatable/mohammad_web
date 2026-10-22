@@ -78,7 +78,11 @@ const JobCard = ({
         </div>
       </div>
 
-      <div className={`flex shrink-0 flex-wrap items-center gap-2 ${grid ? 'mt-auto' : ''}`}>
+      <div
+        className={`flex shrink-0 flex-wrap items-center gap-2 ${
+          grid ? 'mt-auto' : 'justify-end border-t border-[#F2F4F7] pt-3 sm:border-0 sm:pt-0'
+        }`}
+      >
         {variant === 'admin' ? (
           <>
             <button
