@@ -45,9 +45,9 @@ const OwnerActionsMenu = ({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className={`rounded-full text-[#98A2B3] hover:text-[#64748B] ${
-          small ? 'p-1 hover:bg-[#E4E7EC]' : 'p-1.5 hover:bg-[#F9FAFB]'
-        }`}
+        className={`flex items-center justify-center rounded-full text-[#667085] transition-colors hover:text-deep-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 ${
+          small ? 'h-7 w-7 hover:bg-[#E4E7EC]' : 'h-9 w-9 hover:bg-[#F2F4F7]'
+        } ${open ? (small ? 'bg-[#E4E7EC]' : 'bg-[#F2F4F7] text-deep-blue') : ''}`}
         aria-label={label}
         aria-expanded={open}
         aria-haspopup="true"

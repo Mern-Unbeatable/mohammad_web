@@ -43,7 +43,7 @@ export const PostStats = ({ stats, reactionCounts, onCommentsClick }) => {
         <span />
       )}
 
-      <span className="flex shrink-0 items-center gap-3">
+      <span className="flex shrink-0 items-center gap-2">
         {comments > 0 ? (
           onCommentsClick ? (
             <button
@@ -56,6 +56,9 @@ export const PostStats = ({ stats, reactionCounts, onCommentsClick }) => {
           ) : (
             <span>{countLabel(comments, "comment")}</span>
           )
+        ) : null}
+        {comments > 0 && shares > 0 ? (
+          <span aria-hidden="true" className="h-1 w-1 shrink-0 rounded-full bg-[#98A2B3]" />
         ) : null}
         {shares > 0 ? <span>{countLabel(shares, "share")}</span> : null}
       </span>
