@@ -155,7 +155,8 @@ const EcosystemSection = () => {
             One professional ecosystem
           </p>
           <h2 className="mt-3 max-w-[720px] text-[28px] font-bold leading-[1.12] tracking-[-0.02em] text-deep-blue sm:text-[32px] lg:text-[34px] xl:text-[42px]">
-            From Research To Opportunity, All In One Place.
+            From Research To Opportunity,{' '}
+            <span className="text-primary">All In One Place.</span>
           </h2>
         </FadeUp>
 
