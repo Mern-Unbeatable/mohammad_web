@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router';
 import { useSelector } from 'react-redux';
+import { Plus } from 'lucide-react';
 import CountBadge from '@/components/ui/CountBadge';
 import { selectPendingRequestCount } from '@/features/dash/user/contacts';
 import { useCreatePostAction } from '@/shared/context/useCreatePostAction';
@@ -60,9 +61,21 @@ const MobileBottomNav = () => {
                 <button
                   type="button"
                   onClick={openCreatePost}
-                  className="relative flex flex-1 flex-col items-center justify-center gap-0.5"
+                  className="group relative flex flex-1 flex-col items-center justify-end gap-1 pb-1.5 focus-visible:outline-none"
                 >
-                  {content}
+                  <span
+                    aria-hidden="true"
+                    className="absolute -top-1.5 left-1/2 h-11 w-11 -translate-x-1/2 rounded-full bg-primary/35 blur-md"
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="absolute -top-2.5 left-1/2 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full bg-gradient-to-br from-[#3BA3E6] to-primary text-white shadow-md shadow-primary/30 ring-[3px] ring-white/90 backdrop-blur-md transition-transform group-active:scale-95 group-focus-visible:ring-primary/40"
+                  >
+                    <Plus className="h-5 w-5" strokeWidth={2.5} />
+                  </span>
+                  <span className="text-[10px] font-semibold leading-none text-primary">
+                    {label}
+                  </span>
                 </button>
               ) : (
                 <Link

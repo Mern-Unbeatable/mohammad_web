@@ -3,7 +3,7 @@ import AttachmentCard from "./AttachmentCard";
 import PostImageGallery from "./PostImageGallery";
 import RepostedPostCard from "./RepostedPostCard";
 
-const TEXT_CLASS = "text-[15px] leading-relaxed text-[#475467] sm:text-base";
+const TEXT_CLASS = "text-[15px] leading-relaxed text-[#344054] sm:text-base";
 const PROMO_TAG_CLASS =
   "absolute left-3 rounded-md bg-[#E67E22] px-2 py-1 text-[11px] font-bold text-white";
 

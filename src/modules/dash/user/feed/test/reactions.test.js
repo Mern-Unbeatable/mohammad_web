@@ -7,7 +7,25 @@ import {
   reconcileReaction,
   rollbackReaction,
   toApiReaction,
+  visibleReactors,
 } from "../utils/reactions";
+
+describe("visibleReactors", () => {
+  const me = { id: "me", name: "Me" };
+  const people = ["a", "b", "c"].map((id) => ({ id, name: id }));
+
+  it("puts the viewer first while they have a reaction and caps the stack", () => {
+    expect(visibleReactors(people, me, true).map((p) => p.id)).toEqual(["me", "a", "b"]);
+  });
+
+  it("drops the viewer once their reaction is removed", () => {
+    expect(visibleReactors([me, ...people], me, false).map((p) => p.id)).toEqual(["a", "b", "c"]);
+  });
+
+  it("handles a post without reactor data", () => {
+    expect(visibleReactors(undefined, me, false)).toEqual([]);
+  });
+});
 
 const engagement = (overrides = {}) => ({
   reactionId: null,

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MdThumbUpOffAlt } from "react-icons/md";
 import { getReaction, reactions } from "@/modules/dash/user/data/reactions";
+import { ACTION_BUTTON_CLASS } from "./actionButtonClass";
 
 const OPEN_DELAY_MS = 200;
 /** Grace period for moving the cursor from the button up to the panel. */
@@ -93,9 +94,9 @@ const ReactionButton = ({ reactionId, onReact }) => {
 
   const isLike = selected?.id === "like";
   const buttonColor = !selected
-    ? "text-gray-600"
+    ? "text-[#475467]"
     : isLike
-      ? "text-blue-600"
+      ? "text-primary"
       : selected.color;
 
   return (
@@ -140,7 +141,7 @@ const ReactionButton = ({ reactionId, onReact }) => {
         aria-haspopup="menu"
         aria-expanded={pickerOpen}
         aria-pressed={Boolean(selected)}
-        className={`flex w-full min-w-0 items-center justify-center gap-1.5 whitespace-nowrap px-1 py-3 text-[13px] font-medium transition-colors hover:bg-[#F9FAFB] sm:gap-2 ${buttonColor}`}
+        className={`${ACTION_BUTTON_CLASS} ${buttonColor}`}
       >
         {!selected ? (
           <MdThumbUpOffAlt aria-hidden="true" className="h-[18px] w-[18px]" />

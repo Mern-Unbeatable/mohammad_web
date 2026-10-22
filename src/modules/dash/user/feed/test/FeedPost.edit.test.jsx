@@ -40,13 +40,19 @@ describe("FeedPost edit entry point", () => {
     expect(html).not.toContain('aria-label="Report post"');
   });
 
-  it("shows other members the report button instead", () => {
+  it("gives other members a post menu (with Report) instead of edit controls", () => {
     const html = renderPost(originalPost(), {
       viewer: { id: "someone-else", firstName: "Sam" },
       onEdit: noop,
       onDelete: noop,
+      onReport: noop,
     });
-    expect(html).toContain('aria-label="Report post"');
+    expect(html).toContain('aria-label="Post options"');
+    expect(html).not.toContain("Edit post");
+  });
+
+  it("shows no post menu to other members when reporting isn't available", () => {
+    const html = renderPost(originalPost(), { viewer: { id: "someone-else", firstName: "Sam" } });
     expect(html).not.toContain('aria-label="Post options"');
   });
 

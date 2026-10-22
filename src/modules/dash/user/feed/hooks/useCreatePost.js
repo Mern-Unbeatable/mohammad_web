@@ -1,17 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { toast } from "react-hot-toast";
-import { createPost } from "@/features/dash/user/feed";
 import { useCreatePostAction } from "@/shared/context/useCreatePostAction";
 import { DEFAULT_POST_OPTION } from "../utils/postTypeOptions";
-import { toCreatePostPayload } from "../utils/postPayload";
+import { usePublishPost } from "./usePublishPost";
 
 /**
  * Create-post modal state. Also registers the opener with the layout so
  * other shell entry points (e.g. mobile nav) can open it.
  */
 export function useCreatePost({ onPublished } = {}) {
-  const dispatch = useDispatch();
   const { registerOpenCreatePost } = useCreatePostAction();
   const [open, setOpen] = useState(false);
   const [option, setOption] = useState(DEFAULT_POST_OPTION);
@@ -28,16 +24,11 @@ export function useCreatePost({ onPublished } = {}) {
     [registerOpenCreatePost, openCreatePost],
   );
 
-  const publish = async (values) => {
-    const result = await dispatch(createPost(toCreatePostPayload(values)));
-    if (createPost.fulfilled.match(result)) {
-      toast.success("Post published");
-      setOpen(false);
-      onPublished?.();
-      return;
-    }
-    toast.error(result.payload || "Failed to publish post");
-  };
+  const handlePublished = useCallback(() => {
+    setOpen(false);
+    onPublished?.();
+  }, [onPublished]);
+  const publish = usePublishPost(handlePublished);
 
   return { open, option, openCreatePost, closeCreatePost, publish };
 }

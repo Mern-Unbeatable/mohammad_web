@@ -38,4 +38,5 @@ export {
   formatRelativeTime,
 } from "./feedMappers";
 export * as feedApi from "./feedApi";
+export { getPostReactions } from "./feedApi";
 export { getApiErrorMessage } from "@/config";

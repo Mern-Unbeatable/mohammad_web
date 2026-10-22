@@ -62,6 +62,16 @@ export const rollbackReaction = (state, previous) => ({
   stats: { ...state.stats, reactions: previous.stats?.reactions ?? 0 },
 });
 
+/**
+ * Recent reactors for the avatar stack, with the viewer added in front while they
+ * have a reaction and left out once they remove it (the server list may be stale).
+ */
+export const visibleReactors = (recentReactors, viewer, viewerReacted, limit = 3) => {
+  const others = (recentReactors || []).filter((person) => person?.id && person.id !== viewer?.id);
+  const people = viewerReacted && viewer?.id ? [viewer, ...others] : others;
+  return people.slice(0, limit);
+};
+
 /** Takes the server's reaction, total and per-type counts when the response has them. */
 export const reconcileReaction = (state, data) => {
   if (!data) return state;

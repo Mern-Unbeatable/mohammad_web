@@ -63,13 +63,12 @@ const AdDetailCard = ({
 
     {showSocial && ad.stats ? (
       <>
-        <PostStats stats={ad.stats} reactionId={reactionId} />
+        <PostStats stats={ad.stats} reactionId={reactionId} onCommentsClick={onToggleComments} />
         <PostActions
           reactionId={reactionId}
           onReact={onReact}
           commentsOpen={commentsOpen}
           onToggleComments={onToggleComments}
-          commentCount={ad.stats?.comments ?? 0}
           onShare={onShare}
           shared={shared}
         />

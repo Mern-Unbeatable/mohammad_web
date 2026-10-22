@@ -159,6 +159,7 @@ export function toFeedPostModel(post) {
         ? String(post.reaction).toLowerCase()
         : null,
     reactionCounts: post.reactionCounts || null,
+    recentReactors: Array.isArray(post.recentReactors) ? post.recentReactors : [],
     isRepost: Boolean(post.isRepost),
     sharedPost: post.sharedPost ? toFeedPostModel(post.sharedPost) : null,
     sharedByMe: Boolean(post.sharedByMe),

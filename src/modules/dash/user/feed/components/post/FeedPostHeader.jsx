@@ -1,4 +1,4 @@
-import { MoreHorizontal, Repeat2, Tag } from "lucide-react";
+import { Briefcase, Repeat2, Tag } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import Badge from "@/components/ui/Badge";
 import { POST_BADGES } from "../../constants";
@@ -10,6 +10,7 @@ const PostMenu = ({ post, isOwner, onReport, onEdit, onDelete }) => {
   if (isOwner && (onEdit || onDelete)) {
     return (
       <OwnerActionsMenu
+        className="-mr-1.5 -mt-1"
         label="Post options"
         editLabel="Edit post"
         deleteLabel="Delete post"
@@ -19,15 +20,15 @@ const PostMenu = ({ post, isOwner, onReport, onEdit, onDelete }) => {
     );
   }
 
+  if (!onReport) return null;
+
   return (
-    <button
-      type="button"
-      onClick={() => onReport?.(post)}
-      className="rounded-full p-1.5 text-[#98A2B3] hover:bg-[#F9FAFB] hover:text-[#64748B]"
-      aria-label="Report post"
-    >
-      <MoreHorizontal className="h-5 w-5" />
-    </button>
+    <OwnerActionsMenu
+      className="-mr-1.5 -mt-1"
+      label="Post options"
+      reportLabel="Report post"
+      onReport={() => onReport(post)}
+    />
   );
 };
 
@@ -82,8 +83,25 @@ const FeedPostHeader = ({
           )}
         </div>
         {author.subtitle ? (
-          <p className="truncate text-[12px] text-[#64748B]" title={author.subtitle}>
-            {author.subtitle}
+          <p
+            className="flex min-w-0 items-center gap-1 text-[12px] text-[#475467]"
+            title={author.subtitle}
+          >
+            <Briefcase className="h-3 w-3 shrink-0 text-[#98A2B3]" aria-hidden="true" />
+            {author.subtitle.split(" · ").map((part, index) => (
+              <span key={index} className="inline-flex min-w-0 items-center gap-1.5">
+                {index > 0 ? (
+                  <span
+                    aria-hidden="true"
+                    className="ml-0.5 h-1 w-1 shrink-0 rounded-full bg-[#98A2B3]"
+                  />
+                ) : null}
+                <span className="truncate">
+                  {index > 0 ? <span className="sr-only">, </span> : null}
+                  {part}
+                </span>
+              </span>
+            ))}
           </p>
         ) : null}
         <PostMeta post={post} />
