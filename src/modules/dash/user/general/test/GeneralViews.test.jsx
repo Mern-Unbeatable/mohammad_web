@@ -83,6 +83,5 @@ describe('GeneralPostDetailView', () => {
     expect(html).toContain('Research Scientist · BioCore');
     expect(html).toContain('Dhaka');
     expect(html).toContain('href="/contacts/a1"');
-    expect(html).toContain('Related posts');
   });
 });

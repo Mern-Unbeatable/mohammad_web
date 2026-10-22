@@ -21,8 +21,8 @@ const GeneralPostDetailView = () => {
 
   if (loading) {
     return (
-      <DashboardPage width="narrow">
-        <GeneralPostDetailSkeleton />
+      <DashboardPage>
+        <GeneralPostDetailSkeleton withSidebar />
       </DashboardPage>
     );
   }

@@ -16,6 +16,7 @@ export { default as GeneralPostCardSkeleton } from './skeletons/cards/GeneralPos
 export { default as JobCardSkeleton } from './skeletons/cards/JobCardSkeleton';
 export { default as JobGridCardSkeleton } from './skeletons/cards/JobGridCardSkeleton';
 export { default as JobPosterCardSkeleton } from './skeletons/cards/JobPosterCardSkeleton';
+export { default as RelatedPostsSkeleton } from './skeletons/cards/RelatedPostsSkeleton';
 export { default as ListingCardSkeleton } from './skeletons/cards/ListingCardSkeleton';
 export { default as MyJobCardSkeleton } from './skeletons/cards/MyJobCardSkeleton';
 export { default as MyReportsCardSkeleton } from './skeletons/cards/MyReportsCardSkeleton';
