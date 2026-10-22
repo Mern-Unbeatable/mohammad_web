@@ -4,6 +4,12 @@ import Container from '@/components/ui/Container';
 import { FadeUp, Float } from '@/shared/motion/LandingMotion';
 import { useHomeCta } from '../../hooks/useHomeCta';
 
+const CTA_LABELS = {
+  feed: 'Go to feed',
+  dashboard: 'Go to Dashboard',
+  join: 'Create your free account',
+};
+
 const CtaSection = () => {
   const cta = useHomeCta();
 
@@ -28,7 +34,7 @@ const CtaSection = () => {
             to={cta.to}
             className="mt-8 inline-flex items-center gap-2 rounded-md bg-[#F7F8FA] px-6 py-3 text-[15px] font-semibold text-deep-blue transition-opacity hover:opacity-90 lg:mt-9 lg:px-7 lg:py-3.5 lg:text-[16px] xl:mt-10"
           >
-            {cta.isMember ? 'Go to Dashboard' : 'Create your free account'}
+            {CTA_LABELS[cta.kind]}
             <Float y={2} duration={2.5} className="inline-flex">
               <ArrowRight className="h-4 w-4 stroke-[2.5]" />
             </Float>

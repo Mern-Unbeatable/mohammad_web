@@ -14,7 +14,7 @@ const PublicNavbar = () => {
 
   return (
     <>
-      <nav className="w-full border-b border-[#F0F0F0] bg-white/95 backdrop-blur-sm">
+      <nav className="relative z-[70] w-full border-b border-[#F0F0F0] bg-white/95 backdrop-blur-sm">
         <Container className="flex h-[72px] items-center justify-between lg:h-[76px] xl:h-[84px]">
           <div className="flex items-center gap-10 lg:gap-8 xl:gap-14">
             <Link to="/" className="shrink-0" onClick={handleLogoClick}>

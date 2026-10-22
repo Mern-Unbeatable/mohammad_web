@@ -2,10 +2,16 @@ import { Link } from 'react-router';
 import { Check } from 'lucide-react';
 import heroImage from '@/assets/hero.png';
 import Container from '@/components/ui/Container';
-import { FadeUp, Float, Pulse } from '@/shared/motion/LandingMotion';
+import { FadeUp, Pulse } from '@/shared/motion/LandingMotion';
 import { useHomeCta } from '../../hooks/useHomeCta';
 import { scrollToSection } from '../../utils/scrollToSection';
 import { EXPLORE_SECTION_ID, HERO_FEATURES, HOME_SECTIONS } from '../../constant/constants';
+
+const HERO_CTA_LABELS = {
+  feed: 'Go to feed',
+  dashboard: 'Dashboard',
+  join: 'Join Lab Unity',
+};
 
 const HeroSection = () => {
   const cta = useHomeCta();
@@ -49,7 +55,7 @@ const HeroSection = () => {
                 to={cta.to}
                 className="rounded-full bg-primary px-7 py-3 text-[15px] font-medium leading-none text-white transition-opacity hover:opacity-90 lg:px-6 lg:py-2.5 lg:text-[14px] xl:px-9 xl:py-3.5 xl:text-[16px]"
               >
-                {cta.isMember ? 'Dashboard' : 'Join Lab Unity'}
+                {HERO_CTA_LABELS[cta.kind]}
               </Link>
               <Link
                 to={`/#${EXPLORE_SECTION_ID}`}
@@ -76,15 +82,13 @@ const HeroSection = () => {
           </FadeUp>
         </div>
 
-        <FadeUp inView={false} delay={0.56} className="relative w-full lg:pt-2 xl:pt-0">
-          <Float y={10} duration={6}>
-            <img
-              src={heroImage}
-              alt="Laboratory professionals collaborating around a tablet"
-              className="w-full rounded-2xl object-cover shadow-[0_20px_50px_rgba(10,26,68,0.08)] lg:aspect-[5/4] lg:max-h-[360px] lg:rounded-2xl xl:max-h-none xl:min-h-[520px] xl:rounded-3xl xl:aspect-[5/4]"
-            />
-          </Float>
-        </FadeUp>
+        <div className="relative w-full lg:pt-2 xl:pt-0">
+          <img
+            src={heroImage}
+            alt="Laboratory professionals collaborating around a tablet"
+            className="w-full rounded-2xl object-cover shadow-[0_20px_50px_rgba(10,26,68,0.08)] lg:aspect-[5/4] lg:max-h-[360px] lg:rounded-2xl xl:max-h-none xl:min-h-[520px] xl:rounded-3xl xl:aspect-[5/4]"
+          />
+        </div>
       </Container>
     </section>
   );
