@@ -348,7 +348,7 @@ const EcosystemSection = () => {
                   </p>
                 </div>
                 <div className="flex items-end justify-end gap-2">
-                  <p className="max-w-[80%] rounded-2xl rounded-br-md bg-green-primary px-3.5 py-2.5 text-[12px] font-medium text-white shadow-sm shadow-green-primary/20 xl:px-4 xl:py-3 xl:text-[13px]">
+                  <p className="max-w-[80%] rounded-2xl rounded-br-md bg-[#16A34A] px-3.5 py-2.5 text-[12px] font-semibold text-white shadow-sm shadow-[#16A34A]/25 xl:px-4 xl:py-3 xl:text-[13px]">
                     Sent — see attachment
                   </p>
                   <img

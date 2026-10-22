@@ -27,7 +27,7 @@ const ConnectNetwork = ({ avatars }) => {
   const reduceMotion = useReducedMotion();
 
   return (
-    <div className="relative mx-auto aspect-[32/22] w-full max-w-[420px] text-pink-light">
+    <div className="relative mx-auto aspect-[32/22] w-full max-w-[420px] text-primary">
       <svg
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         className="absolute inset-0 h-full w-full overflow-visible"
@@ -40,8 +40,8 @@ const ConnectNetwork = ({ avatars }) => {
               y1={a.y}
               x2={b.x}
               y2={b.y}
-              stroke="currentColor"
-              strokeOpacity={0.25}
+              stroke="#D5DEE8"
+              strokeOpacity={1}
               strokeWidth={2}
               strokeLinecap="round"
               initial={reduceMotion ? false : { pathLength: 0 }}
@@ -57,7 +57,7 @@ const ConnectNetwork = ({ avatars }) => {
                   x2={b.x}
                   y2={b.y}
                   stroke="currentColor"
-                  strokeOpacity={0.7}
+                  strokeOpacity={0.55}
                   strokeWidth={2}
                   strokeLinecap="round"
                   strokeDasharray="4 10"

@@ -8,6 +8,7 @@ import {
 
 export const HOME_PATH = '/';
 export const JOIN_PATH = '/join';
+export const LOGIN_PATH = '/login';
 
 /** In-page anchors; the public navbar links to these as `/#id`. */
 export const HOME_SECTIONS = {
