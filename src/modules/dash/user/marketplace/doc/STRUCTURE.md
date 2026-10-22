@@ -23,7 +23,7 @@ marketplace/
 │
 ├── components/
 │   ├── toolbar/
-│   │   └── MarketplaceToolbar.jsx   Title, Saved / My / Create links, search, category pills
+│   │   └── MarketplaceToolbar.jsx   Title, Public / Saved / My links (+ Create on My listings), search, category pills
 │   │
 │   ├── listings/             Shared list rendering
 │   │   ├── ListingsSection.jsx      Titled grid with skeleton, error + retry, empty state
