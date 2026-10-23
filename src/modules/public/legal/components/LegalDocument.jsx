@@ -21,7 +21,7 @@ const LegalDocument = ({ title, intro, sections, related }) => {
             <LegalToc title={title} sections={sections} activeId={activeId} onSelect={setActiveId} />
 
             <div className="min-w-0 space-y-6">
-              <LegalArticle sections={sections} />
+              <LegalArticle sections={sections} activeId={activeId} />
               <LegalFooterLinks related={related} />
             </div>
           </div>
