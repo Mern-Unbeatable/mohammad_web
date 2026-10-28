@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { Loader2, ShieldCheck, Sparkles } from "lucide-react";
+import { Loader2, Mail, ShieldCheck, Sparkles } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { getSafeRedirectPath } from "@/shared/router/utils/safeRedirect";
 import { PRIVACY_PATH, TERMS_PATH } from "@/modules/public/legal";
+import { CONTACT_PATH } from "@/modules/public/contact";
 import {
   PasswordField,
   PasswordStrength,
@@ -363,6 +364,14 @@ const RegisterView = () => {
             </div>
           </form>
         </div>
+
+        <p className="mt-6 flex items-center justify-center gap-1.5 text-[14px] text-[#64748B]">
+          <Mail className="h-4 w-4 text-[#98A2B3]" strokeWidth={2.2} aria-hidden="true" />
+          Questions before joining?
+          <Link to={CONTACT_PATH} className="font-medium text-primary hover:underline">
+            Contact us
+          </Link>
+        </p>
       </div>
     </section>
   );
