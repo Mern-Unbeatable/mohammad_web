@@ -171,17 +171,32 @@ const ProfileSetupForm = ({
         />
       </div>
 
+      <div>
+        <FormLabel htmlFor="company">
+          Company / Laboratory Name
+        </FormLabel>
+        <Input
+          id="company"
+          type="text"
+          value={values.company}
+          onChange={(e) => onChange('company', e.target.value)}
+          required
+        />
+      </div>
+
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
-          <FormLabel htmlFor="company">
-            Company / Laboratory Name
+          <FormLabel htmlFor="city">
+            City
           </FormLabel>
           <Input
-            id="company"
+            id="city"
             type="text"
-            value={values.company}
-            onChange={(e) => onChange('company', e.target.value)}
-            required
+            value={values.city ?? ''}
+            onChange={(e) => onChange('city', e.target.value)}
+            maxLength={80}
+            placeholder="e.g. Brussels"
+            autoComplete="address-level2"
           />
         </div>
         <div>
@@ -194,6 +209,11 @@ const ProfileSetupForm = ({
             onChange={(e) => onChange('country', e.target.value)}
             required
           >
+            {values.country ? null : (
+              <option value="" disabled>
+                Select a country
+              </option>
+            )}
             {countries.map((country) => (
               <option key={country} value={country}>
                 {country}

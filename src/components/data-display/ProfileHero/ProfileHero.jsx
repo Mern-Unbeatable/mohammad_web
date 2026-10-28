@@ -203,7 +203,11 @@ export const ContactInfoCard = ({
         className={`grid grid-cols-1 gap-3 sm:grid-cols-2 ${narrow ? "xl:grid-cols-1" : ""}`}
       >
         <InfoTile icon={Building2} label="Laboratory / Company" value={user.company} />
-        <InfoTile icon={MapPin} label="Country" value={user.country} />
+        <InfoTile
+          icon={MapPin}
+          label="Location"
+          value={hasText(user.location) ? user.location : user.country}
+        />
         <InfoTile icon={Mail} label="Email" value={user.email} />
         <InfoTile icon={Phone} label="Phone" value={user.phone} />
       </div>
