@@ -10,12 +10,16 @@ import {
 import Container from "@/components/ui/Container";
 import { FadeUp } from "@/shared/motion/LandingMotion";
 import { useHomeCta } from "../../hooks/useHomeCta";
-import { CONNECT_AVATARS, LOGIN_PATH } from "../../constant/constants";
+import {
+  CONNECT_AVATARS,
+  LOGIN_PATH,
+  TRIAL_DAYS,
+} from "../../constant/constants";
 
 const CTA_LABELS = {
   feed: "Go to feed",
   dashboard: "Go to Dashboard",
-  join: "Create your free account",
+  join: "Join Lab Unity",
 };
 
 const TRUST_POINTS = [
@@ -38,13 +42,19 @@ const CtaSection = () => {
   const cta = useHomeCta();
 
   return (
-    <section className="bg-[#F7F8FA] pb-16 lg:pb-20 xl:pb-24">
+    <section className="bg-gradient-to-br from-secondary via-white to-pink-secondary/60 py-16 lg:py-20 xl:py-24 ">
       <Container>
         <div className="relative overflow-hidden rounded-3xl border border-[#E4ECF5] bg-gradient-to-br from-secondary via-white to-pink-secondary/60 px-6 py-10 shadow-sm sm:px-10 lg:px-12 lg:py-14 xl:px-16 xl:py-16">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-primary/10 blur-[100px]"
           />
+
+          {!cta.isMember && (
+            <p className="absolute right-[-60px] top-[46px] z-10 w-[240px] rotate-45 bg-primary py-1.5 text-center text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow-md shadow-primary/30">
+              {TRIAL_DAYS}-day free trial
+            </p>
+          )}
 
           <div className="relative grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-12 xl:gap-16">
             <FadeUp className="text-center lg:text-left">
@@ -80,7 +90,7 @@ const CtaSection = () => {
                     to={LOGIN_PATH}
                     className={`${buttonBase} w-full border border-[#E4E7EC] bg-white text-deep-blue hover:bg-[#F8FAFC] sm:w-auto`}
                   >
-                    Log in
+                    Pricing
                   </Link>
                 )}
               </div>
@@ -105,17 +115,17 @@ const CtaSection = () => {
 
             <FadeUp
               delay={0.12}
-              className="mx-auto w-full max-w-[380px] lg:mx-0 lg:justify-self-end xl:max-w-[440px]"
+              className="mx-auto w-full max-w-[380px] lg:relative lg:top-6 lg:mx-0 lg:justify-self-end xl:top-4 xl:max-w-[440px]"
             >
               <div className="rounded-2xl bg-gradient-to-br from-deep-blue to-[#13265C] p-6 shadow-xl shadow-deep-blue/20 ring-1 ring-white/5 xl:p-7">
                 <div className="flex items-center gap-3">
-                  <div className="flex -space-x-2.5">
+                  <div className="flex -space-x-2">
                     {CONNECT_AVATARS.map((src) => (
                       <img
                         key={src}
                         src={src}
                         alt=""
-                        className="h-10 w-10 rounded-full object-cover ring-2 ring-deep-blue xl:h-11 xl:w-11"
+                        className="h-8 w-8 rounded-full object-cover ring-2 ring-deep-blue xl:h-9 xl:w-9"
                       />
                     ))}
                   </div>

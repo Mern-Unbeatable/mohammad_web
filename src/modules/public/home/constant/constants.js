@@ -10,6 +10,9 @@ export const HOME_PATH = '/';
 export const JOIN_PATH = '/join';
 export const LOGIN_PATH = '/login';
 
+/** Free trial for new accounts; keep in sync with the server's DEFAULT_TRIAL_DAYS. */
+export const TRIAL_DAYS = 90;
+
 /** In-page anchors; the public navbar links to these as `/#id`. */
 export const HOME_SECTIONS = {
   PLATFORM: 'platform',

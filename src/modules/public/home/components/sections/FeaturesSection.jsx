@@ -67,7 +67,7 @@ const FeaturesSection = () => {
         </FadeUp>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:items-stretch xl:gap-6">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:items-stretch xl:gap-10">
           {/* Left Column */}
           <div className="flex flex-col gap-5 xl:gap-6">
             {/* Connect Card */}
@@ -122,7 +122,7 @@ const FeaturesSection = () => {
           </div>
 
           {/* Right Column */}
-          <div className="flex flex-col gap-5 xl:gap-6">
+          <div className="flex flex-col gap-5 xl:gap-10">
             {/* Share Knowledge Card */}
             <FadeUp
               as="article"
