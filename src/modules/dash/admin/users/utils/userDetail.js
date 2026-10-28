@@ -2,7 +2,6 @@ import { roleLabel } from "@/shared/constants/roles";
 import { formatDate as formatSharedDate } from "@/shared/utils/dates/date";
 import {
   API_STATUS,
-  PREMIUM_STATUSES,
   SUPPLIER_CONTENT_KINDS,
   USER_CONTENT_KINDS,
 } from "../constant/constants";
@@ -14,9 +13,6 @@ export const isSupplierUser = (user) =>
 
 export const contentKindsFor = (isSupplier) =>
   isSupplier ? SUPPLIER_CONTENT_KINDS : USER_CONTENT_KINDS;
-
-export const isPremiumMember = (profileUser) =>
-  PREMIUM_STATUSES.includes(profileUser.membershipStatus);
 
 /** Upper-cased account status, defaulting to ACTIVE. */
 export const accountStatus = (user) => String(user.status || API_STATUS.ACTIVE).toUpperCase();

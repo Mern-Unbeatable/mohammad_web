@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Mail } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { getSafeRedirectPath } from '@/shared/router/utils/safeRedirect';
+import { CONTACT_PATH } from '@/modules/public/contact';
 import SuspensionNotice from '../components/SuspensionNotice';
 import { Checkbox, FormLabel, Input, PasswordInput } from '@/components/form-controls';
 
@@ -127,6 +128,14 @@ const LoginView = () => {
             </button>
           </form>
         </div>
+
+        <p className="mt-6 flex items-center justify-center gap-1.5 text-[14px] text-[#64748B]">
+          <Mail className="h-4 w-4 text-[#98A2B3]" strokeWidth={2.2} aria-hidden="true" />
+          Questions?
+          <Link to={CONTACT_PATH} className="font-medium text-primary hover:underline">
+            Contact us
+          </Link>
+        </p>
       </div>
     </section>
   );

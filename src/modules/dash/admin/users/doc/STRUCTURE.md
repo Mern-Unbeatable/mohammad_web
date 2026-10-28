@@ -42,7 +42,7 @@ users/
 ├── utils/
 │   ├── usersList.js                  readListParams, applyParamChanges, applySearch, buildUsersQuery,
 │   │                                 toUserRow, toStatusUpdate, getUserRowActions
-│   ├── userDetail.js                 isSupplierUser, contentKindsFor, isPremiumMember, account status / rows
+│   ├── userDetail.js                 isSupplierUser, contentKindsFor, account status / rows
 │   └── activity.js                   ROW_DETAILS, buildActivityTabs, formatPrice, capitalize
 │
 ├── test/

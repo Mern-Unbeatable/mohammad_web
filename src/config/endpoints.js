@@ -26,6 +26,7 @@ export const API_ENDPOINTS = {
   // ═══════════════════════════════════════════════════════════════════════
   PUBLIC: {
     HEALTH: "/health",
+    CONTACT: "/contact",
     BLOGS: {
       LIST: "/blogs",
       BY_SLUG: (slug) => `/blogs/${slug}`,

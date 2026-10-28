@@ -1,11 +1,19 @@
+import { Fragment } from 'react';
 import { Link } from 'react-router';
 import { Globe } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import Container from '@/components/ui/Container';
 import { PRIVACY_PATH, TERMS_PATH } from '@/modules/public/legal';
+import { CONTACT_PATH } from '@/modules/public/contact';
+
+const FOOTER_LINKS = [
+  { to: TERMS_PATH, label: 'Terms of Service' },
+  { to: PRIVACY_PATH, label: 'Privacy Policy' },
+  { to: CONTACT_PATH, label: 'Contact Us' },
+];
 
 const linkClass =
-  'rounded-md px-2 py-1.5 text-[13px] font-medium text-[#475467] transition-colors hover:bg-white hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 lg:text-[14px]';
+  'rounded-sm text-[13px] font-medium text-[#475467] underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 lg:text-[14px]';
 
 const AppFooter = () => {
   const currentYear = new Date().getFullYear();
@@ -21,14 +29,16 @@ const AppFooter = () => {
           </p>
         </div>
 
-        <nav aria-label="Footer" className="flex flex-wrap items-center justify-center gap-1">
-          <Link to={TERMS_PATH} className={linkClass}>
-            Terms of Service
-          </Link>
-          <Link to={PRIVACY_PATH} className={linkClass}>
-            Privacy Policy
-          </Link>
-          <span className="ml-1 inline-flex items-center gap-1.5 rounded-full border border-[#E4E7EC] bg-white px-3 py-1.5 text-[13px] font-medium text-[#475467] lg:text-[14px]">
+        <nav aria-label="Footer" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+          {FOOTER_LINKS.map(({ to, label }, index) => (
+            <Fragment key={to}>
+              {index > 0 && <span aria-hidden="true" className="h-4 w-px bg-[#D0D5DD]" />}
+              <Link to={to} className={linkClass}>
+                {label}
+              </Link>
+            </Fragment>
+          ))}
+          <span className="ml-2 inline-flex items-center gap-1.5 rounded-full border border-[#E4E7EC] bg-white px-3 py-1.5 text-[13px] font-medium text-[#475467] lg:text-[14px]">
             <Globe className="h-3.5 w-3.5 text-[#98A2B3]" strokeWidth={2.25} />
             English
           </span>

@@ -13,7 +13,7 @@ import {
 } from "@/features/dash/admin/users";
 import { toProfilePageUser } from "@/features/dash/user/profile";
 import { fetchAuthorPosts, toFeedPostModel } from "@/features/dash/user/feed";
-import { contentKindsFor, isPremiumMember, isSupplierUser } from "../utils/userDetail";
+import { contentKindsFor, isSupplierUser } from "../utils/userDetail";
 import { ACTIVATE_REASON, API_STATUS, MESSAGES } from "../constant/constants";
 
 /**
@@ -103,7 +103,6 @@ export const useAdminUserDetail = () => {
     errorMessage: error || "User details not found",
     selectedUser,
     profileUser,
-    isPremium: profileUser ? isPremiumMember(profileUser) : false,
     posts: {
       items: posts,
       loading: !isThisAuthor || authorPostsLoading,

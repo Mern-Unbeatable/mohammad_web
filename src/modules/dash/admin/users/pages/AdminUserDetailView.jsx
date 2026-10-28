@@ -16,7 +16,6 @@ const AdminUserDetailView = () => {
     errorMessage,
     selectedUser,
     profileUser,
-    isPremium,
     posts,
     content,
     account,
@@ -55,7 +54,6 @@ const AdminUserDetailView = () => {
         hasMorePosts={posts.hasMore}
         loadingMorePosts={posts.loadingMore}
         onLoadMorePosts={posts.loadMore}
-        isPremium={isPremium}
         showEdit={false}
         showMessage
         messageHref={message.href}

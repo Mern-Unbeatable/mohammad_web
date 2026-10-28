@@ -1,23 +1,34 @@
-import { Link } from 'react-router';
-import { Check } from 'lucide-react';
-import heroImage from '@/assets/hero.png';
-import Container from '@/components/ui/Container';
-import { FadeUp, Pulse } from '@/shared/motion/LandingMotion';
-import { useHomeCta } from '../../hooks/useHomeCta';
-import { scrollToSection } from '../../utils/scrollToSection';
-import { EXPLORE_SECTION_ID, HERO_FEATURES, HOME_SECTIONS } from '../../constant/constants';
+import { Link } from "react-router";
+import { Check } from "lucide-react";
+import heroImage from "@/assets/hero.png";
+import Container from "@/components/ui/Container";
+import { FadeUp, Pulse } from "@/shared/motion/LandingMotion";
+import { useHomeCta } from "../../hooks/useHomeCta";
+import { scrollToSection } from "../../utils/scrollToSection";
+import {
+  EXPLORE_SECTION_ID,
+  HERO_FEATURES,
+  HOME_SECTIONS,
+} from "../../constant/constants";
 
 const HERO_CTA_LABELS = {
-  feed: 'Go to feed',
-  dashboard: 'Dashboard',
-  join: 'Join Lab Unity',
+  feed: "Go to feed",
+  dashboard: "Dashboard",
+  join: "Join Lab Unity",
 };
 
 const HeroSection = () => {
   const cta = useHomeCta();
 
   return (
-    <section id={HOME_SECTIONS.PLATFORM} className="relative scroll-mt-[72px] overflow-hidden bg-white lg:scroll-mt-[76px] xl:scroll-mt-[84px]">
+    <section
+      id={HOME_SECTIONS.PLATFORM}
+      className="relative scroll-mt-[72px] overflow-hidden bg-gradient-to-br from-secondary via-white to-pink-secondary/60 lg:scroll-mt-[76px] xl:scroll-mt-[84px]"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-primary/10 blur-[100px]"
+      />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -left-24 top-0 h-full w-[55%] bg-[radial-gradient(ellipse_at_left,rgba(8,118,196,0.08)_0%,rgba(240,246,252,0.6)_45%,transparent_75%)] lg:w-[48%] xl:w-[55%]"
@@ -25,8 +36,15 @@ const HeroSection = () => {
 
       <Container className="relative grid grid-cols-1 items-center gap-10 py-14 sm:gap-12 lg:grid-cols-2 lg:items-start lg:gap-8 lg:py-16 xl:grid-cols-[1fr_1.08fr] xl:items-center xl:gap-12 xl:py-28">
         <div className="w-full max-w-[540px] lg:max-w-[420px] xl:max-w-none">
-          <FadeUp inView={false} className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-[#F9FAFB] px-3.5 py-1.5 xl:mb-8 xl:gap-2.5 xl:px-4 xl:py-2">
-            <Pulse className="h-2 w-2 shrink-0 rounded-full bg-pink-light xl:h-2.5 xl:w-2.5" duration={2.2} scale={0.85} />
+          <FadeUp
+            inView={false}
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-[#F9FAFB] px-3.5 py-1.5 xl:mb-8 xl:gap-2.5 xl:px-4 xl:py-2"
+          >
+            <Pulse
+              className="h-2 w-2 shrink-0 rounded-full bg-pink-light xl:h-2.5 xl:w-2.5"
+              duration={2.2}
+              scale={0.85}
+            />
             <span className="text-[13px] font-normal leading-none text-[#4B5563] xl:text-[14px]">
               The professional network for laboratories
             </span>
@@ -34,18 +52,18 @@ const HeroSection = () => {
 
           <FadeUp inView={false} delay={0.1}>
             <h1 className="text-[36px] font-bold leading-[1.15] tracking-[-0.02em] text-deep-blue sm:text-[42px] lg:text-[38px] lg:leading-[1.2] xl:text-[56px] xl:leading-[1.15]">
-              Where Laboratory Professionals{' '}
-              <span className="text-pink-light">Connect,</span> Collaborate &{' '}
+              Where Laboratory Professionals{" "}
+              <span className="text-pink-light">Connect,</span> Collaborate &{" "}
               <span className="text-primary">Move Science Forward.</span>
             </h1>
           </FadeUp>
 
           <FadeUp inView={false} delay={0.2}>
             <p className="mt-5 max-w-[500px] text-[16px] leading-[1.65] text-[#6B7280] lg:mt-4 lg:max-w-none lg:text-[15px] lg:leading-[1.6] xl:mt-6 xl:max-w-[620px] xl:text-[18px] xl:leading-[1.7]">
-              Lab Unity brings laboratories, researchers, suppliers, and industry
-              professionals together in one trusted professional environment to
-              exchange knowledge, discover opportunities, and build meaningful
-              connections.
+              Lab Unity brings laboratories, researchers, suppliers, and
+              industry professionals together in one trusted professional
+              environment to exchange knowledge, discover opportunities, and
+              build meaningful connections.
             </p>
           </FadeUp>
 

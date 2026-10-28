@@ -61,9 +61,6 @@ export const ACCOUNT_STATUS_CLASS = {
   BANNED: "bg-[#FEF3F2] text-[#D92D20]",
 };
 
-/** Membership states that count as premium on the profile page. */
-export const PREMIUM_STATUSES = ["premium", "trial", "cancelled"];
-
 /** Content kinds shown as activity tabs, per account type. */
 export const SUPPLIER_CONTENT_KINDS = ["advertisements", "listings", "jobs"];
 export const USER_CONTENT_KINDS = ["jobs"];

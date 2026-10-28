@@ -41,7 +41,7 @@ profile/
 │   └── useProfileSetup.js        Load form, field changes, avatar / cover upload, validate and save
 │
 ├── utils/
-│   ├── membership.js         isPremiumMember, showsSubscriptionCard
+│   ├── membership.js         showsSubscriptionCard
 │   ├── subscription.js       Defaults, status key / colour, can-cancel, detail rows
 │   └── profileSetup.js       Country options, image type check, form validation
 │

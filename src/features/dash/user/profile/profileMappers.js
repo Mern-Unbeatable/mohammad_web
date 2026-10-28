@@ -34,7 +34,8 @@ export const emptyProfileForm = {
   lastName: "",
   title: "",
   company: "",
-  country: "Belgium",
+  city: "",
+  country: "",
   email: "",
   phone: "",
   about: "",
@@ -49,7 +50,8 @@ export function mapUserToForm(user) {
     lastName: profile.lastName || "",
     title: profile.title || "",
     company: profile.company || "",
-    country: profile.country || "Belgium",
+    city: profile.city || "",
+    country: profile.country || "",
     email: user?.email || "",
     phone: profile.phone || "",
     // API serializes DB avatarUrl/coverUrl as avatar/coverPhoto
@@ -69,6 +71,7 @@ export function formToUpdatePayload(form) {
   if (form.lastName?.trim()) payload.lastName = form.lastName.trim();
   if (form.title != null) payload.title = String(form.title).trim();
   if (form.company != null) payload.company = String(form.company).trim();
+  if (form.city != null) payload.city = String(form.city).trim();
   if (form.country != null) payload.country = String(form.country).trim();
   if (form.phone != null) payload.phone = String(form.phone).trim();
   if (form.about != null) {
@@ -121,6 +124,7 @@ export function toProfilePageUser(user) {
       "MB",
     title: profile.title || "",
     company: profile.company || "",
+    city: profile.city || "",
     country: profile.country || "",
     location: profile.location || profile.country || "",
     phone: profile.phone || "",

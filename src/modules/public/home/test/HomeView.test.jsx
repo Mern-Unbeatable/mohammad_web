@@ -34,8 +34,8 @@ describe('HomeView', () => {
   it('invites guests to join', () => {
     const html = render();
     expect(html).toContain('Join Lab Unity');
-    expect(html).toContain('Create your free account');
     expect(html.match(/href="\/join"/g)).toHaveLength(2);
+    expect(html).toMatch(/href="\/pricing"[^>]*>Pricing</);
     expect(html).not.toContain('Go to Dashboard');
   });
 

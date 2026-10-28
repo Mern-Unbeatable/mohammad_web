@@ -3,11 +3,10 @@ import FeedPostCardSkeleton from '@/components/loader/skeletons/cards/FeedPostCa
 import ProfileHeroSkeleton from '@/components/loader/skeletons/cards/ProfileHeroSkeleton';
 import SubscriptionDetailsCardSkeleton from '@/components/loader/skeletons/cards/SubscriptionDetailsCardSkeleton';
 import ContactInfoCardSkeleton from '@/components/loader/skeletons/cards/ContactInfoCardSkeleton';
-import ProfessionalInfoCardSkeleton from '@/components/loader/skeletons/cards/ProfessionalInfoCardSkeleton';
 import MyReportsCardSkeleton from '@/components/loader/skeletons/cards/MyReportsCardSkeleton';
 
 /**
- * Full own-profile page skeleton — mirrors ProfilePageContent premium layout.
+ * Full own-profile page skeleton — mirrors ProfilePageContent.
  */
 const ProfilePageSkeleton = ({ showSubscription = true, sidebar = false }) =>
   sidebar ? (
@@ -26,7 +25,7 @@ const ProfilePageSkeleton = ({ showSubscription = true, sidebar = false }) =>
         </div>
         <div className="contents lg:flex lg:min-w-0 lg:flex-col lg:gap-4">
           <div className="order-2">
-            <ContactInfoCardSkeleton showProfessional={showSubscription} />
+            <ContactInfoCardSkeleton showProfessional />
           </div>
           <section className="order-3">
             <Skeleton className="mb-4 h-5 w-24" />
@@ -47,10 +46,7 @@ const ProfilePageSkeleton = ({ showSubscription = true, sidebar = false }) =>
           <ContactInfoCardSkeleton showProfessional />
         </div>
       ) : (
-        <>
-          <ProfessionalInfoCardSkeleton />
-          <ContactInfoCardSkeleton />
-        </>
+        <ContactInfoCardSkeleton showProfessional />
       )}
       <section>
         <Skeleton className="mb-4 h-5 w-24" />

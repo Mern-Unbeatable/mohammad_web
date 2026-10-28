@@ -8,7 +8,7 @@ import {
 } from "@/features/dash/user/profile";
 import { fetchMyReports, clearReportsError, toMyReportModel } from "@/features/dash/user/reports";
 import { MY_REPORTS_QUERY } from "../constant/constants";
-import { isPremiumMember, showsSubscriptionCard } from "../utils/membership";
+import { showsSubscriptionCard } from "../utils/membership";
 
 /** Signed-in user's profile and submitted reports, with membership flags. */
 export function useProfilePage() {
@@ -42,7 +42,6 @@ export function useProfilePage() {
   return {
     profileUser,
     loading,
-    isPremium: isPremiumMember(profileUser),
     showSubscription: showsSubscriptionCard(profileUser),
     reports: myReports,
     reportsLoading,
