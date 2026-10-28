@@ -1,7 +1,4 @@
-import ProfileHero, {
-  ContactInfoCard,
-  ProfessionalInfoCard,
-} from "@/components/data-display/ProfileHero/ProfileHero";
+import ProfileHero, { ContactInfoCard } from "@/components/data-display/ProfileHero/ProfileHero";
 import ActivitySection from "@/components/data-display/ActivitySection/ActivitySection";
 import { currentUser } from "@/modules/dash/user/data/dashboard";
 
@@ -22,7 +19,6 @@ const ProfilePageContent = ({
   onReport,
   onEdit,
   onDelete,
-  isPremium = user.membershipStatus === "premium",
   editHref = "/profile/edit",
   showEdit = true,
   showMessage = false,
@@ -62,14 +58,7 @@ const ProfilePageContent = ({
     />
   );
 
-  const infoCards = isPremium ? (
-    <ContactInfoCard user={user} showProfessional narrow accent />
-  ) : (
-    <>
-      <ProfessionalInfoCard user={user} extended />
-      <ContactInfoCard user={user} narrow accent />
-    </>
-  );
+  const infoCards = <ContactInfoCard user={user} showProfessional narrow accent />;
 
   // 2xl: contact info | activity | account cards. xl: all cards left, activity
   // right so posts keep a feed-like width. Below xl the cards stack.
@@ -115,15 +104,8 @@ const ProfilePageContent = ({
           </div>
 
           <div className="contents lg:flex lg:min-w-0 lg:flex-col lg:gap-4">
-            <div className="order-2 space-y-4">
-              {isPremium ? (
-                <ContactInfoCard user={user} showProfessional />
-              ) : (
-                <>
-                  <ProfessionalInfoCard user={user} extended />
-                  <ContactInfoCard user={user} />
-                </>
-              )}
+            <div className="order-2">
+              <ContactInfoCard user={user} showProfessional />
             </div>
             {activity}
           </div>
@@ -136,16 +118,13 @@ const ProfilePageContent = ({
     <div className="space-y-4">
       {hero}
 
-      {isPremium ? (
+      {subscriptionSlot ? (
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
           {subscriptionSlot}
           <ContactInfoCard user={user} showProfessional />
         </div>
       ) : (
-        <>
-          <ProfessionalInfoCard user={user} extended />
-          <ContactInfoCard user={user} />
-        </>
+        <ContactInfoCard user={user} showProfessional />
       )}
 
       {activity}

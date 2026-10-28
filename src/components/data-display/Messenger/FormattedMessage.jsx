@@ -55,10 +55,38 @@ const renderInline = (nodes, tone) =>
     }
   });
 
-/** Chat message text with lightweight formatting (see `messageFormat.js`). */
-const FormattedMessage = ({ text, tone = "them" }) => {
+const isBlankLine = (line) =>
+  line.every((node) => typeof node === "string" && !node.trim());
+
+/** Lines grouped into paragraphs at blank lines; runs of blank lines count once. */
+const splitParagraphs = (lines) =>
+  lines
+    .reduce(
+      (groups, line) => {
+        if (isBlankLine(line)) groups.push([]);
+        else groups[groups.length - 1].push(line);
+        return groups;
+      },
+      [[]],
+    )
+    .filter((group) => group.length);
+
+const renderLines = (lines, palette) =>
+  lines.map((line, lineIndex) => (
+    <span key={lineIndex}>
+      {lineIndex > 0 ? "\n" : null}
+      {renderInline(line, palette)}
+    </span>
+  ));
+
+/**
+ * Chat message text with lightweight formatting (see `messageFormat.js`).
+ * `paragraphs` turns blank lines into separate `<p>`s, so the parent's spacing
+ * sets the gap instead of a full empty line.
+ */
+const FormattedMessage = ({ text, tone = "them", paragraphs = false }) => {
   const palette = TONES[tone] || TONES.them;
-  return parseMessage(text).map((block, index) => {
+  return parseMessage(text).flatMap((block, index) => {
     if (block.type === "ul") {
       return (
         <ul key={index} className="list-disc space-y-0.5 pl-5">
@@ -86,14 +114,16 @@ const FormattedMessage = ({ text, tone = "them" }) => {
         </ol>
       );
     }
+    if (paragraphs) {
+      return splitParagraphs(block.items).map((lines, groupIndex) => (
+        <p key={`${index}-${groupIndex}`} className="whitespace-pre-wrap">
+          {renderLines(lines, palette)}
+        </p>
+      ));
+    }
     return (
       <p key={index} className="whitespace-pre-wrap">
-        {block.items.map((line, lineIndex) => (
-          <span key={lineIndex}>
-            {lineIndex > 0 ? "\n" : null}
-            {renderInline(line, palette)}
-          </span>
-        ))}
+        {renderLines(block.items, palette)}
       </p>
     );
   });

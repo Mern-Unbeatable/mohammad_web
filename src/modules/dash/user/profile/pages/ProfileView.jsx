@@ -46,7 +46,6 @@ const ProfileView = () => {
           onReport={posts.openReport}
           onEdit={editor.openEditor}
           onDelete={posts.deleting ? undefined : posts.requestDelete}
-          isPremium={profile.isPremium}
           subscriptionSlot={
             profile.showSubscription ? (
               <SubscriptionDetailsCard subscription={profileUser.subscription} />

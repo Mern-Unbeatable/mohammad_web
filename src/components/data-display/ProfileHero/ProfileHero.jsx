@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import ZoomableAvatar from '@/components/data-display/ZoomableAvatar/ZoomableAvatar';
 import Card from '@/components/ui/Card';
-import RichText from '@/components/data-display/RichText/RichText';
+import ExpandableRichText from '@/components/data-display/RichText/ExpandableRichText';
 import { currentUser } from '@/modules/dash/user/data/dashboard';
 import { coverGradientClass } from '@/shared/utils/gradient/coverGradient';
 
@@ -169,20 +169,6 @@ const ProfileHero = ({
   );
 };
 
-export const ProfessionalInfoCard = ({ user = currentUser, extended = false }) => (
-  <Card>
-    <div className="border-b border-[#E4E7EC] px-5 py-4 sm:px-6">
-      <h2 className="text-[16px] font-bold text-deep-blue">Professional information</h2>
-    </div>
-    <div className="space-y-4 px-5 py-5 sm:px-6">
-      <RichText text={user.about} className="text-[14px] leading-[1.7] text-[#475467]" />
-      {extended && user.aboutExtended ? (
-        <RichText text={user.aboutExtended} className="text-[14px] leading-[1.7] text-[#475467]" />
-      ) : null}
-    </div>
-  </Card>
-);
-
 /** `narrow` keeps one tile per row from xl up, for side columns. */
 export const ContactInfoCard = ({
   user = currentUser,
@@ -214,13 +200,11 @@ export const ContactInfoCard = ({
 
       {showProfessional ? (
         <div className="mt-5 border-t border-[#E4E7EC] pt-5">
-          <h3 className="mb-3 text-[14px] font-bold text-deep-blue">Professional information</h3>
-          <div className="space-y-4">
-            <RichText text={user.about} className="text-[14px] leading-[1.7] text-[#475467]" />
-            {user.aboutExtended ? (
-              <RichText text={user.aboutExtended} className="text-[14px] leading-[1.7] text-[#475467]" />
-            ) : null}
-          </div>
+          <h3 className="mb-3 text-[16px] font-bold text-deep-blue">Professional information</h3>
+          <ExpandableRichText
+            text={[user.about, user.aboutExtended].filter(hasText).join("\n\n")}
+            className="text-[14px] leading-[1.7] text-[#475467]"
+          />
         </div>
       ) : null}
     </div>

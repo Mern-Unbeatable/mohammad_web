@@ -4,7 +4,7 @@ import FormattedMessage from "@/components/data-display/Messenger/FormattedMessa
 const RichText = ({ text, className = "" }) =>
   text ? (
     <div className={`space-y-2 [overflow-wrap:anywhere] ${className}`}>
-      <FormattedMessage text={text} tone="plain" />
+      <FormattedMessage text={text} tone="plain" paragraphs />
     </div>
   ) : null;
 

@@ -20,6 +20,19 @@ describe("FormattedMessage", () => {
     );
   });
 
+  it("keeps blank lines in chat but splits paragraphs at them when asked", () => {
+    const text = "one\n\n\ntwo\nthree\n- item\n\nfour";
+    expect(render(text)).toContain("<span>one</span><span>\n</span><span>\n</span>");
+
+    const html = renderToStaticMarkup(<FormattedMessage text={text} tone="plain" paragraphs />);
+    expect(html).toBe(
+      '<p class="whitespace-pre-wrap"><span>one</span></p>' +
+        '<p class="whitespace-pre-wrap"><span>two</span><span>\nthree</span></p>' +
+        html.match(/<ul.*<\/ul>/)[0] +
+        '<p class="whitespace-pre-wrap"><span>four</span></p>',
+    );
+  });
+
   it("escapes HTML instead of rendering it", () => {
     const html = render('<script>alert(1)</script> <a href="javascript:x">x</a>');
     expect(html).not.toContain("<script>");

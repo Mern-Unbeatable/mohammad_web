@@ -3,7 +3,7 @@ import Card from "@/components/ui/Card";
 import ContactProfileHero from "@/components/data-display/ContactProfileHero/ContactProfileHero";
 import ActivitySection from "@/components/data-display/ActivitySection/ActivitySection";
 import { InfoTile } from "@/components/data-display/ProfileHero/ProfileHero";
-import RichText from "@/components/data-display/RichText/RichText";
+import ExpandableRichText from "@/components/data-display/RichText/ExpandableRichText";
 
 /**
  * Composed contact-profile page content: hero, then contact details on the
@@ -63,7 +63,7 @@ const ContactProfilePageContent = ({
             </h2>
           </div>
           <div className="px-5 py-5 sm:px-6">
-            <RichText
+            <ExpandableRichText
               text={contact.about}
               className="text-[14px] leading-[1.7] text-[#475467]"
             />
