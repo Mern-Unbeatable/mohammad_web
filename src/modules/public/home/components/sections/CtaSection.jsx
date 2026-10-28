@@ -10,11 +10,8 @@ import {
 import Container from "@/components/ui/Container";
 import { FadeUp } from "@/shared/motion/LandingMotion";
 import { useHomeCta } from "../../hooks/useHomeCta";
-import {
-  CONNECT_AVATARS,
-  LOGIN_PATH,
-  TRIAL_DAYS,
-} from "../../constant/constants";
+import { PRICING_PATH } from "@/modules/public/pricing";
+import { CONNECT_AVATARS, TRIAL_DAYS } from "../../constant/constants";
 
 const CTA_LABELS = {
   feed: "Go to feed",
@@ -87,7 +84,7 @@ const CtaSection = () => {
                 </Link>
                 {!cta.isMember && (
                   <Link
-                    to={LOGIN_PATH}
+                    to={PRICING_PATH}
                     className={`${buttonBase} w-full border border-[#E4E7EC] bg-white text-deep-blue hover:bg-[#F8FAFC] sm:w-auto`}
                   >
                     Pricing

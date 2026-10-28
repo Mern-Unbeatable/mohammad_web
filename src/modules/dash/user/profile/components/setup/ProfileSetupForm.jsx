@@ -186,20 +186,6 @@ const ProfileSetupForm = ({
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
-          <FormLabel htmlFor="city">
-            City
-          </FormLabel>
-          <Input
-            id="city"
-            type="text"
-            value={values.city ?? ''}
-            onChange={(e) => onChange('city', e.target.value)}
-            maxLength={80}
-            placeholder="e.g. Brussels"
-            autoComplete="address-level2"
-          />
-        </div>
-        <div>
           <FormLabel htmlFor="country">
             Country
           </FormLabel>
@@ -220,6 +206,20 @@ const ProfileSetupForm = ({
               </option>
             ))}
           </Select>
+        </div>
+        <div>
+          <FormLabel htmlFor="city">
+            City
+          </FormLabel>
+          <Input
+            id="city"
+            type="text"
+            value={values.city ?? ''}
+            onChange={(e) => onChange('city', e.target.value)}
+            maxLength={80}
+            placeholder="e.g. Brussels"
+            autoComplete="address-level2"
+          />
         </div>
       </div>
 

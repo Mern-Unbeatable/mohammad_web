@@ -3,7 +3,7 @@ import { Check } from 'lucide-react';
 import { PROFILE_PATH } from '../../constant/constants';
 
 /** Right half of the plan card: included features and help link. */
-const PlanFeaturesPanel = ({ features, membershipEnded }) => (
+const PlanFeaturesPanel = ({ features, membershipEnded, showHelp = true }) => (
   <div className="bg-secondary p-6 sm:p-8">
     <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">
       Everything Included
@@ -23,12 +23,14 @@ const PlanFeaturesPanel = ({ features, membershipEnded }) => (
       </p>
     ) : null}
 
-    <p className="mt-6 text-[12px] text-[#98A2B3]">
-      Need help?{' '}
-      <Link to={PROFILE_PATH} className="text-primary hover:underline">
-        View subscription details on your profile
-      </Link>
-    </p>
+    {showHelp ? (
+      <p className="mt-6 text-[12px] text-[#98A2B3]">
+        Need help?{' '}
+        <Link to={PROFILE_PATH} className="text-primary hover:underline">
+          View subscription details on your profile
+        </Link>
+      </p>
+    ) : null}
   </div>
 );
 
