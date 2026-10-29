@@ -2,7 +2,7 @@ import { SUBSCRIPTION_STATUS } from '../constant/constants';
 import { toApiPlan } from './plans';
 import { formatDate } from '@/shared/utils/dates/date';
 
-const { TRIAL, ACTIVE, CANCELLED, EXPIRED } = SUBSCRIPTION_STATUS;
+const { TRIAL, ACTIVE, PAST_DUE, CANCELLED, EXPIRED } = SUBSCRIPTION_STATUS;
 
 const formatAccessDate = (value) => formatDate(value, { format: 'short', locale: 'en-GB' });
 
@@ -15,11 +15,13 @@ export const isAlreadyOnPlan = (sub, cycle) =>
 export const canCancel = (sub) =>
   sub?.status === ACTIVE ||
   sub?.status === TRIAL ||
+  sub?.status === PAST_DUE ||
   (sub?.status === CANCELLED && sub?.cancelAtPeriodEnd);
 
 /** The Cancel button only shows for a running trial or membership. */
 export const showCancelButton = (sub) =>
-  (sub?.status === ACTIVE || sub?.status === TRIAL) && !sub?.cancelAtPeriodEnd;
+  (sub?.status === ACTIVE || sub?.status === TRIAL || sub?.status === PAST_DUE) &&
+  !sub?.cancelAtPeriodEnd;
 
 export const hasMembershipEnded = (sub) =>
   sub?.status === EXPIRED || (sub?.status === CANCELLED && !sub?.isActive);
@@ -38,15 +40,28 @@ export const cancelSuccessMessage = (sub) =>
 /** Banner `{ tone, icon, text }` for the current subscription, or null. */
 export const statusBanner = (sub, trialDaysLeft) => {
   if (!sub) return null;
-  const { status, cancelAtPeriodEnd, accessEndsAt, plan } = sub;
+  const { status, cancelAtPeriodEnd, accessEndsAt, plan, checkoutPending } = sub;
 
   if (status === TRIAL && trialDaysLeft > 0) {
+    if (checkoutPending) {
+      return {
+        tone: 'warning',
+        icon: 'clock',
+        text: 'Payment processing — your plan activates once confirmed',
+      };
+    }
     return { tone: 'warning', icon: 'clock', text: `Free trial ends in ${trialDaysLeft} days` };
   }
   if (status === ACTIVE && !cancelAtPeriodEnd) {
     return {
       tone: 'success',
       text: `Active · ${plan === 'YEARLY' ? 'Yearly' : 'Monthly'} membership`,
+    };
+  }
+  if (status === PAST_DUE) {
+    return {
+      tone: 'danger',
+      text: 'Payment problem — update your payment method to restore access',
     };
   }
   if (status === CANCELLED && cancelAtPeriodEnd) {

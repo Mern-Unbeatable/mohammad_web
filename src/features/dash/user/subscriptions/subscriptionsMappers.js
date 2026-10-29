@@ -44,6 +44,8 @@ export function toSubscriptionModel(subscription) {
     isActive: Boolean(subscription.isActive),
     accessEndsAt: subscription.accessEndsAt || subscription.renewalDate || null,
     cancelAtPeriodEnd: Boolean(subscription.cancelAtPeriodEnd),
+    checkoutPending: Boolean(subscription.checkoutPending),
+    accessLevel: subscription.accessLevel || (subscription.isActive ? 'premium' : 'none'),
     raw: subscription,
   };
 }

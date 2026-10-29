@@ -12,6 +12,7 @@ export const CHECKOUT_STATUS = { SUCCESS: 'success', CANCELLED: 'cancelled' };
 export const SUBSCRIPTION_STATUS = {
   TRIAL: 'TRIAL',
   ACTIVE: 'ACTIVE',
+  PAST_DUE: 'PAST_DUE',
   CANCELLED: 'CANCELLED',
   EXPIRED: 'EXPIRED',
 };
