@@ -5,6 +5,7 @@ import { DashboardNavbar, MobileBottomNav } from "@/components/navigation";
 import { CreatePostActionProvider } from "@/shared/context/CreatePostActionProvider";
 import { LayoutChromeProvider } from "@/shared/context/LayoutChromeContext";
 import AppFooter from "@/components/navigation/footer/AppFooter";
+import { SubscriptionGate } from "@/components/subscription";
 import { fetchUserProfile } from "@/features/dash/user/profile";
 
 const QuickCreatePost = lazy(
@@ -35,7 +36,7 @@ const UserLayout = ({ children }) => {
         <div className="dashboard-shell flex min-h-screen flex-col bg-[#F3F4F6]">
           <DashboardNavbar />
           <main className="flex-1 pb-safe-nav sm:pb-0">
-            {children ?? <Outlet />}
+            <SubscriptionGate>{children ?? <Outlet />}</SubscriptionGate>
           </main>
           <div className="hidden xl:block">
             <AppFooter />
