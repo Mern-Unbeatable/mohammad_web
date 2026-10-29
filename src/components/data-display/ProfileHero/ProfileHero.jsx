@@ -15,6 +15,8 @@ import {
 import ZoomableAvatar from '@/components/data-display/ZoomableAvatar/ZoomableAvatar';
 import Card from '@/components/ui/Card';
 import ExpandableRichText from '@/components/data-display/RichText/ExpandableRichText';
+import PresenceDot from '@/components/ui/PresenceDot';
+import { useUserPresence } from '@/features/messages/useUserPresence';
 import { currentUser } from '@/modules/dash/user/data/dashboard';
 import { coverGradientClass } from '@/shared/utils/gradient/coverGradient';
 
@@ -72,6 +74,10 @@ const ProfileHero = ({
   const showCover = hasText(user.coverPhoto) && failedCover !== user.coverPhoto;
   const location = hasText(user.location) ? user.location : user.country;
   const connections = Number(user.connections) || 0;
+  const { getStatus } = useUserPresence(user?.id ? [user.id] : []);
+  const presence = getStatus(user?.id);
+  const isOnline = presence === 'online';
+  const showStatus = ['online', 'offline', 'loading'].includes(presence);
 
   return (
     <Card>
@@ -106,6 +112,14 @@ const ProfileHero = ({
                 <h1 className="text-[24px] font-bold leading-tight tracking-tight text-deep-blue sm:text-[28px]">
                   {user.name}
                 </h1>
+                {showStatus ? (
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E4E7EC] bg-[#F9FAFB] px-2.5 py-1 text-[11px] font-semibold text-[#475467]">
+                    <span className="relative inline-flex h-2.5 w-2.5 shrink-0">
+                      <PresenceDot online={isOnline} />
+                    </span>
+                    {presence === 'online' ? 'Online' : presence === 'loading' ? 'Checking status' : 'Offline'}
+                  </span>
+                ) : null}
                 {user.membershipStatus ? (
                   <MembershipBadge status={user.membershipStatus} />
                 ) : null}

@@ -11,8 +11,10 @@ import {
 } from "lucide-react";
 import { Link } from "react-router";
 import Card from "@/components/ui/Card";
+import PresenceDot from "@/components/ui/PresenceDot";
 import ZoomableAvatar from "@/components/data-display/ZoomableAvatar/ZoomableAvatar";
 import { MetaItem } from "@/components/data-display/ProfileHero/ProfileHero";
+import { useUserPresence } from "@/features/messages/useUserPresence";
 import { coverGradientClass } from "@/shared/utils/gradient/coverGradient";
 
 /** The contact model fills missing fields with "—"; those rows are hidden. */
@@ -33,6 +35,10 @@ const ContactProfileHero = ({
   const cover = coverPhoto || contact.coverPhoto;
   const showCover = Boolean(cover) && failedCover !== cover;
   const connections = Number(contact.connections) || 0;
+  const { getStatus } = useUserPresence(contact?.id ? [contact.id] : []);
+  const presence = getStatus(contact?.id);
+  const isOnline = presence === "online";
+  const showStatus = ["online", "offline", "loading"].includes(presence);
 
   return (
     <Card>
@@ -63,9 +69,23 @@ const ContactProfileHero = ({
             />
 
             <div className="w-full min-w-0 sm:w-auto">
-              <h1 className="break-words text-[22px] font-bold leading-tight tracking-tight text-deep-blue sm:text-[28px]">
-                {contact.name}
-              </h1>
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+                <h1 className="break-words text-[22px] font-bold leading-tight tracking-tight text-deep-blue sm:text-[28px]">
+                  {contact.name}
+                </h1>
+                {showStatus ? (
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E4E7EC] bg-[#F9FAFB] px-2.5 py-1 text-[11px] font-semibold text-[#475467]">
+                    <span className="relative inline-flex h-2.5 w-2.5 shrink-0">
+                      <PresenceDot online={isOnline} />
+                    </span>
+                    {presence === "online"
+                      ? "Online"
+                      : presence === "loading"
+                        ? "Checking status"
+                        : "Offline"}
+                  </span>
+                ) : null}
+              </div>
 
               {isShown(contact.title) ? (
                 <p className="mt-1.5 inline-flex max-w-full items-center gap-1.5 text-[14px] font-medium text-[#475467] sm:text-[15px]">

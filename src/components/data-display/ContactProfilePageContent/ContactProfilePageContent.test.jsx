@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router";
@@ -7,6 +7,10 @@ import ContactProfilePageContent from "./ContactProfilePageContent";
 import { fetchAuthorPosts, toFeedPostModel, userFeedReducer } from "@/features/dash/user/feed";
 import { userProfileReducer } from "@/features/dash/user/profile";
 import { originalPost } from "@/features/dash/user/feed/feedRepostFixtures";
+
+vi.mock("@/features/messages/useUserPresence", () => ({
+  useUserPresence: () => ({ getStatus: () => "online" }),
+}));
 
 const contact = {
   id: "anna",
@@ -58,6 +62,7 @@ describe("ContactProfilePageContent activity", () => {
 
     expect(html).toContain("Which centrifuge do you recommend?");
     expect(html).toContain("Anna Berg");
+    expect(html).toContain("Online");
     expect(html).not.toContain("No activity yet");
     expect(html).not.toContain("Show more posts");
   });
