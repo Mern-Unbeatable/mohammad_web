@@ -31,18 +31,23 @@ const JobsList = ({ items, loading }) => (
                   className="mt-0.5 h-10 w-10 shrink-0 rounded-lg border border-[#E4E7EC] bg-white object-contain p-0.5"
                 />
               ) : null}
+
               <div className="min-w-0 flex-1">
-                <p className="text-[13px] text-deep-blue hover:text-primary">
-                  {title}
-                </p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="min-w-0 truncate text-[13px] text-deep-blue hover:text-primary">
+                    {title}
+                  </p>
+
+                  {type ? (
+                    <Badge variant="fulltime" className="shrink-0 normal-case">
+                      {type}
+                    </Badge>
+                  ) : null}
+                </div>
+
                 <p className="mt-0.5 text-[12px] text-[#64748B]">
-                  {[company, location].filter(Boolean).join(" · ")}
+                  {[company, location].filter(Boolean).join(" | ")}
                 </p>
-                {type ? (
-                  <Badge variant="fulltime" className="mt-2 normal-case">
-                    {type}
-                  </Badge>
-                ) : null}
               </div>
             </Link>
           </li>
