@@ -26,7 +26,15 @@ export const useCheckoutReturn = () => {
       if (checkout === CHECKOUT_STATUS.SUCCESS && sessionId) {
         const result = await dispatch(confirmCheckout(sessionId));
         if (confirmCheckout.fulfilled.match(result)) {
-          toast.success('Payment successful — membership activated');
+          // Trust the reconciled backend status, not the redirect alone.
+          const status = String(result.payload?.status || '').toUpperCase();
+          if (status === 'ACTIVE') {
+            toast.success('Payment successful — membership activated');
+          } else if (status === 'PAST_DUE') {
+            toast.error('Payment problem — please update your payment method');
+          } else {
+            toast('Payment received — activating membership. Refresh if status lags.');
+          }
         } else {
           toast('Payment received — activating membership. Refresh if status lags.');
         }

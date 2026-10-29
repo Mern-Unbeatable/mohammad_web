@@ -30,6 +30,8 @@ describe('subscription status', () => {
     expect(showCancelButton(cancelling)).toBe(false);
     expect(showCancelButton({ status: 'TRIAL' })).toBe(true);
     expect(canCancel({ status: 'EXPIRED' })).toBe(false);
+    expect(canCancel({ status: 'PAST_DUE' })).toBe(true);
+    expect(showCancelButton({ status: 'PAST_DUE' })).toBe(true);
   });
 
   it('detects an ended membership', () => {
@@ -51,6 +53,13 @@ describe('statusBanner', () => {
     [cancelling, 0, 'warning', 'Cancels at period end'],
     [{ status: 'EXPIRED' }, 0, 'danger', 'Membership expired'],
     [{ status: 'CANCELLED' }, 0, 'danger', 'Membership cancelled'],
+    [{ status: 'PAST_DUE' }, 0, 'danger', 'Payment problem — update your payment method to restore access'],
+    [
+      { status: 'TRIAL', checkoutPending: true },
+      5,
+      'warning',
+      'Payment processing — your plan activates once confirmed',
+    ],
   ])('%o → %s', (sub, days, tone, text) => {
     expect(statusBanner(sub, days)).toMatchObject({ tone, text });
   });
