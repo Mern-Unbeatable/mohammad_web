@@ -197,3 +197,32 @@ describe("FeedPost author links", () => {
     expect(html).not.toContain('href="/contacts/');
   });
 });
+
+describe("FeedPost author presence badge", () => {
+  it("shows the same online badge as chat when the author is online", () => {
+    const html = renderPost(originalPost(), {
+      viewer: { id: "sam", firstName: "Sam" },
+      authorPresence: "online",
+    });
+    expect(html).toContain('aria-label="Online"');
+    expect(html).toContain("bg-green-primary");
+  });
+
+  it("shows an offline badge only when status is explicitly offline", () => {
+    const html = renderPost(originalPost(), {
+      viewer: { id: "sam", firstName: "Sam" },
+      authorPresence: "offline",
+    });
+    expect(html).toContain('aria-label="Offline"');
+    expect(html).toContain("bg-[#D0D5DD]");
+  });
+
+  it("hides the badge while presence is loading or unavailable", () => {
+    const html = renderPost(originalPost(), {
+      viewer: { id: "sam", firstName: "Sam" },
+      authorPresence: "loading",
+    });
+    expect(html).not.toContain('aria-label="Online"');
+    expect(html).not.toContain('aria-label="Offline"');
+  });
+});

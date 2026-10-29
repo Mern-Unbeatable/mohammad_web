@@ -22,6 +22,7 @@ import {
 import { SearchInput } from "@/components/form-controls";
 import Avatar from "@/components/ui/Avatar";
 import Dots from "@/components/ui/Dots";
+import PresenceDot from "@/components/ui/PresenceDot";
 import {
   MAX_MESSAGE_LENGTH,
   applyComposerFormat,
@@ -71,15 +72,6 @@ const ChatName = ({ chat, className }) => (
       </span>
     ) : null}
   </span>
-);
-
-const PresenceDot = ({ online }) => (
-  <span
-    className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${
-      online ? "bg-green-primary" : "bg-[#98A2B3]"
-    }`}
-    aria-label={online ? "Online" : "Offline"}
-  />
 );
 
 const typingLabelFor = (chat) => {

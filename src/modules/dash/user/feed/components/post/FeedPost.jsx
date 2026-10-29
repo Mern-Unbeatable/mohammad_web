@@ -15,7 +15,7 @@ import FeedPostHeader from "./FeedPostHeader";
 import { PostActions, PostStats } from "./PostActionsBar";
 import ReactionsModal from "./ReactionsModal";
 
-const FeedPost = ({ post, onReport, onEdit, onDelete }) => {
+const FeedPost = ({ post, onReport, onEdit, onDelete, authorPresence = "unknown" }) => {
   const { user } = useSelector((state) => state.userProfile);
   const likingCommentId = useSelector((state) => state.userFeed.likingCommentId);
   const viewer = useMemo(() => toProfilePageUser(user), [user]);
@@ -62,6 +62,7 @@ const FeedPost = ({ post, onReport, onEdit, onDelete }) => {
       <Card>
         <FeedPostHeader
           post={post}
+          authorPresence={authorPresence}
           onReport={onReport}
           onEdit={onEdit}
           onDelete={onDelete}
@@ -98,7 +99,7 @@ const FeedPost = ({ post, onReport, onEdit, onDelete }) => {
         title={`${post.author.name}'s post`}
         onClose={closeFullComments}
       >
-        <FeedPostHeader post={post} showActions={false} />
+        <FeedPostHeader post={post} authorPresence={authorPresence} showActions={false} />
         <FeedPostBody post={post} />
         {statsBar}
         <PostComments {...commentProps} emptyText="No comments yet. Start the conversation." />
