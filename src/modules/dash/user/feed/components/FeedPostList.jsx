@@ -1,4 +1,6 @@
+import { useMemo } from "react";
 import { CardSkeleton } from "@/components/loader";
+import { useUserPresence } from "@/features/messages";
 import FeedPost from "./post/FeedPost";
 import LoadMorePosts from "./LoadMorePosts";
 
@@ -18,6 +20,15 @@ const FeedPostList = ({
   onEdit,
   onDelete,
 }) => {
+  const authorIds = useMemo(
+    () =>
+      Array.from(
+        new Set(posts.map((post) => post?.author?.id).filter((id) => typeof id === "string" && id)),
+      ),
+    [posts],
+  );
+  const { getStatus } = useUserPresence(authorIds);
+
   if (posts.length === 0) {
     if (loading) {
       return <CardSkeleton variant="feedPost" count={3} className="space-y-4" />;
@@ -49,6 +60,7 @@ const FeedPostList = ({
         <FeedPost
           key={post.id}
           post={post}
+          authorPresence={getStatus(post?.author?.id)}
           onReport={onReport}
           onEdit={onEdit}
           onDelete={onDelete}

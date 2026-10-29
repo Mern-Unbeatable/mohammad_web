@@ -52,6 +52,7 @@ export {
   isSeenByOther,
 } from "./messagesMappers";
 export { useMessagesSocket, useTypingEmitter, queryPresence } from "./realtime";
+export { useUserPresence } from "./useUserPresence";
 export { useUnreadMessages } from "./useUnreadMessages";
 export { olderMessagesParams, nextConversationsParams } from "./pagination";
 export {

@@ -60,6 +60,7 @@ feed/
 │   ├── useReplyComposer.js       Reply target, @mention pre-fill, expanded threads
 │   ├── useCommentManagement.js   Comment edit state and delete confirmation
 │   ├── usePostDraft.js           Composer draft, validation, uploads and publish
+│   ├── (presence via `useUserPresence` from `@/features/messages`)
 │   └── useFocusAtEnd.js          Focus a text field with the caret at the end
 │
 ├── utils/
@@ -93,6 +94,10 @@ feed/
 
 - Components never dispatch Redux thunks directly for post/comment actions;
   they go through a hook (`usePostEngagement`, `usePostCommentActions`, `useRepost`, ...).
+- Feed author online status reuses the messaging realtime presence channel
+  (`useMessagesSocket` + `presence:query` / `presence:update`) through
+  `useUserPresence`; avatars show the shared `PresenceDot` only for known
+  online/offline states.
 - Action handlers resolve to `true` / `false` so the UI knows whether to clear
   its input or keep it.
 - Optimistic updates (reactions, comment likes) roll back on failure and

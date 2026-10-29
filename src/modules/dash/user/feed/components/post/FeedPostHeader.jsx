@@ -1,6 +1,7 @@
 import { Briefcase, Repeat2, Tag } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import Badge from "@/components/ui/Badge";
+import PresenceDot from "@/components/ui/PresenceDot";
 import { POST_BADGES } from "../../constants";
 import AuthorLink from "./AuthorLink";
 import OwnerActionsMenu from "./OwnerActionsMenu";
@@ -38,17 +39,19 @@ const FeedPostHeader = ({
   onEdit,
   onDelete,
   isOwner,
+  authorPresence = "unknown",
   showActions = true,
 }) => {
   const { author } = post;
   const badge = POST_BADGES[post.type];
+  const showPresence = authorPresence === "online" || authorPresence === "offline";
 
   return (
     <div className="flex items-start gap-2.5 p-3 pb-0 sm:gap-3 sm:p-4 sm:pb-0">
       <AuthorLink
         author={author}
         decorative
-        className="shrink-0 rounded-full transition-opacity hover:opacity-90"
+        className="relative inline-flex shrink-0 rounded-full leading-none transition-opacity hover:opacity-90"
       >
         <Avatar
           src={author.avatar}
@@ -56,6 +59,7 @@ const FeedPostHeader = ({
           initials={author.initials}
           size="md"
         />
+        {showPresence ? <PresenceDot online={authorPresence === "online"} /> : null}
       </AuthorLink>
 
       <div className="min-w-0 flex-1">
