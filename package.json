@@ -7,8 +7,8 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
-    "dev": "node init && vite dev",
-    "build": "node init && vite build",
+    "dev": "vite dev",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run"
