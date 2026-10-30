@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import { messagesApi, toConversationModel } from '@/features/messages';
 import { useAuth } from '@/modules/auth';
 import { CHAT_BASE_PATHS, chatPath, chatTargetFor } from '@/features/messages/chatPaths';
+import { useFloatingChat } from '@/modules/dash/user/floatingChat/floatingChatContext';
 import { CONVERSATIONS_PAGE_SIZE } from '../constant/constants';
 
 const fetchAllConversations = async () => {
@@ -26,6 +27,7 @@ const fetchAllConversations = async () => {
 export function useMessagesPreview() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openChat: openFloatingChat } = useFloatingChat();
   const [chats, setChats] = useState([]);
   const [loading, setLoading] = useState(false);
   const requestRef = useRef(0);
@@ -50,7 +52,22 @@ export function useMessagesPreview() {
     }
   };
 
+  /**
+   * Direct (user-to-user) conversations open the LinkedIn-style floating popup
+   * at the bottom-right (reusing the shared floating chat state, which focuses
+   * an already-open popup instead of duplicating it). Group chats keep opening
+   * the full inbox.
+   */
   const openChat = (chat) => {
+    if (chat && !chat.isGroup && chat.otherUserId) {
+      openFloatingChat({
+        id: chat.otherUserId,
+        name: chat.name,
+        avatar: chat.avatar,
+        initials: chat.initials,
+      });
+      return;
+    }
     const target = chatTargetFor(chat);
     navigate(chatPath(CHAT_BASE_PATHS.USER, target ?? undefined));
   };

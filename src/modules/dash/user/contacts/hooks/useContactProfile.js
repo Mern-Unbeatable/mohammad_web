@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
@@ -11,8 +11,7 @@ import {
 } from '@/features/dash/user/contacts';
 import { fetchAuthorPosts, toFeedPostModel } from '@/features/dash/user/feed';
 import { useAuth } from '@/modules/auth';
-import { CHAT_BASE_PATHS } from '@/features/messages/chatPaths';
-import { useStartConversation } from '@/modules/messages';
+import { useFloatingChat } from '@/modules/dash/user/floatingChat/floatingChatContext';
 
 /** Contact profile: details, the contact's posts, connect, message and report state. */
 export const useContactProfile = () => {
@@ -31,12 +30,9 @@ export const useContactProfile = () => {
   } = useSelector((state) => state.userFeed);
 
   const { user } = useAuth();
-  const startConversation = useStartConversation(CHAT_BASE_PATHS.USER);
+  const { openChat } = useFloatingChat();
   const [reportPost, setReportPost] = useState(null);
   const [notFoundId, setNotFoundId] = useState(null);
-  /** Contact id the message dialog is open for. */
-  const [messageContactId, setMessageContactId] = useState(null);
-  const closeMessage = useCallback(() => setMessageContactId(null), []);
 
   useEffect(() => {
     if (!contactId) return undefined;
@@ -95,10 +91,7 @@ export const useContactProfile = () => {
     connect,
     connecting: Boolean(contact) && connectingId === contact.id,
     canMessage,
-    messageOpen: canMessage && messageContactId === contact.id,
-    openMessage: () => setMessageContactId(contact.id),
-    closeMessage,
-    sendMessage: (message) => startConversation({ recipientId: contact.id, message }),
+    openMessage: () => openChat(contact),
     reportPost,
     setReportPost,
     closeReport: () => setReportPost(null),
