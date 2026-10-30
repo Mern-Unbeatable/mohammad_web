@@ -36,7 +36,7 @@ const FloatingChatWindow = ({ recipient, minimized, onToggleMinimize, onClose })
 
   return (
     <section
-      className="pointer-events-auto flex w-[min(360px,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-t-xl border border-[#E4E7EC] bg-white shadow-[0_12px_40px_rgba(15,23,42,0.18)]"
+      className="pointer-events-auto flex w-[min(360px,100%)] flex-col overflow-hidden rounded-t-xl border border-[#E4E7EC] bg-white shadow-[0_12px_40px_rgba(15,23,42,0.18)]"
       style={{ height: minimized ? "auto" : "min(70vh, 520px)" }}
       aria-label={`Chat with ${recipient.name}`}
     >
