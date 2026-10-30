@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '@/modules/auth';
+import { useCall } from '@/features/calls';
 import {
   addParticipants,
   clearMessagesError,
@@ -47,6 +48,7 @@ export function useMessagesContainer({ variant, basePath, section, targetId }) {
   const { user } = useAuth();
   const currentUserId = user?.id;
   const currentRole = user?.role;
+  const { startCall } = useCall();
   const {
     conversations,
     conversationsMeta,
@@ -317,6 +319,7 @@ export function useMessagesContainer({ variant, basePath, section, targetId }) {
       onDeleteMessage: setPendingDeleteId,
       onEditMessage: handleEditMessage,
       onOpenInfo: () => setInfoOpen(true),
+      onStartCall: startCall,
       loading: conversationsLoading,
       listError: conversationsError,
       onRetryList: () => dispatch(fetchConversations({ type, search, page: 1 })),

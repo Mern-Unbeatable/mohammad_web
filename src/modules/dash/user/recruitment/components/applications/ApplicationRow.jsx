@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Eye, X } from "lucide-react";
+import { Eye, FileText, X } from "lucide-react";
 import { CANCELLABLE_APPLICATION_STATUSES, jobDetailPath } from "../../constant/constants";
 import { applicationStatusClass } from "../../utils/candidates";
 
@@ -41,6 +41,17 @@ const ApplicationRow = ({ app, withdrawing, onWithdraw, jobHref = jobDetailPath 
           <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
             <span className={applicationStatusClass(app.status)}>{app.status}</span>
             <span className="text-[11px] text-[#98A2B3]">{app.appliedAt}</span>
+            {app.cv?.url ? (
+              <a
+                href={app.cv.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline"
+              >
+                <FileText className="h-3 w-3" />
+                View CV
+              </a>
+            ) : null}
           </div>
         </div>
       </div>

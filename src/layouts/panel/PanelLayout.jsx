@@ -5,6 +5,7 @@ import logo from "@/assets/logo.png";
 import Avatar from "@/components/ui/Avatar";
 import CountBadge from "@/components/ui/CountBadge";
 import { useUnreadMessages } from "@/features/messages";
+import { CallProvider } from "@/features/calls";
 import { useAuth, toAccountIdentity } from "@/modules/auth";
 import { roleLabel as formatRoleLabel } from "@/shared/constants/roles";
 import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
@@ -157,7 +158,8 @@ const PanelLayout = ({
   );
 
   return (
-    <div className="panel-shell flex min-h-screen bg-[#F3F4F6]">
+    <CallProvider>
+      <div className="panel-shell flex min-h-screen bg-[#F3F4F6]">
       {/* Mobile overlay */}
       {sidebarOpen ? (
         <button
@@ -212,7 +214,8 @@ const PanelLayout = ({
           {children}
         </main>
       </div>
-    </div>
+      </div>
+    </CallProvider>
   );
 };
 

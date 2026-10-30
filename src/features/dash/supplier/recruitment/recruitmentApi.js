@@ -110,10 +110,17 @@ export async function deleteJob(jobId) {
   return { jobId, data: unwrapApiData(response) ?? response };
 }
 
-export async function applyToJob(jobId, payload = {}) {
-  const response = await crudService.post(
+export async function applyToJob(jobId, { coverLetter, cv } = {}) {
+  const formData = new FormData();
+  if (cv) formData.append("cv", cv);
+  if (coverLetter != null && coverLetter !== "") {
+    formData.append("coverLetter", coverLetter);
+  }
+  const response = await crudService.upload(
     API_ENDPOINTS.SUPPLIER.RECRUITMENT.APPLY(jobId),
-    payload,
+    formData,
+    null,
+    { timeout: 60000 },
   );
   return unwrapApiData(response) || response;
 }

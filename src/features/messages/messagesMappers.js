@@ -1,6 +1,7 @@
 /** Map API conversations / messages onto the Messenger UI models. */
 import { stripFormatting } from "./messageFormat";
 import { formatDate, toDate } from "@/shared/utils/dates/date";
+import { callMessageSummary } from "@/features/calls/callHistory";
 
 const sameDay = (a, b) =>
   a.getFullYear() === b.getFullYear() &&
@@ -84,6 +85,7 @@ export const isImageAttachment = (attachment) =>
 /** Conversation-list preview for a message (mirrors server `previewOf`). */
 export function messagePreview(message) {
   if (!message) return "";
+  if (message.type === "CALL") return "Voice call";
   return (
     stripFormatting(message.body) ||
     attachmentSummary(message.attachments) ||
@@ -233,11 +235,13 @@ export function systemMessageText(message, currentUserId) {
 export function toMessageModel(message, currentUserId) {
   if (!message?.id) return null;
   const isSystem = message.type === "SYSTEM";
+  const isCall = message.type === "CALL";
   const isMine =
     currentUserId && message.senderId
       ? message.senderId === currentUserId
       : message.from === "me";
   const textParts = isSystem ? systemMessageParts(message, currentUserId) : null;
+  const call = isCall ? callMessageSummary(message, currentUserId) : null;
   const body = isSystem
     ? textParts.map((part) => (typeof part === "string" ? part : part.text)).join("")
     : message.body || "";
@@ -248,10 +252,12 @@ export function toMessageModel(message, currentUserId) {
     text: body,
     textParts,
     isSystem,
-    eventTime: isSystem ? formatEventTime(message.time) : "",
+    isCall,
+    call,
+    eventTime: isSystem || isCall ? formatEventTime(message.time) : "",
     attachments: Array.isArray(message.attachments) ? message.attachments : [],
     listing: toChatListingModel(message.listing),
-    from: isSystem ? "system" : isMine ? "me" : "them",
+    from: isSystem || isCall ? "system" : isMine ? "me" : "them",
     senderId: message.senderId || null,
     sender: typeof message.sender === "string" ? message.sender : null,
     senderAvatar: message.senderAvatar || null,

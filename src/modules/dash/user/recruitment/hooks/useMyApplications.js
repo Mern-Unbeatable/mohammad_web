@@ -19,6 +19,7 @@ const toApplicationModel = (app) => {
       "Applied ",
     ),
     coverLetter: app.coverLetter || "",
+    cv: app.cv || null,
     job,
     jobId: job?.id || app.jobId,
   };

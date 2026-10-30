@@ -68,6 +68,10 @@ const SupplierJobDetailView = () => {
             <ApplyForm
               coverLetter={apply.coverLetter}
               onCoverLetterChange={apply.setCoverLetter}
+              cvFile={apply.cvFile}
+              onSelectCv={apply.selectCv}
+              onRemoveCv={apply.removeCv}
+              cvError={apply.cvError}
               applying={apply.applying}
               onSubmit={apply.submit}
               onCancel={apply.close}

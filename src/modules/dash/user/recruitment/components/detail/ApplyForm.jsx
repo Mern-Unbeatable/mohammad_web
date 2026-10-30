@@ -1,16 +1,34 @@
 import Card from "@/components/ui/Card";
 import { Textarea } from "@/components/form-controls";
+import CvUploadField from "@/components/recruitment/CvUploadField";
 
-/** In-app application form with an optional cover letter. */
-const ApplyForm = ({ coverLetter, onCoverLetterChange, applying, onSubmit, onCancel }) => (
+/** In-app application form with a required CV and an optional cover letter. */
+const ApplyForm = ({
+  coverLetter,
+  onCoverLetterChange,
+  cvFile,
+  onSelectCv,
+  onRemoveCv,
+  cvError,
+  applying,
+  onSubmit,
+  onCancel,
+}) => (
   <Card className="mt-5">
     <form onSubmit={onSubmit} className="space-y-4 p-5 sm:p-6">
       <div>
         <h2 className="text-[16px] font-bold text-deep-blue">Apply for this position</h2>
         <p className="mt-1 text-[13px] text-[#64748B]">
-          Optionally include a short cover letter with your application.
+          Attach your CV and optionally include a short cover letter.
         </p>
       </div>
+      <CvUploadField
+        file={cvFile}
+        onSelect={onSelectCv}
+        onRemove={onRemoveCv}
+        error={cvError}
+        disabled={applying}
+      />
       <Textarea
         value={coverLetter}
         onChange={(e) => onCoverLetterChange(e.target.value)}

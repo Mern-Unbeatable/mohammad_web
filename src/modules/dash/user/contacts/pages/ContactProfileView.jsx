@@ -3,7 +3,6 @@ import ContactProfilePageContent from '@/components/data-display/ContactProfileP
 import { ReportPostModal } from '@/modules/dash/user/feed';
 import NotFound from '@/modules/error/NotFound';
 import { CHAT_BASE_PATHS, chatPath } from '@/features/messages/chatPaths';
-import { StartConversationModal } from '@/modules/messages';
 import DashboardPage from '@/components/layout/DashboardPage';
 import BackToDirectoryLink from '../components/profile/BackToDirectoryLink';
 import { useContactProfile } from '../hooks/useContactProfile';
@@ -45,15 +44,6 @@ const ContactProfileView = () => {
           onMessage={profile.canMessage ? profile.openMessage : undefined}
         />
       </DashboardPage>
-
-      <StartConversationModal
-        open={profile.messageOpen}
-        title="New message"
-        description={`Start a conversation with ${contact.name}.`}
-        recipient={contact}
-        onClose={profile.closeMessage}
-        onSend={profile.sendMessage}
-      />
 
       <ReportPostModal
         open={Boolean(profile.reportPost)}

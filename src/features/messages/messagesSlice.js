@@ -151,7 +151,8 @@ const messagesSlice = createSlice({
         conversation &&
         !isActive &&
         message.senderId !== currentUserId &&
-        message.type !== "SYSTEM"
+        message.type !== "SYSTEM" &&
+        message.type !== "CALL"
       ) {
         if (!conversation.unreadCount) state.unread.conversations += 1;
         conversation.unreadCount = (conversation.unreadCount ?? 0) + 1;
