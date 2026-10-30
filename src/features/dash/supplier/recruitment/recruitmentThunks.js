@@ -84,11 +84,9 @@ export const removeSupplierJob = createAsyncThunk(
 
 export const applyToSupplierJob = createAsyncThunk(
   "supplierRecruitment/applyToSupplierJob",
-  async ({ jobId, coverLetter }, { rejectWithValue }) => {
+  async ({ jobId, coverLetter, cv }, { rejectWithValue }) => {
     try {
-      const payload = {};
-      if (coverLetter != null) payload.coverLetter = coverLetter;
-      const application = await recruitmentApi.applyToJob(jobId, payload);
+      const application = await recruitmentApi.applyToJob(jobId, { coverLetter, cv });
       return { jobId, application };
     } catch (err) {
       return rejectWithValue(

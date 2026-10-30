@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router";
-import { Mail, MapPin, Phone, X } from "lucide-react";
+import { Download, FileText, Mail, MapPin, Phone, X } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
 import { applicationStatusClass } from "@/modules/dash/user/recruitment/utils/candidates";
@@ -125,6 +125,31 @@ const ApplicantDetailsModal = ({ application, onClose }) => {
               <p className="mt-2 text-[13px] text-[#98A2B3]">
                 No cover letter was included.
               </p>
+            )}
+          </section>
+
+          <section className="mt-5 border-t border-[#E4E7EC] pt-5">
+            <h3 className="text-[14px] font-bold text-deep-blue">CV / Résumé</h3>
+            {application.cv?.url ? (
+              <a
+                href={application.cv.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 flex items-center gap-3 rounded-lg border border-[#E4E7EC] bg-white p-3 transition-colors hover:border-primary hover:bg-[#F9FAFB]"
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#E8F3FB] text-primary">
+                  <FileText className="h-5 w-5" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[13px] font-medium text-deep-blue">
+                    {application.cv.name || "Applicant CV"}
+                  </span>
+                  <span className="text-[12px] text-[#98A2B3]">View / download</span>
+                </span>
+                <Download className="h-4 w-4 shrink-0 text-[#64748B]" />
+              </a>
+            ) : (
+              <p className="mt-2 text-[13px] text-[#98A2B3]">No CV was attached.</p>
             )}
           </section>
         </div>
