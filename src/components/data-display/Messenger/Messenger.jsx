@@ -14,6 +14,9 @@ import {
   MessageSquare,
   Paperclip,
   Pencil,
+  Phone,
+  PhoneCall,
+  PhoneMissed,
   Plus,
   Send,
   Trash2,
@@ -383,6 +386,34 @@ const SystemNotice = ({ message, getProfileHref }) => (
   </div>
 );
 
+const CallNotice = ({ message }) => {
+  const call = message.call || {};
+  const Icon = call.missed ? PhoneMissed : PhoneCall;
+  return (
+    <div className="flex flex-col items-center px-2 text-center" role="note">
+      <p
+        className={`inline-flex max-w-[90%] items-center gap-2 rounded-2xl px-3.5 py-1.5 text-[12px] leading-relaxed break-words ${
+          call.missed ? "bg-[#FEE4E2] text-[#B42318]" : "bg-[#F2F4F7] text-[#475467]"
+        }`}
+      >
+        <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+        <span className="font-medium">{call.label || "Voice call"}</span>
+        {call.durationLabel ? (
+          <span className="text-[#98A2B3]">· {call.durationLabel}</span>
+        ) : null}
+      </p>
+      {message.eventTime ? (
+        <time
+          dateTime={message.createdAt || undefined}
+          className="mt-1 text-[10px] text-[#98A2B3]"
+        >
+          {message.eventTime}
+        </time>
+      ) : null}
+    </div>
+  );
+};
+
 export const NewMessagesButton = ({ count, onClick }) => (
   <button
     type="button"
@@ -538,6 +569,7 @@ const Messenger = ({
   onDeleteMessage,
   onEditMessage,
   onOpenInfo,
+  onStartCall,
   loading = false,
   listError = null,
   onRetryList,
@@ -800,6 +832,17 @@ const Messenger = ({
               </div>
 
               <div className="flex shrink-0 items-center gap-0.5">
+                {onStartCall && !displayChat.isGroup && displayChat.otherUserId ? (
+                  <button
+                    type="button"
+                    onClick={() => onStartCall(displayChat)}
+                    aria-label={`Call ${displayChat.name}`}
+                    title={`Call ${displayChat.name}`}
+                    className="rounded-full p-2 text-[#64748B] transition-colors hover:bg-[#F9FAFB] hover:text-primary"
+                  >
+                    <Phone className="h-[18px] w-[18px]" />
+                  </button>
+                ) : null}
                 {onLeave && displayChat.isGroup ? (
                   <button
                     type="button"
@@ -868,6 +911,9 @@ const Messenger = ({
                     (!prev ||
                       prev.from !== "them" ||
                       prev.senderId !== message.senderId);
+                  if (message.isCall) {
+                    return <CallNotice key={message.id} message={message} />;
+                  }
                   if (message.from === "system") {
                     return (
                       <SystemNotice

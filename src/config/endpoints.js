@@ -59,6 +59,10 @@ export const API_ENDPOINTS = {
     PARTICIPANT: (conversationId, userId) =>
       `/messages/${conversationId}/participants/${userId}`,
     LEAVE: (conversationId) => `/messages/${conversationId}/leave`,
+    /** WebRTC ICE servers (STUN/TURN) for voice calls. */
+    ICE_SERVERS: "/messages/ice-servers",
+    /** Voice-call history for a conversation. */
+    CALLS: (conversationId) => `/messages/${conversationId}/calls`,
     /** Private chat upload; returns a key, files are only reachable through signed links. */
     UPLOAD: "/messages/attachments",
   },
