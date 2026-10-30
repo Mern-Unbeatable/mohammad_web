@@ -1,6 +1,16 @@
 /** Fallback ICE servers used until the server config loads (public STUN only). */
 export const FALLBACK_ICE_SERVERS = [{ urls: "stun:stun.l.google.com:19302" }];
 
+/**
+ * Distinct, looped ringtone assets (served from web/public/audio).
+ * - incoming: played on the receiver while the call is ringing
+ * - outgoing: ringback played on the caller while waiting for an answer
+ */
+export const RINGTONE_SRC = {
+  incoming: "/audio/ringtone.mp3",
+  outgoing: "/audio/freesound.mp3",
+};
+
 /** Call lifecycle phases tracked on the client. */
 export const CALL_PHASE = {
   IDLE: "idle",

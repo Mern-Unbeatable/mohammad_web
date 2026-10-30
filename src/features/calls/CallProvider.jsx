@@ -10,6 +10,7 @@ import { acquireSocket, releaseSocket } from "@/features/messages/realtime";
 import CallOverlay from "@/components/calls/CallOverlay";
 import { CallContext } from "./callContext";
 import { getIceServers } from "./callsApi";
+import { useCallRingtone } from "./useCallRingtone";
 import {
   CALL_PHASE,
   CALL_RING_TIMEOUT_MS,
@@ -455,6 +456,8 @@ export function CallProvider({ children }) {
     closeNow,
     teardownMedia,
   ]);
+
+  useCallRingtone(call);
 
   const value = useMemo(
     () => ({
