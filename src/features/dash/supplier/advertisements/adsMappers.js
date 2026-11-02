@@ -208,6 +208,9 @@ export function adToForm(ad) {
     eventTime: ad?.eventTime || "",
     location: ad?.location || "",
     organizer: ad?.organizer || "",
+    destinationMode: ad?.destinationMode || "",
+    destinationResourceId: ad?.destinationResourceId || "",
+    destinationUrl: ad?.destinationUrl || "",
     durationId,
     imageUrl: ad?.imageUrl || "",
     videoUrl: ad?.videoUrl || "",
@@ -237,6 +240,11 @@ export function formToCreatePayload(form) {
   if (form.organizer?.trim()) payload.organizer = form.organizer.trim();
   if (form.eventDate) payload.eventDate = form.eventDate;
   if (form.eventTime?.trim()) payload.eventTime = form.eventTime.trim();
+  if (form.destinationMode) payload.destinationMode = form.destinationMode;
+  if (form.destinationResourceId?.trim()) {
+    payload.destinationResourceId = form.destinationResourceId.trim();
+  }
+  if (form.destinationUrl?.trim()) payload.destinationUrl = form.destinationUrl.trim();
   if (form.imageUrl) payload.imageUrl = form.imageUrl;
   if (form.videoUrl) payload.videoUrl = form.videoUrl;
 

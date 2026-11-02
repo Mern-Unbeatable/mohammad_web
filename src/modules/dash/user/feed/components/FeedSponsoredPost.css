@@ -1,0 +1,256 @@
+/* Feed Sponsored Post Styling */
+
+.feed-sponsored-post {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  border: 1px solid #e4e7ec;
+  background-color: #fff;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.feed-sponsored-post:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Header with supplier info and sponsored badge */
+.feed-sponsored-post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f1f3;
+}
+
+.feed-sponsored-post-supplier {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.feed-sponsored-post-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.feed-sponsored-post-avatar-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f0f1f3;
+  color: #0a1f2e;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.feed-sponsored-post-supplier-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.feed-sponsored-post-supplier-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0a1f2e;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feed-sponsored-post-category {
+  font-size: 12px;
+  color: #64748b;
+  margin: 2px 0 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feed-sponsored-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b5eff;
+  background-color: #f0ecff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+/* Media section */
+.feed-sponsored-post-media {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #f5f6f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.feed-sponsored-post-media-content {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Content section */
+.feed-sponsored-post-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.feed-sponsored-post-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0a1f2e;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.feed-sponsored-post-description {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.feed-sponsored-post-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.feed-sponsored-post-metadata-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.feed-sponsored-post-metadata-item strong {
+  color: #0a1f2e;
+  font-weight: 600;
+}
+
+/* CTA Button */
+.feed-sponsored-post-cta-button {
+  align-self: flex-start;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #6b5eff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  white-space: nowrap;
+}
+
+.feed-sponsored-post-cta-button:hover {
+  background-color: #5a47dd;
+  transform: translateY(-1px);
+}
+
+.feed-sponsored-post-cta-button:active {
+  transform: translateY(0);
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .feed-sponsored-post-header {
+    padding: 10px 12px;
+  }
+
+  .feed-sponsored-post-avatar,
+  .feed-sponsored-post-avatar-initials {
+    width: 36px;
+    height: 36px;
+  }
+
+  .feed-sponsored-post-supplier-name {
+    font-size: 13px;
+  }
+
+  .feed-sponsored-post-category {
+    font-size: 11px;
+  }
+
+  .feed-sponsored-badge {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+
+  .feed-sponsored-post-media {
+    aspect-ratio: 1 / 1;
+  }
+
+  .feed-sponsored-post-content {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .feed-sponsored-post-title {
+    font-size: 15px;
+  }
+
+  .feed-sponsored-post-description {
+    font-size: 13px;
+  }
+
+  .feed-sponsored-post-metadata {
+    font-size: 12px;
+    gap: 10px;
+  }
+
+  .feed-sponsored-post-cta-button {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 380px) {
+  .feed-sponsored-post-avatar,
+  .feed-sponsored-post-avatar-initials {
+    width: 32px;
+    height: 32px;
+  }
+
+  .feed-sponsored-post-supplier-name {
+    font-size: 12px;
+  }
+
+  .feed-sponsored-post-category {
+    font-size: 10px;
+  }
+
+  .feed-sponsored-post-badge {
+    font-size: 10px;
+    padding: 2px 4px;
+  }
+
+  .feed-sponsored-post-title {
+    font-size: 14px;
+  }
+
+  .feed-sponsored-post-description {
+    font-size: 12px;
+  }
+}

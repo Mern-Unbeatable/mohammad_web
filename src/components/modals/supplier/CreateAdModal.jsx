@@ -34,7 +34,7 @@ import {
   adsApi,
 } from '@/features/dash/supplier/advertisements';
 import { panelPrimaryBtn, panelSecondaryBtn } from '@/components/layout/panelPageTheme';
-import { FormLabel, Input, RichTextArea } from '@/components/form-controls';
+import { FormLabel, Input, RichTextArea, Select } from '@/components/form-controls';
 
 const STEPPER_STEPS_INITIAL = [
   { id: 'type', label: 'Type' },
@@ -69,6 +69,37 @@ const CATEGORY_ICONS = {
   webinar: GraduationCap,
 };
 
+const DESTINATION_BY_CATEGORY = {
+  product: {
+    internalLabel: 'Select Existing Product',
+    externalLabel: 'External URL',
+    resourceLabel: 'Product',
+    resourcePlaceholder: 'Choose a product',
+    ctaLabel: 'View Product',
+  },
+  service: {
+    internalLabel: 'Supplier Profile',
+    externalLabel: 'External URL',
+    resourceLabel: 'Supplier Profile',
+    resourcePlaceholder: '',
+    ctaLabel: 'View Service',
+  },
+  promo: {
+    internalLabel: 'Internal Offer',
+    externalLabel: 'External URL',
+    resourceLabel: 'Offer',
+    resourcePlaceholder: 'Choose an offer post',
+    ctaLabel: 'View Offer',
+  },
+  webinar: {
+    internalLabel: 'Internal Event',
+    externalLabel: 'Registration URL',
+    resourceLabel: 'Event',
+    resourcePlaceholder: 'Choose an event post',
+    ctaLabel: 'Register Now',
+  },
+};
+
 const defaultForm = {
   categoryId: 'product',
   title: '',
@@ -79,6 +110,9 @@ const defaultForm = {
   eventTime: '',
   location: '',
   organizer: '',
+  destinationMode: '',
+  destinationResourceId: '',
+  destinationUrl: '',
   durationId: '',
   imageName: '',
   videoName: '',
@@ -100,11 +134,44 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [uploading, setUploading] = useState({ image: false, video: false });
+  const [destinationLoading, setDestinationLoading] = useState(false);
+  const [destinationOptions, setDestinationOptions] = useState({
+    products: [],
+    posts: [],
+  });
   const [estimateFrom] = useState(() => new Date());
 
   useEffect(() => {
     if (open) dispatch(fetchSupplierAdPricing());
   }, [open, dispatch]);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    let active = true;
+    const loadDestinationOptions = async () => {
+      setDestinationLoading(true);
+      try {
+        const [products, posts] = await Promise.all([
+          adsApi.getDestinationProducts(),
+          adsApi.getDestinationPosts(),
+        ]);
+        if (!active) return;
+        setDestinationOptions({
+          products,
+          posts,
+        });
+      } catch (err) {
+        if (!active) return;
+        setError(err?.message || 'Failed to load destination options.');
+      } finally {
+        if (active) setDestinationLoading(false);
+      }
+    };
+    loadDestinationOptions();
+    return () => {
+      active = false;
+    };
+  }, [open]);
 
   useBodyScrollLock(open);
 
@@ -175,6 +242,34 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
   const setField = (key, value) => {
     setError('');
     setForm((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const isHttpUrl = (value) => /^https?:\/\//i.test(String(value || '').trim());
+
+  const validateDestination = () => {
+    const mode = form.destinationMode;
+    if (!mode) {
+      setError('Please select a destination option.');
+      return false;
+    }
+
+    if (mode === 'EXTERNAL') {
+      if (!isHttpUrl(form.destinationUrl)) {
+        setError('Please enter a valid HTTP/HTTPS destination URL.');
+        return false;
+      }
+      return true;
+    }
+
+    if (form.categoryId === 'service') {
+      return true;
+    }
+
+    if (!form.destinationResourceId) {
+      setError('Please select an internal destination.');
+      return false;
+    }
+    return true;
   };
 
   const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
@@ -248,6 +343,9 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
         setError('Please enter a description.');
         return false;
       }
+      if (!validateDestination()) {
+        return false;
+      }
     }
     if (step === 'duration' && !duration) {
       setError(pricingUnavailable);
@@ -281,6 +379,11 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
   const handleCategorySelect = (categoryId) => {
     setError('');
     setForm((prev) => {
+      const destinationReset = {
+        destinationMode: '',
+        destinationResourceId: '',
+        destinationUrl: '',
+      };
       if (categoryId === 'webinar') {
         return {
           ...prev,
@@ -289,9 +392,10 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
           location: prev.location || WEBINAR_DEFAULTS.location,
           organizer: prev.organizer || WEBINAR_DEFAULTS.organizer,
           description: prev.description || WEBINAR_DEFAULTS.description,
+          ...destinationReset,
         };
       }
-      return { ...prev, categoryId };
+      return { ...prev, categoryId, ...destinationReset };
     });
   };
 
@@ -302,6 +406,9 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
     if (saving || submitting) return;
     if (!duration) {
       setError(pricingUnavailable);
+      return;
+    }
+    if (!validateDestination()) {
       return;
     }
     const payload = formToCreatePayload({ ...form, durationId: duration.id });
@@ -354,6 +461,19 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
     navigate('/supplier/ads');
   };
 
+  const destinationConfig = DESTINATION_BY_CATEGORY[form.categoryId];
+  const destinationSummary =
+    form.destinationMode === 'EXTERNAL'
+      ? form.destinationUrl
+      : form.categoryId === 'service'
+        ? 'Supplier profile'
+        : form.destinationResourceId
+          ? (form.categoryId === 'product'
+              ? destinationOptions.products
+              : destinationOptions.posts
+            ).find((item) => item.value === form.destinationResourceId)?.label || 'Internal destination'
+          : 'Not selected';
+
   if (!open) return null;
 
   return createPortal(
@@ -405,7 +525,13 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
                 <TypeStep categoryId={form.categoryId} onSelect={handleCategorySelect} />
               ) : null}
               {step === 'details' ? (
-                <DetailsStep categoryId={form.categoryId} form={form} onChange={setField} />
+                <DetailsStep
+                  categoryId={form.categoryId}
+                  form={form}
+                  onChange={setField}
+                  loadingDestinations={destinationLoading}
+                  destinationOptions={destinationOptions}
+                />
               ) : null}
               {step === 'media' ? (
                 <MediaStep
@@ -433,6 +559,14 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
                     Preview your advertisement
                   </p>
                   <AdDetailCard ad={previewAd} showSocial={false} />
+                  <div className="rounded-xl border border-[#E4E7EC] bg-white px-4 py-3">
+                    <p className="text-[12px] font-semibold text-[#64748B]">Destination</p>
+                    <p className="mt-1 text-[14px] text-deep-blue">
+                      {form.destinationMode === 'EXTERNAL'
+                        ? `${destinationConfig?.externalLabel}: ${destinationSummary}`
+                        : `${destinationConfig?.internalLabel}: ${destinationSummary}`}
+                    </p>
+                  </div>
                 </div>
               ) : null}
               {step === 'payment' ? <PaymentStep total={duration?.priceLabel || '—'} /> : null}
@@ -583,8 +717,17 @@ const TypeStep = ({ categoryId, onSelect }) => (
   </div>
 );
 
-const DetailsStep = ({ categoryId, form, onChange }) => {
+const DetailsStep = ({
+  categoryId,
+  form,
+  onChange,
+  loadingDestinations,
+  destinationOptions,
+}) => {
   const isWebinar = categoryId === 'webinar';
+  const destinationConfig = DESTINATION_BY_CATEGORY[categoryId];
+  const internalOptions =
+    categoryId === 'product' ? destinationOptions.products : destinationOptions.posts;
 
   return (
     <div className="space-y-4">
@@ -731,6 +874,86 @@ const DetailsStep = ({ categoryId, form, onChange }) => {
               : 'Describe your product, service, or event...'
           }
         />
+      </div>
+
+      <div className="space-y-3 rounded-xl border border-[#E4E7EC] bg-[#F9FAFB] px-4 py-4">
+        <FormLabel as="p" className="mb-0 sm:text-[14px]">
+          Destination Configuration <span className="text-pink-light">*</span>
+        </FormLabel>
+        <div className="space-y-2">
+          <label className="flex items-center gap-2 text-[14px] text-deep-blue">
+            <input
+              type="radio"
+              name="destination-mode"
+              value="INTERNAL"
+              checked={form.destinationMode === 'INTERNAL'}
+              onChange={(e) => {
+                onChange('destinationMode', e.target.value);
+                onChange('destinationUrl', '');
+              }}
+            />
+            {destinationConfig.internalLabel}
+          </label>
+          <label className="flex items-center gap-2 text-[14px] text-deep-blue">
+            <input
+              type="radio"
+              name="destination-mode"
+              value="EXTERNAL"
+              checked={form.destinationMode === 'EXTERNAL'}
+              onChange={(e) => {
+                onChange('destinationMode', e.target.value);
+                onChange('destinationResourceId', '');
+              }}
+            />
+            {destinationConfig.externalLabel}
+          </label>
+        </div>
+
+        {form.destinationMode === 'INTERNAL' ? (
+          categoryId === 'service' ? (
+            <p className="text-[13px] text-[#64748B]">
+              CTA will open your supplier profile.
+            </p>
+          ) : (
+            <div>
+              <FormLabel htmlFor="destination-resource" className="sm:text-[14px]">
+                Select {destinationConfig.resourceLabel}
+              </FormLabel>
+              <Select
+                id="destination-resource"
+                value={form.destinationResourceId}
+                onChange={(e) => onChange('destinationResourceId', e.target.value)}
+                disabled={loadingDestinations}
+                options={[
+                  {
+                    value: '',
+                    label: loadingDestinations
+                      ? 'Loading options...'
+                      : destinationConfig.resourcePlaceholder,
+                  },
+                  ...internalOptions,
+                ]}
+                className="sm:text-[15px]"
+              />
+            </div>
+          )
+        ) : null}
+
+        {form.destinationMode === 'EXTERNAL' ? (
+          <div>
+            <FormLabel htmlFor="destination-url" className="sm:text-[14px]">
+              {destinationConfig.externalLabel}
+            </FormLabel>
+            <Input
+              id="destination-url"
+              type="url"
+              value={form.destinationUrl}
+              onChange={(e) => onChange('destinationUrl', e.target.value)}
+              placeholder="https://example.com"
+              className="sm:text-[15px]"
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );
