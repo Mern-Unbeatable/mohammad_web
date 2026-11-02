@@ -14,6 +14,7 @@ import { DEFAULT_FEED_FILTER, FEED_FILTERS } from "../constants";
 import { useCreatePost } from "../hooks/useCreatePost";
 import { useFeedPosts } from "../hooks/useFeedPosts";
 import { usePostDeletion } from "../hooks/usePostDeletion";
+import { AdvertisementDistributionProvider, useAdvertisementDistribution } from "../context/AdvertisementDistributionContext";
 
 const FeedView = () => {
   const { user } = useSelector((state) => state.userProfile);
@@ -29,13 +30,64 @@ const FeedView = () => {
   const { editingPost, openEditor, closeEditor, saveEdit } = usePostEditor();
 
   return (
+    <AdvertisementDistributionProvider>
+      <FeedViewContent
+        user={profileUser}
+        saving={saving}
+        feed={feed}
+        create={create}
+        deletion={deletion}
+        editingPost={editingPost}
+        activeFilter={activeFilter}
+        reportPost={reportPost}
+        openEditor={openEditor}
+        closeEditor={closeEditor}
+        saveEdit={saveEdit}
+        setActiveFilter={setActiveFilter}
+        setReportPost={setReportPost}
+      />
+    </AdvertisementDistributionProvider>
+  );
+};
+
+/**
+ * Inner component that uses the advertisement distribution context.
+ * This is separated so it can access useAdvertisementDistribution.
+ */
+const FeedViewContent = ({
+  user,
+  saving,
+  feed,
+  create,
+  deletion,
+  editingPost,
+  activeFilter,
+  reportPost,
+  openEditor,
+  closeEditor,
+  saveEdit,
+  setActiveFilter,
+  setReportPost,
+}) => {
+  const { feedAds, trackImpression, trackClick } = useAdvertisementDistribution();
+
+  // Create wrapper tracking functions for feed ads
+  const handleTrackAdImpression = (adId) => {
+    trackImpression(adId);
+  };
+
+  const handleTrackAdClick = (adId) => {
+    trackClick(adId);
+  };
+
+  return (
     <>
       <DashboardPage spacing="compact" className="flex gap-8">
         <LeftSidebar />
 
         <section className="min-w-0 w-full flex-1 space-y-4">
           <div className="hidden sm:block">
-            <FeedComposer user={profileUser} onCreatePost={create.openCreatePost} />
+            <FeedComposer user={user} onCreatePost={create.openCreatePost} />
           </div>
           <FeedFilters
             filters={FEED_FILTERS}
@@ -44,6 +96,7 @@ const FeedView = () => {
           />
           <FeedPostList
             posts={feed.posts}
+            feedAds={feedAds}
             loading={feed.loading}
             failed={feed.failed}
             hasMore={feed.hasMore}
@@ -53,6 +106,8 @@ const FeedView = () => {
             onReport={setReportPost}
             onEdit={openEditor}
             onDelete={deletion.requestDelete}
+            onTrackAdImpression={handleTrackAdImpression}
+            onTrackAdClick={handleTrackAdClick}
           />
         </section>
 
@@ -63,7 +118,7 @@ const FeedView = () => {
         <CreatePostModal
           open
           onClose={create.closeCreatePost}
-          user={profileUser}
+          user={user}
           submitting={saving}
           onPublish={create.publish}
           initialOption={create.option}
@@ -75,7 +130,7 @@ const FeedView = () => {
           mode="edit"
           post={editingPost}
           onClose={closeEditor}
-          user={profileUser}
+          user={user}
           submitting={saving}
           onPublish={saveEdit}
         />

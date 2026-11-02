@@ -163,6 +163,40 @@ export async function confirmAdCheckout(adId, sessionId) {
   return unwrapApiData(response) || response;
 }
 
+const mapResourceOptions = (rows = []) =>
+  rows
+    .filter((row) => row?.id && row?.title)
+    .map((row) => ({ value: row.id, label: row.title }));
+
+export async function getDestinationProducts() {
+  const response = await crudService.get(API_ENDPOINTS.SUPPLIER.MARKETPLACE.LIST, {
+    page: 1,
+    pageSize: 100,
+    sort: "desc",
+    mine: true,
+  });
+  const parsed = parseListResponse(response, { page: 1, pageSize: 100 });
+  return mapResourceOptions(parsed.data);
+}
+
+export async function getDestinationPosts() {
+  const response = await crudService.get(API_ENDPOINTS.SUPPLIER.GENERAL.LIST, {
+    page: 1,
+    pageSize: 100,
+    sort: "desc",
+    mine: true,
+  });
+  const parsed = parseListResponse(response, { page: 1, pageSize: 100 });
+  return mapResourceOptions(parsed.data);
+}
+
+export async function resolveAdCta(adId) {
+  const response = await crudService.post(
+    API_ENDPOINTS.USER.ADVERTISEMENTS.CTA(adId),
+  );
+  return unwrapApiData(response) || response;
+}
+
 // ═══════════════════════════════════════════════════════════════════════
 // Active sponsored ads (public feed) + engagement tracking
 // ═══════════════════════════════════════════════════════════════════════

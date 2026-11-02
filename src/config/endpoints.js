@@ -161,6 +161,7 @@ export const API_ENDPOINTS = {
       CANCEL: (adId) => `/advertisements/${adId}/cancel`,
       CHECKOUT: (adId) => `/advertisements/${adId}/checkout`,
       CHECKOUT_CONFIRM: (adId) => `/advertisements/${adId}/checkout/confirm`,
+      CTA: (adId) => `/advertisements/${adId}/cta`,
       TRACK: (adId, metric) => `/advertisements/${adId}/track/${metric}`,
     },
 
@@ -303,6 +304,7 @@ export const API_ENDPOINTS = {
 
     ADVERTISEMENTS: {
       ACTIVE: "/advertisements/active",
+      CTA: (adId) => `/advertisements/${adId}/cta`,
       TRACK: (adId, metric) => `/advertisements/${adId}/track/${metric}`,
     },
 
