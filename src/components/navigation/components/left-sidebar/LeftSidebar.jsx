@@ -3,6 +3,7 @@ import { toProfilePageUser } from "@/features/dash/user/profile";
 import ProfileCard from "./ProfileCard";
 import TrialCard from "./TrialCard";
 import QuickLinksCard from "./QuickLinksCard";
+import SponsoredAdsCard from "./SponsoredAdsCard";
 
 const LeftSidebar = () => {
   const { user } = useSelector((state) => state.userProfile);
@@ -13,6 +14,7 @@ const LeftSidebar = () => {
       <div className="sticky top-[70px] space-y-3">
         <ProfileCard user={profileUser} />
         <TrialCard user={profileUser} />
+        <SponsoredAdsCard />
         <QuickLinksCard />
       </div>
     </div>

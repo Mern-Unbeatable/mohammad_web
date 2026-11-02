@@ -2,7 +2,6 @@ import { useRightSidebar } from "../../hooks/useRightSidebar";
 import PeopleYouMayKnow from "./PeopleYouMayKnow";
 import MarketplaceList from "./MarketplaceList";
 import JobsList from "./JobsList";
-import SponsoredAdsCard from "./SponsoredAdsCard";
 
 const RightSidebar = () => {
   const {
@@ -25,7 +24,6 @@ const RightSidebar = () => {
           onConnect={handleConnect}
           loading={peopleLoading}
         />
-        <SponsoredAdsCard />
         <MarketplaceList items={listings} loading={listingsLoading} />
         <JobsList items={jobs} loading={jobsLoading} />
       </div>
