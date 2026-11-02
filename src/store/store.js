@@ -28,6 +28,8 @@ import { userRecruitmentReducer } from "../features/dash/user/recruitment";
 import { userReportsReducer } from "../features/dash/user/reports";
 import { userSearchReducer } from "../features/dash/user/search";
 import { userFeedReducer } from "../features/dash/user/feed";
+import { userRightSidebarReducer } from "../features/dash/user/rightSidebar";
+import { userAdvertisementsRailReducer } from "../features/dash/user/advertisementsRail";
 import { userNotificationsReducer } from "../features/dash/user/notifications";
 import { userSubscriptionsReducer } from "../features/dash/user/subscriptions";
 import { userGeneralReducer } from "../features/dash/user/general";
@@ -64,6 +66,8 @@ export const store = configureStore({
     userReports: userReportsReducer,
     userSearch: userSearchReducer,
     userFeed: userFeedReducer,
+    userRightSidebar: userRightSidebarReducer,
+    userAdvertisementsRail: userAdvertisementsRailReducer,
     userNotifications: userNotificationsReducer,
     userSubscriptions: userSubscriptionsReducer,
     userGeneral: userGeneralReducer,

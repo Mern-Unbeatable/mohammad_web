@@ -1,8 +1,7 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { axiosInstance } from "@/config/client";
-
-const SIDEBAR_AD_LIMIT = 3;
-const FEED_PAGE_SIZE = 20;
+import { fetchAdvertisementsRail } from "@/features/dash/user/advertisementsRail";
 
 /**
  * useSplitAdvertisements: Manages advertisement distribution between sidebar and feed.
@@ -14,55 +13,14 @@ const FEED_PAGE_SIZE = 20;
  * - Provides both sidebar ads and feed ads
  */
 export function useSplitAdvertisements() {
-  const [sidebarAds, setSidebarAds] = useState([]);
-  const [feedAds, setFeedAds] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const { sidebarAds, feedAds, loading, error } = useSelector(
+    (state) => state.userAdvertisementsRail,
+  );
 
-  // Fetch all eligible ads and split them
   useEffect(() => {
-    let active = true;
-
-    const fetchAndSplit = async () => {
-      try {
-        setLoading(true);
-        
-        // Fetch all eligible ads (large page size to get everything in one call)
-        const response = await axiosInstance.get("/feed/ads/active", {
-          params: {
-            page: 1,
-            pageSize: 100, // Fetch many ads to ensure we get all available
-          },
-        });
-
-        if (!active) return;
-
-        const allAds = Array.isArray(response.data) ? response.data : [];
-
-        // Split: first 3 for sidebar, rest for feed
-        const sidebar = allAds.slice(0, SIDEBAR_AD_LIMIT);
-        const feed = allAds.slice(SIDEBAR_AD_LIMIT);
-
-        setSidebarAds(sidebar);
-        setFeedAds(feed);
-        setError(null);
-      } catch (err) {
-        if (!active) return;
-        const message = err.response?.data?.message || "Failed to load advertisements";
-        setError(message);
-        setSidebarAds([]);
-        setFeedAds([]);
-      } finally {
-        if (active) setLoading(false);
-      }
-    };
-
-    fetchAndSplit();
-
-    return () => {
-      active = false;
-    };
-  }, []);
+    dispatch(fetchAdvertisementsRail());
+  }, [dispatch]);
 
   // Track impression when user sees an ad
   const trackImpression = useCallback(async (adId) => {
@@ -94,10 +52,7 @@ export function useSplitAdvertisements() {
     trackImpression,
     trackClick,
     refresh: () => {
-      // Trigger refetch by clearing state
-      setSidebarAds([]);
-      setFeedAds([]);
-      setLoading(true);
+      dispatch(fetchAdvertisementsRail({ force: true }));
     },
   };
 }
