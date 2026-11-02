@@ -25,7 +25,7 @@ const SponsoredAdsCard = () => {
   useEffect(() => {
     let active = true;
     adsApi
-      .getActiveAds({ pageSize: 4 })
+      .getActiveAds({ pageSize: 3 })
       .then((res) => {
         if (active) setAds(Array.isArray(res?.data) ? res.data : []);
       })
@@ -88,7 +88,9 @@ const SponsoredAdsCard = () => {
                 </p>
                 <p className="truncate text-[12px] text-[#64748B]">
                   {ad.supplier?.company || "Sponsored"}
-                  {ad.category ? ` · ${CATEGORY_LABEL[ad.category] || ad.category}` : ""}
+                  {ad.category
+                    ? ` · ${CATEGORY_LABEL[ad.category] || ad.category}`
+                    : ""}
                 </p>
               </div>
             </button>
