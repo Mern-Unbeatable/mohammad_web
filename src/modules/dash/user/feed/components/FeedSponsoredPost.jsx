@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import Card from "@/components/ui/Card";
 import "./FeedSponsoredPost.css";
 
@@ -21,6 +21,7 @@ const FeedSponsoredPost = memo(({
 }) => {
   const cardRef = useRef(null);
   const impressionTrackedRef = useRef(false);
+  const [redirecting, setRedirecting] = useState(false);
 
   // Track impression when ad becomes visible in viewport
   useEffect(() => {
@@ -40,27 +41,17 @@ const FeedSponsoredPost = memo(({
     return () => observer.disconnect();
   }, [ad.id, onTrackImpression]);
 
-  const handleCTAClick = useCallback(() => {
-    onTrackClick?.(ad.id);
-    
-    // Route based on category
-    switch (ad.category) {
-      case "PRODUCT":
-        window.location.href = `/supplier/${ad.supplier.id}`;
-        break;
-      case "SERVICE":
-        window.location.href = `/supplier/${ad.supplier.id}`;
-        break;
-      case "PROMO":
-        window.location.href = `/supplier/${ad.supplier.id}`;
-        break;
-      case "WEBINAR":
-        window.location.href = `/supplier/${ad.supplier.id}`;
-        break;
-      default:
-        window.location.href = `/supplier/${ad.supplier.id}`;
+  const handleCTAClick = useCallback(async () => {
+    if (redirecting) return;
+    setRedirecting(true);
+    try {
+      const result = await onTrackClick?.(ad.id);
+      const redirectUrl = result || `/contacts/${ad.supplier.id}`;
+      window.location.assign(redirectUrl);
+    } finally {
+      setRedirecting(false);
     }
-  }, [ad, onTrackClick]);
+  }, [ad.id, ad.supplier.id, onTrackClick, redirecting]);
 
   const getCTAText = () => {
     switch (ad.category) {
@@ -164,6 +155,7 @@ const FeedSponsoredPost = memo(({
         <button
           className="feed-sponsored-post-cta-button"
           onClick={handleCTAClick}
+          disabled={redirecting}
           aria-label={`${getCTAText()} - ${ad.title}`}
         >
           {getCTAText()}

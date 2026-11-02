@@ -67,7 +67,7 @@ export function useSplitAdvertisements() {
   // Track impression when user sees an ad
   const trackImpression = useCallback(async (adId) => {
     try {
-      await axiosInstance.post(`/supplier/advertisements/${adId}/track/views`);
+      await axiosInstance.post(`/advertisements/${adId}/track/views`);
     } catch (err) {
       // Silent fail: don't break UX for tracking failures
       console.warn(`Failed to track impression for ad ${adId}`, err);
@@ -77,10 +77,12 @@ export function useSplitAdvertisements() {
   // Track click when user clicks CTA
   const trackClick = useCallback(async (adId) => {
     try {
-      await axiosInstance.post(`/supplier/advertisements/${adId}/track/clicks`);
+      const result = await axiosInstance.post(`/advertisements/${adId}/cta`);
+      return result?.data?.redirectUrl || null;
     } catch (err) {
       // Silent fail: don't break UX for tracking failures
       console.warn(`Failed to track click for ad ${adId}`, err);
+      return null;
     }
   }, []);
 

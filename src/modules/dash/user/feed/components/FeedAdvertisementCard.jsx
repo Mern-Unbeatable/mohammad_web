@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import Card from "@/components/ui/Card";
 import "./FeedAdvertisementCard.css";
 
@@ -20,6 +20,7 @@ const FeedAdvertisementCard = memo(({
 }) => {
   const cardRef = useRef(null);
   const impressionTrackedRef = useRef(false);
+  const [redirecting, setRedirecting] = useState(false);
 
   // Track impression when ad becomes visible in viewport
   useEffect(() => {
@@ -39,34 +40,17 @@ const FeedAdvertisementCard = memo(({
     return () => observer.disconnect();
   }, [ad.id, onTrackImpression]);
 
-  const handleCTAClick = useCallback(() => {
-    onTrackClick?.(ad.id);
-    
-    // Route based on category
-    switch (ad.category) {
-      case "PRODUCT":
-        // Supplier profile or product detail page
-        window.location.href = `/supplier/${ad.supplier.id}`;
-        break;
-      case "SERVICE":
-        // Supplier profile or service detail page
-        window.location.href = `/supplier/${ad.supplier.id}`;
-        break;
-      case "PROMO":
-        // Promo detail or supplier profile
-        window.location.href = `/supplier/${ad.supplier.id}`;
-        break;
-      case "WEBINAR":
-        // Webinar registration or event page
-        if (ad.eventDate) {
-          window.location.href = `/supplier/${ad.supplier.id}`;
-        }
-        break;
-      default:
-        // Fallback to supplier profile
-        window.location.href = `/supplier/${ad.supplier.id}`;
+  const handleCTAClick = useCallback(async () => {
+    if (redirecting) return;
+    setRedirecting(true);
+    try {
+      const result = await onTrackClick?.(ad.id);
+      const redirectUrl = result || `/contacts/${ad.supplier.id}`;
+      window.location.assign(redirectUrl);
+    } finally {
+      setRedirecting(false);
     }
-  }, [ad, onTrackClick]);
+  }, [ad.id, ad.supplier.id, onTrackClick, redirecting]);
 
   const getCTAText = () => {
     switch (ad.category) {
@@ -169,6 +153,7 @@ const FeedAdvertisementCard = memo(({
         <button
           className="feed-ad-cta-button"
           onClick={handleCTAClick}
+          disabled={redirecting}
           aria-label={`${getCTAText()} - ${ad.title}`}
         >
           {getCTAText()}
