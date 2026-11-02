@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Megaphone } from "lucide-react";
-import { adsApi } from "@/features/dash/supplier/advertisements";
+import { useAdvertisementDistribution } from "@/modules/dash/user/feed/context/AdvertisementDistributionContext";
 
 const CATEGORY_LABEL = {
   PRODUCT: "Product",
@@ -10,50 +10,31 @@ const CATEGORY_LABEL = {
 };
 
 /**
- * Audience-facing sponsored advertisements rail.
+ * Audience-facing sponsored advertisements rail (sidebar).
  *
- * Renders the live, admin-approved ads from `GET /advertisements/active` and
- * records engagement: one impression per ad shown, and a click when an ad is
- * activated. This is the surface that actually delivers the advertising product
- * suppliers pay for.
+ * Renders only the first 3 eligible, admin-approved ads from the distribution context.
+ * Remaining ads are displayed in the feed as sponsored posts.
+ * 
+ * Records engagement: one impression per ad shown, and a click when an ad is activated.
  */
 const SponsoredAdsCard = () => {
-  const [ads, setAds] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { sidebarAds: ads, loading, trackImpression, trackClick } = useAdvertisementDistribution();
   const impressed = useRef(new Set());
-
-  useEffect(() => {
-    let active = true;
-    adsApi
-      .getActiveAds({ pageSize: 3 })
-      .then((res) => {
-        if (active) setAds(Array.isArray(res?.data) ? res.data : []);
-      })
-      .catch(() => {
-        if (active) setAds([]);
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
 
   // One impression per ad while it is on screen.
   useEffect(() => {
     ads.forEach((ad) => {
       if (ad?.id && !impressed.current.has(ad.id)) {
         impressed.current.add(ad.id);
-        adsApi.trackAd(ad.id, "views");
+        trackImpression(ad.id);
       }
     });
-  }, [ads]);
+  }, [ads, trackImpression]);
 
   if (loading || !ads.length) return null;
 
   const handleClick = (ad) => {
-    adsApi.trackAd(ad.id, "clicks");
+    trackClick(ad.id);
   };
 
   return (
