@@ -18,6 +18,7 @@ export {
   loginUser,
   registerUser,
   fetchUserProfile,
+  bootstrapSession,
   refreshSession,
   logoutUser,
   changePassword,

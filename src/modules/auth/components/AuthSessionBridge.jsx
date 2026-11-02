@@ -1,12 +1,13 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserProfile, setSessionReady } from "@/features/auth";
-import { tokenService } from "@/config";
+import { bootstrapSession } from "@/features/auth";
 import AppBootLoadingScreen from "@/components/loader/screens/AppBootLoadingScreen";
 
 /**
- * Bootstraps auth when a token cookie exists: revalidates via /auth/me.
- * Mount under Redux Provider (outside or inside the router).
+ * Bootstraps auth on load. Access/refresh tokens are httpOnly cookies the
+ * browser sends automatically but JS cannot read, so we attempt a silent
+ * cookie-based refresh + profile fetch. A logged-out visitor is simply marked
+ * ready (no redirect), so public pages still render.
  */
 const AuthSessionBridge = ({ children }) => {
   const dispatch = useDispatch();
@@ -16,14 +17,7 @@ const AuthSessionBridge = ({ children }) => {
   useEffect(() => {
     if (bootstrapped.current) return;
     bootstrapped.current = true;
-
-    const token = tokenService.getToken();
-    if (!token) {
-      dispatch(setSessionReady(true));
-      return;
-    }
-
-    dispatch(fetchUserProfile());
+    dispatch(bootstrapSession());
   }, [dispatch]);
 
   if (!sessionReady) {

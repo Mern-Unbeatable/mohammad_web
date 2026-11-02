@@ -53,18 +53,43 @@ export const fetchUserProfile = createAsyncThunk(
     try {
       return await authApi.me();
     } catch (err) {
-      // Access expired but refresh still valid → rotate once, then me again
+      // Access token missing/expired → try a cookie-based refresh once, then me.
       try {
-        if (tokenService.getRefreshToken()) {
-          await authApi.refresh();
-          return await authApi.me();
-        }
+        await authApi.refresh();
+        return await authApi.me();
       } catch {
         // fall through
       }
       tokenService.clearAuth();
       return rejectWithValue(
         authApi.getApiErrorMessage(err, "Failed to fetch user profile"),
+      );
+    }
+  },
+);
+
+// ═══════════════════════════════════════════════════════════════════════
+// Bootstrap session (app load) — tokens are httpOnly cookies invisible to JS,
+// so we attempt a silent cookie-based refresh. Uses the bare client (no 401
+// interceptor) so a logged-out visitor is never redirected away from public
+// pages.
+// ═══════════════════════════════════════════════════════════════════════
+export const bootstrapSession = createAsyncThunk(
+  "auth/bootstrapSession",
+  async (_, { rejectWithValue }) => {
+    if (!tokenService.getToken()) {
+      try {
+        await authApi.refresh();
+      } catch {
+        return rejectWithValue(null);
+      }
+    }
+    try {
+      return await authApi.me();
+    } catch (err) {
+      tokenService.clearAuth();
+      return rejectWithValue(
+        authApi.getApiErrorMessage(err, "Failed to restore session"),
       );
     }
   },

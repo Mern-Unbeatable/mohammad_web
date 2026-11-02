@@ -10,6 +10,7 @@ import {
   GraduationCap,
   ImageIcon,
   Info,
+  Lock,
   Microscope,
   RefreshCw,
   Settings2,
@@ -30,6 +31,7 @@ import {
   adToForm,
   toDurationTiers,
   defaultDurationId,
+  adsApi,
 } from '@/features/dash/supplier/advertisements';
 import { panelPrimaryBtn, panelSecondaryBtn } from '@/components/layout/panelPageTheme';
 import { FormLabel, Input, RichTextArea } from '@/components/form-controls';
@@ -88,6 +90,7 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
   const { saving, pricing, pricingLoading, pricingError } = useSelector(
     (state) => state.supplierAds
   );
+  const authUser = useSelector((state) => state.auth.user);
   const dialogRef = useRef(null);
   const [step, setStep] = useState('type');
   const [form, setForm] = useState(() =>
@@ -95,6 +98,8 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
   );
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [uploading, setUploading] = useState({ image: false, video: false });
   const [estimateFrom] = useState(() => new Date());
 
   useEffect(() => {
@@ -124,30 +129,103 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
     ? `${pricingError}. Please retry.`
     : 'Advertisement pricing is still loading. Please wait a moment.';
 
+  const supplierCompany =
+    authUser?.profile?.company ||
+    authUser?.company ||
+    authUser?.profile?.name ||
+    authUser?.name ||
+    [authUser?.profile?.firstName, authUser?.profile?.lastName]
+      .filter(Boolean)
+      .join(' ') ||
+    'Your company';
+  const supplierInitials =
+    authUser?.profile?.initials ||
+    supplierCompany
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join('') ||
+    'AD';
+  const supplierLocation =
+    form.location ||
+    authUser?.profile?.location ||
+    authUser?.profile?.country ||
+    '—';
+
   const previewAd = useMemo(
     () => ({
-      company: 'Meridian Lab Instruments',
-      companyInitials: 'ML',
+      company: supplierCompany,
+      companyInitials: supplierInitials,
       category: category?.label || 'Product Showcase',
-      location: form.location || 'Stuttgart, Germany',
-      title: form.title || 'ProSpec Elite Series Spectrophotometer',
+      location: supplierLocation,
+      title: form.title || 'Your advertisement title',
       description:
         form.description ||
-        'High-precision UV-Vis spectrophotometer for routine QC and research applications.',
-      image:
-        form.imageUrl ||
-        'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=450&fit=crop',
+        'Describe your product, service, or event to laboratory professionals.',
+      image: form.imageUrl || '',
       startDate: duration ? `${duration.startDate} (est.)` : '—',
       expiryDate: duration ? `${duration.endDate} (est.)` : '—',
       price: form.price ? `€${form.price}` : 'Contact for pricing',
       stats: null,
     }),
-    [category, duration, form]
+    [category, duration, form, supplierCompany, supplierInitials, supplierLocation]
   );
 
   const setField = (key, value) => {
     setError('');
     setForm((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
+  const VIDEO_TYPES = ['video/mp4', 'video/quicktime'];
+  const IMAGE_MAX = 10 * 1024 * 1024;
+  const VIDEO_MAX = 100 * 1024 * 1024;
+
+  const handleMediaSelect = async (kind, file) => {
+    if (!file) return;
+    const isImage = kind === 'image';
+    const allowed = isImage ? IMAGE_TYPES : VIDEO_TYPES;
+    const maxBytes = isImage ? IMAGE_MAX : VIDEO_MAX;
+    if (!allowed.includes(file.type)) {
+      setError(
+        isImage
+          ? 'Unsupported image type. Use PNG, JPG or WEBP.'
+          : 'Unsupported video type. Use MP4 or MOV.'
+      );
+      return;
+    }
+    if (file.size > maxBytes) {
+      setError(
+        isImage
+          ? 'Image exceeds the 10MB limit.'
+          : 'Video exceeds the 100MB limit.'
+      );
+      return;
+    }
+    setError('');
+    setUploading((prev) => ({ ...prev, [kind]: true }));
+    try {
+      const { url } = await adsApi.uploadAdMedia(file);
+      setForm((prev) => ({
+        ...prev,
+        [isImage ? 'imageUrl' : 'videoUrl']: url,
+        [isImage ? 'imageName' : 'videoName']: file.name,
+      }));
+    } catch (err) {
+      setError(err?.message || `Failed to upload ${kind}.`);
+    } finally {
+      setUploading((prev) => ({ ...prev, [kind]: false }));
+    }
+  };
+
+  const handleMediaRemove = (kind) => {
+    const isImage = kind === 'image';
+    setForm((prev) => ({
+      ...prev,
+      [isImage ? 'imageUrl' : 'videoUrl']: '',
+      [isImage ? 'imageName' : 'videoName']: '',
+    }));
   };
 
   const validateStep = () => {
@@ -221,7 +299,7 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
   const stepperCurrent = step;
 
   const handlePay = async () => {
-    if (saving) return;
+    if (saving || submitting) return;
     if (!duration) {
       setError(pricingUnavailable);
       return;
@@ -232,27 +310,43 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
       return;
     }
 
-    const result = editAdId
-      ? await dispatch(updateSupplierAd({ adId: editAdId, payload }))
-      : await dispatch(createSupplierAd(payload));
+    setSubmitting(true);
+    setError('');
+    try {
+      const ad = editAdId
+        ? await dispatch(updateSupplierAd({ adId: editAdId, payload })).unwrap()
+        : await dispatch(createSupplierAd(payload)).unwrap();
 
-    const matched = editAdId
-      ? updateSupplierAd.fulfilled.match(result)
-      : createSupplierAd.fulfilled.match(result);
+      const adId = ad?.id || editAdId;
 
-    if (matched) {
-      setSuccess(true);
-      onCreated?.(result.payload);
-      return;
+      // Already paid (e.g. editing a live ad without changing the duration) —
+      // no further payment is required.
+      if (ad?.paymentStatus === 'PAID' && ad?.status !== 'PENDING_PAYMENT') {
+        setSuccess(true);
+        onCreated?.(ad);
+        return;
+      }
+
+      // Redirect to Stripe Checkout to pay the advertising fee.
+      const checkout = await adsApi.startAdCheckout(adId);
+      if (checkout?.checkoutUrl) {
+        window.location.assign(checkout.checkoutUrl);
+        return;
+      }
+      setError('Could not start payment. Please try again.');
+    } catch (err) {
+      const message =
+        typeof err === 'string'
+          ? err
+          : err?.message ||
+            (editAdId
+              ? 'Failed to resubmit advertisement'
+              : 'Failed to create advertisement');
+      setError(message);
+      toast.error(message);
+    } finally {
+      setSubmitting(false);
     }
-
-    const message =
-      result.payload ||
-      (editAdId
-        ? 'Failed to resubmit advertisement'
-        : 'Failed to create advertisement');
-    setError(message);
-    toast.error(message);
   };
 
   const handleFinish = () => {
@@ -317,8 +411,10 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
                 <MediaStep
                   imageName={form.imageName}
                   videoName={form.videoName}
-                  onImageSelect={(name) => setField('imageName', name)}
-                  onVideoSelect={(name) => setField('videoName', name)}
+                  imageUrl={form.imageUrl}
+                  uploading={uploading}
+                  onSelect={handleMediaSelect}
+                  onRemove={handleMediaRemove}
                 />
               ) : null}
               {step === 'duration' ? (
@@ -364,10 +460,14 @@ const CreateAdModal = ({ open, onClose, onCreated, editAdId = null, initialAd = 
                     <button
                       type="button"
                       onClick={handlePay}
-                      disabled={saving || !duration}
+                      disabled={saving || submitting || !duration}
                       className={`${panelPrimaryBtn} min-w-0 flex-1 disabled:opacity-60`}
                     >
-                      {saving ? 'Submitting…' : duration ? `Pay ${duration.priceLabel}` : 'Pay'}
+                      {saving || submitting
+                        ? 'Redirecting…'
+                        : duration
+                          ? `Pay ${duration.priceLabel}`
+                          : 'Pay'}
                     </button>
                   ) : (
                     <button type="button" onClick={goNext} className={`${panelPrimaryBtn} min-w-0 flex-1`}>
@@ -636,7 +736,7 @@ const DetailsStep = ({ categoryId, form, onChange }) => {
   );
 };
 
-const MediaStep = ({ imageName, videoName, onImageSelect, onVideoSelect }) => (
+const MediaStep = ({ imageName, videoName, imageUrl, uploading, onSelect, onRemove }) => (
   <div className="space-y-5">
     <div>
       <h3 className="text-[15px] font-bold text-deep-blue sm:text-[16px]">Upload Media</h3>
@@ -645,39 +745,85 @@ const MediaStep = ({ imageName, videoName, onImageSelect, onVideoSelect }) => (
       </p>
     </div>
 
-    <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-[#D0D5DD] bg-[#F9FAFB] px-4 py-10 text-center hover:border-primary hover:bg-secondary/20">
-      <ImageIcon className="h-8 w-8 text-[#98A2B3]" />
-      <span className="text-[14px] font-semibold text-deep-blue sm:text-[15px]">
-        {imageName || 'Drop images here or click to upload'}
-      </span>
-      <span className="text-[12px] text-[#98A2B3] sm:text-[13px]">
-        PNG, JPG, WEBP up to 10MB · Recommended: 1200×628px
-      </span>
-      <input
-        type="file"
-        accept="image/png,image/jpeg,image/webp"
-        className="sr-only"
-        onChange={(event) => onImageSelect(event.target.files?.[0]?.name || '')}
-      />
-    </label>
+    {imageUrl ? (
+      <div className="flex items-center gap-3 rounded-xl border border-[#E4E7EC] bg-white p-3">
+        <img
+          src={imageUrl}
+          alt={imageName || 'Advertisement image'}
+          className="h-16 w-24 shrink-0 rounded-lg object-cover"
+        />
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-[14px] font-semibold text-deep-blue">{imageName || 'Uploaded image'}</p>
+          <p className="text-[12px] text-green-primary">Uploaded</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => onRemove('image')}
+          className="shrink-0 rounded-lg px-2 py-1 text-[13px] font-semibold text-[#DC2626] hover:bg-[#FEF2F2]"
+        >
+          Remove
+        </button>
+      </div>
+    ) : (
+      <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-[#D0D5DD] bg-[#F9FAFB] px-4 py-10 text-center hover:border-primary hover:bg-secondary/20">
+        <ImageIcon className="h-8 w-8 text-[#98A2B3]" />
+        <span className="text-[14px] font-semibold text-deep-blue sm:text-[15px]">
+          {uploading.image ? 'Uploading…' : 'Drop images here or click to upload'}
+        </span>
+        <span className="text-[12px] text-[#98A2B3] sm:text-[13px]">
+          PNG, JPG, WEBP up to 10MB · Recommended: 1200×628px
+        </span>
+        <input
+          type="file"
+          accept="image/png,image/jpeg,image/webp"
+          className="sr-only"
+          disabled={uploading.image}
+          onChange={(event) => {
+            onSelect('image', event.target.files?.[0]);
+            event.target.value = '';
+          }}
+        />
+      </label>
+    )}
 
     <div>
       <FormLabel as="p" className="sm:text-[14px] mb-2">Video (Optional)</FormLabel>
-      <label className="flex w-full cursor-pointer items-center gap-3 rounded-xl border border-[#E4E7EC] bg-white px-4 py-4 hover:border-primary hover:bg-secondary/10">
-        <Video className="h-5 w-5 shrink-0 text-[#98A2B3]" />
-        <div className="min-w-0 text-left">
-          <p className="text-[14px] font-semibold text-deep-blue sm:text-[15px]">
-            {videoName || 'Add a product demo video'}
-          </p>
-          <p className="text-[12px] text-[#98A2B3] sm:text-[13px]">MP4, MOV up to 100MB</p>
+      {videoName ? (
+        <div className="flex items-center gap-3 rounded-xl border border-[#E4E7EC] bg-white px-4 py-4">
+          <Video className="h-5 w-5 shrink-0 text-green-primary" />
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[14px] font-semibold text-deep-blue">{videoName}</p>
+            <p className="text-[12px] text-green-primary">Uploaded</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => onRemove('video')}
+            className="shrink-0 rounded-lg px-2 py-1 text-[13px] font-semibold text-[#DC2626] hover:bg-[#FEF2F2]"
+          >
+            Remove
+          </button>
         </div>
-        <input
-          type="file"
-          accept="video/mp4,video/quicktime"
-          className="sr-only"
-          onChange={(event) => onVideoSelect(event.target.files?.[0]?.name || '')}
-        />
-      </label>
+      ) : (
+        <label className="flex w-full cursor-pointer items-center gap-3 rounded-xl border border-[#E4E7EC] bg-white px-4 py-4 hover:border-primary hover:bg-secondary/10">
+          <Video className="h-5 w-5 shrink-0 text-[#98A2B3]" />
+          <div className="min-w-0 text-left">
+            <p className="text-[14px] font-semibold text-deep-blue sm:text-[15px]">
+              {uploading.video ? 'Uploading…' : 'Add a product demo video'}
+            </p>
+            <p className="text-[12px] text-[#98A2B3] sm:text-[13px]">MP4, MOV up to 100MB</p>
+          </div>
+          <input
+            type="file"
+            accept="video/mp4,video/quicktime"
+            className="sr-only"
+            disabled={uploading.video}
+            onChange={(event) => {
+              onSelect('video', event.target.files?.[0]);
+              event.target.value = '';
+            }}
+          />
+        </label>
+      )}
     </div>
   </div>
 );
@@ -815,31 +961,21 @@ const DurationSummaryItem = ({ label, value }) => (
 const PaymentStep = ({ total }) => (
   <div className="space-y-4">
     <p className="text-[14px] text-[#64748B] sm:text-[15px]">
-      Complete payment to submit your advertisement for administrator review.
+      Review your advertising fee. You&apos;ll be securely redirected to Stripe to
+      complete payment, then your advertisement is submitted for administrator review.
     </p>
     <div className="rounded-xl border border-[#E4E7EC] bg-[#F9FAFB] p-4">
-      <p className="text-[13px] text-[#64748B]">Total due</p>
-      <p className="text-[24px] font-bold text-deep-blue">{total}</p>
-    </div>
-    <div>
-      <FormLabel htmlFor="card-number" className="sm:text-[14px]">
-        Card Number
-      </FormLabel>
-      <Input id="card-number" type="text" placeholder="4242 4242 4242 4242" className="sm:text-[15px]" />
-    </div>
-    <div className="grid grid-cols-2 gap-3">
-      <div>
-        <FormLabel htmlFor="expiry" className="sm:text-[14px]">
-          Expiry
-        </FormLabel>
-        <Input id="expiry" type="text" placeholder="MM/YY" className="sm:text-[15px]" />
+      <div className="flex items-center justify-between">
+        <p className="text-[13px] text-[#64748B]">Advertising fee</p>
+        <p className="text-[24px] font-bold text-deep-blue">{total}</p>
       </div>
-      <div>
-        <FormLabel htmlFor="cvc" className="sm:text-[14px]">
-          CVC
-        </FormLabel>
-        <Input id="cvc" type="text" placeholder="123" className="sm:text-[15px]" />
-      </div>
+    </div>
+    <div className="flex items-start gap-2 rounded-lg border border-[#E4E7EC] bg-white px-3 py-3">
+      <Lock className="mt-0.5 h-4 w-4 shrink-0 text-green-primary" />
+      <p className="text-[13px] leading-relaxed text-[#64748B]">
+        Payments are processed securely by Stripe. We never see or store your card
+        details. Your advertisement goes live once an administrator approves it.
+      </p>
     </div>
   </div>
 );
@@ -851,9 +987,9 @@ const SuccessStep = ({ ad, category, duration, onFinish }) => (
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-secondary text-green-primary">
           <CheckCircle2 className="h-9 w-9" strokeWidth={2} />
         </div>
-        <h3 className="mt-4 text-[20px] font-bold text-deep-blue sm:text-[22px]">Payment Successful</h3>
+        <h3 className="mt-4 text-[20px] font-bold text-deep-blue sm:text-[22px]">Advertisement updated</h3>
         <p className="mt-2 text-[14px] text-[#64748B] sm:text-[15px]">
-          Your advertisement has been submitted for administrator review.
+          Your changes have been submitted for administrator review.
         </p>
       </div>
 

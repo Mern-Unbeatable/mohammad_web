@@ -2,19 +2,31 @@
 import { formatDate, formatIsoDate } from "@/shared/utils/dates/date";
 
 const STATUS_LABEL = {
+  PENDING_PAYMENT: "Pending payment",
   PENDING: "Pending",
   ACTIVE: "Active",
   EXPIRED: "Expired",
   REJECTED: "Rejected",
+  CANCELLED: "Cancelled",
 };
 
 const STATUS_FILTER_API = {
   all: undefined,
   active: "ACTIVE",
+  pending_payment: "PENDING_PAYMENT",
   pending: "PENDING",
   expired: "EXPIRED",
   rejected: "REJECTED",
+  cancelled: "CANCELLED",
 };
+
+/** Statuses with no public impressions yet, so metrics render as em dashes. */
+const NO_METRICS_STATUSES = new Set([
+  "PENDING_PAYMENT",
+  "PENDING",
+  "REJECTED",
+  "CANCELLED",
+]);
 
 const CATEGORY_LABEL = {
   PRODUCT: "Product Showcase",
@@ -116,14 +128,12 @@ export function toAdRowModel(ad) {
     title: ad.title,
     category: CATEGORY_LABEL[ad.category] || ad.category,
     status: STATUS_LABEL[ad.status] || ad.status,
-    views:
-      ad.status === "PENDING" || ad.status === "REJECTED"
-        ? "—"
-        : Number(ad.views || 0).toLocaleString("en-US"),
-    clicks:
-      ad.status === "PENDING" || ad.status === "REJECTED"
-        ? "—"
-        : Number(ad.clicks || 0).toLocaleString("en-US"),
+    views: NO_METRICS_STATUSES.has(ad.status)
+      ? "—"
+      : Number(ad.views || 0).toLocaleString("en-US"),
+    clicks: NO_METRICS_STATUSES.has(ad.status)
+      ? "—"
+      : Number(ad.clicks || 0).toLocaleString("en-US"),
     duration: `${ad.durationDays || 7} Days`,
     uploadDate: formatUploadDate(ad.uploadDate || ad.createdAt),
     raw: ad,

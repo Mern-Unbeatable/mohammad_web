@@ -6,14 +6,11 @@ import { bareAuthClient } from "./instances";
 
 /** Refresh tokens without importing authApi (breaks circular import with axios). */
 export const refreshAccessToken = async () => {
-  const refreshToken = tokenService.getRefreshToken();
-  if (!refreshToken) {
-    throw new Error("No refresh token");
-  }
-
+  // The refresh token is an httpOnly cookie (sent automatically with
+  // withCredentials); no token is read from or sent by JS.
   const { data: envelope } = await bareAuthClient.post(
     API_ENDPOINTS.AUTH.REFRESH,
-    { refreshToken },
+    {},
   );
   const data = unwrapApiData(envelope) || envelope;
   const remember = tokenService.getRemember();
