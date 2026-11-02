@@ -107,6 +107,25 @@ export async function updateAd(adId, payload) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════
+// Media upload (shared /uploads endpoint, multer field `file`)
+// ═══════════════════════════════════════════════════════════════════════
+export async function uploadAdMedia(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+  const response = await crudService.upload(
+    API_ENDPOINTS.SUPPLIER.UPLOADS.SINGLE,
+    formData,
+    null,
+    { timeout: 120000 },
+  );
+  const data = unwrapApiData(response) || response;
+  if (!data?.url) {
+    throw new Error("Upload did not return a file URL");
+  }
+  return data;
+}
+
+// ═══════════════════════════════════════════════════════════════════════
 // Delete ad
 // ═══════════════════════════════════════════════════════════════════════
 export async function deleteAd(adId) {
@@ -114,6 +133,55 @@ export async function deleteAd(adId) {
     API_ENDPOINTS.SUPPLIER.ADVERTISEMENTS.DELETE(adId),
   );
   return { adId, data: unwrapApiData(response) ?? response };
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// Cancel ad (withdraw from review / circulation)
+// ═══════════════════════════════════════════════════════════════════════
+export async function cancelAd(adId) {
+  const response = await crudService.patch(
+    API_ENDPOINTS.SUPPLIER.ADVERTISEMENTS.CANCEL(adId),
+  );
+  return unwrapApiData(response) || response;
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// Payment — start Stripe Checkout and confirm on return
+// ═══════════════════════════════════════════════════════════════════════
+export async function startAdCheckout(adId) {
+  const response = await crudService.post(
+    API_ENDPOINTS.SUPPLIER.ADVERTISEMENTS.CHECKOUT(adId),
+  );
+  return unwrapApiData(response) || response;
+}
+
+export async function confirmAdCheckout(adId, sessionId) {
+  const response = await crudService.post(
+    API_ENDPOINTS.SUPPLIER.ADVERTISEMENTS.CHECKOUT_CONFIRM(adId),
+    { sessionId },
+  );
+  return unwrapApiData(response) || response;
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// Active sponsored ads (public feed) + engagement tracking
+// ═══════════════════════════════════════════════════════════════════════
+export async function getActiveAds(params = {}) {
+  const response = await crudService.get(
+    API_ENDPOINTS.SUPPLIER.ADVERTISEMENTS.ACTIVE,
+    { page: 1, pageSize: 10, ...params },
+  );
+  return parseListResponse(response, params);
+}
+
+export async function trackAd(adId, metric) {
+  try {
+    await crudService.post(
+      API_ENDPOINTS.SUPPLIER.ADVERTISEMENTS.TRACK(adId, metric),
+    );
+  } catch {
+    // Engagement tracking is best-effort; never block the UI on it.
+  }
 }
 
 export { getApiErrorMessage };

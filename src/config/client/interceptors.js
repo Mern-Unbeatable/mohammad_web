@@ -90,9 +90,10 @@ export const setupInterceptors = (client) => {
       if (
         status === 401 &&
         !originalRequest._retry &&
-        !isAuthCredentialRequest(url) &&
-        tokenService.getRefreshToken()
+        !isAuthCredentialRequest(url)
       ) {
+        // The refresh token lives in an httpOnly cookie we can't read, so we
+        // always attempt a single cookie-based refresh on 401.
         return refreshAndRetry(originalRequest);
       }
 

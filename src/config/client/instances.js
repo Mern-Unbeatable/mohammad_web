@@ -8,6 +8,8 @@ const createClient = () =>
   axios.create({
     baseURL: BASE_URL,
     timeout: 15000,
+    // Send/receive the httpOnly auth cookies on every request.
+    withCredentials: true,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

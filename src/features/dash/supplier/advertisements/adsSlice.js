@@ -6,6 +6,8 @@ import {
   createSupplierAd,
   updateSupplierAd,
   removeSupplierAd,
+  cancelSupplierAd,
+  confirmSupplierAdCheckout,
 } from "./adsThunks";
 
 const initialState = {
@@ -124,6 +126,21 @@ const adsSlice = createSlice({
       .addCase(removeSupplierAd.rejected, (state, action) => {
         state.deleting = false;
         state.error = action.payload;
+      })
+      .addCase(cancelSupplierAd.pending, (state) => {
+        state.saving = true;
+        state.error = null;
+      })
+      .addCase(cancelSupplierAd.fulfilled, (state, action) => {
+        state.saving = false;
+        upsertAd(state, action.payload);
+      })
+      .addCase(cancelSupplierAd.rejected, (state, action) => {
+        state.saving = false;
+        state.error = action.payload;
+      })
+      .addCase(confirmSupplierAdCheckout.fulfilled, (state, action) => {
+        upsertAd(state, action.payload);
       });
   },
 });

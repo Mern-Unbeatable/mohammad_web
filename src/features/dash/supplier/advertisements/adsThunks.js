@@ -103,3 +103,35 @@ export const removeSupplierAd = createAsyncThunk(
     }
   },
 );
+
+// ═══════════════════════════════════════════════════════════════════════
+// Cancel (withdraw)
+// ═══════════════════════════════════════════════════════════════════════
+export const cancelSupplierAd = createAsyncThunk(
+  "supplierAds/cancelSupplierAd",
+  async (adId, { rejectWithValue }) => {
+    try {
+      return await adsApi.cancelAd(adId);
+    } catch (err) {
+      return rejectWithValue(
+        adsApi.getApiErrorMessage(err, "Failed to cancel advertisement"),
+      );
+    }
+  },
+);
+
+// ═══════════════════════════════════════════════════════════════════════
+// Confirm payment after returning from Stripe Checkout
+// ═══════════════════════════════════════════════════════════════════════
+export const confirmSupplierAdCheckout = createAsyncThunk(
+  "supplierAds/confirmSupplierAdCheckout",
+  async ({ adId, sessionId }, { rejectWithValue }) => {
+    try {
+      return await adsApi.confirmAdCheckout(adId, sessionId);
+    } catch (err) {
+      return rejectWithValue(
+        adsApi.getApiErrorMessage(err, "Failed to confirm payment"),
+      );
+    }
+  },
+);

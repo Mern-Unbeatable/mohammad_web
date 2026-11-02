@@ -154,9 +154,14 @@ export const API_ENDPOINTS = {
       LIST: "/advertisements",
       CREATE: "/advertisements",
       PRICING: "/advertisements/pricing",
+      ACTIVE: "/advertisements/active",
       DETAILS: (adId) => `/advertisements/${adId}`,
       UPDATE: (adId) => `/advertisements/${adId}`,
       DELETE: (adId) => `/advertisements/${adId}`,
+      CANCEL: (adId) => `/advertisements/${adId}/cancel`,
+      CHECKOUT: (adId) => `/advertisements/${adId}/checkout`,
+      CHECKOUT_CONFIRM: (adId) => `/advertisements/${adId}/checkout/confirm`,
+      TRACK: (adId, metric) => `/advertisements/${adId}/track/${metric}`,
     },
 
     MARKETPLACE: {

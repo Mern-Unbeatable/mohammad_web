@@ -22,30 +22,62 @@ describe("buildAdsQuery", () => {
 });
 
 describe("getAdRowActions", () => {
-  const handlers = () => ({ onDetails: vi.fn(), onResubmit: vi.fn(), onRenew: vi.fn() });
+  const handlers = () => ({
+    onDetails: vi.fn(),
+    onResubmit: vi.fn(),
+    onRenew: vi.fn(),
+    onPay: vi.fn(),
+    onCancel: vi.fn(),
+    onDelete: vi.fn(),
+  });
 
-  it("offers only details for active ads", () => {
+  it("offers details and cancel for active ads", () => {
     expect(getAdRowActions({ id: "a1", status: "Active" }, handlers()).map((a) => a.id)).toEqual([
       "details",
+      "cancel",
     ]);
   });
 
-  it("adds resubmit for rejected ads and passes the row id", () => {
+  it("offers pay now and delete for ads awaiting payment", () => {
+    const h = handlers();
+    const actions = getAdRowActions({ id: "a0", status: "Pending payment" }, h);
+    expect(actions.map((a) => a.id)).toEqual(["details", "pay", "delete"]);
+    actions[1].onClick();
+    expect(h.onPay).toHaveBeenCalledWith("a0");
+  });
+
+  it("offers cancel for ads pending review", () => {
+    const h = handlers();
+    const actions = getAdRowActions({ id: "ap", status: "Pending" }, h);
+    expect(actions.map((a) => a.id)).toEqual(["details", "cancel"]);
+    actions[1].onClick();
+    expect(h.onCancel).toHaveBeenCalledWith("ap");
+  });
+
+  it("adds resubmit and delete for rejected ads and passes the row id", () => {
     const h = handlers();
     const actions = getAdRowActions({ id: "a2", status: "Rejected" }, h);
-    expect(actions.map((a) => a.id)).toEqual(["details", "resubmit"]);
+    expect(actions.map((a) => a.id)).toEqual(["details", "resubmit", "delete"]);
     actions[1].onClick();
     expect(h.onResubmit).toHaveBeenCalledWith("a2");
   });
 
-  it("adds renew for expired ads, which starts a fresh create", () => {
+  it("adds renew and delete for expired ads, which starts a fresh create", () => {
     const h = handlers();
     const actions = getAdRowActions({ id: "a3", status: "Expired" }, h);
-    expect(actions.map((a) => a.id)).toEqual(["details", "renew"]);
+    expect(actions.map((a) => a.id)).toEqual(["details", "renew", "delete"]);
     actions[0].onClick();
     actions[1].onClick();
     expect(h.onDetails).toHaveBeenCalledWith("a3");
     expect(h.onRenew).toHaveBeenCalledWith();
+  });
+
+  it("offers delete for cancelled ads", () => {
+    const h = handlers();
+    const actions = getAdRowActions({ id: "a4", status: "Cancelled" }, h);
+    expect(actions.map((a) => a.id)).toEqual(["details", "delete"]);
+    actions[1].onClick();
+    expect(h.onDelete).toHaveBeenCalledWith("a4");
   });
 });
 

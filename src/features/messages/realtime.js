@@ -40,6 +40,8 @@ function createSocket() {
   const instance = io(resolveSocketUrl(), {
     // Called on every (re)connect so a refreshed access token is picked up.
     auth: (cb) => cb({ token: tokenService.getToken() }),
+    // Send the httpOnly auth cookie on the WS handshake as a fallback.
+    withCredentials: true,
     transports: ["websocket", "polling"],
     reconnectionDelayMax: 10000,
   });

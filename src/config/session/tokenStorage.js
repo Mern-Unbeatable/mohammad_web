@@ -1,86 +1,78 @@
 import Cookies from "js-cookie";
 
-const ACCESS_TOKEN_KEY = "accessToken";
-const REFRESH_TOKEN_KEY = "refreshToken";
-const USER_KEY = "user";
+/**
+ * In-memory session store.
+ *
+ * Access/refresh tokens are NEVER written to `localStorage` or JS-readable
+ * cookies — the server issues them as httpOnly cookies, so they cannot be
+ * stolen via XSS. We keep a transient copy of the access token in memory only
+ * (for the Authorization header and the realtime socket handshake); it is lost
+ * on reload and silently re-minted from the httpOnly refresh cookie by
+ * `AuthSessionBridge`. The `remember` preference is non-sensitive and stays in
+ * a normal cookie so the server can scope cookie lifetime if needed.
+ */
+
 const REMEMBER_KEY = "remember";
 
 const isSecure = () =>
   typeof window !== "undefined" && window.location.protocol === "https:";
 
-const cookieOptions = (remember = true) => ({
-  expires: remember ? 7 : undefined,
+const rememberCookieOptions = () => ({
+  expires: 365,
   secure: isSecure(),
   sameSite: "strict",
   path: "/",
 });
 
-const readJson = (key) => {
-  const raw = Cookies.get(key);
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
-};
+let accessToken = null;
+let refreshToken = null;
+let user = null;
 
 export const tokenService = {
-  getToken: () => Cookies.get(ACCESS_TOKEN_KEY) || null,
-  setToken: (token, remember = true) => {
-    if (!token) {
-      Cookies.remove(ACCESS_TOKEN_KEY, { path: "/" });
-      return;
-    }
-    Cookies.set(ACCESS_TOKEN_KEY, token, cookieOptions(remember));
+  getToken: () => accessToken,
+  setToken: (token) => {
+    accessToken = token || null;
   },
 
-  getRefreshToken: () => Cookies.get(REFRESH_TOKEN_KEY) || null,
-  setRefreshToken: (token, remember = true) => {
-    if (!token) {
-      Cookies.remove(REFRESH_TOKEN_KEY, { path: "/" });
-      return;
-    }
-    Cookies.set(REFRESH_TOKEN_KEY, token, cookieOptions(remember));
+  // Retained for API compatibility; the real refresh token lives only in the
+  // httpOnly cookie. We keep a transient copy so legacy callers don't break.
+  getRefreshToken: () => refreshToken,
+  setRefreshToken: (token) => {
+    refreshToken = token || null;
   },
 
-  getUser: () => readJson(USER_KEY),
-
-  setUser: (user, remember = tokenService.getRemember()) => {
-    if (!user) {
-      Cookies.remove(USER_KEY, { path: "/" });
-      return;
-    }
-    Cookies.set(USER_KEY, JSON.stringify(user), cookieOptions(remember));
+  getUser: () => user,
+  setUser: (nextUser) => {
+    user = nextUser || null;
   },
 
   getRemember: () => Cookies.get(REMEMBER_KEY) !== "0",
-
   setRemember: (remember) => {
-    Cookies.set(REMEMBER_KEY, remember ? "1" : "0", cookieOptions(true));
+    Cookies.set(REMEMBER_KEY, remember ? "1" : "0", rememberCookieOptions());
   },
 
   persistSession: ({
-    accessToken,
-    refreshToken,
-    user,
+    accessToken: nextAccess,
+    refreshToken: nextRefresh,
+    user: nextUser,
     remember = true,
   } = {}) => {
     tokenService.setRemember(remember);
-    if (accessToken) tokenService.setToken(accessToken, remember);
-    if (refreshToken) tokenService.setRefreshToken(refreshToken, remember);
-    if (user) tokenService.setUser(user, remember);
+    if (nextAccess !== undefined) tokenService.setToken(nextAccess);
+    if (nextRefresh !== undefined) tokenService.setRefreshToken(nextRefresh);
+    if (nextUser !== undefined && nextUser !== null)
+      tokenService.setUser(nextUser);
     return {
-      accessToken: tokenService.getToken(),
-      refreshToken: tokenService.getRefreshToken(),
-      user: tokenService.getUser(),
+      accessToken,
+      refreshToken,
+      user,
     };
   },
 
   clearAuth: () => {
-    Cookies.remove(ACCESS_TOKEN_KEY, { path: "/" });
-    Cookies.remove(REFRESH_TOKEN_KEY, { path: "/" });
-    Cookies.remove(USER_KEY, { path: "/" });
+    accessToken = null;
+    refreshToken = null;
+    user = null;
     Cookies.remove(REMEMBER_KEY, { path: "/" });
   },
 };
