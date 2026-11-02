@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Megaphone } from "lucide-react";
+import { CardSkeleton } from "@/components/loader";
+import { SIDEBAR_LIMIT } from "../../constant/constants";
 import { useAdvertisementDistribution } from "@/modules/dash/user/feed/context/AdvertisementDistributionContext";
 
 const CATEGORY_LABEL = {
@@ -31,10 +33,30 @@ const SponsoredAdsCard = () => {
     });
   }, [ads, trackImpression]);
 
-  if (loading || !ads.length) return null;
+  if (loading) {
+    return (
+      <div className="rounded-xl border border-[#E4E7EC] bg-white p-4">
+        <div className="mb-3 flex items-center gap-2">
+          <Megaphone className="h-4 w-4 text-primary" />
+          <h3 className="text-[14px] font-bold text-deep-blue">Sponsored</h3>
+        </div>
+        <CardSkeleton
+          variant="sidebarListing"
+          count={SIDEBAR_LIMIT}
+          as="ul"
+          className="divide-y divide-[#E4E7EC]"
+        />
+      </div>
+    );
+  }
 
-  const handleClick = (ad) => {
-    trackClick(ad.id);
+  if (!ads.length) return null;
+
+  const handleClick = async (ad) => {
+    const redirectUrl = await trackClick(ad.id);
+    if (redirectUrl) {
+      window.location.assign(redirectUrl);
+    }
   };
 
   return (
