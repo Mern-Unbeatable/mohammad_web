@@ -5,6 +5,8 @@ import { SubscriptionDetailsCard } from "@/modules/dash/user/profile";
 import PanelPage from "@/components/layout/PanelPage";
 import PanelBackButton from "@/components/layout/PanelBackButton";
 import { StartConversationModal } from "@/modules/messages";
+import { PaymentHistoryCard } from "@/components/payments";
+import { paymentsApi } from "@/features/payments";
 import AccountDetailsCard from "../components/detail/AccountDetailsCard";
 import ProfileActivityTabs from "../components/detail/ProfileActivityTabs";
 import { useAdminUserDetail } from "../hooks/useAdminUserDetail";
@@ -66,12 +68,23 @@ const AdminUserDetailView = () => {
           />
         }
         sidebarSlot={
-          <AccountDetailsCard
-            user={selectedUser}
-            updating={account.updating}
-            onSuspend={account.openSuspend}
-            onActivate={account.activate}
-          />
+          <div className="flex flex-col gap-4">
+            <AccountDetailsCard
+              user={selectedUser}
+              updating={account.updating}
+              onSuspend={account.openSuspend}
+              onActivate={account.activate}
+            />
+            <PaymentHistoryCard
+              title="Payment history"
+              subtitle="Stripe payments and invoices for this account."
+              emptyMessage="No payments recorded for this account."
+              fetcher={paymentsApi.getAdminPayments}
+              params={{ userId: selectedUser.id }}
+              pageSize={5}
+              compact
+            />
+          </div>
         }
         renderActivity={(activity) => (
           <ProfileActivityTabs

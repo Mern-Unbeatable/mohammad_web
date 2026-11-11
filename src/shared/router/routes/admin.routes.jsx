@@ -28,6 +28,7 @@ const AdminAdvertisementView = lazyPage(() => import('@/modules/dash/admin/ads/p
 const AdminAdvertisementDetailView = lazyPage(
   () => import('@/modules/dash/admin/ads/pages/AdminAdvertisementDetailView'),
 );
+const AdminPaymentsView = lazyPage(() => import('@/modules/dash/admin/payments/pages/AdminPaymentsView'));
 const AdminBlogsView = lazyPage(() => import('@/modules/dash/admin/blogs/pages/AdminBlogsView'));
 const AdminCreateBlogView = lazyPage(() => import('@/modules/dash/admin/blogs/pages/AdminCreateBlogView'));
 const AdminStatisticsView = lazyPage(() => import('@/modules/dash/admin/statistics/pages/AdminStatisticsView'));
@@ -96,6 +97,7 @@ export const adminRoutes = {
           element: <AdminAdvertisementDetailView />,
           handle: { title: 'Ad detail' },
         },
+        { path: 'payments', element: <AdminPaymentsView />, handle: { title: 'Payments' } },
         { path: 'blogs', element: <AdminBlogsView />, handle: { title: 'Blogs' } },
         { path: 'blogs/new', element: <AdminCreateBlogView />, handle: { title: 'New blog' } },
         { path: 'statistics', element: <AdminStatisticsView />, handle: { title: 'Statistics' } },

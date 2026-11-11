@@ -7,6 +7,7 @@ import {
   Megaphone,
   MessageSquare,
   Newspaper,
+  Receipt,
   Settings,
   ShieldCheck,
   ShoppingBag,
@@ -17,6 +18,7 @@ import {
 export const supplierNavItems = [
   { to: '/supplier', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/supplier/ads', label: 'My Ads', icon: Megaphone },
+  { to: '/supplier/payments', label: 'Payments', icon: Receipt },
   { to: '/supplier/contacts', label: 'Contacts', icon: Users },
   { to: '/supplier/recruitment', label: 'Recruitment', icon: Briefcase, badge: 'newApplications' },
   { to: '/supplier/general', label: 'General', icon: Newspaper },
@@ -35,6 +37,7 @@ export const adminNavItems = [
   { to: '/admin/marketplace', label: 'Marketplace', icon: ShoppingBag },
   { to: '/admin/reports', label: 'Reports Resolved', icon: ShieldCheck },
   { to: '/admin/advertisement', label: 'Advertisement', icon: Megaphone },
+  { to: '/admin/payments', label: 'Payments', icon: Receipt },
   { to: '/admin/blogs', label: 'Blogs', icon: FileText },
   { to: '/admin/statistics', label: 'Statistics & Reports', icon: BarChart3 },
   { to: '/admin/settings', label: 'Settings', icon: Settings },

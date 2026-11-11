@@ -1,7 +1,9 @@
 # Subscription module — structure report
 
 The membership page (`/subscription`): status banner, billing-cycle toggle,
-plan card with Stripe checkout and cancel, and handling of the Stripe return
+plan card with Stripe checkout and cancel, billing history with Stripe
+invoices (`PaymentHistoryCard` from `@/components/payments`, anchor
+`#billing-history`), and handling of the Stripe return
 (`?checkout=success&session_id=…` / `?checkout=cancelled`).
 
 ## Folder layout

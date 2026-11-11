@@ -68,11 +68,25 @@ export const API_ENDPOINTS = {
   },
 
   // ═══════════════════════════════════════════════════════════════════════
+  // Payment history & Stripe invoices (users and suppliers see their own)
+  // ═══════════════════════════════════════════════════════════════════════
+  PAYMENTS: {
+    MINE: "/payments/me",
+    /** Fresh Stripe invoice / receipt links for one payment (owner or admin). */
+    LINKS: (paymentId) => `/payments/${paymentId}/links`,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
   // Admin
   // ═══════════════════════════════════════════════════════════════════════
   ADMIN: {
     DASHBOARD: "/admin/dashboard",
     STATISTICS: "/admin/statistics",
+
+    PAYMENTS: {
+      LIST: "/admin/payments",
+      SYNC: "/admin/payments/sync",
+    },
 
     SETTINGS: "/admin/settings",
     SETTING: (key) => `/admin/settings/${key}`,

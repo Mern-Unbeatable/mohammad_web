@@ -11,6 +11,9 @@ const SupplierDashboardView = lazyPage(
 );
 const SupplierAdsView = lazyPage(() => import('@/modules/dash/supplier/ads/pages/SupplierAdsView'));
 const SupplierAdDetailView = lazyPage(() => import('@/modules/dash/supplier/ads/pages/SupplierAdDetailView'));
+const SupplierPaymentsView = lazyPage(
+  () => import('@/modules/dash/supplier/payments/pages/SupplierPaymentsView'),
+);
 const SupplierGeneralView = lazyPage(() => import('@/modules/dash/supplier/general/pages/SupplierGeneralView'));
 const SupplierMyGeneralPostsView = lazyPage(
   () => import('@/modules/dash/supplier/general/pages/SupplierMyGeneralPostsView'),
@@ -51,6 +54,7 @@ export const supplierRoutes = {
         { index: true, element: <SupplierDashboardView />, handle: { title: 'Supplier dashboard' } },
         { path: 'ads', element: <SupplierAdsView />, handle: { title: 'Ads' } },
         { path: 'ads/:adId', element: <SupplierAdDetailView />, handle: { title: 'Ad detail' } },
+        { path: 'payments', element: <SupplierPaymentsView />, handle: { title: 'Payments' } },
         { path: 'general', element: <SupplierGeneralView />, handle: { title: 'General' } },
         {
           path: 'general/my-posts',

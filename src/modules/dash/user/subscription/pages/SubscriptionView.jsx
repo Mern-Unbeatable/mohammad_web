@@ -7,6 +7,7 @@ import CycleToggle from '../components/plans/CycleToggle';
 import PlanPricePanel from '../components/plans/PlanPricePanel';
 import PlanFeaturesPanel from '../components/plans/PlanFeaturesPanel';
 import CancelSubscriptionModal from '@/components/modals/subscription/CancelSubscriptionModal';
+import { PaymentHistoryCard } from '@/components/payments';
 import { useSubscriptionPage } from '../hooks/useSubscriptionPage';
 
 const SubscriptionView = () => {
@@ -50,6 +51,14 @@ const SubscriptionView = () => {
           </Card>
         </>
       )}
+
+      <PaymentHistoryCard
+        id="billing-history"
+        className="mt-6"
+        title="Billing history"
+        subtitle="Your membership payments with their Stripe invoices."
+        emptyMessage="No payments yet. Invoices appear here after your first payment."
+      />
 
       <CancelSubscriptionModal
         open={page.confirmCancelOpen}
