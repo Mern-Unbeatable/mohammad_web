@@ -9,9 +9,10 @@ import { FloatingChatProvider } from "@/modules/dash/user/floatingChat";
 import AppFooter from "@/components/navigation/footer/AppFooter";
 import { SubscriptionGate } from "@/components/subscription";
 import { fetchUserProfile } from "@/features/dash/user/profile";
+import { withChunkReload } from "@/shared/router/utils/chunkReload";
 
 const QuickCreatePost = lazy(
-  () => import("@/modules/dash/user/feed/components/composer/QuickCreatePost"),
+  withChunkReload(() => import("@/modules/dash/user/feed/components/composer/QuickCreatePost")),
 );
 
 const renderQuickCreatePost = ({ onClose }) => (
