@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-hot-toast';
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-hot-toast";
 import {
   fetchSidebarJobs,
   fetchSidebarListings,
   fetchSidebarPeople,
   markSidebarPersonPending,
   requestContactConnection,
-} from '@/features/dash/user/rightSidebar';
+} from "@/features/dash/user/rightSidebar";
 
 /** Loads people suggestions, latest listings and jobs with Redux-backed cache. */
 export function useRightSidebar() {
@@ -70,11 +70,11 @@ export function useRightSidebar() {
     setConnectingId(null);
 
     if (requestContactConnection.fulfilled.match(result)) {
-      toast.success('Connection request sent');
+      toast.success("Connection request sent");
       dispatch(markSidebarPersonPending(person.id));
       return;
     }
-    toast.error(result.payload || 'Failed to send connection request');
+    toast.error(result.payload || "Failed to send connection request");
   };
 
   return {

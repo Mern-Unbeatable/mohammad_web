@@ -1,8 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { contactsApi, requestContactConnection } from "@/features/dash/user/contacts";
+import {
+  contactsApi,
+  requestContactConnection,
+} from "@/features/dash/user/contacts";
 import { marketplaceApi } from "@/features/dash/user/marketplace";
 import { recruitmentApi } from "@/features/dash/user/recruitment";
-import { PEOPLE_FETCH_SIZE, SIDEBAR_LIMIT } from "@/components/navigation/constant/constants";
+import {
+  PEOPLE_FETCH_SIZE,
+  SIDEBAR_LIMIT,
+} from "@/components/navigation/constant/constants";
 import {
   toSidebarJobs,
   toSidebarListings,
@@ -62,7 +68,8 @@ export const fetchSidebarListings = createAsyncThunk(
       const state = getState().userRightSidebar;
       if (state.listingsLoading) return false;
       if (arg?.force) return true;
-      if (state.listingsLoaded && isFresh(state.listingsFetchedAt)) return false;
+      if (state.listingsLoaded && isFresh(state.listingsFetchedAt))
+        return false;
       return true;
     },
   },
@@ -99,9 +106,15 @@ export const refreshRightSidebar = createAsyncThunk(
   "userRightSidebar/refreshRightSidebar",
   async (_, { dispatch }) => {
     await Promise.all([
-      dispatch(fetchSidebarPeople({ force: true })).unwrap().catch(() => null),
-      dispatch(fetchSidebarListings({ force: true })).unwrap().catch(() => null),
-      dispatch(fetchSidebarJobs({ force: true })).unwrap().catch(() => null),
+      dispatch(fetchSidebarPeople({ force: true }))
+        .unwrap()
+        .catch(() => null),
+      dispatch(fetchSidebarListings({ force: true }))
+        .unwrap()
+        .catch(() => null),
+      dispatch(fetchSidebarJobs({ force: true }))
+        .unwrap()
+        .catch(() => null),
     ]);
     return true;
   },

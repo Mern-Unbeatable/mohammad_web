@@ -16,11 +16,16 @@ const CATEGORY_LABEL = {
  *
  * Renders only the first 3 eligible, admin-approved ads from the distribution context.
  * Remaining ads are displayed in the feed as sponsored posts.
- * 
+ *
  * Records engagement: one impression per ad shown, and a click when an ad is activated.
  */
 const SponsoredAdsCard = () => {
-  const { sidebarAds: ads, loading, trackImpression, trackClick } = useAdvertisementDistribution();
+  const {
+    sidebarAds: ads,
+    loading,
+    trackImpression,
+    trackClick,
+  } = useAdvertisementDistribution();
   const impressed = useRef(new Set());
 
   // One impression per ad while it is on screen.

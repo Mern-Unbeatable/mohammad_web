@@ -5,7 +5,7 @@ import { fetchAdvertisementsRail } from "@/features/dash/user/advertisementsRail
 
 /**
  * useSplitAdvertisements: Manages advertisement distribution between sidebar and feed.
- * 
+ *
  * Strategy:
  * - Fetches all eligible active ads from a unified endpoint
  * - Splits ads: first 3 for sidebar, remaining for feed
