@@ -55,7 +55,8 @@ export const API_ENDPOINTS = {
     EDIT_MESSAGE: (conversationId, messageId) =>
       `/messages/${conversationId}/messages/${messageId}`,
     READ: (conversationId) => `/messages/${conversationId}/read`,
-    PARTICIPANTS: (conversationId) => `/messages/${conversationId}/participants`,
+    PARTICIPANTS: (conversationId) =>
+      `/messages/${conversationId}/participants`,
     PARTICIPANT: (conversationId, userId) =>
       `/messages/${conversationId}/participants/${userId}`,
     LEAVE: (conversationId) => `/messages/${conversationId}/leave`,
@@ -68,11 +69,25 @@ export const API_ENDPOINTS = {
   },
 
   // ═══════════════════════════════════════════════════════════════════════
+  // Payment history & Stripe invoices (users and suppliers see their own)
+  // ═══════════════════════════════════════════════════════════════════════
+  PAYMENTS: {
+    MINE: "/payments/me",
+    /** Fresh Stripe invoice / receipt links for one payment (owner or admin). */
+    LINKS: (paymentId) => `/payments/${paymentId}/links`,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
   // Admin
   // ═══════════════════════════════════════════════════════════════════════
   ADMIN: {
     DASHBOARD: "/admin/dashboard",
     STATISTICS: "/admin/statistics",
+
+    PAYMENTS: {
+      LIST: "/admin/payments",
+      SYNC: "/admin/payments/sync",
+    },
 
     SETTINGS: "/admin/settings",
     SETTING: (key) => `/admin/settings/${key}`,
