@@ -18,6 +18,26 @@ export const fetchFeed = createAsyncThunk(
   },
 );
 
+/** Next page of the home feed; `params` is the current query with the following page number. */
+export const fetchMoreFeed = createAsyncThunk(
+  "userFeed/fetchMoreFeed",
+  async (params, { rejectWithValue }) => {
+    try {
+      return await feedApi.getFeed(params);
+    } catch (err) {
+      return rejectWithValue(
+        feedApi.getApiErrorMessage(err, "Failed to load more posts"),
+      );
+    }
+  },
+  {
+    condition: (_, { getState }) => {
+      const { postsLoading, postsLoadingMore } = getState().userFeed;
+      return !postsLoading && !postsLoadingMore;
+    },
+  },
+);
+
 export const MY_POSTS_QUERY = { page: 1, pageSize: 5, mine: true, sort: "desc" };
 
 /** Signed-in user's own posts; served from cache unless never loaded or marked stale. */
@@ -38,6 +58,61 @@ export const fetchMyPosts = createAsyncThunk(
         getState().userFeed;
       if (myPostsLoading) return false;
       return !myPostsLoaded || myPostsStale;
+    },
+  },
+);
+
+export const fetchMoreMyPosts = createAsyncThunk(
+  "userFeed/fetchMoreMyPosts",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const { page = 1 } = getState().userFeed.myPostsMeta;
+      return await feedApi.getFeed({ ...MY_POSTS_QUERY, page: page + 1 });
+    } catch (err) {
+      return rejectWithValue(
+        feedApi.getApiErrorMessage(err, "Failed to load more posts"),
+      );
+    }
+  },
+  {
+    condition: (_, { getState }) => {
+      const { myPostsLoaded, myPostsLoading, myPostsLoadingMore } =
+        getState().userFeed;
+      return myPostsLoaded && !myPostsLoading && !myPostsLoadingMore;
+    },
+  },
+);
+
+export const AUTHOR_POSTS_PAGE_SIZE = 10;
+
+/** One member's posts for their profile page; page 1 replaces the list, later pages append. */
+export const fetchAuthorPosts = createAsyncThunk(
+  "userFeed/fetchAuthorPosts",
+  async ({ authorId, page = 1 }, { rejectWithValue }) => {
+    try {
+      return await feedApi.getFeed({
+        authorId,
+        page,
+        pageSize: AUTHOR_POSTS_PAGE_SIZE,
+        sort: "desc",
+      });
+    } catch (err) {
+      return rejectWithValue(
+        feedApi.getApiErrorMessage(err, "Failed to load posts"),
+      );
+    }
+  },
+  {
+    condition: ({ authorId, page = 1 }, { getState }) => {
+      if (!authorId) return false;
+      if (page === 1) return true;
+      const { authorPostsLoading, authorPostsLoadingMore, authorPostsAuthorId } =
+        getState().userFeed;
+      return (
+        authorPostsAuthorId === authorId &&
+        !authorPostsLoading &&
+        !authorPostsLoadingMore
+      );
     },
   },
 );
@@ -111,6 +186,20 @@ export const addComment = createAsyncThunk(
   },
 );
 
+export const editComment = createAsyncThunk(
+  "userFeed/editComment",
+  async ({ postId, commentId, body }, { rejectWithValue }) => {
+    try {
+      const comment = await feedApi.updateComment(postId, commentId, body);
+      return { postId, commentId, comment };
+    } catch (err) {
+      return rejectWithValue(
+        feedApi.getApiErrorMessage(err, "Failed to update comment"),
+      );
+    }
+  },
+);
+
 export const removeComment = createAsyncThunk(
   "userFeed/removeComment",
   async ({ postId, commentId }, { rejectWithValue }) => {
@@ -133,6 +222,32 @@ export const reactToPost = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(
         feedApi.getApiErrorMessage(err, "Failed to react to post"),
+      );
+    }
+  },
+);
+
+export const repostPost = createAsyncThunk(
+  "userFeed/repostPost",
+  async ({ postId, content }, { rejectWithValue }) => {
+    try {
+      return await feedApi.repostPost(postId, content);
+    } catch (err) {
+      return rejectWithValue(
+        feedApi.getApiErrorMessage(err, "Failed to repost"),
+      );
+    }
+  },
+);
+
+export const undoRepost = createAsyncThunk(
+  "userFeed/undoRepost",
+  async ({ postId }, { rejectWithValue }) => {
+    try {
+      return await feedApi.undoRepost(postId);
+    } catch (err) {
+      return rejectWithValue(
+        feedApi.getApiErrorMessage(err, "Failed to undo repost"),
       );
     }
   },

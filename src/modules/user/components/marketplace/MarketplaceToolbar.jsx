@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { Heart, List, Plus, Search } from 'lucide-react';
 import { categories } from '@/modules/user/data/marketplace';
+import { SEARCH_MAX_LENGTH } from '@/shared/utils/urlFilters';
 
 const actionBtn =
   'inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-[12px] font-semibold transition-colors';
@@ -60,6 +61,7 @@ const MarketplaceToolbar = ({
         type="search"
         value={query}
         onChange={(e) => onQueryChange(e.target.value)}
+        maxLength={SEARCH_MAX_LENGTH}
         placeholder="Search equipment, category or location..."
         className="w-full rounded-lg border border-[#E4E7EC] bg-white py-2.5 pl-10 pr-4 text-[14px] text-deep-blue outline-none placeholder:text-[#98A2B3] focus:border-primary focus:ring-2 focus:ring-primary/10"
       />
@@ -72,6 +74,7 @@ const MarketplaceToolbar = ({
           <button
             key={item}
             type="button"
+            aria-pressed={isActive}
             onClick={() => onCategoryChange(item)}
             className={`rounded-full px-3.5 py-1.5 text-[12px] font-semibold transition-colors ${
               isActive

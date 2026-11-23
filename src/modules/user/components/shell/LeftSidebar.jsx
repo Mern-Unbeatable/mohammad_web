@@ -1,10 +1,21 @@
+import { useState } from "react";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
-import { Briefcase, Package, Users } from "lucide-react";
+import {
+  Briefcase,
+  Building2,
+  Clock,
+  Crown,
+  MapPin,
+  Package,
+  Sparkles,
+  Users,
+} from "lucide-react";
 import Card from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
 import { quickLinks } from "@/modules/user/data/dashboard";
 import { toProfilePageUser } from "@/features/user/profile";
+import { coverGradientClass } from "@/shared/utils/coverGradient";
 
 const iconMap = {
   package: Package,
@@ -12,7 +23,19 @@ const iconMap = {
   users: Users,
 };
 
+const MetaLine = ({ icon, children, className = "" }) => {
+  const Icon = icon;
+  return (
+    <span className={`inline-flex min-w-0 items-center gap-1 ${className}`}>
+      <Icon aria-hidden className="h-3.5 w-3.5 shrink-0" />
+      <span className="truncate">{children}</span>
+    </span>
+  );
+};
+
 const ProfileCard = ({ user }) => {
+  const [failedCover, setFailedCover] = useState(null);
+
   if (!user) {
     return (
       <Card className="px-4 py-8 text-center text-[13px] text-[#64748B]">
@@ -21,14 +44,19 @@ const ProfileCard = ({ user }) => {
     );
   }
 
+  const showCover = Boolean(user.coverPhoto) && failedCover !== user.coverPhoto;
+
   return (
     <Card className="text-center">
       <Link to="/profile" className="block">
-        <div className="h-16 overflow-hidden bg-[#E8F3FB]">
-          {user.coverPhoto ? (
+        <div
+          className={`h-16 overflow-hidden ${coverGradientClass(user.id || user.name)}`}
+        >
+          {showCover ? (
             <img
               src={user.coverPhoto}
               alt=""
+              onError={() => setFailedCover(user.coverPhoto)}
               className="h-full w-full object-cover"
             />
           ) : null}
@@ -44,19 +72,43 @@ const ProfileCard = ({ user }) => {
           <h2 className="mt-3 text-[15px] font-bold text-deep-blue transition-colors hover:text-primary">
             {user.name}
           </h2>
-          <p className="mt-0.5 text-[13px] text-[#64748B]">{user.title}</p>
-          <p className="text-[12px] text-[#98A2B3]">
-            {[user.company, user.location].filter(Boolean).join(" · ")}
-          </p>
+
+          {user.title && (
+            <p className="mt-1 text-[13px] text-[#64748B]">{user.title}</p>
+          )}
+
+          {user.company || user.location ? (
+            <div className="mt-1 flex flex-wrap items-center justify-center gap-x-3 gap-y-0.5 text-[12px] text-[#98A2B3]">
+              {user.company ? (
+                <MetaLine icon={Building2}>{user.company}</MetaLine>
+              ) : null}
+              {user.location ? (
+                <MetaLine icon={MapPin}>{user.location}</MetaLine>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </Link>
       <div className="mx-4 mb-4 flex items-center justify-between border-t border-[#E4E7EC] pt-3">
-        <p className="text-[12px] text-[#64748B]">Connections</p>
+        <p className="inline-flex items-center gap-1.5 text-[12px] text-[#64748B]">
+          <Users aria-hidden className="h-4 w-4 text-primary" />
+          Connections
+        </p>
         <p className="text-[15px] font-bold text-primary">{user.connections}</p>
       </div>
     </Card>
   );
 };
+
+const ViewPlansLink = () => (
+  <Link
+    to="/subscription"
+    className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-md border border-primary py-2 text-[13px] font-semibold text-primary transition-colors hover:bg-secondary"
+  >
+    <Crown aria-hidden className="h-4 w-4" />
+    View plans
+  </Link>
+);
 
 const TrialCard = ({ user }) => {
   if (!user) return null;
@@ -69,8 +121,12 @@ const TrialCard = ({ user }) => {
     return (
       <Card className="p-4">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-[13px] font-semibold text-deep-blue">Free trial</p>
-          <span className="text-[12px] text-[#64748B]">
+          <p className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-deep-blue">
+            <Sparkles aria-hidden className="h-4 w-4 text-[#B8860B]" />
+            Free trial
+          </p>
+          <span className="inline-flex items-center gap-1 text-[12px] text-[#64748B]">
+            <Clock aria-hidden className="h-3.5 w-3.5" />
             {left} of {total} days remaining
           </span>
         </div>
@@ -80,12 +136,7 @@ const TrialCard = ({ user }) => {
             style={{ width: `${100 - progress}%` }}
           />
         </div>
-        <Link
-          to="/subscription"
-          className="mt-3 flex w-full items-center justify-center rounded-md border border-primary py-2 text-[13px] font-semibold text-primary transition-colors hover:bg-secondary"
-        >
-          View plans
-        </Link>
+        <ViewPlansLink />
       </Card>
     );
   }
@@ -97,18 +148,16 @@ const TrialCard = ({ user }) => {
   ) {
     return (
       <Card className="p-4">
-        <p className="text-[13px] font-semibold text-deep-blue">Membership</p>
+        <p className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-deep-blue">
+          <Crown aria-hidden className="h-4 w-4 text-[#E67E22]" />
+          Membership
+        </p>
         <p className="mt-1 text-[12px] text-[#64748B]">
           {user.membershipStatus === "expired"
             ? "Your membership has expired."
             : "Upgrade for full Lab Unity access."}
         </p>
-        <Link
-          to="/subscription"
-          className="mt-3 flex w-full items-center justify-center rounded-md border border-primary py-2 text-[13px] font-semibold text-primary transition-colors hover:bg-secondary"
-        >
-          View plans
-        </Link>
+        <ViewPlansLink />
       </Card>
     );
   }

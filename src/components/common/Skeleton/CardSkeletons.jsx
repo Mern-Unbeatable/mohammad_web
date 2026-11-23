@@ -3,15 +3,21 @@ import Skeleton from './Skeleton';
 
 /** Matches ContactCard layout (Avatar size="lg" = h-14) */
 export const ContactCardSkeleton = () => (
-  <Card className="flex flex-col p-5 text-center">
-    <Skeleton className="mx-auto h-14 w-14" rounded="full" />
-    <Skeleton className="mx-auto mt-3 h-4 w-28" />
-    <Skeleton className="mx-auto mt-2 h-3 w-36" />
-    <Skeleton className="mx-auto mt-1.5 h-3.5 w-24" />
-    <Skeleton className="mx-auto mt-1 h-3 w-20" />
-    <div className="mt-4 grid grid-cols-2 gap-2">
-      <Skeleton className="h-9 w-full" rounded="md" />
-      <Skeleton className="h-9 w-full" rounded="md" />
+  <Card className="flex flex-col text-center">
+    <Skeleton className="h-16 w-full" rounded="none" />
+    <div className="flex flex-col items-center px-5 pb-5">
+      <Skeleton
+        className="-mt-10 h-20 w-20 border-4 border-white"
+        rounded="full"
+      />
+      <Skeleton className="mt-3 h-4 w-28" />
+      <Skeleton className="mt-2 h-3 w-36" />
+      <Skeleton className="mt-1.5 h-3.5 w-24" />
+      <Skeleton className="mt-1 h-3 w-20" />
+      <div className="mt-4 grid w-full grid-cols-2 gap-2">
+        <Skeleton className="h-9 w-full" rounded="md" />
+        <Skeleton className="h-9 w-full" rounded="md" />
+      </div>
     </div>
   </Card>
 );
@@ -385,14 +391,22 @@ export const ProfilePageSkeleton = ({ showSubscription = true, sidebar = false }
 export const ContactProfilePageSkeleton = () => (
   <div className="space-y-4" aria-busy="true" aria-live="polite">
     <ProfileHeroSkeleton />
-    <ProfessionalInfoCardSkeleton />
-    <ContactInfoCardSkeleton />
-    <section>
-      <Skeleton className="mb-4 h-5 w-24" />
-      <div className="space-y-4">
-        <FeedPostCardSkeleton />
+    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)] lg:items-start">
+      <div className="order-2 min-w-0 lg:order-none">
+        <ContactInfoCardSkeleton />
       </div>
-    </section>
+      <div className="contents lg:flex lg:min-w-0 lg:flex-col lg:gap-4">
+        <div className="order-1 lg:order-none">
+          <ProfessionalInfoCardSkeleton />
+        </div>
+        <section className="order-3 min-w-0 lg:order-none">
+          <Skeleton className="mb-4 h-5 w-24" />
+          <div className="space-y-4">
+            <FeedPostCardSkeleton />
+          </div>
+        </section>
+      </div>
+    </div>
   </div>
 );
 

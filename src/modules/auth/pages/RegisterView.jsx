@@ -1,16 +1,17 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
-import { IoIosArrowDown } from 'react-icons/io';
-import { Loader2, ShieldCheck } from 'lucide-react';
-import { toast } from 'react-toastify';
-import { useAuth } from '@/shared/auth/useAuth';
-import { getSafeRedirectPath } from '@/shared/routing/safeRedirect';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { IoIosArrowDown } from "react-icons/io";
+import { Loader2, ShieldCheck } from "lucide-react";
+import { toast } from "react-toastify";
+import { useAuth } from "@/shared/auth/useAuth";
+import { getSafeRedirectPath } from "@/shared/routing/safeRedirect";
+import { PRIVACY_PATH, TERMS_PATH } from "@/shared/constants/legal";
 import {
   inputClass,
   labelClass,
   PasswordField,
   PasswordStrength,
-} from '@/modules/auth/components/AuthFormFields';
+} from "@/modules/auth/components/AuthFormFields";
 
 const selectClass = `${inputClass} appearance-none pr-10`;
 
@@ -20,7 +21,13 @@ const SelectField = ({ id, label, value, onChange, children, disabled }) => (
       {label}
     </label>
     <div className="relative">
-      <select id={id} value={value} onChange={onChange} disabled={disabled} className={selectClass}>
+      <select
+        id={id}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+        className={selectClass}
+      >
         {children}
       </select>
       <IoIosArrowDown
@@ -32,32 +39,56 @@ const SelectField = ({ id, label, value, onChange, children, disabled }) => (
 );
 
 const profileOptions = [
-  { value: '', label: 'Select One' },
-  { value: 'laboratory', label: 'Laboratory — For laboratories and laboratory professionals' },
-  { value: 'hospital', label: 'Hospital — For hospitals and healthcare organizations' },
-  { value: 'clinic', label: 'Clinic — For clinics and healthcare professionals' },
-  { value: 'supplier', label: 'Supplier — For laboratory equipment, products, and services suppliers' },
-  { value: 'professional', label: 'Professional — For individual professionals in the laboratory industry' },
-  { value: 'other', label: 'Other — If none of the above describes you' },
+  { value: "", label: "Select One" },
+  {
+    value: "laboratory",
+    label: "Laboratory — For laboratories and laboratory professionals",
+  },
+  {
+    value: "hospital",
+    label: "Hospital — For hospitals and healthcare organizations",
+  },
+  {
+    value: "clinic",
+    label: "Clinic — For clinics and healthcare professionals",
+  },
+  {
+    value: "supplier",
+    label:
+      "Supplier — For laboratory equipment, products, and services suppliers",
+  },
+  {
+    value: "professional",
+    label:
+      "Professional — For individual professionals in the laboratory industry",
+  },
+  { value: "other", label: "Other — If none of the above describes you" },
 ];
 
-const countries = ['Belgium', 'France', 'Germany', 'Netherlands', 'United Kingdom', 'United States'];
+const countries = [
+  "Belgium",
+  "France",
+  "Germany",
+  "Netherlands",
+  "United Kingdom",
+  "United States",
+];
 
 const RegisterView = () => {
   const navigate = useNavigate();
   const { register, loading, homePath } = useAuth();
 
-  const [profileType, setProfileType] = useState('laboratory');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [jobTitle, setJobTitle] = useState('');
-  const [company, setCompany] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [country, setCountry] = useState('Germany');
-  const [professionalInfo, setProfessionalInfo] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [profileType, setProfileType] = useState("laboratory");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [company, setCompany] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [country, setCountry] = useState("Germany");
+  const [professionalInfo, setProfessionalInfo] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -66,17 +97,17 @@ const RegisterView = () => {
     e.preventDefault();
 
     if (!profileType) {
-      toast.error('Please select what best describes you.');
+      toast.error("Please select what best describes you.");
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match.');
+      toast.error("Passwords do not match.");
       return;
     }
 
     if (!acceptedTerms) {
-      toast.error('You must accept the Terms of Service and Privacy Policy.');
+      toast.error("You must accept the Terms of Service and Privacy Policy.");
       return;
     }
 
@@ -98,12 +129,14 @@ const RegisterView = () => {
     const result = await register(payload);
 
     if (!result.ok) {
-      toast.error(result.error || 'Registration failed');
+      toast.error(result.error || "Registration failed");
       return;
     }
 
-    toast.success('Account created successfully!');
-    navigate(getSafeRedirectPath(result.redirectTo, homePath || '/feed'), { replace: true });
+    toast.success("Account created successfully!");
+    navigate(getSafeRedirectPath(result.redirectTo, homePath || "/feed"), {
+      replace: true,
+    });
   };
 
   return (
@@ -114,7 +147,8 @@ const RegisterView = () => {
             Join Lab Unity
           </h1>
           <p className="mt-2 text-[15px] text-[#64748B]">
-            Free during the initial trial period. No payment required to register.
+            Free during the initial trial period. No payment required to
+            register.
           </p>
         </div>
 
@@ -128,7 +162,11 @@ const RegisterView = () => {
               disabled={loading}
             >
               {profileOptions.map(({ value, label }) => (
-                <option key={value || 'default'} value={value} disabled={!value}>
+                <option
+                  key={value || "default"}
+                  value={value}
+                  disabled={!value}
+                >
                   {label}
                 </option>
               ))}
@@ -293,14 +331,22 @@ const RegisterView = () => {
                 className="mt-0.5 h-4 w-4 rounded border-[#D0D5DD] text-primary focus:ring-primary/20"
               />
               <span className="text-[14px] leading-[1.6] text-[#475467]">
-                I accept the Lab Unity{' '}
-                <a href="#" className="font-medium text-primary hover:underline">
+                I accept the Lab Unity{" "}
+                <Link
+                  to={TERMS_PATH}
+                  rel="noopener noreferrer"
+                  className="font-medium text-primary hover:underline"
+                >
                   Terms of Service
-                </a>{' '}
-                and{' '}
-                <a href="#" className="font-medium text-primary hover:underline">
+                </Link>{" "}
+                and{" "}
+                <Link
+                  to={PRIVACY_PATH}
+                  rel="noopener noreferrer"
+                  className="font-medium text-primary hover:underline"
+                >
                   Privacy Policy
-                </a>
+                </Link>
                 , and agree to be listed in the professional contacts directory.
               </span>
             </label>
@@ -316,7 +362,7 @@ const RegisterView = () => {
                   Creating account...
                 </>
               ) : (
-                'Create free account'
+                "Create free account"
               )}
             </button>
 

@@ -68,6 +68,17 @@ export async function getContactsList(params = {}) {
   return parseListResponse(response, query);
 }
 
+/** Pending requests addressed to the caller (nav badge). */
+export async function getPendingRequestCount() {
+  const { meta } = await getContactsList({
+    status: "pending",
+    direction: "incoming",
+    page: 1,
+    pageSize: 1,
+  });
+  return Number(meta?.total) || 0;
+}
+
 // ═══════════════════════════════════════════════════════════════════════
 // Contact profile
 // ═══════════════════════════════════════════════════════════════════════

@@ -228,6 +228,7 @@ export const API_ENDPOINTS = {
       COMMENT_LIKE: (postId, commentId) =>
         `/feed/${postId}/comments/${commentId}/like`,
       REACTIONS: (postId) => `/feed/${postId}/reactions`,
+      REPOST: (postId) => `/feed/${postId}/repost`,
     },
 
     CONTACTS: {

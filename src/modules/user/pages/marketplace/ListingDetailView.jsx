@@ -122,6 +122,9 @@ const ListingDetailView = () => {
   const saved = Boolean(listing.isSaved);
   const sellerId = listing.seller.id;
   const isOwnListing = Boolean(sellerId && sellerId === user?.id);
+  // Without both IDs we can't tell whose profile it is, so show no link.
+  const sellerProfileHref =
+    !sellerId || !user?.id ? null : isOwnListing ? '/profile' : `/contacts/${sellerId}`;
 
   const handleToggleSave = async () => {
     const result = await dispatch(toggleSaveListing(listing.id));
@@ -242,9 +245,9 @@ const ListingDetailView = () => {
                     </p>
                   </div>
                 </div>
-                {listing.seller.id ? (
+                {sellerProfileHref ? (
                   <Link
-                    to={`/contacts/${listing.seller.id}`}
+                    to={sellerProfileHref}
                     className="mt-4 inline-flex w-full items-center justify-center rounded-lg bg-secondary px-4 py-2.5 text-[13px] font-semibold text-primary hover:bg-[#E3EEF8]"
                   >
                     View seller profile

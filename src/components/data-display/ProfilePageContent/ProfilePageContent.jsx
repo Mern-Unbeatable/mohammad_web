@@ -16,7 +16,11 @@ const ProfilePageContent = ({
   user = currentUser,
   posts = [],
   postsLoading = false,
+  hasMorePosts = false,
+  loadingMorePosts = false,
+  onLoadMorePosts,
   onReport,
+  onEdit,
   onDelete,
   isPremium = user.membershipStatus === 'premium',
   editHref = '/profile/edit',
@@ -41,7 +45,11 @@ const ProfilePageContent = ({
     <ActivitySection
       posts={posts}
       loading={postsLoading}
+      hasMore={hasMorePosts}
+      loadingMore={loadingMorePosts}
+      onLoadMore={onLoadMorePosts}
       onReport={onReport}
+      onEdit={onEdit}
       onDelete={onDelete}
       emptyName={user.firstName || user.name}
       title={postsTitle}

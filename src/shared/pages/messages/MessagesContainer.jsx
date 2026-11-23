@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router';
 import { toast } from 'react-toastify';
+import { LogOut } from 'lucide-react';
 import ConfirmModal from '@/components/common/ConfirmModal/ConfirmModal';
 import MessagesPageContent from '@/shared/pages/messages/MessagesPageContent';
 import NewMessageModal from '@/shared/pages/messages/NewMessageModal';
@@ -589,6 +590,7 @@ const MessagesContainer = ({
         title="Leave group?"
         description="You will stop receiving messages from this group. Rejoining requires the owner to add you again."
         confirmLabel="Leave"
+        confirmIcon={LogOut}
         confirming={actionLoading}
         onClose={() => setConfirmLeave(false)}
         onConfirm={handleConfirmLeave}

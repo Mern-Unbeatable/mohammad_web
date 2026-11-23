@@ -1,5 +1,6 @@
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router";
 import { toast } from "react-toastify";
 import Pagination from "@/components/common/Pagination/Pagination";
 import { CardSkeleton } from "@/components/common/Skeleton";
@@ -14,6 +15,9 @@ import {
   toJobCardModel,
 } from "@/features/user/recruitment";
 import { LIST_PAGE_SIZE } from "@/shared/hooks/usePaginatedList";
+import { usePageParam } from "@/shared/hooks/usePageParam";
+import { SEARCH_PARAM } from "@/shared/utils/urlFilters";
+import { LEVEL_PARAM, recruitmentFilters } from "./recruitmentUrlFilters";
 
 const JOB_BASE = "/recruitment";
 
@@ -32,31 +36,54 @@ const buildJobsQuery = ({ page, query, level }) => {
 
 const RecruitmentView = () => {
   const dispatch = useDispatch();
-  const { jobs, jobsMeta, jobsLoading, error } = useSelector(
+  const { jobs, jobsMeta, jobsLoading, jobsError, error } = useSelector(
     (state) => state.userRecruitment,
   );
 
-  const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [level, setLevel] = useState("All");
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { [LEVEL_PARAM]: level, [SEARCH_PARAM]: search } =
+    recruitmentFilters.read(searchParams);
+  const [page, setPage] = usePageParam();
+
+  const [query, setQuery] = useState(search);
+  const [syncedSearch, setSyncedSearch] = useState(search);
+  // Back/Forward can change `q`; mirror it into the search box.
+  if (search !== syncedSearch) {
+    setSyncedSearch(search);
+    setQuery(search);
+  }
+
+  const updateFilters = useCallback(
+    (changes, { replace = false } = {}) => {
+      dispatch(invalidateJobsList());
+      setSearchParams((prev) => recruitmentFilters.apply(prev, changes), { replace });
+    },
+    [dispatch, setSearchParams],
+  );
+
+  useEffect(() => {
+    const next = recruitmentFilters.normalize(searchParams);
+    if (next) setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (query === debouncedQuery) return;
-      dispatch(invalidateJobsList());
-      setDebouncedQuery(query);
-      setPage(1);
+      const nextSearch = query.trim() ? query : "";
+      if (nextSearch === search) return;
+      updateFilters({ [SEARCH_PARAM]: nextSearch }, { replace: true });
     }, 350);
     return () => clearTimeout(timer);
-  }, [query, debouncedQuery, dispatch]);
+  }, [query, search, updateFilters]);
 
-  useLayoutEffect(() => {
+  const loadJobs = useCallback(() => {
     dispatch(clearRecruitmentError());
-    dispatch(
-      fetchJobs(buildJobsQuery({ page, query: debouncedQuery, level })),
-    );
-  }, [dispatch, page, debouncedQuery, level]);
+    dispatch(fetchJobs(buildJobsQuery({ page, query: search, level })));
+  }, [dispatch, page, search, level]);
+
+  // Run before paint so skeletons replace stale cards immediately on filter/page change
+  useLayoutEffect(() => {
+    loadJobs();
+  }, [loadJobs]);
 
   useEffect(() => {
     if (error) toast.error(error);
@@ -68,17 +95,25 @@ const RecruitmentView = () => {
   );
 
   const totalPages = Math.max(1, jobsMeta?.totalPages || 1);
+  // Only trust totalPages once it belongs to the page in the URL.
+  const pageOutOfRange =
+    !jobsLoading &&
+    !jobsError &&
+    Number(jobsMeta?.page) === page &&
+    page > totalPages;
+  const showSkeleton = jobsLoading || pageOutOfRange;
+
+  useEffect(() => {
+    if (pageOutOfRange) setPage(totalPages, { replace: true });
+  }, [pageOutOfRange, totalPages, setPage]);
 
   const handleLevelChange = (value) => {
     if (value === level) return;
-    dispatch(invalidateJobsList());
-    setLevel(value);
-    setPage(1);
+    updateFilters({ [LEVEL_PARAM]: value });
   };
 
   const handlePageChange = (next) => {
     if (next === page) return;
-    dispatch(invalidateJobsList());
     setPage(next);
   };
 
@@ -95,12 +130,25 @@ const RecruitmentView = () => {
         />
 
         <div className="mt-6 space-y-4">
-          {jobsLoading ? (
+          {showSkeleton ? (
             <CardSkeleton
               variant="job"
               count={LIST_PAGE_SIZE}
               className="space-y-4"
             />
+          ) : jobsError ? (
+            <div className="rounded-xl border border-dashed border-[#D0D5DD] bg-white px-6 py-14 text-center">
+              <p className="text-[15px] font-semibold text-deep-blue">
+                Couldn&apos;t load jobs
+              </p>
+              <button
+                type="button"
+                onClick={loadJobs}
+                className="mt-2 text-[14px] font-semibold text-primary hover:underline"
+              >
+                Try again
+              </button>
+            </div>
           ) : pageItems.length ? (
             pageItems.map((job, index) => (
               <JobCard

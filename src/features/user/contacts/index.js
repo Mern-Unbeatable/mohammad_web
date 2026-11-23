@@ -8,9 +8,15 @@
  */
 
 export { default as userContactsReducer } from "./contactsSlice";
-export { clearContactsError, clearSelectedContact, invalidateContactsList } from "./contactsSlice";
+export {
+  clearContactsError,
+  clearSelectedContact,
+  invalidateContactsList,
+  selectPendingRequestCount,
+} from "./contactsSlice";
 export {
   fetchContactsList,
+  fetchPendingRequestCount,
   fetchContactDetails,
   requestContactConnection,
   acceptConnection,

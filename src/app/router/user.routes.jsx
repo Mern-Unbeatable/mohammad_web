@@ -28,6 +28,7 @@ const NotificationsView = lazyPage(() => import('@/modules/user/pages/notificati
 const SubscriptionView = lazyPage(() => import('@/modules/user/pages/subscription/SubscriptionView'));
 const ProfileView = lazyPage(() => import('@/modules/user/pages/profile/ProfileView'));
 const ProfileSetupView = lazyPage(() => import('@/modules/user/pages/profile/ProfileSetupView'));
+const SearchView = lazyPage(() => import('@/modules/user/pages/search/SearchView'));
 
 export const userRoutes = {
   element: <RequireRole allowedRoles={[USER_ROLES.USER]} />,
@@ -37,6 +38,7 @@ export const userRoutes = {
       element: <UserDashboardLayout />,
       children: [
         { path: '/feed', element: <FeedView />, handle: { title: 'Feed' } },
+        { path: '/search', element: <SearchView />, handle: { title: 'Search' } },
         { path: '/contacts', element: <ContactsView />, handle: { title: 'Contacts' } },
         {
           path: '/contacts/:contactId',

@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Container from "@/components/ui/Container";
@@ -8,14 +14,18 @@ import LeftSidebar from "@/modules/user/components/shell/LeftSidebar";
 import RightSidebar from "@/modules/user/components/shell/RightSidebar";
 import FeedPost from "@/modules/user/components/feed/FeedPost";
 import CreatePostModal from "@/modules/user/components/feed/CreatePostModal";
+import { DEFAULT_POST_OPTION } from "@/modules/user/components/feed/postTypeOptions";
 import ReportPostModal from "@/modules/user/components/feed/ReportPostModal";
+import LoadMorePosts from "@/modules/user/components/feed/LoadMorePosts";
 import {
   FeedComposer,
   FeedFilters,
 } from "@/modules/user/components/feed/FeedShared";
 import { useFeedActions } from "@/modules/user/context/FeedActionsContext";
+import { usePostEditor } from "@/modules/user/hooks/usePostEditor";
 import {
   fetchFeed,
+  fetchMoreFeed,
   createPost,
   removePost,
   invalidateFeedPosts,
@@ -30,6 +40,8 @@ const feedFilters = [
   { id: "suppliers", label: "Suppliers" },
 ];
 
+const FEED_PAGE_SIZE = 20;
+
 const filterToApiType = {
   questions: "question",
   information: "information",
@@ -39,31 +51,52 @@ const filterToApiType = {
 const FeedView = () => {
   const dispatch = useDispatch();
   const { registerOpenCreatePost } = useFeedActions();
-  const { posts, postsLoading, postsError, saving, deleting, error } =
-    useSelector((state) => state.userFeed);
+  const {
+    posts,
+    postsMeta,
+    postsLoading,
+    postsLoadingMore,
+    postsError,
+    saving,
+    deleting,
+    error,
+  } = useSelector((state) => state.userFeed);
   const { user } = useSelector((state) => state.userProfile);
   const profileUser = useMemo(() => toProfilePageUser(user), [user]);
 
   const [activeFilter, setActiveFilter] = useState("all");
   const [createOpen, setCreateOpen] = useState(false);
+  const [createPostOption, setCreatePostOption] = useState(DEFAULT_POST_OPTION);
   const [reportPost, setReportPost] = useState(null);
   const [pendingDelete, setPendingDelete] = useState(null);
+  const { editingPost, openEditor, closeEditor, saveEdit } = usePostEditor();
+
+  const openCreatePost = useCallback((option = DEFAULT_POST_OPTION) => {
+    setCreatePostOption(option);
+    setCreateOpen(true);
+  }, []);
 
   useEffect(() => {
-    registerOpenCreatePost(() => setCreateOpen(true));
-  }, [registerOpenCreatePost]);
+    registerOpenCreatePost(() => openCreatePost());
+  }, [registerOpenCreatePost, openCreatePost]);
 
   useEffect(() => {
     if (!user) dispatch(fetchUserProfile());
   }, [dispatch, user]);
 
+  const feedQuery = useMemo(() => {
+    const type = filterToApiType[activeFilter];
+    return { page: 1, pageSize: FEED_PAGE_SIZE, sort: "desc", ...(type ? { type } : {}) };
+  }, [activeFilter]);
+
   const loadFeed = useCallback(() => {
     dispatch(invalidateFeedPosts());
-    const params = { page: 1, pageSize: 20, sort: "desc" };
-    const type = filterToApiType[activeFilter];
-    if (type) params.type = type;
-    dispatch(fetchFeed(params));
-  }, [dispatch, activeFilter]);
+    dispatch(fetchFeed(feedQuery));
+  }, [dispatch, feedQuery]);
+
+  const hasMorePosts = (postsMeta?.page ?? 1) < (postsMeta?.totalPages ?? 1);
+  const loadMorePosts = () =>
+    dispatch(fetchMoreFeed({ ...feedQuery, page: (postsMeta?.page ?? 1) + 1 }));
 
   useLayoutEffect(() => {
     loadFeed();
@@ -78,12 +111,7 @@ const FeedView = () => {
     [posts],
   );
 
-  const handlePublish = async ({
-    type,
-    content,
-    imageUrl,
-    documentUrl,
-  }) => {
+  const handlePublish = async ({ type, content, imageUrls, documentUrl }) => {
     const apiType =
       type === "question"
         ? "QUESTION"
@@ -95,23 +123,14 @@ const FeedView = () => {
       type: apiType,
       content: (content || "").trim(),
     };
-    if (imageUrl) payload.imageUrl = imageUrl;
+    if (imageUrls?.length) payload.imageUrls = imageUrls;
     if (documentUrl) payload.documentUrl = documentUrl;
 
     const result = await dispatch(createPost(payload));
     if (createPost.fulfilled.match(result)) {
       toast.success("Post published");
       setCreateOpen(false);
-      dispatch(
-        fetchFeed({
-          page: 1,
-          pageSize: 20,
-          sort: "desc",
-          ...(filterToApiType[activeFilter]
-            ? { type: filterToApiType[activeFilter] }
-            : {}),
-        }),
-      );
+      dispatch(fetchFeed(feedQuery));
     } else {
       toast.error(result.payload || "Failed to publish post");
     }
@@ -137,15 +156,12 @@ const FeedView = () => {
   return (
     <>
       <main className="py-4 sm:py-5">
-        <Container className="flex gap-6">
+        <Container className="flex gap-8">
           <LeftSidebar />
 
-          <section className="mx-auto min-w-0 w-full max-w-[720px] flex-1 space-y-4">
+          <section className="min-w-0 w-full flex-1 space-y-4">
             <div className="hidden sm:block">
-              <FeedComposer
-                user={profileUser}
-                onCreatePost={() => setCreateOpen(true)}
-              />
+              <FeedComposer user={profileUser} onCreatePost={openCreatePost} />
             </div>
             <FeedFilters
               filters={feedFilters}
@@ -182,9 +198,16 @@ const FeedView = () => {
                     key={post.id}
                     post={post}
                     onReport={setReportPost}
+                    onEdit={openEditor}
                     onDelete={deleting ? undefined : setPendingDelete}
                   />
                 ))}
+                {hasMorePosts ? (
+                  <LoadMorePosts
+                    onClick={loadMorePosts}
+                    loading={postsLoadingMore}
+                  />
+                ) : null}
               </div>
             )}
           </section>
@@ -193,13 +216,27 @@ const FeedView = () => {
         </Container>
       </main>
 
-      <CreatePostModal
-        open={createOpen}
-        onClose={() => setCreateOpen(false)}
-        user={profileUser}
-        submitting={saving}
-        onPublish={handlePublish}
-      />
+      {createOpen ? (
+        <CreatePostModal
+          open
+          onClose={() => setCreateOpen(false)}
+          user={profileUser}
+          submitting={saving}
+          onPublish={handlePublish}
+          initialOption={createPostOption}
+        />
+      ) : null}
+      {editingPost ? (
+        <CreatePostModal
+          open
+          mode="edit"
+          post={editingPost}
+          onClose={closeEditor}
+          user={profileUser}
+          submitting={saving}
+          onPublish={saveEdit}
+        />
+      ) : null}
       <ReportPostModal
         open={Boolean(reportPost)}
         post={reportPost}

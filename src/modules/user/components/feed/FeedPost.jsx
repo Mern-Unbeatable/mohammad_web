@@ -1,23 +1,38 @@
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { MoreHorizontal, Tag, Trash2 } from 'lucide-react';
-import { toast } from 'react-toastify';
-import Card from '@/components/ui/Card';
-import Avatar from '@/components/ui/Avatar';
-import Badge from '@/components/ui/Badge';
-import ExpandableText from '@/components/common/ExpandableText/ExpandableText';
-import { AttachmentCard, PostStats, PostActions } from './FeedShared';
-import PostComments from './PostComments';
-import SharePostModal from './SharePostModal';
-import { addComment, likeComment, reactToPost } from '@/features/user/feed';
-import { toProfilePageUser } from '@/features/user/profile';
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { MoreHorizontal, Repeat2, Tag } from "lucide-react";
+import { toast } from "react-toastify";
+import Card from "@/components/ui/Card";
+import Avatar from "@/components/ui/Avatar";
+import Badge from "@/components/ui/Badge";
+import ExpandableText from "@/components/common/ExpandableText/ExpandableText";
+import { AttachmentCard, PostStats, PostActions } from "./FeedShared";
+import PostComments from "./PostComments";
+import SharePostModal from "./SharePostModal";
+import RepostedPostCard from "./RepostedPostCard";
+import PostImageGallery from "./PostImageGallery";
+import OwnerActionsMenu from "./OwnerActionsMenu";
+import FullCommentsModal from "./FullCommentsModal";
+import AuthorLink from "./AuthorLink";
+import {
+  addComment,
+  editComment,
+  removeComment,
+  likeComment,
+  reactToPost,
+  repostPost,
+  undoRepost,
+} from "@/features/user/feed";
+import { toProfilePageUser } from "@/features/user/profile";
 
 const badgeByType = {
-  question: { variant: 'question', label: 'Question' },
-  information: { variant: 'information', label: 'Information' },
-  sponsored: { variant: 'sponsored', label: '• Sponsored' },
-  promo: { variant: 'sponsored', label: '• Sponsored' },
+  question: { variant: "question", label: "Question" },
+  information: { variant: "information", label: "Information" },
+  sponsored: { variant: "sponsored", label: "• Sponsored" },
+  promo: { variant: "sponsored", label: "• Sponsored" },
 };
+
+const COMMENT_PREVIEW_LIMIT = 4;
 
 const REACTION_API = {
   like: "like",
@@ -33,94 +48,77 @@ const REACTION_API = {
   curious: "angry",
 };
 
-const OwnerPostMenu = ({ post, onDelete }) => {
-  const [open, setOpen] = useState(false);
-  const rootRef = useRef(null);
-
-  useEffect(() => {
-    if (!open) return undefined;
-
-    const handleClickOutside = (event) => {
-      if (rootRef.current && !rootRef.current.contains(event.target)) {
-        setOpen(false);
-      }
-    };
-
-    const handleEscape = (event) => {
-      if (event.key === 'Escape') setOpen(false);
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEscape);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [open]);
-
-  return (
-    <div ref={rootRef} className="relative shrink-0">
-      <button
-        type="button"
-        onClick={() => setOpen((prev) => !prev)}
-        className="rounded-full p-1.5 text-[#98A2B3] hover:bg-[#F9FAFB] hover:text-[#64748B]"
-        aria-label="Post options"
-        aria-expanded={open}
-        aria-haspopup="true"
-      >
-        <MoreHorizontal className="h-5 w-5" />
-      </button>
-
-      {open && (
-        <div
-          role="menu"
-          className="absolute right-0 top-[calc(100%+4px)] z-[20] w-[160px] overflow-hidden rounded-lg border border-[#E4E7EC] bg-white py-1 shadow-[0_8px_24px_rgba(15,23,42,0.12)]"
-        >
-          <button
-            type="button"
-            role="menuitem"
-            onClick={() => {
-              setOpen(false);
-              onDelete(post);
-            }}
-            className="flex w-full items-center gap-2.5 px-3.5 py-2 text-[13px] font-semibold text-[#DC2626] transition-colors hover:bg-[#FEF2F2]"
-          >
-            <Trash2 className="h-4 w-4" strokeWidth={1.8} />
-            Delete post
-          </button>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const PostHeader = ({ post, onReport, onDelete, isOwner }) => {
+const PostHeader = ({
+  post,
+  onReport,
+  onEdit,
+  onDelete,
+  isOwner,
+  showActions = true,
+}) => {
   const badge = badgeByType[post.type];
+  const meta = [post.author.meta, post.edited ? "Edited" : null]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
-    <div className="flex items-start gap-3 p-4 pb-0">
-      <Avatar
-        src={post.author.avatar}
-        initials={post.author.initials}
-        size="md"
-      />
+    <div className="flex items-start gap-2.5 p-3 pb-0 sm:gap-3 sm:p-4 sm:pb-0">
+      <AuthorLink
+        author={post.author}
+        decorative
+        className="shrink-0 rounded-full transition-opacity hover:opacity-90"
+      >
+        <Avatar
+          src={post.author.avatar}
+          alt={post.author.name}
+          initials={post.author.initials}
+          size="md"
+        />
+      </AuthorLink>
       <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-center gap-2">
-          <h3 className="text-[14px] font-bold text-deep-blue">{post.author.name}</h3>
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+          <h3 className="min-w-0 break-words text-[14px] font-bold leading-5 text-deep-blue">
+            <AuthorLink
+              author={post.author}
+              className="rounded-sm hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-primary"
+            >
+              {post.author.name}
+            </AuthorLink>
+          </h3>
+          {post.isRepost && (
+            <span className="inline-flex items-center gap-1 text-[13px] text-[#64748B]">
+              <Repeat2 className="h-3.5 w-3.5" />
+              shared a post
+            </span>
+          )}
           {badge && <Badge variant={badge.variant}>{badge.label}</Badge>}
-          {post.type === 'promo' && (
+          {post.type === "promo" && (
             <span className="inline-flex items-center gap-1 rounded-full bg-pink-secondary px-2 py-0.5 text-[10px] font-semibold text-pink-light">
               <Tag className="h-3 w-3" />
               Promotional Offer
             </span>
           )}
         </div>
-        <p className="text-[12px] text-[#64748B]">{post.author.subtitle}</p>
-        <p className="text-[12px] text-[#98A2B3]">{post.author.meta}</p>
+        {post.author.subtitle ? (
+          <p
+            className="truncate text-[12px] text-[#64748B]"
+            title={post.author.subtitle}
+          >
+            {post.author.subtitle}
+          </p>
+        ) : null}
+        {meta ? (
+          <p className="truncate text-[12px] text-[#98A2B3]">{meta}</p>
+        ) : null}
       </div>
-      {isOwner && onDelete ? (
-        <OwnerPostMenu post={post} onDelete={onDelete} />
+      {!showActions ? null : isOwner && (onEdit || onDelete) ? (
+        <OwnerActionsMenu
+          label="Post options"
+          editLabel="Edit post"
+          deleteLabel="Delete post"
+          onEdit={onEdit ? () => onEdit(post) : undefined}
+          onDelete={onDelete ? () => onDelete(post) : undefined}
+        />
       ) : (
         <button
           type="button"
@@ -138,9 +136,13 @@ const PostHeader = ({ post, onReport, onDelete, isOwner }) => {
 const PromoPricing = ({ post }) => (
   <div className="mt-3 flex flex-wrap items-end justify-between gap-3">
     <div className="flex items-baseline gap-2">
-      <span className="text-[28px] font-bold text-green-primary">{post.price}</span>
+      <span className="text-[28px] font-bold text-green-primary">
+        {post.price}
+      </span>
       {post.originalPrice && (
-        <span className="text-[14px] text-[#98A2B3] line-through">{post.originalPrice}</span>
+        <span className="text-[14px] text-[#98A2B3] line-through">
+          {post.originalPrice}
+        </span>
       )}
     </div>
     <div className="text-right">
@@ -156,23 +158,106 @@ const PromoPricing = ({ post }) => (
   </div>
 );
 
-const FeedPost = ({ post, onReport, onDelete }) => {
+const PostBody = ({ post }) =>
+  post.isRepost ? (
+    <div className="p-3 sm:p-4">
+      {post.content ? (
+        <ExpandableText
+          text={post.content}
+          className="text-[15px] leading-relaxed text-[#475467] sm:text-base"
+        />
+      ) : null}
+      {post.attachment && <AttachmentCard attachment={post.attachment} />}
+      <PostImageGallery images={post.images} image={post.image} />
+      <RepostedPostCard post={post.sharedPost} />
+    </div>
+  ) : (
+    <div className="p-3 sm:p-4">
+      {post.title && (
+        <h4 className="mb-2 text-[16px] font-bold text-deep-blue">
+          {post.title}
+        </h4>
+      )}
+      <ExpandableText
+        text={post.content}
+        className="text-[15px] leading-relaxed text-[#475467] sm:text-base"
+      />
+
+      {post.attachment && <AttachmentCard attachment={post.attachment} />}
+
+      {post.type !== "promo" && (
+        <PostImageGallery images={post.images} image={post.image} />
+      )}
+
+      {post.type === "promo" && post.image && (
+        <div className="relative mt-3 overflow-hidden rounded-lg">
+          <img
+            src={post.image}
+            alt=""
+            className="aspect-[16/9] w-full object-cover"
+            loading="lazy"
+          />
+          {post.discount && post.type === "promo" && (
+            <>
+              <span className="absolute left-3 top-3 rounded-md bg-[#E67E22] px-2 py-1 text-[11px] font-bold text-white">
+                {post.discount}
+              </span>
+              <span className="absolute bottom-3 left-3 rounded-md bg-[#E67E22] px-2 py-1 text-[11px] font-bold text-white">
+                Ends in 29 days
+              </span>
+            </>
+          )}
+        </div>
+      )}
+
+      {post.type === "sponsored" && post.price && (
+        <p className="mt-3 text-[22px] font-bold text-green-primary">
+          {post.price}
+        </p>
+      )}
+
+      {post.type === "promo" && <PromoPricing post={post} />}
+
+      {post.cta && (
+        <button
+          type="button"
+          className="mt-4 w-full rounded-md bg-pink-light py-3 text-[14px] font-semibold text-white transition-opacity hover:opacity-90"
+        >
+          {post.cta}
+        </button>
+      )}
+    </div>
+  );
+
+const FeedPost = ({ post, onReport, onEdit, onDelete }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.userProfile);
   const likingCommentId = useSelector(
     (state) => state.userFeed.likingCommentId,
   );
+  const reposting = useSelector(
+    (state) => state.userFeed.repostingId === post.id,
+  );
   const profileUser = useMemo(() => toProfilePageUser(user), [user]);
   const isOwner = Boolean(
     profileUser?.id && post.author?.id && profileUser.id === post.author.id,
   );
+  const originalAuthorId = post.isRepost
+    ? post.sharedPost?.author?.id
+    : post.author?.id;
+  const repostUnavailableReason =
+    post.isRepost && !post.sharedPost
+      ? "The original post is no longer available"
+      : profileUser?.id && originalAuthorId === profileUser.id
+        ? "You can't repost your own post"
+        : null;
 
   const [commentsOpen, setCommentsOpen] = useState(false);
+  const [fullCommentsOpen, setFullCommentsOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [reactionId, setReactionId] = useState(
     post.myReaction ? String(post.myReaction).toLowerCase() : null,
   );
-  const [shared, setShared] = useState(false);
   const [stats, setStats] = useState(post.stats);
   const [reactionCounts, setReactionCounts] = useState(
     post.reactionCounts || null,
@@ -210,7 +295,7 @@ const FeedPost = ({ post, onReport, onDelete }) => {
     if (reactToPost.rejected.match(result)) {
       setReactionId(prevId);
       setStats(prevStats);
-      toast.error(result.payload || 'Failed to update reaction');
+      toast.error(result.payload || "Failed to update reaction");
       return;
     }
 
@@ -265,7 +350,8 @@ const FeedPost = ({ post, onReport, onDelete }) => {
   const mapComments = (list, commentId, updater) =>
     (list || []).map((item) => {
       if (item.id === commentId) return updater(item);
-      if (!Array.isArray(item.replies) || item.replies.length === 0) return item;
+      if (!Array.isArray(item.replies) || item.replies.length === 0)
+        return item;
       return {
         ...item,
         replies: mapComments(item.replies, commentId, updater),
@@ -285,12 +371,10 @@ const FeedPost = ({ post, onReport, onDelete }) => {
       })),
     );
 
-    const result = await dispatch(
-      likeComment({ postId: post.id, commentId }),
-    );
+    const result = await dispatch(likeComment({ postId: post.id, commentId }));
     if (likeComment.rejected.match(result)) {
       setComments((prev) => mapComments(prev, commentId, () => previous));
-      toast.error(result.payload || 'Failed to like comment');
+      toast.error(result.payload || "Failed to like comment");
       return;
     }
 
@@ -306,18 +390,91 @@ const FeedPost = ({ post, onReport, onDelete }) => {
     }
   };
 
+  const handleEditComment = async (commentId, text) => {
+    const result = await dispatch(
+      editComment({ postId: post.id, commentId, body: text }),
+    );
+    if (editComment.rejected.match(result)) {
+      toast.error(result.payload || "Failed to update comment");
+      return false;
+    }
+    const content = result.payload?.comment?.content ?? text.trim();
+    setComments((prev) =>
+      mapComments(prev, commentId, (c) => ({ ...c, content })),
+    );
+    return true;
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    const result = await dispatch(
+      removeComment({ postId: post.id, commentId }),
+    );
+    if (removeComment.rejected.match(result)) {
+      toast.error(result.payload || "Failed to delete comment");
+      return false;
+    }
+
+    const target = findComment(comments, commentId);
+    const removed = target ? 1 + (target.replies?.length ?? 0) : 0;
+    setComments((prev) =>
+      prev
+        .filter((c) => c.id !== commentId)
+        .map((c) => {
+          if (!c.replies?.some((r) => r.id === commentId)) return c;
+          const replies = c.replies.filter((r) => r.id !== commentId);
+          return { ...c, replies, replyCount: replies.length };
+        }),
+    );
+    const serverCount = result.payload?.data?.commentCount;
+    setStats((prev) => ({
+      ...prev,
+      comments:
+        typeof serverCount === "number"
+          ? serverCount
+          : Math.max(0, (prev?.comments ?? 0) - removed),
+    }));
+    toast.success("Comment deleted");
+    return true;
+  };
+
   const handleShare = () => {
     setShareOpen(true);
   };
 
-  const handleShareComplete = () => {
-    if (!shared) {
-      setStats((prev) => ({ ...prev, shares: prev.shares + 1 }));
+  const handleRepost = async (caption) => {
+    const result = await dispatch(
+      repostPost({ postId: post.id, content: caption }),
+    );
+    if (repostPost.fulfilled.match(result)) {
+      toast.success("Reposted to your feed");
+      return true;
     }
-    setShared(true);
+    toast.error(result.payload || "Failed to repost");
+    return false;
+  };
+
+  const handleUndoRepost = async () => {
+    const result = await dispatch(undoRepost({ postId: post.id }));
+    if (undoRepost.fulfilled.match(result)) {
+      toast.success("Repost removed");
+      return true;
+    }
+    toast.error(result.payload || "Failed to undo repost");
+    return false;
   };
 
   const toggleComments = () => setCommentsOpen((prev) => !prev);
+  const closeFullComments = useCallback(() => setFullCommentsOpen(false), []);
+
+  const commentProps = {
+    comments,
+    currentUser: profileUser,
+    onAddComment: handleAddComment,
+    onLikeComment: handleLikeComment,
+    onEditComment: handleEditComment,
+    onDeleteComment: handleDeleteComment,
+    likingCommentId,
+  };
 
   return (
     <>
@@ -325,58 +482,12 @@ const FeedPost = ({ post, onReport, onDelete }) => {
         <PostHeader
           post={post}
           onReport={onReport}
+          onEdit={onEdit}
           onDelete={onDelete}
           isOwner={isOwner}
         />
 
-        <div className="p-4">
-          {post.title && (
-            <h4 className="mb-2 text-[16px] font-bold text-deep-blue">{post.title}</h4>
-          )}
-          <ExpandableText
-            text={post.content}
-            lines={5}
-            className="text-base leading-relaxed text-[#475467]"
-          />
-
-          {post.attachment && <AttachmentCard attachment={post.attachment} />}
-
-          {post.image && (
-            <div className="relative mt-3 overflow-hidden rounded-lg">
-              <img
-                src={post.image}
-                alt=""
-                className="aspect-[16/9] w-full object-cover"
-                loading="lazy"
-              />
-              {post.discount && post.type === 'promo' && (
-                <>
-                  <span className="absolute left-3 top-3 rounded-md bg-[#E67E22] px-2 py-1 text-[11px] font-bold text-white">
-                    {post.discount}
-                  </span>
-                  <span className="absolute bottom-3 left-3 rounded-md bg-[#E67E22] px-2 py-1 text-[11px] font-bold text-white">
-                    Ends in 29 days
-                  </span>
-                </>
-              )}
-            </div>
-          )}
-
-          {post.type === 'sponsored' && post.price && (
-            <p className="mt-3 text-[22px] font-bold text-green-primary">{post.price}</p>
-          )}
-
-          {post.type === 'promo' && <PromoPricing post={post} />}
-
-          {post.cta && (
-            <button
-              type="button"
-              className="mt-4 w-full rounded-md bg-pink-light py-3 text-[14px] font-semibold text-white transition-opacity hover:opacity-90"
-            >
-              {post.cta}
-            </button>
-          )}
-        </div>
+        <PostBody post={post} />
 
         <PostStats
           stats={stats}
@@ -390,26 +501,48 @@ const FeedPost = ({ post, onReport, onDelete }) => {
           onToggleComments={toggleComments}
           commentCount={stats?.comments ?? 0}
           onShare={handleShare}
-          shared={shared}
+          shared={post.sharedByMe}
         />
 
         {commentsOpen && (
           <PostComments
-            comments={comments}
-            currentUser={profileUser}
-            onAddComment={handleAddComment}
-            onLikeComment={handleLikeComment}
-            likingCommentId={likingCommentId}
+            {...commentProps}
+            previewLimit={COMMENT_PREVIEW_LIMIT}
+            onShowAll={() => setFullCommentsOpen(true)}
           />
         )}
       </Card>
 
-      <SharePostModal
-        open={shareOpen}
-        post={post}
-        onClose={() => setShareOpen(false)}
-        onShare={handleShareComplete}
-      />
+      <FullCommentsModal
+        open={fullCommentsOpen}
+        title={`${post.author.name}'s post`}
+        onClose={closeFullComments}
+      >
+        <PostHeader post={post} showActions={false} />
+        <PostBody post={post} />
+        <PostStats
+          stats={stats}
+          reactionId={reactionId}
+          reactionCounts={reactionCounts}
+        />
+        <PostComments
+          {...commentProps}
+          emptyText="No comments yet. Start the conversation."
+        />
+      </FullCommentsModal>
+
+      {shareOpen ? (
+        <SharePostModal
+          open
+          post={post}
+          onClose={() => setShareOpen(false)}
+          shared={post.sharedByMe}
+          reposting={reposting}
+          repostUnavailableReason={repostUnavailableReason}
+          onRepost={handleRepost}
+          onUndoRepost={handleUndoRepost}
+        />
+      ) : null}
     </>
   );
 };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useDispatch } from "react-redux";
-import { Briefcase, Check, ShoppingBag, UserPlus } from "lucide-react";
+import { Briefcase, Check, Clock, ShoppingBag, UserPlus } from "lucide-react";
 import { toast } from "react-toastify";
 import Card from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
@@ -80,7 +80,7 @@ const PeopleYouMayKnow = ({ people, connectingId, onConnect, loading }) => (
                 type="button"
                 onClick={() => onConnect(person)}
                 disabled={isConnected || isPending}
-                className={`inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-2 text-[13px] font-semibold transition-colors ${
+                className={`inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-semibold transition-colors ${
                   isConnected || isPending
                     ? "bg-green-secondary text-green-primary"
                     : "bg-primary text-white hover:opacity-90"
@@ -88,13 +88,19 @@ const PeopleYouMayKnow = ({ people, connectingId, onConnect, loading }) => (
               >
                 {isConnected ? (
                   <>
-                    <Check className="h-3 w-3" />
+                    <Check className="h-3.5 w-3.5" aria-hidden="true" />
                     Connected
                   </>
                 ) : isPending ? (
-                  "Pending"
+                  <>
+                    <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+                    Pending
+                  </>
                 ) : (
-                  "Connect"
+                  <>
+                    <UserPlus className="h-3.5 w-3.5" aria-hidden="true" />
+                    Connect
+                  </>
                 )}
               </button>
             </li>

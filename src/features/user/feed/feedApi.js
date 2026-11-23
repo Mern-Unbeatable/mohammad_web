@@ -56,6 +56,7 @@ export async function getFeed(params = {}) {
   if (!query.type) delete query.type;
   if (!query.search) delete query.search;
   if (query.mine === undefined || query.mine === null) delete query.mine;
+  if (!query.authorId) delete query.authorId;
 
   const response = await crudService.get(API_ENDPOINTS.USER.FEED.LIST, query);
   return parseListResponse(response, query);
@@ -97,6 +98,31 @@ export async function uploadFile(file) {
   return data;
 }
 
+/**
+ * Upload several files in one request via /uploads/multiple.
+ * Field name must be `files` (matches multer upload.array("files", 12)).
+ */
+export async function uploadFiles(files = []) {
+  const list = Array.from(files).filter(Boolean);
+  if (!list.length) return [];
+
+  const formData = new FormData();
+  list.forEach((file) => formData.append("files", file));
+
+  const response = await crudService.upload(
+    API_ENDPOINTS.USER.UPLOADS.MULTIPLE,
+    formData,
+    null,
+    { timeout: 120000 },
+  );
+  const data = unwrapApiData(response) || response;
+  const rows = Array.isArray(data) ? data : [];
+  if (rows.length !== list.length || rows.some((row) => !row?.url)) {
+    throw new Error("Upload did not return file URLs");
+  }
+  return rows;
+}
+
 export async function updatePost(postId, payload) {
   const response = await crudService.patch(
     API_ENDPOINTS.USER.FEED.UPDATE(postId),
@@ -132,6 +158,14 @@ export async function addComment(postId, payload) {
   return unwrapApiData(response) || response;
 }
 
+export async function updateComment(postId, commentId, content) {
+  const response = await crudService.patch(
+    API_ENDPOINTS.USER.FEED.COMMENT(postId, commentId),
+    { content: String(content ?? "").trim() },
+  );
+  return unwrapApiData(response) || response;
+}
+
 export async function deleteComment(postId, commentId) {
   const response = await crudService.del(
     API_ENDPOINTS.USER.FEED.COMMENT(postId, commentId),
@@ -147,6 +181,21 @@ export async function reactToPost(postId, type) {
   const response = await crudService.post(
     API_ENDPOINTS.USER.FEED.REACTIONS(postId),
     { type },
+  );
+  return unwrapApiData(response) || response;
+}
+
+export async function repostPost(postId, content = "") {
+  const response = await crudService.post(
+    API_ENDPOINTS.USER.FEED.REPOST(postId),
+    { content: String(content).trim() },
+  );
+  return unwrapApiData(response) || response;
+}
+
+export async function undoRepost(postId) {
+  const response = await crudService.del(
+    API_ENDPOINTS.USER.FEED.REPOST(postId),
   );
   return unwrapApiData(response) || response;
 }

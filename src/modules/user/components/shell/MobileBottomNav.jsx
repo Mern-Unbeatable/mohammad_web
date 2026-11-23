@@ -3,12 +3,13 @@ import { Link, useLocation } from 'react-router';
 import { useSelector } from 'react-redux';
 import CountBadge from '@/components/ui/CountBadge';
 import { selectUserUnreadNotificationCount } from '@/features/user/notifications';
+import { selectPendingRequestCount } from '@/features/user/contacts';
 import { useFeedActions } from '@/modules/user/context/FeedActionsContext';
 import { useLayoutChrome } from '@/shared/context/LayoutChromeContext';
 
 const tabs = [
   { id: 'home', label: 'Home', icon: Home, to: '/feed' },
-  { id: 'network', label: 'Network', icon: Users, to: '/contacts', badge: 2 },
+  { id: 'network', label: 'Network', icon: Users, to: '/contacts' },
   { id: 'post', label: 'Post', icon: SquarePlus, action: 'create' },
   { id: 'notifications', label: 'Notifications', icon: Bell, to: '/notifications' },
   { id: 'jobs', label: 'Jobs', icon: Briefcase, to: '/recruitment' },
@@ -20,10 +21,12 @@ const MobileBottomNav = () => {
   const { bottomNavHidden } = useLayoutChrome();
   // Kept fresh by `useNotificationBadge` in DashboardNavbar.
   const unreadNotifications = useSelector(selectUserUnreadNotificationCount);
+  const pendingRequests = useSelector(selectPendingRequestCount);
 
   if (bottomNavHidden) return null;
 
-  const badgeFor = (tab) => (tab.id === 'notifications' ? unreadNotifications : tab.badge);
+  const badges = { notifications: unreadNotifications, network: pendingRequests };
+  const badgeFor = (tab) => badges[tab.id] ?? 0;
 
   const isTabActive = (tab) => {
     if (tab.id === 'home') return pathname === '/feed';

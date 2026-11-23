@@ -7,6 +7,8 @@ import { ProfilePageSkeleton } from "@/components/common/Skeleton";
 import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal";
 import ProfilePageContent from "@/components/data-display/ProfilePageContent/ProfilePageContent";
 import ReportPostModal from "@/modules/user/components/feed/ReportPostModal";
+import CreatePostModal from "@/modules/user/components/feed/CreatePostModal";
+import { usePostEditor } from "@/modules/user/hooks/usePostEditor";
 import {
   SubscriptionDetailsCard,
   MyReportsCard,
@@ -18,6 +20,7 @@ import {
 } from "@/features/user/profile";
 import {
   fetchMyPosts,
+  fetchMoreMyPosts,
   removePost,
   toFeedPostModel,
 } from "@/features/user/feed";
@@ -34,8 +37,15 @@ const ProfileView = () => {
     loading,
     error: profileError,
   } = useSelector((state) => state.userProfile);
-  const { myPosts, myPostsLoaded, myPostsStale, myPostsError, deleting } =
-    useSelector((state) => state.userFeed);
+  const {
+    myPosts,
+    myPostsMeta,
+    myPostsLoaded,
+    myPostsLoadingMore,
+    myPostsStale,
+    myPostsError,
+    deleting,
+  } = useSelector((state) => state.userFeed);
   const {
     reports,
     reportsLoading,
@@ -43,6 +53,8 @@ const ProfileView = () => {
   } = useSelector((state) => state.userReports);
   const [reportPost, setReportPost] = useState(null);
   const [pendingDelete, setPendingDelete] = useState(null);
+  const { editingPost, openEditor, closeEditor, saveEdit, saving } =
+    usePostEditor();
 
   const profileUser = useMemo(() => toProfilePageUser(user), [user]);
   const isPremium =
@@ -55,9 +67,11 @@ const ProfileView = () => {
     ["premium", "trial", "cancelled"].includes(profileUser?.membershipStatus);
 
   const activity = useMemo(
-    () => (myPosts || []).map(toFeedPostModel).filter(Boolean).slice(0, 4),
+    () => (myPosts || []).map(toFeedPostModel).filter(Boolean),
     [myPosts],
   );
+  const hasMorePosts =
+    (myPostsMeta?.page ?? 1) < (myPostsMeta?.totalPages ?? 1);
 
   const myReports = useMemo(
     () => (reports || []).map(toMyReportModel).filter(Boolean),
@@ -130,7 +144,11 @@ const ProfileView = () => {
             user={profileUser}
             posts={activity}
             postsLoading={!myPostsLoaded && !myPostsError}
+            hasMorePosts={hasMorePosts}
+            loadingMorePosts={myPostsLoadingMore}
+            onLoadMorePosts={() => dispatch(fetchMoreMyPosts())}
             onReport={setReportPost}
+            onEdit={openEditor}
             onDelete={deleting ? undefined : setPendingDelete}
             isPremium={isPremium}
             subscriptionSlot={
@@ -165,6 +183,18 @@ const ProfileView = () => {
         post={reportPost}
         onClose={() => setReportPost(null)}
       />
+
+      {editingPost ? (
+        <CreatePostModal
+          open
+          mode="edit"
+          post={editingPost}
+          onClose={closeEditor}
+          user={profileUser}
+          submitting={saving}
+          onPublish={saveEdit}
+        />
+      ) : null}
 
       <ConfirmModal
         open={Boolean(pendingDelete)}

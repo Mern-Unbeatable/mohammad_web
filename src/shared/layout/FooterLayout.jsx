@@ -1,4 +1,9 @@
+import { Link } from 'react-router';
 import Container from '@/components/ui/Container';
+import { PRIVACY_PATH, TERMS_PATH } from '@/shared/constants/legal';
+
+const linkClass =
+  'text-[13px] text-[#475467] transition-colors hover:text-deep-blue lg:text-[14px]';
 
 const FooterLayout = () => {
   const currentYear = new Date().getFullYear();
@@ -8,12 +13,17 @@ const FooterLayout = () => {
         <p className="text-[13px] text-[#475467] lg:text-[14px]">
           © {currentYear} Lab Unity. All Rights Reserved.
         </p>
-        <button
-          type="button"
-          className="text-[13px] text-[#475467] transition-colors hover:text-deep-blue lg:text-[14px]"
-        >
-          English
-        </button>
+        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+          <Link to={TERMS_PATH} className={linkClass}>
+            Terms of Service
+          </Link>
+          <Link to={PRIVACY_PATH} className={linkClass}>
+            Privacy Policy
+          </Link>
+          <button type="button" className={linkClass}>
+            English
+          </button>
+        </div>
       </Container>
     </footer>
   );

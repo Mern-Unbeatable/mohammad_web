@@ -1,5 +1,6 @@
 import { FileText } from 'lucide-react';
 import Avatar from '@/components/ui/Avatar';
+import { POST_TYPE_OPTIONS } from './postTypeOptions';
 
 export { PostStats, PostActions } from './PostActionsBar';
 
@@ -51,11 +52,11 @@ export const FeedComposer = ({ onCreatePost, user }) => (
       </button>
     </div>
     <div className="mt-3 flex flex-wrap gap-2 border-t border-[#E4E7EC] pt-3">
-      {['Create Post', 'Ask a Question', 'Share Information'].map((label) => (
+      {POST_TYPE_OPTIONS.map(({ id, label }) => (
         <button
-          key={label}
+          key={id}
           type="button"
-          onClick={onCreatePost}
+          onClick={() => onCreatePost(id)}
           className="rounded-full border border-[#E4E7EC] px-3.5 py-1.5 text-[12px] font-semibold text-[#475467] transition-colors hover:border-primary hover:text-primary"
         >
           {label}
@@ -66,13 +67,14 @@ export const FeedComposer = ({ onCreatePost, user }) => (
 );
 
 export const FeedFilters = ({ filters, activeFilter, onChange }) => (
-  <div className="flex flex-wrap gap-2">
+  <div className="-mx-4 flex gap-1.5 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:gap-2 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
     {filters.map(({ id, label }) => (
       <button
         key={id}
         type="button"
         onClick={() => onChange(id)}
-        className={`rounded-full px-4 py-1.5 text-[13px] font-semibold transition-colors ${
+        aria-pressed={activeFilter === id}
+        className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-semibold transition-colors sm:px-4 ${
           activeFilter === id
             ? 'bg-primary text-white'
             : 'border border-[#E4E7EC] bg-white text-[#475467] hover:border-primary/40'

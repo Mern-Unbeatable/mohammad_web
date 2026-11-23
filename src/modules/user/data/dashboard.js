@@ -57,36 +57,6 @@ export const feedFilters = [
   { id: 'suppliers', label: 'Suppliers' },
 ];
 
-export const suggestedPeople = [
-  {
-    id: 'thomas-vermeulen',
-    initials: 'TV',
-    name: 'Thomas Vermeulen',
-    company: 'BioLab Corp',
-    to: '/contacts/thomas-vermeulen',
-    avatar:
-      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=160&h=160&fit=crop&crop=face',
-  },
-  {
-    id: 'amina-haddad',
-    initials: 'AH',
-    name: 'Amina Haddad',
-    company: 'Institut Pasteur Lille',
-    to: '/contacts/amina-haddad',
-    avatar:
-      'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=160&h=160&fit=crop&crop=face',
-  },
-  {
-    id: 'ravi-kumar',
-    initials: 'RK',
-    name: 'Ravi Kumar',
-    company: 'SynLab Diagnostics',
-    to: '/contacts/ravi-kumar',
-    avatar:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqy5ShEFSxwHTFMoD48GNhTteRdlLb51azWU0ibObL5g&s=10',
-  },
-];
-
 export const marketplaceItems = [
   {
     id: 'agilent-1260-hplc',

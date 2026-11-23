@@ -123,6 +123,7 @@ export function toFeedPostModel(post) {
 
   const country = post.author?.country || post.author?.location || "";
   const postedAgo = formatRelativeTime(post.createdAt);
+  const images = getPostImageUrls(post);
 
   return {
     id: post.id,
@@ -136,7 +137,8 @@ export function toFeedPostModel(post) {
         postedAgo,
     },
     content: post.content || post.body || post.text || "",
-    image: post.image || post.imageUrl || null,
+    images,
+    image: images[0] || null,
     attachment: post.attachment
       ? post.attachment
       : post.documentUrl
@@ -162,6 +164,42 @@ export function toFeedPostModel(post) {
         ? String(post.reaction).toLowerCase()
         : null,
     reactionCounts: post.reactionCounts || null,
+    isRepost: Boolean(post.isRepost),
+    sharedPost: post.sharedPost ? toFeedPostModel(post.sharedPost) : null,
+    sharedByMe: Boolean(post.sharedByMe),
+    editedAt: post.editedAt || null,
+    edited: Boolean(post.editedAt),
     raw: post,
   };
+}
+
+/** Image URLs of an API post, falling back to the older single `imageUrl`. */
+export function getPostImageUrls(post) {
+  if (Array.isArray(post?.imageUrls) && post.imageUrls.length) {
+    return post.imageUrls.filter(Boolean);
+  }
+  const single = post?.image || post?.imageUrl;
+  return single ? [single] : [];
+}
+
+const sameList = (a, b) =>
+  a.length === b.length && a.every((value, index) => value === b[index]);
+
+/** PATCH body for `PATCH /feed/:id` holding only the fields that changed. */
+export function toUpdatePostPayload(original, values) {
+  if (!original) return {};
+  const payload = {};
+
+  const content = String(values?.content ?? "").trim();
+  if (content !== (original.content || "")) payload.content = content;
+
+  const imageUrls = (values?.imageUrls || []).filter(Boolean);
+  if (!sameList(imageUrls, getPostImageUrls(original))) {
+    payload.imageUrls = imageUrls;
+  }
+  const documentUrl = values?.documentUrl || null;
+  if (documentUrl !== (original.documentUrl || null)) {
+    payload.documentUrl = documentUrl;
+  }
+  return payload;
 }

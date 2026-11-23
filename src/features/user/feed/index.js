@@ -15,18 +15,26 @@ export {
 } from "./feedSlice";
 export {
   fetchFeed,
+  fetchMoreFeed,
   fetchMyPosts,
+  fetchMoreMyPosts,
+  fetchAuthorPosts,
   fetchPostDetails,
   createPost,
   updatePost,
   removePost,
   addComment,
+  editComment,
   removeComment,
   reactToPost,
+  repostPost,
+  undoRepost,
   likeComment,
 } from "./feedThunks";
 export {
   toFeedPostModel,
+  toUpdatePostPayload,
+  getPostImageUrls,
   formatRelativeTime,
 } from "./feedMappers";
 export * as feedApi from "./feedApi";

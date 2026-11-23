@@ -14,6 +14,8 @@ const initialState = {
   listingsMeta: { page: 1, pageSize: 8, total: 0, totalPages: 1 },
   selectedListing: null,
   listingsLoading: false,
+  listingsRequestId: null,
+  listingsError: null,
   selectedListingLoading: false,
   saving: false,
   deleting: false,
@@ -45,9 +47,11 @@ const marketplaceSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchListings.pending, (state) => {
+      .addCase(fetchListings.pending, (state, action) => {
         state.listingsLoading = true;
+        state.listingsRequestId = action.meta.requestId;
         state.error = null;
+        state.listingsError = null;
         state.listings = [];
         state.listingsMeta = {
           ...state.listingsMeta,
@@ -56,13 +60,17 @@ const marketplaceSlice = createSlice({
         };
       })
       .addCase(fetchListings.fulfilled, (state, action) => {
+        // Ignore responses for a page/filter the user has already left.
+        if (action.meta.requestId !== state.listingsRequestId) return;
         state.listingsLoading = false;
         state.listings = action.payload.data;
         state.listingsMeta = action.payload.meta;
       })
       .addCase(fetchListings.rejected, (state, action) => {
+        if (action.meta.requestId !== state.listingsRequestId) return;
         state.listingsLoading = false;
         state.error = action.payload;
+        state.listingsError = action.payload || "Failed to load listings";
       })
       .addCase(fetchListingDetails.pending, (state) => {
         state.selectedListingLoading = true;

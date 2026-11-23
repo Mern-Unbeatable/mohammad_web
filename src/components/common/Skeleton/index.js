@@ -1,5 +1,5 @@
-export { default } from './Skeleton';
-export { default as Skeleton } from './Skeleton';
+export { default } from "./Skeleton";
+export { default as Skeleton } from "./Skeleton";
 export {
   CardSkeleton,
   CARD_SKELETONS,
@@ -36,4 +36,4 @@ export {
   MessengerSkeleton,
   ProfileSetupFormSkeleton,
   BlogDetailSkeleton,
-} from './CardSkeletons';
+} from "./CardSkeletons";

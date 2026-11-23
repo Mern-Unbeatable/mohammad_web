@@ -1,12 +1,10 @@
-import { MessageCircle, Share2 } from 'lucide-react';
-import { getReaction } from '@/modules/user/data/reactions';
-import ReactionButton from './ReactionButton';
+import { MessageCircle, Share2 } from "lucide-react";
+import { getReaction } from "@/modules/user/data/reactions";
+import ReactionButton from "./ReactionButton";
 
 export const PostStats = ({ stats, reactionId, reactionCounts }) => {
   const selected = getReaction(reactionId);
-  const reactionLabel = selected
-    ? ` · You reacted with ${selected.emoji}`
-    : '';
+  const reactionLabel = selected ? ` · You reacted with ${selected.emoji}` : "";
 
   const topEmojis = reactionCounts
     ? Object.entries(reactionCounts)
@@ -18,8 +16,8 @@ export const PostStats = ({ stats, reactionId, reactionCounts }) => {
     : [];
 
   return (
-    <div className="flex items-center justify-between border-b border-[#E4E7EC] px-4 py-2 text-[12px] text-[#64748B]">
-      <span className="inline-flex items-center gap-1.5">
+    <div className="flex items-center justify-between gap-3 border-b border-[#E4E7EC] px-3 py-2 text-[12px] text-[#64748B] sm:px-4">
+      <span className="inline-flex min-w-0 items-center gap-1.5">
         {topEmojis.length ? (
           <span className="inline-flex items-center" aria-hidden>
             {topEmojis.map((emoji) => (
@@ -29,11 +27,11 @@ export const PostStats = ({ stats, reactionId, reactionCounts }) => {
             ))}
           </span>
         ) : null}
-        <span>
-          {stats.reactions} reactions · {stats.comments} comments{reactionLabel}
+        <span className="truncate">
+          {stats.reactions} reactions • {stats.comments} comments
         </span>
       </span>
-      <span>{stats.shares} shares</span>
+      <span className="shrink-0">{stats.shares} shares</span>
     </div>
   );
 };
@@ -53,26 +51,28 @@ export const PostActions = ({
     <button
       type="button"
       onClick={onToggleComments}
-      className={`flex items-center justify-center gap-2 py-3 text-[13px] font-medium transition-colors hover:bg-[#F9FAFB] ${
-        commentsOpen ? 'text-primary' : 'text-[#475467]'
+      className={`flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap px-1 py-3 text-[13px] font-medium transition-colors hover:bg-[#F9FAFB] sm:gap-2 ${
+        commentsOpen ? "text-primary" : "text-[#475467]"
       }`}
     >
-      <MessageCircle className="h-4 w-4" />
+      <MessageCircle className="h-4 w-4 shrink-0" />
       Comment
       {commentCount > 0 ? (
-        <span className="tabular-nums">({commentCount})</span>
+        <span className="hidden tabular-nums min-[400px]:inline">
+          ({commentCount})
+        </span>
       ) : null}
     </button>
 
     <button
       type="button"
       onClick={onShare}
-      className={`flex items-center justify-center gap-2 py-3 text-[13px] font-medium transition-colors hover:bg-[#F9FAFB] ${
-        shared ? 'text-primary' : 'text-[#475467]'
+      className={`flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap px-1 py-3 text-[13px] font-medium transition-colors hover:bg-[#F9FAFB] sm:gap-2 ${
+        shared ? "text-primary" : "text-[#475467]"
       }`}
     >
-      <Share2 className="h-4 w-4" />
-      {shared ? 'Shared' : 'Share'}
+      <Share2 className="h-4 w-4 shrink-0" />
+      {shared ? "Shared" : "Share"}
     </button>
   </div>
 );

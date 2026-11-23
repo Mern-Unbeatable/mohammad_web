@@ -16,6 +16,8 @@ const initialState = {
   applications: [],
   applicationsMeta: { page: 1, pageSize: 10, total: 0, totalPages: 1 },
   jobsLoading: true,
+  jobsRequestId: null,
+  jobsError: null,
   selectedJobLoading: false,
   applicationsLoading: false,
   saving: false,
@@ -52,13 +54,16 @@ const recruitmentSlice = createSlice({
         totalPages: 1,
       };
       state.error = null;
+      state.jobsError = null;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchJobs.pending, (state) => {
+      .addCase(fetchJobs.pending, (state, action) => {
         state.jobsLoading = true;
+        state.jobsRequestId = action.meta.requestId;
         state.error = null;
+        state.jobsError = null;
         state.jobs = [];
         state.jobsMeta = {
           ...state.jobsMeta,
@@ -67,13 +72,17 @@ const recruitmentSlice = createSlice({
         };
       })
       .addCase(fetchJobs.fulfilled, (state, action) => {
+        // Ignore responses for a page/filter the user has already left.
+        if (action.meta.requestId !== state.jobsRequestId) return;
         state.jobsLoading = false;
         state.jobs = action.payload.data;
         state.jobsMeta = action.payload.meta;
       })
       .addCase(fetchJobs.rejected, (state, action) => {
+        if (action.meta.requestId !== state.jobsRequestId) return;
         state.jobsLoading = false;
         state.error = action.payload;
+        state.jobsError = action.payload || "Failed to load jobs";
       })
       .addCase(fetchJobDetails.pending, (state) => {
         state.selectedJobLoading = true;
