@@ -61,7 +61,8 @@ const AdminReportDetailView = () => {
         open={reason.open}
         title={copy.title}
         submitLabel={copy.submitLabel}
-        placeholder="Add a moderation note…"
+        description={copy.description}
+        placeholder={copy.placeholder || "Add a moderation note…"}
         onClose={reason.close}
         onConfirm={reason.confirm}
       />

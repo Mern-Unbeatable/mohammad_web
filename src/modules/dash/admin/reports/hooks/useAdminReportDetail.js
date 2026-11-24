@@ -27,7 +27,7 @@ export const useAdminReportDetail = () => {
 
   const [historyOpen, setHistoryOpen] = useState(false);
   const [reasonOpen, setReasonOpen] = useState(false);
-  const [pendingAction, setPendingAction] = useState(null);
+  const [pendingAction, setPendingAction] = useState(null); // DECISION_ACTIONS item
 
   useEffect(() => {
     if (reportId) dispatch(fetchReportDetails(reportId));
@@ -69,14 +69,9 @@ export const useAdminReportDetail = () => {
     toast.error(result.payload || "Failed to resolve report");
   };
 
-  const decide = ({ id, kind }) => {
-    if (kind === "resolve") return resolve();
-    if (kind === "reason") {
-      setPendingAction(id);
-      setReasonOpen(true);
-      return undefined;
-    }
-    return moderate(id);
+  const decide = (action) => {
+    setPendingAction(action);
+    setReasonOpen(true);
   };
 
   const openReporter = () => {
@@ -101,13 +96,18 @@ export const useAdminReportDetail = () => {
     },
     reason: {
       open: reasonOpen,
-      action: pendingAction,
+      action: pendingAction?.id || null,
       close: () => {
         setReasonOpen(false);
         setPendingAction(null);
       },
       confirm: (note) => {
-        if (pendingAction) moderate(pendingAction, note);
+        if (!pendingAction) return;
+        if (pendingAction.kind === "resolve") {
+          resolve();
+        } else {
+          moderate(pendingAction.id, note);
+        }
         setPendingAction(null);
       },
     },

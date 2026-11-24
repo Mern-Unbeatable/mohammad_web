@@ -60,13 +60,13 @@ export const ACTION_TONES = {
 };
 
 /**
- * Decision buttons in display order. `kind`: "moderate" runs the action at once,
- * "reason" asks for a note first, "resolve" marks the report resolved.
+ * Decision buttons in display order. Every action opens a confirm/note modal first.
+ * `kind`: "moderate" applies a moderation action; "resolve" marks the report resolved.
  */
 export const DECISION_ACTIONS = [
   { id: MODERATION.REMOVE_CONTENT, label: "Remove Content", icon: Trash2, tone: "red", kind: "moderate" },
   { id: MODERATION.WARN, label: "Warn User", icon: AlertTriangle, tone: "amber", kind: "moderate" },
-  { id: MODERATION.SUSPEND, label: "Suspend User", icon: UserX, tone: "orange", kind: "reason" },
-  { id: MODERATION.BAN, label: "Ban User", icon: Ban, tone: "pink", kind: "reason" },
+  { id: MODERATION.SUSPEND, label: "Suspend User", icon: UserX, tone: "orange", kind: "moderate" },
+  { id: MODERATION.BAN, label: "Ban User", icon: Ban, tone: "pink", kind: "moderate" },
   { id: "RESOLVE", label: "Mark Resolved", icon: CheckCircle2, tone: "green", kind: "resolve" },
 ];

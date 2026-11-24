@@ -36,9 +36,21 @@ describe("getReportRowActions", () => {
 });
 
 describe("reasonModalCopy", () => {
-  it("uses Ban wording only for BAN", () => {
-    expect(reasonModalCopy("BAN")).toEqual({ title: "Ban User", submitLabel: "Ban" });
-    expect(reasonModalCopy("SUSPEND")).toEqual({ title: "Suspend User", submitLabel: "Suspend" });
-    expect(reasonModalCopy(null).submitLabel).toBe("Suspend");
+  it("returns confirm copy for each moderation action", () => {
+    expect(reasonModalCopy("BAN")).toMatchObject({ title: "Ban User", submitLabel: "Ban" });
+    expect(reasonModalCopy("SUSPEND")).toMatchObject({
+      title: "Suspend User",
+      submitLabel: "Suspend",
+    });
+    expect(reasonModalCopy("WARN")).toMatchObject({ title: "Warn User", submitLabel: "Warn" });
+    expect(reasonModalCopy("REMOVE_CONTENT")).toMatchObject({
+      title: "Remove Content",
+      submitLabel: "Remove",
+    });
+    expect(reasonModalCopy("RESOLVE")).toMatchObject({
+      title: "Mark Resolved",
+      submitLabel: "Resolve",
+    });
+    expect(reasonModalCopy(null).submitLabel).toBe("Confirm");
   });
 });

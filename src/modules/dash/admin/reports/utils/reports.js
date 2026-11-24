@@ -35,8 +35,50 @@ export const getReportRowActions = (row, { onDetails, onStatus }) => [
   })),
 ];
 
-/** Title / button text of the note dialog for Suspend or Ban. */
-export const reasonModalCopy = (action) =>
-  action === MODERATION.BAN
-    ? { title: "Ban User", submitLabel: "Ban" }
-    : { title: "Suspend User", submitLabel: "Suspend" };
+/** Title / button text of the confirm-note dialog for each moderation action. */
+export const reasonModalCopy = (action) => {
+  switch (action) {
+    case MODERATION.REMOVE_CONTENT:
+      return {
+        title: "Remove Content",
+        submitLabel: "Remove",
+        description: "This will remove the reported content and resolve the case.",
+        placeholder: "Add a moderation note…",
+      };
+    case MODERATION.WARN:
+      return {
+        title: "Warn User",
+        submitLabel: "Warn",
+        description: "This will issue a warning to the reported user and resolve the case.",
+        placeholder: "Add a moderation note…",
+      };
+    case MODERATION.SUSPEND:
+      return {
+        title: "Suspend User",
+        submitLabel: "Suspend",
+        description: "This will suspend the reported user’s account and resolve the case.",
+        placeholder: "Add a suspension reason…",
+      };
+    case MODERATION.BAN:
+      return {
+        title: "Ban User",
+        submitLabel: "Ban",
+        description: "This will permanently ban the reported user and resolve the case.",
+        placeholder: "Add a ban reason…",
+      };
+    case "RESOLVE":
+      return {
+        title: "Mark Resolved",
+        submitLabel: "Resolve",
+        description: "This will close the report without further account action.",
+        placeholder: "Add a resolution note…",
+      };
+    default:
+      return {
+        title: "Confirm action",
+        submitLabel: "Confirm",
+        description: "Please confirm this moderation action.",
+        placeholder: "Add a moderation note…",
+      };
+  }
+};
