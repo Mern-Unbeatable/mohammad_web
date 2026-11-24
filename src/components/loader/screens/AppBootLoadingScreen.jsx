@@ -8,7 +8,7 @@ const AppBootLoadingScreen = () => (
       <img
         src="/logo-rm.png"
         alt="Lab Unity"
-        className="app-boot-logo-img h-auto w-[120px] max-w-[70vw] object-contain sm:w-[148px]"
+        className="h-auto w-[80px] max-w-[70vw] object-contain sm:w-[130px]"
         draggable={false}
       />
 
