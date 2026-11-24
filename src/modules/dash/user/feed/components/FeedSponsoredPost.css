@@ -79,6 +79,9 @@
 }
 
 .feed-sponsored-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 12px;
   font-weight: 600;
   color: #6b5eff;
@@ -88,6 +91,10 @@
   white-space: nowrap;
   flex-shrink: 0;
   margin-left: 8px;
+}
+
+.feed-sponsored-badge svg {
+  flex-shrink: 0;
 }
 
 /* Media section */

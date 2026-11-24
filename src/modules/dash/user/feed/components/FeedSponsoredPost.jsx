@@ -1,4 +1,5 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { Megaphone } from "lucide-react";
 import Card from "@/components/ui/Card";
 import "./FeedSponsoredPost.css";
 
@@ -101,7 +102,10 @@ const FeedSponsoredPost = memo(({
             </p>
           </div>
         </div>
-        <div className="feed-sponsored-badge">Sponsored</div>
+        <div className="feed-sponsored-badge" aria-label="Sponsored">
+          <Megaphone size={12} strokeWidth={2.25} aria-hidden="true" />
+          <span>Sponsored</span>
+        </div>
       </div>
 
       {/* Media */}
