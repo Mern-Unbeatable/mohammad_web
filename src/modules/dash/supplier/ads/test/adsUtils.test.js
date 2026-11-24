@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { buildAdsQuery } from "../utils/adsQuery";
 import { getAdRowActions } from "../utils/adRowActions";
+import { getAdManageActions } from "../utils/adManageActions";
 import { createLocalComment, toggleCommentLike } from "../utils/localComments";
 import { ADS_PAGE_SIZE } from "../constant/constants";
 
@@ -78,6 +79,23 @@ describe("getAdRowActions", () => {
     expect(actions.map((a) => a.id)).toEqual(["details", "delete"]);
     actions[1].onClick();
     expect(h.onDelete).toHaveBeenCalledWith("a4");
+  });
+});
+
+describe("getAdManageActions", () => {
+  it("offers pay and delete for unpaid drafts", () => {
+    expect(getAdManageActions("Pending payment").map((a) => a.id)).toEqual(["pay", "delete"]);
+  });
+
+  it("offers cancel while pending review or active", () => {
+    expect(getAdManageActions("Pending").map((a) => a.id)).toEqual(["cancel"]);
+    expect(getAdManageActions("Active").map((a) => a.id)).toEqual(["cancel"]);
+  });
+
+  it("offers resubmit or renew with delete when needed", () => {
+    expect(getAdManageActions("Rejected").map((a) => a.id)).toEqual(["resubmit", "delete"]);
+    expect(getAdManageActions("Expired").map((a) => a.id)).toEqual(["renew", "delete"]);
+    expect(getAdManageActions("Cancelled").map((a) => a.id)).toEqual(["delete"]);
   });
 });
 

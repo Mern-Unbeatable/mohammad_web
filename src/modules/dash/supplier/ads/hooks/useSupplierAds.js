@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router";
 import { toast } from "react-hot-toast";
@@ -24,7 +24,10 @@ export const useSupplierAds = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { ads, adsMeta, adsLoading, error } = useSelector((state) => state.supplierAds);
+  const { ads, adsMeta, adsLoading, error } = useSelector(
+    (state) => state.supplierAds,
+  );
+  const checkoutHandled = useRef(false);
 
   const [statusFilter, setStatusFilter] = useState(DEFAULT_STATUS_FILTER);
   const [search, setSearch] = useState("");
@@ -45,15 +48,16 @@ export const useSupplierAds = () => {
   useEffect(() => {
     dispatch(clearSupplierAdsError());
     dispatch(
-      fetchSupplierAds(buildAdsQuery({ page, statusFilter, search: debouncedSearch })),
+      fetchSupplierAds(
+        buildAdsQuery({ page, statusFilter, search: debouncedSearch }),
+      ),
     );
   }, [dispatch, page, statusFilter, debouncedSearch]);
 
-  useEffect(() => {
-    if (error) toast.error(error);
-  }, [error]);
-
-  const rows = useMemo(() => (ads || []).map(toAdRowModel).filter(Boolean), [ads]);
+  const rows = useMemo(
+    () => (ads || []).map(toAdRowModel).filter(Boolean),
+    [ads],
+  );
 
   const changeSearch = (value) => {
     setSearch(value);
@@ -78,34 +82,42 @@ export const useSupplierAds = () => {
   const handleCreated = () => {
     setPage(1);
     dispatch(
-      fetchSupplierAds(buildAdsQuery({ page: 1, statusFilter, search: debouncedSearch })),
+      fetchSupplierAds(
+        buildAdsQuery({ page: 1, statusFilter, search: debouncedSearch }),
+      ),
     );
   };
 
   const refresh = () => {
     dispatch(
-      fetchSupplierAds(buildAdsQuery({ page: 1, statusFilter, search: debouncedSearch })),
+      fetchSupplierAds(
+        buildAdsQuery({ page: 1, statusFilter, search: debouncedSearch }),
+      ),
     );
   };
 
-  // Handle return from Stripe Checkout (?checkout=success&ad=&session_id=).
+  // Handle Stripe Checkout return once (?checkout=success|cancelled&ad=&session_id=).
   useEffect(() => {
+    if (checkoutHandled.current) return;
+
     const checkout = searchParams.get("checkout");
     if (!checkout) return;
+
+    checkoutHandled.current = true;
     const adId = searchParams.get("ad");
     const sessionId = searchParams.get("session_id");
 
-    const clearParams = () => {
-      const next = new URLSearchParams(searchParams);
-      ["checkout", "ad", "session_id"].forEach((k) => next.delete(k));
-      setSearchParams(next, { replace: true });
-    };
+    const next = new URLSearchParams(searchParams);
+    ["checkout", "ad", "session_id"].forEach((k) => next.delete(k));
+    setSearchParams(next, { replace: true });
 
     if (checkout === "success" && adId && sessionId) {
       dispatch(confirmSupplierAdCheckout({ adId, sessionId }))
         .unwrap()
         .then(() => {
-          toast.success("Payment received — your advertisement is pending review.");
+          toast.success(
+            "Payment received — your advertisement is pending review.",
+          );
           refresh();
         })
         .catch((message) => {
@@ -114,11 +126,9 @@ export const useSupplierAds = () => {
               ? message
               : "We couldn't confirm your payment. Please check your advertisement status.",
           );
-        })
-        .finally(clearParams);
+        });
     } else if (checkout === "cancelled") {
-      toast("Payment cancelled. Your advertisement is saved and unpaid.");
-      clearParams();
+      toast.error("Payment cancelled. Your Ads is saved and unpaid.");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
@@ -168,6 +178,7 @@ export const useSupplierAds = () => {
   return {
     rows,
     loading: adsLoading,
+    error,
     total: adsMeta?.total || 0,
     summary: adsMeta?.summary || {
       total: 0,

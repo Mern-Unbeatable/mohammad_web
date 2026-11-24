@@ -5,6 +5,7 @@ import PanelPage from "@/components/layout/PanelPage";
 import PanelPageHeader from "@/components/layout/PanelPageHeader";
 import { panelPrimaryBtn } from "@/components/layout/panelPageTheme";
 import AdsTable from "../components/list/AdsTable";
+import ErrorBanner from "../components/common/ErrorBanner";
 import { useSupplierAds } from "../hooks/useSupplierAds";
 
 const SupplierAdsView = () => {
@@ -59,6 +60,8 @@ const SupplierAdsView = () => {
           <StatCard key={stat.id} {...stat} />
         ))}
       </div>
+
+      {ads.error ? <ErrorBanner>{ads.error}</ErrorBanner> : null}
 
       <AdsTable
         rows={ads.rows}

@@ -4,12 +4,14 @@ import { MemoryRouter } from "react-router";
 import RejectionNotice from "../components/detail/RejectionNotice";
 import BackToAdsLink from "../components/detail/BackToAdsLink";
 import AdDetailCard from "../components/detail/AdDetailCard";
+import AdHeader from "../components/detail/AdHeader";
+import AdStatusSidebar from "../components/detail/AdStatusSidebar";
 import { DEFAULT_REJECTION } from "../constant/constants";
 
 const ad = {
   companyInitials: "NL",
   company: "Novagen Labs",
-  category: "Product",
+  category: "Product Showcase",
   location: "Paris",
   title: "New HPLC column",
   description: "Sharper peaks.",
@@ -17,6 +19,11 @@ const ad = {
   startDate: "Oct 1, 2026",
   expiryDate: "Oct 15, 2026",
   price: "€60",
+  status: "Pending",
+  views: 12,
+  clicks: 3,
+  durationDays: 14,
+  rejectionReason: "",
   stats: null,
 };
 
@@ -42,5 +49,18 @@ describe("ads detail components", () => {
     expect(html).toContain("New HPLC column");
     expect(html).toContain("Expiry Date: Oct 15, 2026");
     expect(html).not.toContain("Comment");
+  });
+
+  it("renders the split detail header and status sidebar", () => {
+    const header = renderToStaticMarkup(<AdHeader ad={ad} />);
+    expect(header).toContain("Novagen Labs");
+    expect(header).toContain("Sponsored");
+
+    const sidebar = renderToStaticMarkup(
+      <AdStatusSidebar ad={ad} busy={false} onAction={() => {}} />,
+    );
+    expect(sidebar).toContain("Status");
+    expect(sidebar).toContain("Pending");
+    expect(sidebar).toContain("Cancel advertisement");
   });
 });

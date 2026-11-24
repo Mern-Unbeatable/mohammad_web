@@ -2,8 +2,9 @@
 
 The supplier's own advertisements: the list (`/supplier/ads`) with KPI cards,
 search, status filter, paging, and create / resubmit / renew; and the detail
-page (`/supplier/ads/:adId`) with the ad preview, rejection reason, reactions
-and comments. Data comes from `@/features/dash/supplier/advertisements`.
+page (`/supplier/ads/:adId`) with a split preview + status sidebar (mirrors
+admin detail layout, with supplier manage actions). Data comes from
+`@/features/dash/supplier/advertisements`.
 
 ## Folder layout
 
@@ -11,33 +12,39 @@ and comments. Data comes from `@/features/dash/supplier/advertisements`.
 ads/
 ├── pages/
 │   ├── SupplierAdsView.jsx        Header + create button, KPI cards, AdsTable, CreateAdModal
-│   └── SupplierAdDetailView.jsx   Loading / not found, back link, rejection notice, card, comments
+│   └── SupplierAdDetailView.jsx   Back, preview card, status sidebar, CreateAdModal
 │
-├── index.js                       Public API: AdDetailCard (CreateAdModal preview), AdCell, ADS_PATH, adDetailPath (dashboard)
+├── index.js                       Public API: AdDetailCard (CreateAdModal preview), AdCell, ADS_PATH, adDetailPath
 │
 ├── constant/
-│   └── constants.js               Paths, page size, debounce delay, status labels, filter options, default rejection text
+│   └── constants.js               Paths, page size, status labels/pills, filter options, default rejection text
 │
 ├── components/
 │   ├── list/
 │   │   ├── AdsTable.jsx           DataTable with search, status filter, columns, row actions, pagination
 │   │   └── AdCell.jsx             Title + category icon and pill
-│   └── detail/
-│       ├── AdDetailCard.jsx       Company, title, description, image, dates, price, reactions bar
-│       ├── RejectionNotice.jsx    Red notice with the reason (or the default text)
-│       ├── BackToAdsLink.jsx
-│       └── AdComments.jsx         Framed PostComments
-│                              (CreateAdModal: @/components/modals/supplier)
+│   ├── detail/
+│   │   ├── AdHeader.jsx           Company + category + Sponsored
+│   │   ├── AdBody.jsx             Title, description, image, price
+│   │   ├── AdStatusSidebar.jsx    Status, metrics, rejection, manage actions
+│   │   ├── AdManageActions.jsx    Pay / cancel / resubmit / renew / delete
+│   │   ├── AdDetailCard.jsx       CreateAdModal preview card
+│   │   ├── RejectionNotice.jsx
+│   │   ├── BackToAdsLink.jsx
+│   │   └── AdComments.jsx
+│   └── common/
+│       └── ErrorBanner.jsx
 │
 ├── hooks/
-│   ├── useSupplierAds.js          Filters, debounced search, paging, fetch, summary, row actions, create / resubmit modal
-│   ├── useSupplierAdDetail.js     Fetch by id → { status: loading | notFound | ready, ad }
-│   └── useAdEngagement.js         Reaction, share flag and in-memory comments
+│   ├── useSupplierAds.js          List filters, paging, row actions, create modal
+│   ├── useSupplierAdDetail.js     Detail fetch + manage actions + create modal
+│   └── useAdEngagement.js         In-memory reactions/comments (preview helpers)
 │
 ├── utils/
-│   ├── adsQuery.js                buildAdsQuery
-│   ├── adRowActions.js            getAdRowActions (details; resubmit if rejected; renew if expired)
-│   └── localComments.js           createLocalComment, toggleCommentLike
+│   ├── adsQuery.js
+│   ├── adRowActions.js
+│   ├── adManageActions.js
+│   └── localComments.js
 │
 ├── test/
 │   ├── adsUtils.test.js
@@ -55,7 +62,6 @@ ads/
 
 ## Notes
 
-- List layout mirrors `/admin/advertisement` (KPI cards + compact table); suppliers
-  keep the create / pay / resubmit actions.
-- Comments and reactions on the detail page are kept in memory and are lost
-  on reload; there is no ads comments API yet.
+- List and detail layouts mirror `/admin/advertisement`; suppliers keep create /
+  pay / cancel / resubmit / renew / delete instead of admin review actions.
+- `AdDetailCard` remains for CreateAdModal preview (`showSocial={false}`).

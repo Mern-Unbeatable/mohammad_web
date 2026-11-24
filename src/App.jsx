@@ -17,6 +17,10 @@ function App() {
               background: "#dc2626",
               color: "#fff",
             },
+            iconTheme: {
+              primary: "#fff",
+              secondary: "#dc2626",
+            },
           },
         }}
       />

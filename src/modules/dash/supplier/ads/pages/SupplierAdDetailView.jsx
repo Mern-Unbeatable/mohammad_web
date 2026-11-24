@@ -1,26 +1,25 @@
 import { Navigate, useParams } from "react-router";
+import CreateAdModal from "@/components/modals/supplier/CreateAdModal";
+import Card from "@/components/ui/Card";
 import { AdvertisementDetailSkeleton } from "@/components/loader";
 import PanelPage from "@/components/layout/PanelPage";
-import PanelPageHeader from "@/components/layout/PanelPageHeader";
-import AdDetailCard from "../components/detail/AdDetailCard";
-import AdComments from "../components/detail/AdComments";
-import BackToAdsLink from "../components/detail/BackToAdsLink";
-import RejectionNotice from "../components/detail/RejectionNotice";
+import PanelBackButton from "@/components/layout/PanelBackButton";
+import AdHeader from "../components/detail/AdHeader";
+import AdBody from "../components/detail/AdBody";
+import AdStatusSidebar from "../components/detail/AdStatusSidebar";
 import { useSupplierAdDetail } from "../hooks/useSupplierAdDetail";
-import { useAdEngagement } from "../hooks/useAdEngagement";
-import { ADS_PATH, AD_STATUS } from "../constant/constants";
+import { ADS_PATH } from "../constant/constants";
 
 const SupplierAdDetailView = () => {
   const { adId } = useParams();
-  const { status, ad } = useSupplierAdDetail(adId);
-  const engagement = useAdEngagement();
+  const detail = useSupplierAdDetail(adId);
+  const { ad } = detail;
 
-  if (status === "notFound") return <Navigate to={ADS_PATH} replace />;
+  if (detail.status === "notFound") return <Navigate to={ADS_PATH} replace />;
 
-  if (status === "loading") {
+  if (detail.status === "loading") {
     return (
       <PanelPage>
-        <PanelPageHeader title="My Advertisement Details" />
         <AdvertisementDetailSkeleton />
       </PanelPage>
     );
@@ -28,28 +27,27 @@ const SupplierAdDetailView = () => {
 
   return (
     <PanelPage>
-      <PanelPageHeader title="My Advertisement Details" />
-      <BackToAdsLink />
+      <PanelBackButton fallback={ADS_PATH} />
 
-      {ad.status === AD_STATUS.REJECTED ? <RejectionNotice reason={ad.rejectionReason} /> : null}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px] xl:gap-8">
+        <div className="min-w-0">
+          <Card className="overflow-hidden">
+            <AdHeader ad={ad} />
+            <AdBody ad={ad} />
+          </Card>
+        </div>
 
-      <AdDetailCard
-        ad={ad}
-        reactionId={engagement.reactionId}
-        commentsOpen={engagement.commentsOpen}
-        shared={engagement.shared}
-        onReact={engagement.react}
-        onToggleComments={engagement.toggleComments}
-        onShare={engagement.share}
+        <AdStatusSidebar ad={ad} busy={detail.busy} onAction={detail.runAction} />
+      </div>
+
+      <CreateAdModal
+        key={detail.createOpen ? detail.resubmitAdId || "renew" : "closed"}
+        open={detail.createOpen}
+        editAdId={detail.resubmitAdId}
+        initialAd={detail.resubmitAd}
+        onClose={detail.closeCreate}
+        onCreated={detail.handleCreated}
       />
-
-      {engagement.commentsOpen ? (
-        <AdComments
-          comments={engagement.comments}
-          onAddComment={engagement.addComment}
-          onLikeComment={engagement.likeComment}
-        />
-      ) : null}
     </PanelPage>
   );
 };

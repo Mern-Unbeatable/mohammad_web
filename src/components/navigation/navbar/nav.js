@@ -15,17 +15,27 @@ import {
   Users,
 } from 'lucide-react';
 
+/** Supplier sidebar — grouped like the admin panel for consistent scanning. */
 export const supplierNavItems = [
-  { to: '/supplier', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/supplier/ads', label: 'My Ads', icon: Megaphone },
-  { to: '/supplier/payments', label: 'Payments', icon: Receipt },
-  { to: '/supplier/contacts', label: 'Contacts', icon: Users },
-  { to: '/supplier/recruitment', label: 'Recruitment', icon: Briefcase, badge: 'newApplications' },
-  { to: '/supplier/general', label: 'General', icon: Newspaper },
-  { to: '/supplier/chat', label: 'Messages', icon: MessageSquare, badge: 'unreadMessages' },
-  { to: '/supplier/blogs', label: 'Blogs', icon: FileText },
-  { to: '/supplier/notifications', label: 'Notifications', icon: Bell, badge: 'unreadNotifications' },
-  { to: '/supplier/profile', label: 'Profile', icon: User },
+  // Overview
+  { to: '/supplier', label: 'Dashboard', icon: LayoutDashboard, end: true, section: 'Overview' },
+
+  // Content
+  { to: '/supplier/ads', label: 'Advertisement', icon: Megaphone, section: 'Content' },
+  { to: '/supplier/recruitment', label: 'Recruitment', icon: Briefcase, badge: 'newApplications', section: 'Content' },
+  { to: '/supplier/general', label: 'General Post', icon: Newspaper, section: 'Content' },
+  { to: '/supplier/blogs', label: 'Blogs', icon: FileText, section: 'Content' },
+
+  // People
+  { to: '/supplier/contacts', label: 'Contacts', icon: Users, section: 'People' },
+  { to: '/supplier/chat', label: 'Chat', icon: MessageSquare, badge: 'unreadMessages', section: 'People' },
+
+  // Insights
+  { to: '/supplier/payments', label: 'Payments', icon: Receipt, section: 'Insights' },
+
+  // Account
+  { to: '/supplier/notifications', label: 'Notifications', icon: Bell, badge: 'unreadNotifications', section: 'Account' },
+  { to: '/supplier/profile', label: 'Profile', icon: User, section: 'Account' },
 ];
 
 /** Admin sidebar — grouped for consistent scanning. */
