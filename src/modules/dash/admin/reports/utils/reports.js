@@ -1,3 +1,4 @@
+import { CheckCircle2, Clock3, Eye, Search } from "lucide-react";
 import { statusFilterToApi } from "@/features/dash/admin/reports";
 import { MODERATION, REPORTS_PAGE_SIZE, REPORT_STATUS } from "../constant/constants";
 
@@ -12,17 +13,23 @@ export const buildReportsQuery = ({ page, statusFilter, search }) => {
 };
 
 const STATUS_ACTIONS = [
-  { id: "pending", label: REPORT_STATUS.PENDING },
-  { id: "review", label: REPORT_STATUS.UNDER_REVIEW },
-  { id: "resolved", label: REPORT_STATUS.RESOLVED },
+  { id: "pending", label: REPORT_STATUS.PENDING, icon: Clock3 },
+  { id: "review", label: REPORT_STATUS.UNDER_REVIEW, icon: Search },
+  { id: "resolved", label: REPORT_STATUS.RESOLVED, icon: CheckCircle2 },
 ];
 
 /** DataTable row menu: See Details, then one entry per status (the current one disabled). */
 export const getReportRowActions = (row, { onDetails, onStatus }) => [
-  { id: "details", label: "See Details", onClick: () => onDetails(row.id) },
-  ...STATUS_ACTIONS.map(({ id, label }) => ({
+  {
+    id: "details",
+    label: "See Details",
+    icon: Eye,
+    onClick: () => onDetails(row.id),
+  },
+  ...STATUS_ACTIONS.map(({ id, label, icon }) => ({
     id,
     label,
+    icon,
     disabled: () => row.status === label,
     onClick: () => onStatus(row.id, label),
   })),

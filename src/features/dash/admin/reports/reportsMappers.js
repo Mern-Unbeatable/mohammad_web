@@ -63,7 +63,7 @@ const initialsFromName = (name = "") =>
     .join("") || "U";
 
 export function formatReportDate(dateValue) {
-  return formatDate(dateValue, { locale: "en-GB", fallback: "—" });
+  return formatDate(dateValue, { format: "short", fallback: "—" });
 }
 
 export function formatDateTime(dateValue) {
@@ -125,10 +125,14 @@ export function toReportRowModel(report) {
   return {
     id: report.id,
     reportedBy: reporter.name,
+    reporterAvatar: reporter.avatar,
+    reporterInitials: reporter.initials,
     reportedItem: report.targetSnippet || report.reasonDetail || "—",
     type: TARGET_LABEL[report.targetType] || report.targetType,
     reason: REASON_LABEL[report.reason] || report.reason,
     reportedUser: reportedUser.name,
+    reportedUserAvatar: reportedUser.avatar,
+    reportedUserInitials: reportedUser.initials,
     reportCount: reportedUser.warnings || 0,
     reportedDate: formatReportDate(report.createdAt),
     status: STATUS_LABEL[report.status] || report.status,

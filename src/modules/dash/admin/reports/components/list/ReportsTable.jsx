@@ -1,10 +1,16 @@
 import DataTable from "@/components/data-display/DataTable/DataTable";
 import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
+import ReportedByCell from "./ReportedByCell";
 import ReportedUserCell from "./ReportedUserCell";
 import { REPORTS_PAGE_SIZE, STATUS_FILTER_OPTIONS } from "../../constant/constants";
 
 const COLUMNS = [
-  { key: "reportedBy", header: "Reported By", className: "font-semibold" },
+  {
+    key: "reportedBy",
+    header: "Reported By",
+    render: (_, row) => <ReportedByCell row={row} />,
+  },
+  { key: "reportedDate", header: "Reported Date", className: "font-semibold" },
   {
     key: "reportedItem",
     header: "Reported Item",
@@ -14,14 +20,13 @@ const COLUMNS = [
       </span>
     ),
   },
-  { key: "type", header: "Type" },
-  { key: "reason", header: "Reason" },
   {
     key: "reportedUser",
     header: "Reported User",
     render: (_, row) => <ReportedUserCell row={row} />,
   },
-  { key: "reportedDate", header: "Reported Date" },
+  { key: "type", header: "Type" },
+  { key: "reason", header: "Reason" },
   {
     key: "status",
     header: "Status",
@@ -43,6 +48,7 @@ const ReportsTable = ({
   onPageChange,
 }) => (
   <DataTable
+    compact
     showSearch
     searchValue={search}
     onSearchChange={onSearchChange}
