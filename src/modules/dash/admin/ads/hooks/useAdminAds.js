@@ -59,6 +59,12 @@ export const useAdminAds = () => {
     error,
     page: adsMeta?.page || page,
     total: adsMeta?.total || 0,
+    summary: adsMeta?.summary || {
+      total: 0,
+      active: 0,
+      pending: 0,
+      expired: 0,
+    },
     changePage: setPage,
     search,
     changeSearch: setSearch,

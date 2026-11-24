@@ -7,7 +7,13 @@ import {
 
 const initialState = {
   ads: [],
-  adsMeta: { page: 1, pageSize: 10, total: 0, totalPages: 1 },
+  adsMeta: {
+    page: 1,
+    pageSize: 10,
+    total: 0,
+    totalPages: 1,
+    summary: { total: 0, active: 0, pending: 0, expired: 0 },
+  },
   selectedAd: null,
   adsLoading: false,
   selectedAdLoading: false,

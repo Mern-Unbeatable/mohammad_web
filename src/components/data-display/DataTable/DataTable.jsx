@@ -72,9 +72,13 @@ const DataTable = ({
             ) : null}
 
             {showSearch || (showFilters && filters.length > 0) ? (
-              <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between lg:ml-auto lg:w-auto lg:justify-end">
+              <div
+                className={`flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between ${
+                  showTabs && tabs.length > 0 ? 'lg:ml-auto lg:w-auto lg:justify-end' : ''
+                }`}
+              >
                 {showSearch ? (
-                  <label className="flex w-full min-w-0 max-w-md items-center rounded-lg border border-[#E4E7EC] bg-white px-3 py-2 focus-within:border-primary lg:w-72 xl:w-80">
+                  <label className="flex w-full min-w-0 max-w-md items-center rounded-lg border border-[#E4E7EC] bg-white px-3 py-2 focus-within:border-primary">
                     <input
                       type="search"
                       value={searchValue}
@@ -85,7 +89,7 @@ const DataTable = ({
                   </label>
                 ) : null}
                 {showFilters && filters.length > 0 ? (
-                  <div className="self-end sm:self-auto">
+                  <div className="self-end sm:self-auto sm:ml-auto">
                     <FiltersBar filterLabel={filterLabel} filters={filters} />
                   </div>
                 ) : null}

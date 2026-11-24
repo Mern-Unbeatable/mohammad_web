@@ -30,6 +30,7 @@ const AdsTable = ({
   onPageChange,
 }) => (
   <DataTable
+    compact
     showSearch
     searchValue={search}
     onSearchChange={onSearchChange}

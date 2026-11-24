@@ -31,16 +31,16 @@ const AdCell = ({ row }) => {
   const { icon: Icon, className } = CATEGORY_ICON[key] || DEFAULT_ICON;
 
   return (
-    <div className="flex items-start gap-3">
+    <div className="flex items-center gap-2.5">
       <span
-        className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${className}`}
+        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${className}`}
         aria-hidden="true"
       >
-        <Icon className="h-4 w-4" strokeWidth={2} />
+        <Icon className="h-3.5 w-3.5" strokeWidth={2} />
       </span>
-      <div className="min-w-0">
-        <p className="font-semibold text-deep-blue">{row.title}</p>
-        <CategoryPill label={row.category} className="mt-1" />
+      <div className="min-w-0 leading-tight">
+        <p className="truncate text-[13px] font-semibold text-deep-blue">{row.title}</p>
+        <CategoryPill label={row.category} className="mt-0.5" />
       </div>
     </div>
   );

@@ -19,17 +19,18 @@ const parseListResponse = (response, params = {}) => {
     pageSize: params.pageSize || 10,
     total: 0,
     totalPages: 1,
+    summary: { total: 0, active: 0, pending: 0, expired: 0 },
   };
 
   if (Array.isArray(inner)) {
     rows = inner;
-    metaData = outer?.meta || metaData;
+    metaData = { ...metaData, ...(outer?.meta || {}) };
   } else if (Array.isArray(inner?.data)) {
     rows = inner.data;
-    metaData = inner.meta || outer?.meta || metaData;
+    metaData = { ...metaData, ...(inner.meta || outer?.meta || {}) };
   } else if (Array.isArray(outer?.data)) {
     rows = outer.data;
-    metaData = outer.meta || metaData;
+    metaData = { ...metaData, ...(outer.meta || {}) };
   }
 
   if (!metaData.total && rows.length) {
