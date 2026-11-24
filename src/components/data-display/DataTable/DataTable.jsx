@@ -146,7 +146,10 @@ const DataTable = ({
 
               {!loading
                 ? data.map((row, rowIndex) => (
-                    <tr key={getRowKey(row, rowIndex)} className="border-b border-[#F4F5F7] last:border-b-0">
+                    <tr
+                      key={getRowKey(row, rowIndex)}
+                      className="border-b border-[#F4F5F7] transition-colors last:border-b-0 hover:bg-[#F8FAFC]"
+                    >
                       {columns.map((column) => {
                         const value = row?.[column.key];
                         const wrapClass = column.wrap ? 'whitespace-normal break-words' : 'whitespace-nowrap';
