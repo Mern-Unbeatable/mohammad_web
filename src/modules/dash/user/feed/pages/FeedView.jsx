@@ -71,15 +71,6 @@ const FeedViewContent = ({
 }) => {
   const { feedAds, trackImpression, trackClick } = useAdvertisementDistribution();
 
-  // Create wrapper tracking functions for feed ads
-  const handleTrackAdImpression = (adId) => {
-    trackImpression(adId);
-  };
-
-  const handleTrackAdClick = (adId) => {
-    trackClick(adId);
-  };
-
   return (
     <>
       <DashboardPage
@@ -109,8 +100,8 @@ const FeedViewContent = ({
             onReport={setReportPost}
             onEdit={openEditor}
             onDelete={deletion.requestDelete}
-            onTrackAdImpression={handleTrackAdImpression}
-            onTrackAdClick={handleTrackAdClick}
+            onTrackAdImpression={trackImpression}
+            onTrackAdClick={trackClick}
           />
         </section>
 
