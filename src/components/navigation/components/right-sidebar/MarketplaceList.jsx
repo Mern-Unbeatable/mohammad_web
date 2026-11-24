@@ -34,13 +34,20 @@ const MarketplaceList = ({ items, loading }) => (
                   <ShoppingBag className="h-4 w-4" aria-hidden="true" />
                 </span>
               )}
-              <div className="min-w-0 flex-1">
-                <p className="text-[13px] text-deep-blue hover:text-primary">
-                  {title}
-                </p>
-                <p className="mt-0.5 text-[12px] text-[#64748B]">{meta}</p>
-                <p className="mt-1 text-[13px] font-bold text-primary">
-                  {price}
+              <div className="min-w-0 flex-1 overflow-hidden">
+                <div className="flex min-w-0 items-start gap-2">
+                  <p
+                    className="min-w-0 flex-1 truncate text-[13px] text-deep-blue hover:text-primary"
+                    title={title}
+                  >
+                    {title}
+                  </p>
+                  <p className="shrink-0 whitespace-nowrap text-[13px] font-bold text-primary">
+                    {price}
+                  </p>
+                </div>
+                <p className="mt-0.5 truncate text-[12px] text-[#64748B]" title={meta}>
+                  {meta}
                 </p>
               </div>
             </Link>

@@ -21,10 +21,14 @@ export const FILTER_TO_API_TYPE = {
 /* ---------- Post card ---------- */
 
 export const POST_BADGES = {
-  question: { variant: "question", label: "Question" },
-  information: { variant: "information", label: "Information" },
-  sponsored: { variant: "sponsored", label: "• Sponsored" },
-  promo: { variant: "sponsored", label: "• Sponsored" },
+  question: { variant: "question", label: "Question", shortLabel: "Q" },
+  information: {
+    variant: "information",
+    label: "Information",
+    shortLabel: "Info",
+  },
+  sponsored: { variant: "sponsored", label: "• Sponsored", shortLabel: "Ad" },
+  promo: { variant: "sponsored", label: "• Sponsored", shortLabel: "Ad" },
 };
 
 /* ---------- Comments ---------- */

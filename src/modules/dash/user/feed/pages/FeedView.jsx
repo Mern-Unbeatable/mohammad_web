@@ -82,10 +82,13 @@ const FeedViewContent = ({
 
   return (
     <>
-      <DashboardPage spacing="compact" className="flex gap-8">
+      <DashboardPage
+        spacing="compact"
+        className="flex gap-4 !px-2 sm:gap-8 sm:!px-6 lg:!px-8"
+      >
         <LeftSidebar />
 
-        <section className="min-w-0 w-full flex-1 space-y-4">
+        <section className="min-w-0 w-full flex-1 space-y-2 sm:space-y-4">
           <div className="hidden sm:block">
             <FeedComposer user={user} onCreatePost={create.openCreatePost} />
           </div>

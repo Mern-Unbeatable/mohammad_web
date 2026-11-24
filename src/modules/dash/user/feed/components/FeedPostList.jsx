@@ -84,20 +84,31 @@ const FeedPostList = ({
   const authorIds = useMemo(
     () =>
       Array.from(
-        new Set(posts.map((post) => post?.author?.id).filter((id) => typeof id === "string" && id)),
+        new Set(
+          posts
+            .map((post) => post?.author?.id)
+            .filter((id) => typeof id === "string" && id),
+        ),
       ),
     [posts],
   );
   const { getStatus } = useUserPresence(authorIds);
 
   const mergedItems = useMemo(
-    () => mergePostsWithAds(posts, feedAds, onTrackAdImpression, onTrackAdClick),
+    () =>
+      mergePostsWithAds(posts, feedAds, onTrackAdImpression, onTrackAdClick),
     [posts, feedAds, onTrackAdImpression, onTrackAdClick],
   );
 
   if (posts.length === 0) {
     if (loading) {
-      return <CardSkeleton variant="feedPost" count={3} className="space-y-4" />;
+      return (
+        <CardSkeleton
+          variant="feedPost"
+          count={3}
+          className="space-y-2 sm:space-y-4"
+        />
+      );
     }
     if (failed) {
       return (
@@ -121,8 +132,8 @@ const FeedPostList = ({
   }
 
   return (
-    <div className="space-y-4">
-      {mergedItems.map((item, idx) => {
+    <div className="space-y-1.5 sm:space-y-4">
+      {mergedItems.map((item) => {
         if (item.type === "post") {
           return (
             <FeedPost
@@ -157,7 +168,9 @@ const FeedPostList = ({
         }
         return null;
       })}
-      {hasMore ? <LoadMorePosts onClick={onLoadMore} loading={loadingMore} /> : null}
+      {hasMore ? (
+        <LoadMorePosts onClick={onLoadMore} loading={loadingMore} />
+      ) : null}
     </div>
   );
 };

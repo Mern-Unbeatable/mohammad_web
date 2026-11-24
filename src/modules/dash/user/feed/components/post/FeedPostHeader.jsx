@@ -63,8 +63,8 @@ const FeedPostHeader = ({
       </AuthorLink>
 
       <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-          <h3 className="min-w-0 break-words text-[14px] font-bold leading-5 text-deep-blue">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5 sm:gap-x-2">
+          <h3 className="min-w-0 max-w-[min(100%,12rem)] truncate text-[13px] font-bold leading-5 text-deep-blue sm:max-w-none sm:text-[14px] sm:whitespace-normal sm:break-words">
             <AuthorLink
               author={author}
               className="rounded-sm hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-primary"
@@ -73,16 +73,23 @@ const FeedPostHeader = ({
             </AuthorLink>
           </h3>
           {post.isRepost && (
-            <span className="inline-flex items-center gap-1 text-[13px] text-[#64748B]">
-              <Repeat2 className="h-3.5 w-3.5" />
-              shared a post
+            <span className="inline-flex items-center gap-1 text-[11px] text-[#64748B] sm:text-[13px]">
+              <Repeat2 className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+              <span className="sm:hidden">shared</span>
+              <span className="hidden sm:inline">shared a post</span>
             </span>
           )}
-          {badge && <Badge variant={badge.variant}>{badge.label}</Badge>}
+          {badge && (
+            <Badge variant={badge.variant} className="shrink-0">
+              <span className="sm:hidden">{badge.shortLabel || badge.label}</span>
+              <span className="hidden sm:inline">{badge.label}</span>
+            </Badge>
+          )}
           {post.type === "promo" && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-pink-secondary px-2 py-0.5 text-[10px] font-semibold text-pink-light">
-              <Tag className="h-3 w-3" />
-              Promotional Offer
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-pink-secondary px-1.5 py-0.5 text-[9px] font-semibold text-pink-light sm:px-2 sm:text-[10px]">
+              <Tag className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+              <span className="sm:hidden">Promo</span>
+              <span className="hidden sm:inline">Promotional Offer</span>
             </span>
           )}
         </div>
