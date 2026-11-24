@@ -4,12 +4,13 @@ const variants = {
   sponsored: "border border-green-primary/30 bg-white text-green-primary",
   post: "bg-[#F3F4F6] text-[#64748B]",
   fulltime: "bg-secondary text-primary",
+  workplace: "bg-[#F4F3FF] text-[#5925DC]",
   promo: "bg-[#FDF0F6] text-pink-light",
 };
 
 const Badge = ({ children, variant = "post", className = "" }) => (
   <span
-    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide sm:text-[11px] ${variants[variant]} ${className}`}
+    className={`inline-flex max-w-full items-center truncate rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide sm:px-2.5 sm:text-[10px] ${variants[variant]} ${className}`}
   >
     {children}
   </span>

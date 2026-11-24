@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { tokenService } from "@/api/cookies";
-import { unwrapUser } from "@/api/unwrapApiData";
+import { tokenService, unwrapUser } from "@/config";
 import {
   loginUser,
   registerUser,
   fetchUserProfile,
+  bootstrapSession,
   refreshSession,
   logoutUser,
   changePassword,
@@ -12,32 +12,24 @@ import {
   resetPassword,
 } from "./authThunks";
 
-/** Heal cookies/state if an older bug stored the API envelope as `user`. */
+/** Heal state if an older bug stored the API envelope as `user`. */
 const coerceStoredUser = (raw) => {
   if (!raw || typeof raw !== "object") return raw;
   if (raw.role || raw.email || raw.id) return raw;
   return unwrapUser(raw) || raw;
 };
 
-const initialUser = coerceStoredUser(tokenService.getUser());
-
-if (
-  initialUser &&
-  typeof initialUser === "object" &&
-  initialUser.role &&
-  tokenService.getUser() &&
-  !tokenService.getUser().role
-) {
-  tokenService.setUser(initialUser);
-}
-
 const initialState = {
-  user: initialUser,
-  token: tokenService.getToken(),
-  isAuthenticated: !!(tokenService.getToken() && initialUser),
+  user: null,
+  token: null,
+  isAuthenticated: false,
   loading: false,
   error: null,
-  sessionReady: !tokenService.getToken(),
+  // Tokens live in httpOnly cookies invisible to JS, so we can't know
+  // synchronously whether a session exists. AuthSessionBridge resolves this by
+  // attempting a cookie-based refresh on mount, then flips sessionReady.
+  sessionReady: false,
+  loggingOut: false,
 };
 
 const applyReset = (state) => {
@@ -47,6 +39,7 @@ const applyReset = (state) => {
   state.loading = false;
   state.error = null;
   state.sessionReady = true;
+  state.loggingOut = false;
 };
 
 const authSlice = createSlice({
@@ -123,6 +116,20 @@ const authSlice = createSlice({
         state.sessionReady = true;
         state.error = action.payload;
       })
+      // Session bootstrap (cookie-based, silent)
+      .addCase(bootstrapSession.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.token = tokenService.getToken();
+        state.isAuthenticated = !!(action.payload && state.token);
+        state.sessionReady = true;
+        state.error = null;
+      })
+      .addCase(bootstrapSession.rejected, (state) => {
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
+        state.sessionReady = true;
+      })
       // Refresh
       .addCase(refreshSession.fulfilled, (state, action) => {
         state.token = action.payload?.accessToken || tokenService.getToken();
@@ -135,6 +142,9 @@ const authSlice = createSlice({
         state.sessionReady = true;
       })
       // Logout
+      .addCase(logoutUser.pending, (state) => {
+        state.loggingOut = true;
+      })
       .addCase(logoutUser.fulfilled, (state) => {
         applyReset(state);
       })

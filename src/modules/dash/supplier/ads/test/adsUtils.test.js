@@ -1,0 +1,119 @@
+import { describe, expect, it, vi } from "vitest";
+import { buildAdsQuery } from "../utils/adsQuery";
+import { getAdRowActions } from "../utils/adRowActions";
+import { getAdManageActions } from "../utils/adManageActions";
+import { createLocalComment, toggleCommentLike } from "../utils/localComments";
+import { ADS_PAGE_SIZE } from "../constant/constants";
+
+describe("buildAdsQuery", () => {
+  it("asks for the supplier's own ads, newest first, without status or search for defaults", () => {
+    expect(buildAdsQuery({ page: 1, statusFilter: "all", search: "  " })).toEqual({
+      page: 1,
+      pageSize: ADS_PAGE_SIZE,
+      sort: "desc",
+      mine: true,
+    });
+  });
+
+  it("maps status and a trimmed search", () => {
+    expect(
+      buildAdsQuery({ page: 3, statusFilter: "rejected", search: " lab " }),
+    ).toMatchObject({ page: 3, status: "REJECTED", search: "lab" });
+  });
+});
+
+describe("getAdRowActions", () => {
+  const handlers = () => ({
+    onDetails: vi.fn(),
+    onResubmit: vi.fn(),
+    onRenew: vi.fn(),
+    onPay: vi.fn(),
+    onCancel: vi.fn(),
+    onDelete: vi.fn(),
+  });
+
+  it("offers details and cancel for active ads", () => {
+    expect(getAdRowActions({ id: "a1", status: "Active" }, handlers()).map((a) => a.id)).toEqual([
+      "details",
+      "cancel",
+    ]);
+  });
+
+  it("offers pay now and delete for ads awaiting payment", () => {
+    const h = handlers();
+    const actions = getAdRowActions({ id: "a0", status: "Pending payment" }, h);
+    expect(actions.map((a) => a.id)).toEqual(["details", "pay", "delete"]);
+    actions[1].onClick();
+    expect(h.onPay).toHaveBeenCalledWith("a0");
+  });
+
+  it("offers cancel for ads pending review", () => {
+    const h = handlers();
+    const actions = getAdRowActions({ id: "ap", status: "Pending" }, h);
+    expect(actions.map((a) => a.id)).toEqual(["details", "cancel"]);
+    actions[1].onClick();
+    expect(h.onCancel).toHaveBeenCalledWith("ap");
+  });
+
+  it("adds resubmit and delete for rejected ads and passes the row id", () => {
+    const h = handlers();
+    const actions = getAdRowActions({ id: "a2", status: "Rejected" }, h);
+    expect(actions.map((a) => a.id)).toEqual(["details", "resubmit", "delete"]);
+    actions[1].onClick();
+    expect(h.onResubmit).toHaveBeenCalledWith("a2");
+  });
+
+  it("adds renew and delete for expired ads, which starts a fresh create", () => {
+    const h = handlers();
+    const actions = getAdRowActions({ id: "a3", status: "Expired" }, h);
+    expect(actions.map((a) => a.id)).toEqual(["details", "renew", "delete"]);
+    actions[0].onClick();
+    actions[1].onClick();
+    expect(h.onDetails).toHaveBeenCalledWith("a3");
+    expect(h.onRenew).toHaveBeenCalledWith();
+  });
+
+  it("offers delete for cancelled ads", () => {
+    const h = handlers();
+    const actions = getAdRowActions({ id: "a4", status: "Cancelled" }, h);
+    expect(actions.map((a) => a.id)).toEqual(["details", "delete"]);
+    actions[1].onClick();
+    expect(h.onDelete).toHaveBeenCalledWith("a4");
+  });
+});
+
+describe("getAdManageActions", () => {
+  it("offers pay and delete for unpaid drafts", () => {
+    expect(getAdManageActions("Pending payment").map((a) => a.id)).toEqual(["pay", "delete"]);
+  });
+
+  it("offers cancel while pending review or active", () => {
+    expect(getAdManageActions("Pending").map((a) => a.id)).toEqual(["cancel"]);
+    expect(getAdManageActions("Active").map((a) => a.id)).toEqual(["cancel"]);
+  });
+
+  it("offers resubmit or renew with delete when needed", () => {
+    expect(getAdManageActions("Rejected").map((a) => a.id)).toEqual(["resubmit", "delete"]);
+    expect(getAdManageActions("Expired").map((a) => a.id)).toEqual(["renew", "delete"]);
+    expect(getAdManageActions("Cancelled").map((a) => a.id)).toEqual(["delete"]);
+  });
+});
+
+describe("local comments", () => {
+  it("creates an unliked comment authored by the supplier", () => {
+    expect(createLocalComment("Nice", 42)).toMatchObject({
+      id: "c-42",
+      content: "Nice",
+      liked: false,
+      replies: 0,
+      author: { name: "You", subtitle: "Supplier" },
+    });
+  });
+
+  it("toggles the like on one comment only", () => {
+    const list = [createLocalComment("a", 1), createLocalComment("b", 2)];
+    const next = toggleCommentLike(list, "c-2");
+    expect(next.map((c) => c.liked)).toEqual([false, true]);
+    expect(next[0]).toBe(list[0]);
+  });
+});

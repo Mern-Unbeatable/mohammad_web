@@ -1,10 +1,7 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { LayoutChromeContext } from './useLayoutChrome';
 
-const LayoutChromeContext = createContext({
-  bottomNavHidden: false,
-  setBottomNavHidden: () => {},
-});
-
+/** Lets pages hide dashboard chrome (the mobile bottom nav) while they need the full viewport. */
 export const LayoutChromeProvider = ({ children }) => {
   const [bottomNavHidden, setBottomNavHidden] = useState(false);
 
@@ -17,5 +14,3 @@ export const LayoutChromeProvider = ({ children }) => {
     <LayoutChromeContext.Provider value={value}>{children}</LayoutChromeContext.Provider>
   );
 };
-
-export const useLayoutChrome = () => useContext(LayoutChromeContext);

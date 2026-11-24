@@ -1,0 +1,22 @@
+import Card from '@/components/ui/Card';
+import Skeleton from '@/components/loader/common/Skeleton';
+
+/** Matches StatCard (+ optional hint line used on supplier dashboard) */
+const StatCardSkeleton = ({ showHint = false }) => (
+  <Card className="flex h-full flex-col p-4 sm:p-5">
+    <div className="flex items-start gap-3 sm:gap-4">
+      <Skeleton className="h-10 w-10 shrink-0" rounded="lg" />
+      <div className="min-w-0 space-y-2">
+        <Skeleton className="h-3.5 w-24" />
+        <Skeleton className="h-6 w-16" />
+      </div>
+    </div>
+    {showHint ? (
+      <div className="mt-auto pt-3">
+        <Skeleton className="h-3 w-28" />
+      </div>
+    ) : null}
+  </Card>
+);
+
+export default StatCardSkeleton;

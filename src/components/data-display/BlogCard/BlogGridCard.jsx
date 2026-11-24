@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { ArrowRight, Clock } from 'lucide-react';
+import { ArrowRight, Clock, UserRound } from 'lucide-react';
 import BlogCategoryBadge from './BlogCategoryBadge';
 import { blogCardTheme } from './blogCardTheme';
 
@@ -24,8 +24,11 @@ const BlogGridCard = ({ article, blogBasePath = '/blogs' }) => (
 
       <div className="mt-3 flex flex-col gap-3 border-t border-[#E4E7EC] pt-3 sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:pt-4">
         <div className="flex min-w-0 items-center gap-2.5">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-deep-blue text-[11px] font-semibold text-white sm:text-[12px] lg:text-[13px]">
-            {article.authorInitials || 'MO'}
+          <span
+            aria-hidden="true"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-deep-blue text-white"
+          >
+            <UserRound className="h-4 w-4" strokeWidth={2.25} />
           </span>
           <div className="min-w-0">
             <p className={`truncate ${blogCardTheme.author}`}>{article.author}</p>
