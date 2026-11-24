@@ -66,11 +66,24 @@ export function formatPrice(price) {
 export function toAdRowModel(ad) {
   if (!ad) return null;
 
+  const supplier = ad.supplier || {};
+  const personName =
+    supplier.name ||
+    [supplier.firstName, supplier.lastName].filter(Boolean).join(" ") ||
+    "";
+  const company = supplier.company || "";
+  const supplierName = personName || company || "Unknown supplier";
+
   return {
     id: ad.id,
     title: ad.title,
     category: CATEGORY_LABEL[ad.category] || ad.category,
     status: STATUS_LABEL[ad.status] || ad.status,
+    supplierId: supplier.id || null,
+    supplierName,
+    supplierCompany: company,
+    supplierAvatar: supplier.avatar || supplier.avatarUrl || "",
+    supplierInitials: supplier.initials || initialsFromName(supplierName),
     views:
       ad.status === "PENDING" ||
       ad.status === "PENDING_PAYMENT" ||

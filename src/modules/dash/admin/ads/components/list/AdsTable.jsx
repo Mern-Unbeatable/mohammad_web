@@ -1,10 +1,12 @@
 import DataTable from "@/components/data-display/DataTable/DataTable";
 import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
 import AdCell from "./AdCell";
+import SupplierCell from "./SupplierCell";
 import { ADS_PAGE_SIZE, STATUS_FILTER_OPTIONS } from "../../constant/constants";
 
 const COLUMNS = [
   { key: "title", header: "Advertisement", render: (_, row) => <AdCell row={row} /> },
+  { key: "supplierName", header: "User", render: (_, row) => <SupplierCell row={row} /> },
   { key: "views", header: "Views" },
   { key: "clicks", header: "Clicks" },
   { key: "duration", header: "Duration", className: "font-semibold" },
@@ -47,7 +49,7 @@ const AdsTable = ({
     getActions={rowActions}
     showPagination
     pagination={{ page, pageSize: ADS_PAGE_SIZE, total, onPageChange }}
-    tableMinWidth="1000px"
+    tableMinWidth="1140px"
   />
 );
 
