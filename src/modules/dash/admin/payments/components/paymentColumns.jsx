@@ -1,23 +1,36 @@
 import { Link } from 'react-router';
+import Avatar from '@/components/ui/Avatar';
 import { InvoiceButtons, PaymentStatusBadge } from '@/components/payments';
 import { userDetailPath } from '../constant/constants';
 
 /** Admin payments table columns; the last column opens Stripe invoices. */
 export const getPaymentColumns = ({ openingKey, onOpen }) => [
-  { key: 'date', header: 'Date' },
   {
     key: 'user',
     header: 'Member',
     render: (user) =>
       user ? (
-        <Link to={userDetailPath(user.id)} className="block min-w-0 hover:text-primary">
-          <span className="block truncate font-semibold">{user.name}</span>
-          <span className="block truncate text-[12px] text-[#64748B]">{user.email}</span>
+        <Link
+          to={userDetailPath(user.id)}
+          className="flex min-w-0 items-center gap-3 hover:text-primary"
+        >
+          <Avatar
+            src={user.avatar}
+            alt={user.name}
+            initials={user.initials}
+            size="sm"
+            className="shrink-0"
+          />
+          <span className="min-w-0">
+            <span className="block truncate font-semibold">{user.name}</span>
+            <span className="block truncate text-[12px] text-[#64748B]">{user.email}</span>
+          </span>
         </Link>
       ) : (
         '—'
       ),
   },
+  { key: 'date', header: 'Date', className: 'font-semibold' },
   { key: 'kindLabel', header: 'Type' },
   {
     key: 'title',

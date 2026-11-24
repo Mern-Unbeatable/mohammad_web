@@ -25,6 +25,7 @@ export function formatMoney(amount, currency = "EUR") {
     return new Intl.NumberFormat("en-BE", {
       style: "currency",
       currency: String(currency || "EUR").toUpperCase(),
+      currencyDisplay: "narrowSymbol",
     }).format(value);
   } catch {
     return `${value.toFixed(2)} ${currency}`;

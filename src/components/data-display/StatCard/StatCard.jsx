@@ -22,7 +22,7 @@ const iconMap = {
 const StatCard = ({ id, icon: CustomIcon, label, value, currency, tone, className = '' }) => {
   const iconConfig = iconMap[id] || {};
   const Icon = CustomIcon || iconConfig.icon || Activity;
-  
+
   // Prefer explicit tone if provided, otherwise fall back to mapped tone for ID, then default to blue
   const activeTone = tone || iconConfig.tone || 'blue';
 
@@ -37,17 +37,23 @@ const StatCard = ({ id, icon: CustomIcon, label, value, currency, tone, classNam
 
   return (
     <Card className={`p-4 sm:p-5 ${className}`}>
-      <div
-        className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg ${
-          toneStyles[activeTone] || toneStyles.blue
-        }`}
-      >
-        <Icon className="h-5 w-5" strokeWidth={2} />
+      <div className="flex items-start gap-3 sm:gap-4">
+        <div
+          className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${
+            toneStyles[activeTone] || toneStyles.blue
+          }`}
+        >
+          <Icon className="h-5 w-5" strokeWidth={2} />
+        </div>
+        <div className="min-w-0">
+          <p className="text-[13px] font-medium text-[#64748B] sm:text-[14px] lg:text-[15px]">
+            {label}
+          </p>
+          <p className="mt-1 text-[22px] font-bold leading-none text-deep-blue sm:text-[24px] lg:text-[26px]">
+            {formattedValue}
+          </p>
+        </div>
       </div>
-      <p className="text-[13px] font-medium text-[#64748B] sm:text-[14px] lg:text-[15px]">{label}</p>
-      <p className="mt-1 text-[22px] font-bold leading-none text-deep-blue sm:text-[24px] lg:text-[26px]">
-        {formattedValue}
-      </p>
     </Card>
   );
 };

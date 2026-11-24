@@ -11,6 +11,11 @@ describe('formatMoney', () => {
   it('shows a dash for missing amounts', () => {
     expect(formatMoney(undefined)).toBe('—');
   });
+
+  it('uses a narrow dollar symbol without a US prefix', () => {
+    expect(formatMoney(19.99, 'USD')).toContain('$');
+    expect(formatMoney(19.99, 'USD')).not.toContain('US');
+  });
 });
 
 describe('toPaymentModel', () => {
