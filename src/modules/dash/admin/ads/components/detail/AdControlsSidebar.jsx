@@ -1,12 +1,23 @@
+import {
+  CalendarClock,
+  CalendarDays,
+  Eye,
+  MousePointerClick,
+  Timer,
+  Wallet,
+} from "lucide-react";
 import Card from "@/components/ui/Card";
 import { STATUS_PILL } from "../../constant/constants";
 import ErrorBanner from "../common/ErrorBanner";
 import AdCreatorCard from "./AdCreatorCard";
 import ReviewActions from "./ReviewActions";
 
-const MetaRow = ({ label, value }) => (
+const MetaRow = ({ icon: Icon, label, value }) => (
   <div className="flex items-center justify-between gap-3 text-[13px]">
-    <span className="text-[#64748B]">{label}</span>
+    <span className="inline-flex items-center gap-2 text-[#64748B]">
+      <Icon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.8} />
+      {label}
+    </span>
     <span className="font-semibold text-deep-blue">{value}</span>
   </div>
 );
@@ -29,15 +40,24 @@ const AdControlsSidebar = ({ ad, busy, onReview, onReject }) => (
       </div>
 
       <div className="space-y-3 px-5 py-4">
-        <MetaRow label="Views" value={Number(ad.views || 0).toLocaleString("en-US")} />
-        <MetaRow label="Clicks" value={Number(ad.clicks || 0).toLocaleString("en-US")} />
         <MetaRow
+          icon={Eye}
+          label="Views"
+          value={Number(ad.views || 0).toLocaleString("en-US")}
+        />
+        <MetaRow
+          icon={MousePointerClick}
+          label="Clicks"
+          value={Number(ad.clicks || 0).toLocaleString("en-US")}
+        />
+        <MetaRow
+          icon={Timer}
           label="Duration"
           value={ad.durationDays ? `${ad.durationDays} days` : "—"}
         />
-        <MetaRow label="Start" value={ad.startDate} />
-        <MetaRow label="Expiry" value={ad.expiryDate} />
-        <MetaRow label="Price" value={ad.price} />
+        <MetaRow icon={CalendarDays} label="Start" value={ad.startDate} />
+        <MetaRow icon={CalendarClock} label="Expiry" value={ad.expiryDate} />
+        <MetaRow icon={Wallet} label="Price" value={ad.price} />
       </div>
 
       {ad.rejectionReason ? (

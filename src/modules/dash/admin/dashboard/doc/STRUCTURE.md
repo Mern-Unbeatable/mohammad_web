@@ -1,16 +1,16 @@
 # Admin dashboard — structure
 
-The admin overview (`/admin`): KPI cards from `@/features/dash/admin/dashboard`
-(`state.adminDashboard`) and the user-growth / revenue charts from
-`@/features/dash/admin/statistics` (`state.adminStatistics`) for a chosen
-year, each chart with its own period.
+The admin overview (`/admin`): KPI cards, attention queues, month snapshot, and
+quick links from `@/features/dash/admin/dashboard` (`state.adminDashboard`),
+plus user-growth / revenue charts from `@/features/dash/admin/statistics`
+(`state.adminStatistics`) for a chosen year, each chart with its own period.
 
 ## Folder layout
 
 ```
 dashboard/
 ├── pages/
-│   └── AdminDashboardView.jsx        Header, KPI section, charts section
+│   └── AdminDashboardView.jsx        Header, KPIs, snapshot, attention, charts, quick links
 │
 ├── index.js                          Public API: PERIOD, PERIOD_OPTIONS, filterChartData, buildSeries, yearOptions
 │
@@ -20,7 +20,10 @@ dashboard/
 ├── components/
 │   ├── overview/
 │   │   ├── DashboardHeader.jsx       Title + year select
-│   │   └── StatsSection.jsx          StatCards with skeleton / error / empty states
+│   │   ├── StatsSection.jsx          StatCards with skeleton / error / empty states
+│   │   ├── SnapshotSection.jsx       Secondary month metrics
+│   │   ├── AttentionSection.jsx      Pending reports + ads queues
+│   │   └── QuickLinksSection.jsx     Shortcuts into admin areas
 │   ├── charts/
 │   │   └── ChartsSection.jsx         Two LineChartCards with skeleton / error / empty states
 │   └── common/
@@ -48,10 +51,9 @@ dashboard/
 
 ## Notes
 
-- `loadDashboard` is now a `useCallback` on the year, so the effect lists its
-  real dependencies and the `eslint-disable` comment is gone. It still runs
-  once on mount and again whenever the year changes.
-- The KPI Retry reloads everything; the charts Retry only refetches
-  statistics, as before.
-- `AdminStatisticsView` still has its own copy of `filterChartData` and the
-  period options; it can import them from this feature's `index.js`.
+- `GET /admin/dashboard` returns `{ stats, attention, snapshot }`.
+- `loadDashboard` is a `useCallback` on the year, so the effect lists its real
+  dependencies. It runs on mount and whenever the year changes.
+- The KPI Retry reloads everything; the charts Retry only refetches statistics.
+- `AdminStatisticsView` can import `filterChartData` / period options from this
+  feature's `index.js`.

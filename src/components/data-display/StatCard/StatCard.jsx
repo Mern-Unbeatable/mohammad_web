@@ -1,4 +1,15 @@
-import { Users, UserPlus, CreditCard, DollarSign, Briefcase, Tag, Activity } from 'lucide-react';
+import {
+  Users,
+  UserPlus,
+  CreditCard,
+  DollarSign,
+  Briefcase,
+  Tag,
+  Activity,
+  ShieldAlert,
+  Megaphone,
+  Building2,
+} from 'lucide-react';
 import Card from '@/components/ui/Card';
 
 const toneStyles = {
@@ -17,6 +28,9 @@ const iconMap = {
   'monthly-revenue': { icon: DollarSign, tone: 'green' },
   'new-jobs': { icon: Briefcase, tone: 'orange' },
   'marketplace-listings': { icon: Tag, tone: 'teal' },
+  'pending-reports': { icon: ShieldAlert, tone: 'orange' },
+  'pending-ads': { icon: Megaphone, tone: 'pink' },
+  suppliers: { icon: Building2, tone: 'teal' },
 };
 
 const StatCard = ({ id, icon: CustomIcon, label, value, currency, tone, className = '' }) => {

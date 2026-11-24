@@ -5,10 +5,12 @@ import { fetchAdminStatistics, clearStatisticsError } from "@/features/dash/admi
 import { buildSeries, filterChartData, yearOptions } from "../utils/chartData";
 import { PERIOD, REVENUE_LINES, USER_GROWTH_LINES } from "../constant/constants";
 
-/** KPI stats and the user-growth / revenue charts for a chosen year, each with its own period. */
+/** KPI stats, attention queues, and the user-growth / revenue charts. */
 export const useAdminDashboard = () => {
   const dispatch = useDispatch();
-  const { stats, loading, statsError } = useSelector((state) => state.adminDashboard);
+  const { stats, attention, snapshot, loading, statsError } = useSelector(
+    (state) => state.adminDashboard,
+  );
   const { statistics, statisticsLoading, statisticsError } = useSelector(
     (state) => state.adminStatistics,
   );
@@ -43,6 +45,8 @@ export const useAdminDashboard = () => {
     chartYear,
     setChartYear,
     stats,
+    attention,
+    snapshot,
     statsLoading: loading,
     statsError,
     hasStats: Array.isArray(stats) && stats.length > 0,

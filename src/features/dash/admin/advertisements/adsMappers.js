@@ -49,7 +49,7 @@ export function formatUploadDate(dateValue) {
 }
 
 export function formatDisplayDate(dateValue) {
-  return formatDate(dateValue, { fallback: "—" });
+  return formatDate(dateValue, { format: "short", fallback: "—" });
 }
 
 export function formatPrice(price) {
