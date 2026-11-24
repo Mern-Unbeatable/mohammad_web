@@ -2,11 +2,11 @@ import { statusFilterToApi } from "@/features/dash/supplier/advertisements";
 import { ADS_PAGE_SIZE } from "../constant/constants";
 
 /** API params for the signed-in supplier's ads list. */
-export const buildAdsQuery = ({ page, statusFilter, sortFilter, search }) => {
+export const buildAdsQuery = ({ page, statusFilter, search }) => {
   const params = {
     page,
     pageSize: ADS_PAGE_SIZE,
-    sort: sortFilter === "oldest" ? "asc" : "desc",
+    sort: "desc",
     mine: true,
   };
 

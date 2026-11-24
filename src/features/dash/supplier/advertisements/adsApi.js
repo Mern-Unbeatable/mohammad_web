@@ -16,20 +16,21 @@ const parseListResponse = (response, params = {}) => {
   let rows = [];
   let metaData = {
     page: params.page || 1,
-    pageSize: params.pageSize || 7,
+    pageSize: params.pageSize || 10,
     total: 0,
     totalPages: 1,
+    summary: { total: 0, active: 0, pending: 0, expired: 0 },
   };
 
   if (Array.isArray(inner)) {
     rows = inner;
-    metaData = outer?.meta || metaData;
+    metaData = { ...metaData, ...(outer?.meta || {}) };
   } else if (Array.isArray(inner?.data)) {
     rows = inner.data;
-    metaData = inner.meta || outer?.meta || metaData;
+    metaData = { ...metaData, ...(inner.meta || outer?.meta || {}) };
   } else if (Array.isArray(outer?.data)) {
     rows = outer.data;
-    metaData = outer.meta || metaData;
+    metaData = { ...metaData, ...(outer.meta || {}) };
   }
 
   if (!metaData.total && rows.length) {
@@ -38,7 +39,7 @@ const parseListResponse = (response, params = {}) => {
       total: rows.length,
       totalPages: Math.max(
         1,
-        Math.ceil(rows.length / (metaData.pageSize || 7)),
+        Math.ceil(rows.length / (metaData.pageSize || 10)),
       ),
     };
   }
@@ -52,7 +53,7 @@ const parseListResponse = (response, params = {}) => {
 export async function getAdsList(params = {}) {
   const query = {
     page: 1,
-    pageSize: 7,
+    pageSize: 10,
     sort: "desc",
     mine: true,
     ...params,

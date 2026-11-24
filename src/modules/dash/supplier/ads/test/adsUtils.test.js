@@ -6,7 +6,7 @@ import { ADS_PAGE_SIZE } from "../constant/constants";
 
 describe("buildAdsQuery", () => {
   it("asks for the supplier's own ads, newest first, without status or search for defaults", () => {
-    expect(buildAdsQuery({ page: 1, statusFilter: "all", sortFilter: "newest", search: "  " })).toEqual({
+    expect(buildAdsQuery({ page: 1, statusFilter: "all", search: "  " })).toEqual({
       page: 1,
       pageSize: ADS_PAGE_SIZE,
       sort: "desc",
@@ -14,10 +14,10 @@ describe("buildAdsQuery", () => {
     });
   });
 
-  it("maps status, oldest sort and a trimmed search", () => {
+  it("maps status and a trimmed search", () => {
     expect(
-      buildAdsQuery({ page: 3, statusFilter: "rejected", sortFilter: "oldest", search: " lab " }),
-    ).toMatchObject({ page: 3, sort: "asc", status: "REJECTED", search: "lab" });
+      buildAdsQuery({ page: 3, statusFilter: "rejected", search: " lab " }),
+    ).toMatchObject({ page: 3, status: "REJECTED", search: "lab" });
   });
 });
 

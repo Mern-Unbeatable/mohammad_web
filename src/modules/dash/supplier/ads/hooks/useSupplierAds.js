@@ -14,13 +14,12 @@ import {
 import { buildAdsQuery } from "../utils/adsQuery";
 import { getAdRowActions } from "../utils/adRowActions";
 import {
-  DEFAULT_SORT,
   DEFAULT_STATUS_FILTER,
   SEARCH_DEBOUNCE_MS,
   adDetailPath,
 } from "../constant/constants";
 
-/** My ads list: search (debounced), status / sort filters, paging, row actions and the create / resubmit modal. */
+/** My ads list: search (debounced), status filter, paging, row actions and the create / resubmit modal. */
 export const useSupplierAds = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -28,7 +27,6 @@ export const useSupplierAds = () => {
   const { ads, adsMeta, adsLoading, error } = useSelector((state) => state.supplierAds);
 
   const [statusFilter, setStatusFilter] = useState(DEFAULT_STATUS_FILTER);
-  const [sortFilter, setSortFilter] = useState(DEFAULT_SORT);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -37,20 +35,19 @@ export const useSupplierAds = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
+      if (search === debouncedSearch) return;
       setDebouncedSearch(search);
       setPage(1);
     }, SEARCH_DEBOUNCE_MS);
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [search, debouncedSearch]);
 
   useEffect(() => {
     dispatch(clearSupplierAdsError());
     dispatch(
-      fetchSupplierAds(
-        buildAdsQuery({ page, statusFilter, sortFilter, search: debouncedSearch }),
-      ),
+      fetchSupplierAds(buildAdsQuery({ page, statusFilter, search: debouncedSearch })),
     );
-  }, [dispatch, page, statusFilter, sortFilter, debouncedSearch]);
+  }, [dispatch, page, statusFilter, debouncedSearch]);
 
   useEffect(() => {
     if (error) toast.error(error);
@@ -68,11 +65,6 @@ export const useSupplierAds = () => {
     setPage(1);
   };
 
-  const changeSort = (value) => {
-    setSortFilter(value);
-    setPage(1);
-  };
-
   const openCreate = (adId = null) => {
     setResubmitAdId(adId);
     setCreateOpen(true);
@@ -86,17 +78,13 @@ export const useSupplierAds = () => {
   const handleCreated = () => {
     setPage(1);
     dispatch(
-      fetchSupplierAds(
-        buildAdsQuery({ page: 1, statusFilter, sortFilter, search: debouncedSearch }),
-      ),
+      fetchSupplierAds(buildAdsQuery({ page: 1, statusFilter, search: debouncedSearch })),
     );
   };
 
   const refresh = () => {
     dispatch(
-      fetchSupplierAds(
-        buildAdsQuery({ page: 1, statusFilter, sortFilter, search: debouncedSearch }),
-      ),
+      fetchSupplierAds(buildAdsQuery({ page: 1, statusFilter, search: debouncedSearch })),
     );
   };
 
@@ -181,14 +169,18 @@ export const useSupplierAds = () => {
     rows,
     loading: adsLoading,
     total: adsMeta?.total || 0,
-    page,
+    summary: adsMeta?.summary || {
+      total: 0,
+      active: 0,
+      pending: 0,
+      expired: 0,
+    },
+    page: adsMeta?.page || page,
     changePage: setPage,
     search,
     changeSearch,
     statusFilter,
     changeStatus,
-    sortFilter,
-    changeSort,
     rowActions,
     createOpen,
     resubmitAdId,

@@ -1,3 +1,4 @@
+import { CreditCard, Eye, RefreshCw, RotateCcw, Trash2, XCircle } from "lucide-react";
 import { AD_STATUS } from "../constant/constants";
 
 /**
@@ -13,15 +14,26 @@ export const getAdRowActions = (
   { onDetails, onResubmit, onRenew, onPay, onCancel, onDelete },
 ) => {
   const actions = [
-    { id: "details", label: "See Details", onClick: () => onDetails(row.id) },
+    {
+      id: "details",
+      label: "See Details",
+      icon: Eye,
+      onClick: () => onDetails(row.id),
+    },
   ];
 
   if (row.status === AD_STATUS.PENDING_PAYMENT) {
-    actions.push({ id: "pay", label: "Pay now", onClick: () => onPay(row.id) });
+    actions.push({
+      id: "pay",
+      label: "Pay now",
+      icon: CreditCard,
+      onClick: () => onPay(row.id),
+    });
     actions.push({
       id: "delete",
       label: "Delete",
-      danger: true,
+      icon: Trash2,
+      variant: "danger",
       onClick: () => onDelete(row.id),
     });
   }
@@ -30,27 +42,40 @@ export const getAdRowActions = (
     actions.push({
       id: "cancel",
       label: "Cancel",
-      danger: true,
+      icon: XCircle,
+      variant: "danger",
       onClick: () => onCancel(row.id),
     });
   }
 
   if (row.status === AD_STATUS.REJECTED) {
-    actions.push({ id: "resubmit", label: "Resubmit", onClick: () => onResubmit(row.id) });
+    actions.push({
+      id: "resubmit",
+      label: "Resubmit",
+      icon: RotateCcw,
+      onClick: () => onResubmit(row.id),
+    });
     actions.push({
       id: "delete",
       label: "Delete",
-      danger: true,
+      icon: Trash2,
+      variant: "danger",
       onClick: () => onDelete(row.id),
     });
   }
 
   if (row.status === AD_STATUS.EXPIRED) {
-    actions.push({ id: "renew", label: "Renew", onClick: () => onRenew() });
+    actions.push({
+      id: "renew",
+      label: "Renew",
+      icon: RefreshCw,
+      onClick: () => onRenew(),
+    });
     actions.push({
       id: "delete",
       label: "Delete",
-      danger: true,
+      icon: Trash2,
+      variant: "danger",
       onClick: () => onDelete(row.id),
     });
   }
@@ -59,7 +84,8 @@ export const getAdRowActions = (
     actions.push({
       id: "delete",
       label: "Delete",
-      danger: true,
+      icon: Trash2,
+      variant: "danger",
       onClick: () => onDelete(row.id),
     });
   }
