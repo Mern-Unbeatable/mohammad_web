@@ -10,9 +10,11 @@ export const SEARCH_DEBOUNCE_MS = 350;
 /** Row / detail model `status` labels; also the labels sent to review. */
 export const AD_STATUS = {
   ACTIVE: "Active",
+  PENDING_PAYMENT: "Pending payment",
   PENDING: "Pending",
   EXPIRED: "Expired",
   REJECTED: "Rejected",
+  CANCELLED: "Cancelled",
 };
 
 export const DEFAULT_STATUS_FILTER = "all";
@@ -20,16 +22,20 @@ export const DEFAULT_STATUS_FILTER = "all";
 export const STATUS_FILTER_OPTIONS = [
   { value: "all", label: "All Status" },
   { value: "active", label: "Active" },
+  { value: "pending_payment", label: "Pending payment" },
   { value: "pending", label: "Pending" },
   { value: "expired", label: "Expired" },
   { value: "rejected", label: "Rejected" },
+  { value: "cancelled", label: "Cancelled" },
 ];
 
 export const STATUS_PILL = {
   Active: "bg-green-secondary text-green-primary",
-  Pending: "bg-[#FFFAEB] text-[#B54708]",
-  Expired: "bg-[#F3F4F6] text-[#475467]",
-  Rejected: "bg-[#FEF3F2] text-[#D92D20]",
+  "Pending payment": "bg-[#FFFAEB] text-[#B54708]",
+  Pending: "bg-[#FEF9E6] text-[#B8860B]",
+  Expired: "bg-[#FEF3F2] text-[#D92D20]",
+  Rejected: "bg-pink-secondary text-pink-light",
+  Cancelled: "bg-[#F3F4F6] text-[#475467]",
 };
 
 /** Review buttons on the detail page, in display order. */

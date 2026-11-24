@@ -2,18 +2,22 @@
 import { formatDate, formatIsoDate } from "@/shared/utils/dates/date";
 
 const STATUS_LABEL = {
+  PENDING_PAYMENT: "Pending payment",
   PENDING: "Pending",
   ACTIVE: "Active",
   EXPIRED: "Expired",
   REJECTED: "Rejected",
+  CANCELLED: "Cancelled",
 };
 
 const STATUS_FILTER_API = {
   all: undefined,
+  pending_payment: "PENDING_PAYMENT",
   pending: "PENDING",
   active: "ACTIVE",
   expired: "EXPIRED",
   rejected: "REJECTED",
+  cancelled: "CANCELLED",
 };
 
 const STATUS_REVIEW_API = {
@@ -68,11 +72,17 @@ export function toAdRowModel(ad) {
     category: CATEGORY_LABEL[ad.category] || ad.category,
     status: STATUS_LABEL[ad.status] || ad.status,
     views:
-      ad.status === "PENDING" || ad.status === "REJECTED"
+      ad.status === "PENDING" ||
+      ad.status === "PENDING_PAYMENT" ||
+      ad.status === "REJECTED" ||
+      ad.status === "CANCELLED"
         ? "—"
         : Number(ad.views || 0).toLocaleString("en-US"),
     clicks:
-      ad.status === "PENDING" || ad.status === "REJECTED"
+      ad.status === "PENDING" ||
+      ad.status === "PENDING_PAYMENT" ||
+      ad.status === "REJECTED" ||
+      ad.status === "CANCELLED"
         ? "—"
         : Number(ad.clicks || 0).toLocaleString("en-US"),
     duration: `${ad.durationDays || 7} Days`,
