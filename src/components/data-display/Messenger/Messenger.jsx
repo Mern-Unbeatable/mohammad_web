@@ -832,7 +832,10 @@ const Messenger = ({
               </div>
 
               <div className="flex shrink-0 items-center gap-0.5">
-                {onStartCall && !displayChat.isGroup && displayChat.otherUserId ? (
+                {onStartCall &&
+                !displayChat.isGroup &&
+                displayChat.otherUserId &&
+                displayChat.online ? (
                   <button
                     type="button"
                     onClick={() => onStartCall(displayChat)}
