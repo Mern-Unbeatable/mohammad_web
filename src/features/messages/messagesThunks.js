@@ -97,6 +97,14 @@ export const sendMessage = createAsyncThunk(
   ),
 );
 
+export const editMessage = createAsyncThunk(
+  "messages/editMessage",
+  withError("Failed to edit message", async ({ conversationId, messageId, body }) => ({
+    conversationId,
+    message: await messagesApi.editMessage(conversationId, messageId, body),
+  })),
+);
+
 export const deleteMessage = createAsyncThunk(
   "messages/deleteMessage",
   withError("Failed to delete message", ({ conversationId, messageId }) =>
@@ -111,10 +119,10 @@ export const leaveConversation = createAsyncThunk(
   ),
 );
 
-export const renameGroup = createAsyncThunk(
-  "messages/renameGroup",
-  withError("Failed to rename group", ({ conversationId, name }) =>
-    messagesApi.renameGroup(conversationId, name),
+export const updateGroup = createAsyncThunk(
+  "messages/updateGroup",
+  withError("Failed to update group", ({ conversationId, changes }) =>
+    messagesApi.updateGroup(conversationId, changes),
   ),
 );
 

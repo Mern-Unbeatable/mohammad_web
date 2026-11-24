@@ -1,8 +1,12 @@
-import { API_ENDPOINTS } from "@/api/httpEndpoints";
-import { tokenService } from "@/api/cookies";
-import { unwrapApiData, unwrapUser } from "@/api/unwrapApiData";
-import { getApiErrorMessage } from "@/api/httpError";
-import axiosInstance, { bareAuthClient } from "@/api/axiosInstance";
+import {
+  API_ENDPOINTS,
+  axiosInstance,
+  bareAuthClient,
+  getApiErrorMessage,
+  tokenService,
+  unwrapApiData,
+  unwrapUser,
+} from "@/config";
 
 /**
  * Auth HTTP helpers — no Redux. Used by thunks.
@@ -64,17 +68,13 @@ export async function login(credentials) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// Refresh
+// Refresh (httpOnly refresh cookie is sent automatically)
 // ═══════════════════════════════════════════════════════════════════════
-export async function refresh(refreshToken = tokenService.getRefreshToken()) {
-  if (!refreshToken) {
-    throw toError({ message: "No refresh token" }, "No refresh token");
-  }
-
+export async function refresh() {
   try {
     const { data: envelope } = await bareAuthClient.post(
       API_ENDPOINTS.AUTH.REFRESH,
-      { refreshToken },
+      {},
     );
     const data = unwrapApiData(envelope) || envelope;
     const remember = tokenService.getRemember();
@@ -94,11 +94,8 @@ export async function refresh(refreshToken = tokenService.getRefreshToken()) {
 // Logout
 // ═══════════════════════════════════════════════════════════════════════
 export async function logout() {
-  const refreshToken = tokenService.getRefreshToken();
   try {
-    if (refreshToken) {
-      await bareAuthClient.post(API_ENDPOINTS.AUTH.LOGOUT, { refreshToken });
-    }
+    await bareAuthClient.post(API_ENDPOINTS.AUTH.LOGOUT, {});
     return { ok: true };
   } catch (error) {
     throw toError(error, "Logout failed");

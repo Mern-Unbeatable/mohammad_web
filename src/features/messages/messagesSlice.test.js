@@ -12,6 +12,7 @@ import reducer, {
 } from "./messagesSlice";
 import {
   fetchConversations,
+  fetchRecipients,
   fetchThread,
   fetchUnreadSummary,
   markConversationRead,
@@ -332,5 +333,62 @@ describe("messagesSlice unread totals", () => {
     expect(reducer(reset, logoutUser.fulfilled(undefined, "req")).unread).toEqual(
       initialState.unread,
     );
+  });
+});
+
+describe("fetchRecipients", () => {
+  const people = (...ids) => ids.map((id) => ({ id, name: id }));
+
+  it("ignores an older search that finishes after a newer one", () => {
+    let state = reducer(initialState, fetchRecipients.pending("all", { search: "" }));
+    state = reducer(state, fetchRecipients.pending("ana", { search: "ana" }));
+    state = reducer(state, fetchRecipients.fulfilled(people("ana"), "ana", { search: "ana" }));
+    state = reducer(state, fetchRecipients.fulfilled(people("ana", "bob"), "all", { search: "" }));
+
+    expect(state.recipients.map((r) => r.id)).toEqual(["ana"]);
+    expect(state.recipientsLoading).toBe(false);
+  });
+
+  it("stays loading when an older search finishes first", () => {
+    let state = reducer(initialState, fetchRecipients.pending("all", { search: "" }));
+    state = reducer(state, fetchRecipients.pending("ana", { search: "ana" }));
+    state = reducer(state, fetchRecipients.fulfilled(people("ana", "bob"), "all", { search: "" }));
+
+    expect(state.recipients).toEqual([]);
+    expect(state.recipientsLoading).toBe(true);
+  });
+
+  it("ignores a failure from a superseded search", () => {
+    let state = reducer(initialState, fetchRecipients.pending("old", { search: "a" }));
+    state = reducer(state, fetchRecipients.pending("new", { search: "an" }));
+    state = reducer(state, fetchRecipients.rejected(null, "old", { search: "a" }, "Network Error"));
+
+    expect(state.error).toBeNull();
+    expect(state.recipientsLoading).toBe(true);
+  });
+});
+
+describe("messageReceived group activity notices", () => {
+  it("bumps the conversation without counting the notice as unread", () => {
+    let state = reducer(
+      initialState,
+      fetchConversations.fulfilled(
+        { data: [{ id: "g1", isGroup: false, name: "g1", preview: "", time: "2026-01-01", unreadCount: 0, participants: [] }], meta: { page: 1, pageSize: 30, total: 1, totalPages: 1 } },
+        "r1",
+        { type: "direct", page: 1 },
+      ),
+    );
+    state = reducer(
+      state,
+      messageReceived({
+        conversationId: "g1",
+        currentUserId: "me",
+        message: { id: "s1", type: "SYSTEM", senderId: "u2", body: "Anna left the group", attachments: [], time: "2026-02-01" },
+      }),
+    );
+    const conversation = state.conversations.find((c) => c.id === "g1");
+    expect(conversation.preview).toBe("Anna left the group");
+    expect(conversation.unreadCount).toBe(0);
+    expect(state.unread.messages).toBe(0);
   });
 });

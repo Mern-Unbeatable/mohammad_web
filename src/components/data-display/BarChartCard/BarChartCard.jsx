@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from 'recharts';
 import Card from '@/components/ui/Card';
+import { Select } from '@/components/form-controls';
 
 const DEFAULT_CHART_HEIGHT = 240;
 
@@ -84,10 +85,10 @@ const BarChartCard = ({
         <h3 className="text-[16px] font-bold text-deep-blue sm:text-[17px]">{title}</h3>
         {yearOptions.length > 0 ? (
           <label className="relative inline-flex min-w-[120px] items-center">
-            <select
+            <Select
+              variant="compact"
               value={yearValue}
               onChange={(event) => onYearChange?.(event.target.value)}
-              className="h-9 w-full cursor-pointer appearance-none rounded-lg border border-[#E4E7EC] bg-white py-1.5 pl-3 pr-8 text-[13px] font-medium text-deep-blue outline-none focus:border-primary"
               aria-label="Chart period"
             >
               {yearOptions.map((option) => (
@@ -95,7 +96,7 @@ const BarChartCard = ({
                   {option}
                 </option>
               ))}
-            </select>
+            </Select>
             <ChevronDown className="pointer-events-none absolute right-2 h-4 w-4 text-[#64748B]" />
           </label>
         ) : null}

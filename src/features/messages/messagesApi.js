@@ -3,7 +3,7 @@ import {
   API_ENDPOINTS,
   unwrapApiData,
   getApiErrorMessage,
-} from "@/api";
+} from "@/config";
 
 /**
  * Messaging HTTP helpers shared by User, Supplier and Admin — no Redux.
@@ -93,6 +93,12 @@ export async function sendMessage(
   );
 }
 
+export async function editMessage(conversationId, messageId, body) {
+  return unwrapApiData(
+    await crudService.patch(E.EDIT_MESSAGE(conversationId, messageId), { body }),
+  );
+}
+
 export async function deleteMessage(conversationId, messageId) {
   await crudService.del(E.DELETE_MESSAGE(conversationId, messageId));
   return { conversationId, messageId };
@@ -103,8 +109,20 @@ export async function leaveConversation(conversationId) {
   return { conversationId };
 }
 
-export async function renameGroup(conversationId, name) {
-  return unwrapApiData(await crudService.patch(E.RENAME(conversationId), { name }));
+/** `{ name?, avatar? }`; `avatar: null` removes the group photo. */
+export async function updateGroup(conversationId, changes) {
+  return unwrapApiData(await crudService.patch(E.UPDATE_GROUP(conversationId), changes));
+}
+
+/** Uploads a group photo and returns its public URL. */
+export async function uploadGroupPhoto(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+  const uploaded = unwrapApiData(
+    await crudService.upload(E.GROUP_PHOTO_UPLOAD, formData, null, { timeout: 60000 }),
+  );
+  if (!uploaded?.url) throw new Error("Upload did not return a file URL");
+  return uploaded.url;
 }
 
 export async function addParticipants(conversationId, participantIds) {
@@ -127,8 +145,8 @@ export async function uploadAttachment(file, onProgress) {
     await crudService.upload(E.UPLOAD, formData, onProgress),
   );
   return {
-    url: uploaded.url,
-    name: uploaded.originalName || file.name,
+    key: uploaded.key,
+    name: uploaded.name || file.name,
     mimeType: uploaded.mimeType || file.type,
     size: uploaded.size ?? file.size,
   };

@@ -14,6 +14,7 @@ export {
   setActiveConversation,
   resetMessages,
   messageReceived,
+  messageUpdated,
   messageRemoved,
   conversationRemoved,
   conversationReadByOther,
@@ -30,9 +31,10 @@ export {
   startDirect,
   createGroup,
   sendMessage,
+  editMessage,
   deleteMessage,
   leaveConversation,
-  renameGroup,
+  updateGroup,
   addParticipants,
   removeParticipant,
   fetchUnreadSummary,
@@ -42,14 +44,17 @@ export {
   toMessageModel,
   formatMessageTime,
   formatBubbleTime,
+  formatEventTime,
   attachmentSummary,
   messagePreview,
   toChatListingModel,
   isImageAttachment,
   isSeenByOther,
 } from "./messagesMappers";
-export { useMessagesSocket, queryPresence } from "./realtime";
+export { useMessagesSocket, useTypingEmitter, queryPresence } from "./realtime";
+export { useUserPresence } from "./useUserPresence";
 export { useUnreadMessages } from "./useUnreadMessages";
+export { olderMessagesParams, nextConversationsParams } from "./pagination";
 export {
   parseLegacyChatLink,
   resolveLegacyChatLink,

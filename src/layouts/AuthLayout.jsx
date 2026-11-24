@@ -1,7 +1,6 @@
 import { Link, Outlet, useLocation } from 'react-router';
 import logo from '@/assets/logo.png';
 import Container from '@/components/ui/Container';
-import ScrollToTop from '@/shared/routing/ScrollToTop';
 
 const AuthLayout = () => {
   const { pathname } = useLocation();
@@ -9,8 +8,7 @@ const AuthLayout = () => {
 
   return (
     <div className="min-h-screen bg-[#F7F8FA]">
-      <ScrollToTop />
-      <header className="border-b border-[#ECEEF2] bg-white">
+      <header className="sticky top-0 z-[70] border-b border-[#ECEEF2] bg-white">
         <Container className="flex h-[72px] items-center justify-between">
           <Link to="/" className="shrink-0">
             <img

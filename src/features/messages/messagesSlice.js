@@ -9,9 +9,10 @@ import {
   startDirect,
   createGroup,
   sendMessage,
+  editMessage,
   deleteMessage,
   leaveConversation,
-  renameGroup,
+  updateGroup,
   addParticipants,
   removeParticipant,
   fetchUnreadSummary,
@@ -30,6 +31,10 @@ export const initialState = {
   conversationsMeta: { page: 1, pageSize: 30, total: 0, totalPages: 1 },
   conversationsLoading: false,
   conversationsLoadingMore: false,
+  /** Latest visible list request; responses from earlier ones are stale. */
+  conversationsRequestId: null,
+  /** Why the current tab's first page failed to load (shown with a retry). */
+  conversationsError: null,
   activeConversationId: null,
   /** Latest detail of the active conversation, even if it is not in the loaded list page. */
   activeDetail: null,
@@ -39,6 +44,7 @@ export const initialState = {
   olderLoading: false,
   recipients: [],
   recipientsLoading: false,
+  recipientsRequestId: null,
   onlineUserIds: [],
   sending: false,
   actionLoading: false,
@@ -106,6 +112,15 @@ const setRejected = (key) => (state, action) => {
   state.error = action.payload || action.error?.message || "Something went wrong";
 };
 
+/** Edits only change text and `editedAt`; `from` stays as loaded (it is viewer-relative). */
+const applyMessageEdit = (state, { conversationId, message } = {}) => {
+  if (!message?.id || state.activeConversationId !== conversationId) return;
+  const existing = state.messages.find((m) => m.id === message.id);
+  if (!existing) return;
+  existing.body = message.body;
+  existing.editedAt = message.editedAt ?? null;
+};
+
 const messagesSlice = createSlice({
   name: "messages",
   initialState,
@@ -132,11 +147,21 @@ const messagesSlice = createSlice({
       const conversation = bumpConversation(state, conversationId, message);
       const isActive = state.activeConversationId === conversationId;
       if (isActive) appendMessage(state, message);
-      if (conversation && !isActive && message.senderId !== currentUserId) {
+      if (
+        conversation &&
+        !isActive &&
+        message.senderId !== currentUserId &&
+        message.type !== "SYSTEM" &&
+        message.type !== "CALL"
+      ) {
         if (!conversation.unreadCount) state.unread.conversations += 1;
         conversation.unreadCount = (conversation.unreadCount ?? 0) + 1;
         state.unread.messages += 1;
       }
+    },
+    /** Realtime: `message:updated` (an edit by the sender). */
+    messageUpdated: (state, action) => {
+      applyMessageEdit(state, action.payload);
     },
     messageRemoved: (state, action) => {
       const { conversationId, messageId } = action.payload;
@@ -170,18 +195,34 @@ const messagesSlice = createSlice({
     builder
       .addCase(fetchConversations.pending, (state, action) => {
         const { page = 1, silent, type } = action.meta.arg || {};
-        state.error = null;
-        if (type) state.listType = type;
+        // Background refreshes never switch tabs or touch loading state.
         if (silent) return;
+        state.error = null;
+        state.conversationsError = null;
+        state.conversationsRequestId = action.meta.requestId;
+        if (type && type !== state.listType) {
+          // Another tab: drop the previous tab's rows and pagination so they
+          // are not shown (or paged) as this tab's list while it loads.
+          state.listType = type;
+          state.conversations = [];
+          state.conversationsMeta = initialState.conversationsMeta;
+          state.conversationsLoadingMore = false;
+        }
         if (page > 1) state.conversationsLoadingMore = true;
         else state.conversationsLoading = true;
       })
       .addCase(fetchConversations.fulfilled, (state, action) => {
-        const { page = 1, type } = action.meta.arg || {};
-        state.conversationsLoading = false;
-        state.conversationsLoadingMore = false;
-        // Ignore responses for a tab the user already left.
+        const { page = 1, silent, type } = action.meta.arg || {};
         if (type && type !== state.listType) return;
+        if (silent) {
+          // A visible request in flight will bring fresher data.
+          if (state.conversationsLoading || state.conversationsLoadingMore) return;
+        } else {
+          const latest = state.conversationsRequestId;
+          if (latest && action.meta.requestId !== latest) return;
+          state.conversationsLoading = false;
+          state.conversationsLoadingMore = false;
+        }
         const rows = action.payload.data;
         if (page > 1) {
           const seen = new Set(state.conversations.map((c) => c.id));
@@ -192,8 +233,16 @@ const messagesSlice = createSlice({
         state.conversationsMeta = action.payload.meta;
       })
       .addCase(fetchConversations.rejected, (state, action) => {
+        const { page = 1, silent } = action.meta.arg || {};
+        // Failed background refreshes are retried by the next poll or reconnect.
+        if (silent) return;
+        const latest = state.conversationsRequestId;
+        if (latest && action.meta.requestId !== latest) return;
+        const message = action.payload || action.error?.message || "Something went wrong";
+        state.conversationsLoading = false;
         state.conversationsLoadingMore = false;
-        setRejected("conversationsLoading")(state, action);
+        if (page > 1) state.error = message;
+        else state.conversationsError = message;
       })
 
       .addCase(fetchConversation.fulfilled, (state, action) => {
@@ -257,12 +306,20 @@ const messagesSlice = createSlice({
         state.unread.loaded = true;
       })
 
-      .addCase(fetchRecipients.pending, setPending("recipientsLoading"))
+      .addCase(fetchRecipients.pending, (state, action) => {
+        setPending("recipientsLoading")(state);
+        state.recipientsRequestId = action.meta.requestId;
+      })
+      // Searches race while typing; only the latest one may update the list.
       .addCase(fetchRecipients.fulfilled, (state, action) => {
+        if (state.recipientsRequestId !== action.meta.requestId) return;
         state.recipientsLoading = false;
         state.recipients = action.payload;
       })
-      .addCase(fetchRecipients.rejected, setRejected("recipientsLoading"))
+      .addCase(fetchRecipients.rejected, (state, action) => {
+        if (state.recipientsRequestId !== action.meta.requestId) return;
+        setRejected("recipientsLoading")(state, action);
+      })
 
       .addCase(sendMessage.pending, setPending("sending"))
       .addCase(sendMessage.fulfilled, (state, action) => {
@@ -272,6 +329,13 @@ const messagesSlice = createSlice({
         if (state.activeConversationId === conversationId) appendMessage(state, message);
       })
       .addCase(sendMessage.rejected, setRejected("sending"))
+
+      .addCase(editMessage.fulfilled, (state, action) => {
+        applyMessageEdit(state, action.payload);
+      })
+      .addCase(editMessage.rejected, (state, action) => {
+        state.error = action.payload;
+      })
 
       .addCase(deleteMessage.fulfilled, (state, action) => {
         const { conversationId, messageId } = action.payload;
@@ -307,7 +371,7 @@ const messagesSlice = createSlice({
     });
 
     // Group management returns the refreshed conversation.
-    [renameGroup, addParticipants, removeParticipant].forEach((thunk) => {
+    [updateGroup, addParticipants, removeParticipant].forEach((thunk) => {
       builder
         .addCase(thunk.pending, setPending("actionLoading"))
         .addCase(thunk.fulfilled, (state, action) => {
@@ -330,6 +394,7 @@ export const {
   setActiveConversation,
   resetMessages,
   messageReceived,
+  messageUpdated,
   messageRemoved,
   conversationRemoved,
   conversationReadByOther,

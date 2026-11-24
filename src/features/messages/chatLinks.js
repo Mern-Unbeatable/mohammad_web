@@ -3,7 +3,7 @@ import {
   CHAT_SECTIONS,
   chatPath,
   chatTargetFor,
-} from "@/shared/constants/chat";
+} from "@/features/messages/chatPaths";
 import { getConversation } from "./messagesApi";
 
 /** Inbox paths that used `?conversation=` / `?user=` before the chat route refactor. */

@@ -1,0 +1,120 @@
+import { describe, expect, it } from "vitest";
+import { renderToStaticMarkup } from "react-dom/server";
+import { Provider } from "react-redux";
+import { MemoryRouter, Route, Routes } from "react-router";
+import { configureStore } from "@reduxjs/toolkit";
+import { adminMessagesReducer } from "@/features/messages/moderation";
+import AdminChatView from "../pages/AdminChatView";
+import AdminChatModerationView from "../pages/AdminChatModerationView";
+import { ADMIN_CHAT_MODERATION_PATH } from "../constant/constants";
+
+const renderModeration = (state = {}) => {
+  const store = configureStore({
+    reducer: { adminMessages: adminMessagesReducer },
+    preloadedState: {
+      adminMessages: { ...adminMessagesReducer(undefined, { type: "@@init" }), ...state },
+    },
+  });
+  return renderToStaticMarkup(
+    <Provider store={store}>
+      <AdminChatModerationView />
+    </Provider>,
+  );
+};
+
+const conversation = {
+  id: "c1",
+  name: "Lab team",
+  isGroup: true,
+  preview: "See you",
+  time: "2026-10-01T10:00:00Z",
+  participants: [
+    { id: "u1", name: "Ana" },
+    { id: "u2", name: "Ben" },
+  ],
+  messageCount: 1,
+};
+
+describe("AdminChatModerationView", () => {
+  it("renders the empty list and the placeholder", () => {
+    const html = renderModeration();
+    expect(html).toContain("0 conversations");
+    expect(html).toContain("No conversations found.");
+    expect(html).toContain("Select a conversation");
+  });
+
+  it("shows the list error with a retry button instead of the empty message", () => {
+    const html = renderModeration({ listError: "Failed to load conversations" });
+    expect(html).toContain('role="alert"');
+    expect(html).toContain("Failed to load conversations");
+    expect(html).toMatch(/<button type="button"[^>]*>Try again<\/button>/);
+    expect(html).not.toContain("No conversations found.");
+  });
+
+  it("shows the spinner rather than an error or empty message while loading", () => {
+    const html = renderModeration({ listLoading: true, listError: null });
+    expect(html).not.toContain("No conversations found.");
+    expect(html).not.toContain('role="alert"');
+  });
+
+  it("renders rows with counts and Load more", () => {
+    const html = renderModeration({
+      conversations: [conversation],
+      meta: { page: 1, total: 1, totalPages: 2 },
+    });
+    expect(html).toContain("1 conversation<");
+    expect(html).toContain("Lab team");
+    expect(html).toContain("2 members");
+    expect(html).toContain("1 message<");
+    expect(html).toContain("Load more");
+  });
+
+  it("renders the selected thread with system and member messages", () => {
+    const html = renderModeration({
+      conversations: [conversation],
+      selectedId: "c1",
+      selected: conversation,
+      hasMore: true,
+      messages: [
+        { id: "m1", type: "SYSTEM", body: "Ana joined", time: "2026-10-01T10:00:00Z" },
+        { id: "m2", type: "TEXT", body: "Hello", sender: "Ben", time: "2026-10-01T10:01:00Z" },
+      ],
+    });
+    expect(html).toContain("Delete conversation");
+    expect(html).toContain("Load older messages");
+    expect(html).toContain("Ana joined");
+    expect(html).toContain("Hello");
+    expect(html).toContain('aria-label="Remove message from Ben"');
+    expect(html).not.toContain("Select a conversation");
+  });
+
+  it("keeps moderation actions reachable and visible for keyboard users", () => {
+    const html = renderModeration({
+      conversations: [conversation],
+      selectedId: "c1",
+      selected: conversation,
+      messages: [{ id: "m2", type: "TEXT", body: "Hello", sender: "Ben", time: "2026-10-01T10:01:00Z" }],
+    });
+    const remove = html.match(/<button[^>]*aria-label="Remove message from Ben"[^>]*>/)?.[0] ?? "";
+    expect(remove).toContain('type="button"');
+    expect(remove).toContain("focus-visible:opacity-100");
+    expect(remove).toContain("group-focus-within:opacity-100");
+    expect(remove).not.toMatch(/\bhidden\b/);
+    expect(html).toMatch(/role="log"[^>]*aria-label="Messages in Lab team"/);
+  });
+});
+
+describe("AdminChatView", () => {
+  it("renders the header and both tabs", () => {
+    const html = renderToStaticMarkup(
+      <MemoryRouter initialEntries={[ADMIN_CHAT_MODERATION_PATH]}>
+        <Routes>
+          <Route path="/admin/chat/*" element={<AdminChatView />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    expect(html).toContain("Message members and moderate platform conversations.");
+    expect(html).toContain("My conversations");
+    expect(html).toContain("Moderation");
+  });
+});

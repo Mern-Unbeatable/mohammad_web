@@ -1,7 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
   attachmentSummary,
+  formatBubbleTime,
+  formatEventTime,
   formatMessageTime,
+  joinNames,
+  systemMessageParts,
+  systemMessageText,
   isSeenByOther,
   messagePreview,
   toChatListingModel,
@@ -12,26 +17,38 @@ import {
 const now = new Date(2026, 8, 26, 15, 0, 0);
 
 describe("formatMessageTime", () => {
-  it("returns clock time for today", () => {
-    expect(formatMessageTime(new Date(2026, 8, 26, 9, 5), now)).toBe("09:05");
+  it("returns a 12-hour clock time for today", () => {
+    expect(formatMessageTime(new Date(2026, 8, 26, 9, 5), now)).toBe("9:05AM");
+    expect(formatMessageTime(new Date(2026, 8, 26, 12, 0), now)).toBe("12:00PM");
   });
 
-  it("returns Yesterday for the previous day", () => {
-    expect(formatMessageTime(new Date(2026, 8, 25, 23, 0), now)).toBe("Yesterday");
+  it("returns days for the last week, counting calendar days", () => {
+    expect(formatMessageTime(new Date(2026, 8, 25, 23, 0), now)).toBe("1d");
+    expect(formatMessageTime(new Date(2026, 8, 20, 12, 0), now)).toBe("6d");
   });
 
-  it("returns a weekday within the last week", () => {
-    expect(formatMessageTime(new Date(2026, 8, 22, 12, 0), now)).toBe("Tue");
+  it("returns weeks within the last year", () => {
+    expect(formatMessageTime(new Date(2026, 8, 19), now)).toBe("1 week");
+    expect(formatMessageTime(new Date(2026, 7, 3), now)).toBe("7 weeks");
   });
 
-  it("returns month/day for older dates and adds the year when different", () => {
-    expect(formatMessageTime(new Date(2026, 7, 3), now)).toBe("Aug 3");
-    expect(formatMessageTime(new Date(2025, 7, 3), now)).toBe("Aug 3, 2025");
+  it("returns years for a year or more", () => {
+    expect(formatMessageTime(new Date(2025, 8, 26), now)).toBe("1y");
+    expect(formatMessageTime(new Date(2023, 7, 3), now)).toBe("3y");
   });
 
   it("returns an empty string for missing or invalid values", () => {
     expect(formatMessageTime(null, now)).toBe("");
     expect(formatMessageTime("not-a-date", now)).toBe("");
+  });
+});
+
+describe("formatBubbleTime", () => {
+  it("keeps day names with a 12-hour clock under bubbles", () => {
+    expect(formatBubbleTime(new Date(2026, 8, 26, 14, 5), now)).toBe("2:05PM");
+    expect(formatBubbleTime(new Date(2026, 8, 25, 12, 0), now)).toBe(
+      "Yesterday 12:00PM",
+    );
   });
 });
 
@@ -59,9 +76,19 @@ describe("toConversationModel", () => {
     expect(toConversationModel(base).online).toBe(false);
   });
 
-  it("never marks groups online", () => {
-    const group = { ...base, isGroup: true };
-    expect(toConversationModel(group, { onlineUserIds: new Set(["u2"]) }).online).toBe(false);
+  it("marks a group online when any other member is online", () => {
+    const group = {
+      ...base,
+      isGroup: true,
+      otherUserId: null,
+      participants: [{ id: "me" }, { id: "u2" }, { id: "u3" }],
+    };
+    const model = (online) =>
+      toConversationModel(group, { onlineUserIds: new Set(online), currentUserId: "me" });
+
+    expect(model(["u3"]).online).toBe(true);
+    expect(model([]).online).toBe(false);
+    expect(model(["me"]).online).toBe(false);
   });
 
   it("flags direct chats with an admin", () => {
@@ -171,5 +198,78 @@ describe("isSeenByOther", () => {
   it("is false for groups", () => {
     const group = { ...conversation("2026-09-26T11:00:00.000Z"), isGroup: true };
     expect(isSeenByOther(group, messages, "me")).toBe(false);
+  });
+});
+
+describe("group activity notices", () => {
+  const notice = (event, senderId = "nayem") => ({
+    id: "s1",
+    type: "SYSTEM",
+    senderId,
+    sender: "Nayem Islam",
+    body: "server text",
+    event,
+    time: new Date(2026, 9, 18, 11, 37),
+  });
+
+  it("writes events from the viewer's point of view", () => {
+    const added = { action: "added", targetIds: ["anna", "me"], targetNames: ["Anna K", "Élise M"] };
+    expect(systemMessageText(notice(added), "other")).toBe("Nayem Islam added Anna K and Élise M");
+    expect(systemMessageText(notice(added), "me")).toBe("Nayem Islam added Anna K and you");
+    expect(systemMessageText(notice(added, "me"), "me")).toBe("You added Anna K and you");
+
+    const removed = { action: "removed", targetIds: ["me"], targetNames: ["Élise M"] };
+    expect(systemMessageText(notice(removed), "me")).toBe("Nayem Islam removed you");
+    expect(systemMessageText(notice({ action: "left" }), "x")).toBe("Nayem Islam left the group");
+    expect(systemMessageText(notice({ action: "renamed", name: "Mofasa" }, "me"), "me")).toBe(
+      'You renamed the group to "Mofasa"',
+    );
+    expect(
+      systemMessageText(
+        notice({ action: "created", name: "Mofasa", targetIds: ["a", "b", "c", "d"], targetNames: ["A", "B", "C", "D"] }),
+        "x",
+      ),
+    ).toBe('Nayem Islam created the group "Mofasa" and added A, B and 2 others');
+  });
+
+  it("splits notices into linkable name parts, leaving the viewer and overflow as plain text", () => {
+    const added = { action: "added", targetIds: ["anna", "me", "cara", "dan"], targetNames: ["Anna K", "Élise M", "Cara", "Dan"] };
+    expect(systemMessageParts(notice(added), "me")).toEqual([
+      { text: "Nayem Islam", userId: "nayem" },
+      " added ",
+      { text: "Anna K", userId: "anna" },
+      ", ",
+      "you",
+      " and ",
+      "2 others",
+    ]);
+    expect(systemMessageParts(notice({ action: "removed", targetIds: ["anna"], targetNames: ["Anna K"] }, "me"), "me")).toEqual([
+      "You",
+      " removed ",
+      { text: "Anna K", userId: "anna" },
+    ]);
+    expect(toMessageModel(notice({ action: "left" }), "me").textParts).toEqual([
+      { text: "Nayem Islam", userId: "nayem" },
+      " left the group",
+    ]);
+  });
+
+  it("falls back to the stored text for unknown events", () => {
+    expect(systemMessageText(notice({ action: "pinned" }), "x")).toBe("server text");
+  });
+
+  it("maps notices to a system model with date and time", () => {
+    const model = toMessageModel(notice({ action: "left" }, "me"), "me");
+    expect(model).toMatchObject({
+      from: "system",
+      isSystem: true,
+      text: "You left the group",
+      eventTime: "Oct 18, 2026 · 11:37AM",
+    });
+  });
+
+  it("formats event time and joins names", () => {
+    expect(formatEventTime("bad")).toBe("");
+    expect(joinNames(["A", "B", "C", "D", "E"])).toBe("A, B and 3 others");
   });
 });
