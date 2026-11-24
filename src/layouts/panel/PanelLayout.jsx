@@ -51,6 +51,54 @@ const PanelLayout = ({
   const openSidebar = () => setSidebarOpen(true);
   const closeSidebar = () => setSidebarOpen(false);
 
+  const navSections = (() => {
+    const hasSections = navItems.some((item) => item.section);
+    if (!hasSections) {
+      return [{ title: "Main menu", items: navItems }];
+    }
+
+    const sections = [];
+    for (const item of navItems) {
+      const title = item.section || "Main menu";
+      const last = sections[sections.length - 1];
+      if (!last || last.title !== title) {
+        sections.push({ title, items: [item] });
+      } else {
+        last.items.push(item);
+      }
+    }
+    return sections;
+  })();
+
+  const renderNavLink = (item) => {
+    const { to, label, end, badge } = item;
+    const Icon = item.icon;
+    return (
+      <li key={to}>
+        <NavLink
+          to={to}
+          end={end}
+          onClick={closeSidebar}
+          className={({ isActive }) =>
+            `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              isActive
+                ? "border-l-[3px] border-primary bg-secondary pl-[calc(0.75rem-3px)] text-primary"
+                : "border-l-[3px] border-transparent text-[#475467] hover:bg-[#F9FAFB] hover:text-deep-blue"
+            }`
+          }
+        >
+          <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={1.8} />
+          {label}
+          <CountBadge
+            count={badgeCounts[badge]}
+            label={`${badgeCounts[badge]} unread`}
+            className="ml-auto"
+          />
+        </NavLink>
+      </li>
+    );
+  };
+
   const sidebarContent = (
     <>
       <div className="flex h-16 shrink-0 items-center justify-between border-b border-[#E4E7EC] px-5">
@@ -75,42 +123,16 @@ const PanelLayout = ({
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-4">
-        <p className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wide text-[#98A2B3]">
-          Main menu
-        </p>
-        <ul className="space-y-0.5">
-          {navItems.map((item) => {
-            const { to, label, end, badge } = item;
-            const Icon = item.icon;
-            return (
-              <li key={to}>
-                <NavLink
-                  to={to}
-                  end={end}
-                  onClick={closeSidebar}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                      isActive
-                        ? "border-l-[3px] border-primary bg-secondary pl-[calc(0.75rem-3px)] text-primary"
-                        : "border-l-[3px] border-transparent text-[#475467] hover:bg-[#F9FAFB] hover:text-deep-blue"
-                    }`
-                  }
-                >
-                  <Icon
-                    className="h-[18px] w-[18px] shrink-0"
-                    strokeWidth={1.8}
-                  />
-                  {label}
-                  <CountBadge
-                    count={badgeCounts[badge]}
-                    label={`${badgeCounts[badge]} unread`}
-                    className="ml-auto"
-                  />
-                </NavLink>
-              </li>
-            );
-          })}
-        </ul>
+        <div className="space-y-4">
+          {navSections.map((section) => (
+            <div key={section.title}>
+              <p className="mb-1.5 px-3 text-[11px] font-semibold uppercase tracking-wide text-[#98A2B3]">
+                {section.title}
+              </p>
+              <ul className="space-y-0.5">{section.items.map(renderNavLink)}</ul>
+            </div>
+          ))}
+        </div>
       </nav>
 
       <div className="shrink-0 border-t border-[#E4E7EC] p-4">

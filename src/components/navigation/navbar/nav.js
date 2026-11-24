@@ -28,18 +28,28 @@ export const supplierNavItems = [
   { to: '/supplier/profile', label: 'Profile', icon: User },
 ];
 
+/** Admin sidebar — grouped for consistent scanning. */
 export const adminNavItems = [
-  { to: '/admin', label: 'Dashboard Overview', icon: LayoutDashboard, end: true },
-  { to: '/admin/users', label: 'Users', icon: Users },
-  { to: '/admin/recruitment', label: 'Recruitment', icon: Briefcase },
-  { to: '/admin/chat', label: 'Chat', icon: MessageSquare, badge: 'unreadMessages' },
-  { to: '/admin/general', label: 'General Post', icon: Newspaper },
-  { to: '/admin/marketplace', label: 'Marketplace', icon: ShoppingBag },
-  { to: '/admin/reports', label: 'Reports Resolved', icon: ShieldCheck },
-  { to: '/admin/advertisement', label: 'Advertisement', icon: Megaphone },
-  { to: '/admin/payments', label: 'Payments', icon: Receipt },
-  { to: '/admin/blogs', label: 'Blogs', icon: FileText },
-  { to: '/admin/statistics', label: 'Statistics & Reports', icon: BarChart3 },
-  { to: '/admin/settings', label: 'Settings', icon: Settings },
-  { to: '/admin/profile', label: 'Profile', icon: User },
+  // Overview
+  { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true, section: 'Overview' },
+
+  // People
+  { to: '/admin/users', label: 'Users', icon: Users, section: 'People' },
+  { to: '/admin/chat', label: 'Chat', icon: MessageSquare, badge: 'unreadMessages', section: 'People' },
+
+  // Content
+  { to: '/admin/general', label: 'General Post', icon: Newspaper, section: 'Content' },
+  { to: '/admin/marketplace', label: 'Marketplace', icon: ShoppingBag, section: 'Content' },
+  { to: '/admin/recruitment', label: 'Recruitment', icon: Briefcase, section: 'Content' },
+  { to: '/admin/advertisement', label: 'Advertisement', icon: Megaphone, section: 'Content' },
+  { to: '/admin/blogs', label: 'Blogs', icon: FileText, section: 'Content' },
+
+  // Insights
+  { to: '/admin/reports', label: 'Reports', icon: ShieldCheck, section: 'Insights' },
+  { to: '/admin/statistics', label: 'Statistics', icon: BarChart3, section: 'Insights' },
+  { to: '/admin/payments', label: 'Payments', icon: Receipt, section: 'Insights' },
+
+  // Account
+  { to: '/admin/settings', label: 'Settings', icon: Settings, section: 'Account' },
+  { to: '/admin/profile', label: 'Profile', icon: User, section: 'Account' },
 ];
