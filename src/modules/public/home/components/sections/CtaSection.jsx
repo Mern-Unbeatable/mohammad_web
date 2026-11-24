@@ -8,7 +8,7 @@ import {
   Users,
 } from "lucide-react";
 import Container from "@/components/ui/Container";
-import { FadeUp } from "@/shared/motion/LandingMotion";
+import { FadeUp } from "@/shared/motion/LandingMotion.jsx";
 import { useHomeCta } from "../../hooks/useHomeCta";
 import { PRICING_PATH } from "@/modules/public/pricing";
 import { CONNECT_AVATARS, TRIAL_DAYS } from "../../constant/constants";

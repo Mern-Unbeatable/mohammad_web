@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { Check } from "lucide-react";
 import heroImage from "@/assets/hero.png";
 import Container from "@/components/ui/Container";
-import { FadeUp, Pulse } from "@/shared/motion/LandingMotion";
+import { FadeUp, Pulse } from "@/shared/motion/LandingMotion.jsx";
 import { useHomeCta } from "../../hooks/useHomeCta";
 import { scrollToSection } from "../../utils/scrollToSection";
 import {

@@ -25,5 +25,3 @@ export const landingPulseTransition = (duration = 2.8, delay = 0) => ({
   repeat: Infinity,
   ease: "easeInOut",
 });
-
-export { FadeUp, Float, Pulse, RingPulse } from "./LandingMotion.jsx";

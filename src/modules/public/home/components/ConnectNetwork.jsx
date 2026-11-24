@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { landingEase, landingViewport } from "@/shared/motion/LandingMotion";
+import { landingEase, landingViewport } from "@/shared/motion/landingMotionConfig";
 
 const MotionLine = motion.line;
 const MotionCircle = motion.circle;

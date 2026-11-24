@@ -8,7 +8,7 @@ import {
   Users,
 } from "lucide-react";
 import Container from "@/components/ui/Container";
-import { FadeUp } from "@/shared/motion/LandingMotion";
+import { FadeUp } from "@/shared/motion/LandingMotion.jsx";
 import ConnectNetwork from "../ConnectNetwork";
 import DiscoverTag from "../DiscoverTag";
 import {

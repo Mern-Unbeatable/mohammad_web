@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { animate, motion, useInView, useReducedMotion } from 'framer-motion';
 import Container from '@/components/ui/Container';
-import { FadeUp } from '@/shared/motion/LandingMotion';
+import { FadeUp } from "@/shared/motion/LandingMotion.jsx";
 import {
   CONNECT_AVATARS as chatAvatars,
   HOME_SECTIONS,

@@ -44,4 +44,5 @@ home/
 - Sections render only; auth state comes from `useHomeCta`.
 - Copy and demo data live in `constant/constants.js`; Tailwind class strings
   used by a single section stay in that section.
-- Animations come from `@/shared/motion/LandingMotion`.
+- Motion components come from `@/shared/motion/LandingMotion`; shared
+  transition helpers live in `@/shared/motion/landingMotionConfig`.
