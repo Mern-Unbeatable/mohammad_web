@@ -3,6 +3,14 @@ import { ArrowRight, Megaphone, ShieldAlert } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import Card from "@/components/ui/Card";
 import { formatDate } from "@/shared/utils/dates/date";
+import { AdCell } from "@/modules/dash/admin/ads";
+
+const CATEGORY_LABEL = {
+  PRODUCT: "Product Showcase",
+  SERVICE: "Service Offering",
+  PROMO: "Promotional Offer",
+  WEBINAR: "Webinar/Event",
+};
 
 const reasonLabel = (reason = "") =>
   String(reason)
@@ -10,6 +18,8 @@ const reasonLabel = (reason = "") =>
     .split("_")
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
+
+const adCategoryLabel = (category = "") => CATEGORY_LABEL[category] || category;
 
 const EmptyQueue = ({ label }) => (
   <p className="px-1 py-6 text-center text-[13px] text-[#98A2B3]">{label}</p>
@@ -136,10 +146,17 @@ const AttentionSection = ({ attention, loading, ready = true }) => {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="truncate text-[13px] font-semibold text-deep-blue">{ad.title}</p>
-                      <p className="mt-0.5 truncate text-[12px] text-[#64748B]">
-                        {[ad.supplier, ad.category].filter(Boolean).join(" · ")}
-                      </p>
+                      <AdCell
+                        row={{
+                          title: ad.title,
+                          category: adCategoryLabel(ad.category),
+                        }}
+                      />
+                      {ad.supplier ? (
+                        <p className="mt-0.5 truncate pl-[42px] text-[12px] text-[#64748B]">
+                          {ad.supplier}
+                        </p>
+                      ) : null}
                     </div>
                     <span className="shrink-0 text-[11px] font-medium text-[#98A2B3]">
                       {formatDate(ad.createdAt, { format: "short", fallback: "—" })}

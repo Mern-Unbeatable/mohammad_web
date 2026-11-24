@@ -115,9 +115,7 @@ export const useSupplierAds = () => {
       dispatch(confirmSupplierAdCheckout({ adId, sessionId }))
         .unwrap()
         .then(() => {
-          toast.success(
-            "Payment received — your advertisement is pending review.",
-          );
+          toast.success("Payment received — your Ads is pending review.");
           refresh();
         })
         .catch((message) => {
