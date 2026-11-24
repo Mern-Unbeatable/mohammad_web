@@ -5,15 +5,15 @@ import { ADS_PAGE_SIZE, STATUS_FILTER_OPTIONS } from "../../constant/constants";
 
 const COLUMNS = [
   { key: "title", header: "Advertisement", render: (_, row) => <AdCell row={row} /> },
+  { key: "views", header: "Views" },
+  { key: "clicks", header: "Clicks" },
+  { key: "duration", header: "Duration", className: "font-semibold" },
+  { key: "uploadDate", header: "Upload date" },
   {
     key: "status",
     header: "Status",
     render: (value) => <StatusBadge status={value} label={value} />,
   },
-  { key: "views", header: "Views" },
-  { key: "clicks", header: "Clicks" },
-  { key: "duration", header: "Duration" },
-  { key: "uploadDate", header: "Upload date" },
 ];
 
 /** Search, status filter, ads table with review row actions, and pagination. */

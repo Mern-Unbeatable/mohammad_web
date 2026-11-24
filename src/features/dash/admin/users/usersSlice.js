@@ -7,7 +7,13 @@ import {
 
 const initialState = {
   users: [],
-  usersMeta: { page: 1, pageSize: 10, total: 0, totalPages: 1 },
+  usersMeta: {
+    page: 1,
+    pageSize: 10,
+    total: 0,
+    totalPages: 1,
+    summary: { total: 0, users: 0, suppliers: 0, active: 0 },
+  },
   selectedUser: null,
   usersLoading: false,
   selectedUserLoading: false,

@@ -86,6 +86,12 @@ export const useAdminUsers = () => {
   return {
     error: error && !usersLoading ? error : null,
     total: usersMeta.total || 0,
+    summary: usersMeta.summary || {
+      total: 0,
+      users: 0,
+      suppliers: 0,
+      active: 0,
+    },
     rows,
     loading: usersLoading,
     tab,

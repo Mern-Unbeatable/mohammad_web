@@ -45,11 +45,14 @@ const DataTable = ({
   bgClassName = 'bg-white',
   className = '',
   tableMinWidth = '900px',
+  compact = false,
 }) => {
   const showActionColumn =
     showActions && (typeof getActions === 'function' || actions.length > 0);
   const showToolbar = showTabs || showSearch || showFilters;
   const colSpan = columns.length + (showActionColumn ? 1 : 0);
+  const headPad = compact ? 'px-3 py-2 sm:px-4' : 'px-3 py-3 sm:px-4';
+  const cellPad = compact ? 'px-3 py-2 sm:px-4' : 'px-3 py-3.5 sm:px-4';
 
   const wrapperClassName = [
     'w-full overflow-visible',
@@ -63,40 +66,32 @@ const DataTable = ({
     <div className={wrapperClassName} aria-busy={loading || undefined}>
       {showToolbar ? (
         <div className="mb-3 flex flex-col gap-3">
-          {showSearch ? (
-            <>
-              {showTabs && tabs.length > 0 ? (
-                <SegmentedTabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
-              ) : null}
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <label className="flex w-full min-w-0 max-w-md items-center rounded-lg border border-[#E4E7EC] bg-white px-3 py-2 focus-within:border-primary">
-                  <input
-                    type="search"
-                    value={searchValue}
-                    onChange={(event) => onSearchChange?.(event.target.value)}
-                    placeholder={searchPlaceholder}
-                    className="w-full min-w-0 bg-transparent text-sm text-deep-blue placeholder:text-[#98A2B3] outline-none"
-                  />
-                </label>
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            {showTabs && tabs.length > 0 ? (
+              <SegmentedTabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
+            ) : null}
+
+            {showSearch || (showFilters && filters.length > 0) ? (
+              <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between lg:ml-auto lg:w-auto lg:justify-end">
+                {showSearch ? (
+                  <label className="flex w-full min-w-0 max-w-md items-center rounded-lg border border-[#E4E7EC] bg-white px-3 py-2 focus-within:border-primary lg:w-72 xl:w-80">
+                    <input
+                      type="search"
+                      value={searchValue}
+                      onChange={(event) => onSearchChange?.(event.target.value)}
+                      placeholder={searchPlaceholder}
+                      className="w-full min-w-0 bg-transparent text-sm text-deep-blue placeholder:text-[#98A2B3] outline-none"
+                    />
+                  </label>
+                ) : null}
                 {showFilters && filters.length > 0 ? (
-                  <div className="order-last self-end sm:order-none sm:self-auto">
+                  <div className="self-end sm:self-auto">
                     <FiltersBar filterLabel={filterLabel} filters={filters} />
                   </div>
                 ) : null}
               </div>
-            </>
-          ) : (
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              {showTabs && tabs.length > 0 ? (
-                <SegmentedTabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
-              ) : (
-                <div />
-              )}
-              {showFilters && filters.length > 0 ? (
-                <FiltersBar filterLabel={filterLabel} filters={filters} />
-              ) : null}
-            </div>
-          )}
+            ) : null}
+          </div>
         </div>
       ) : null}
 
@@ -111,13 +106,13 @@ const DataTable = ({
                 {columns.map((column) => (
                   <th
                     key={column.key}
-                    className={`px-3 py-3 font-semibold whitespace-nowrap text-deep-blue sm:px-4 ${column.headerClassName || ''}`}
+                    className={`${headPad} font-semibold whitespace-nowrap text-deep-blue ${column.headerClassName || ''}`}
                   >
                     {column.header}
                   </th>
                 ))}
                 {showActionColumn ? (
-                  <th className="px-3 py-3 font-semibold whitespace-nowrap text-deep-blue sm:px-4">
+                  <th className={`${headPad} font-semibold whitespace-nowrap text-deep-blue`}>
                     {actionHeader}
                   </th>
                 ) : null}
@@ -128,12 +123,12 @@ const DataTable = ({
                 ? Array.from({ length: skeletonRows }).map((_, rowIndex) => (
                     <tr key={`skeleton-${rowIndex}`} className="border-b border-[#F4F5F7] last:border-b-0">
                       {columns.map((column) => (
-                        <td key={column.key} className={`px-3 py-3.5 sm:px-4 ${column.className || ''}`}>
+                        <td key={column.key} className={`${cellPad} ${column.className || ''}`}>
                           <Skeleton className="h-4 w-full max-w-[9rem]" />
                         </td>
                       ))}
                       {showActionColumn ? (
-                        <td className="px-3 py-3.5 sm:px-4">
+                        <td className={cellPad}>
                           <Skeleton className="mx-auto h-5 w-5 rounded-full" />
                         </td>
                       ) : null}
@@ -158,7 +153,7 @@ const DataTable = ({
                         return (
                           <td
                             key={column.key}
-                            className={`px-3 py-3.5 text-deep-blue sm:px-4 ${wrapClass} ${column.className || ''}`}
+                            className={`${cellPad} text-deep-blue ${wrapClass} ${column.className || ''}`}
                           >
                             {typeof column.render === 'function'
                               ? column.render(value, row, rowIndex)
@@ -167,7 +162,7 @@ const DataTable = ({
                         );
                       })}
                       {showActionColumn ? (
-                        <td className="px-3 py-3.5 sm:px-4">
+                        <td className={cellPad}>
                           <RowActions
                             row={row}
                             actions={

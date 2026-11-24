@@ -26,17 +26,18 @@ export async function getUsersList(params = {}) {
     pageSize: params.pageSize || 10,
     total: 0,
     totalPages: 1,
+    summary: { total: 0, users: 0, suppliers: 0, active: 0 },
   };
 
   if (Array.isArray(inner)) {
     usersData = inner;
-    metaData = outer?.meta || metaData;
+    metaData = { ...metaData, ...(outer?.meta || {}) };
   } else if (Array.isArray(inner?.data)) {
     usersData = inner.data;
-    metaData = inner.meta || outer?.meta || metaData;
+    metaData = { ...metaData, ...(inner.meta || outer?.meta || {}) };
   } else if (Array.isArray(outer?.data)) {
     usersData = outer.data;
-    metaData = outer.meta || metaData;
+    metaData = { ...metaData, ...(outer.meta || {}) };
   }
 
   if (!metaData.total && usersData.length) {
