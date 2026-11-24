@@ -156,6 +156,13 @@
   font-weight: 600;
 }
 
+.feed-sponsored-post-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #16a34a;
+  letter-spacing: -0.02em;
+}
+
 /* CTA Button */
 .feed-sponsored-post-cta-button {
   align-self: flex-start;

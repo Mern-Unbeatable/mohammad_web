@@ -113,6 +113,13 @@
   display: inline-block;
 }
 
+.feed-ad-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #16a34a;
+  letter-spacing: -0.02em;
+}
+
 .feed-ad-cta-button {
   width: 100%;
   padding: 10px 16px;

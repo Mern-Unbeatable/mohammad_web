@@ -1,6 +1,8 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { Megaphone } from "lucide-react";
 import Card from "@/components/ui/Card";
+import ExpandableText from "@/components/common/ExpandableText/ExpandableText";
+import { formatAdFee } from "@/features/dash/supplier/advertisements/adsMappers";
 import "./FeedSponsoredPost.css";
 
 /**
@@ -132,14 +134,20 @@ const FeedSponsoredPost = memo(({
       {/* Content */}
       <div className="feed-sponsored-post-content">
         <h3 className="feed-sponsored-post-title">{ad.title}</h3>
-        <p className="feed-sponsored-post-description">{ad.description}</p>
+        {ad.description ? (
+          <ExpandableText
+            text={ad.description}
+            lines={3}
+            className="feed-sponsored-post-description"
+          />
+        ) : null}
 
         {/* Metadata */}
         {(ad.price || ad.location || ad.eventDate) && (
           <div className="feed-sponsored-post-metadata">
-            {ad.price && (
-              <span className="feed-sponsored-post-metadata-item">
-                <strong>${ad.price.toFixed(2)}</strong>
+            {ad.price != null && Number(ad.price) > 0 && (
+              <span className="feed-sponsored-post-metadata-item feed-sponsored-post-price">
+                {formatAdFee(ad.price)}
               </span>
             )}
             {ad.location && (

@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import Card from "@/components/ui/Card";
+import { formatAdFee } from "@/features/dash/supplier/advertisements/adsMappers";
 import "./FeedAdvertisementCard.css";
 
 /**
@@ -131,9 +132,9 @@ const FeedAdvertisementCard = memo(({
         {/* Ad Metadata */}
         {(ad.price || ad.location || ad.eventDate) && (
           <div className="feed-ad-metadata">
-            {ad.price && (
-              <span className="feed-ad-metadata-item">
-                <strong>${ad.price.toFixed(2)}</strong>
+            {ad.price != null && Number(ad.price) > 0 && (
+              <span className="feed-ad-metadata-item feed-ad-price">
+                {formatAdFee(ad.price)}
               </span>
             )}
             {ad.location && (
