@@ -163,6 +163,7 @@ export function toReportDetailModel(report) {
     status: STATUS_LABEL[report.status] || report.status,
     targetType: TARGET_LABEL[report.targetType] || report.targetType,
     targetSnippet: report.targetSnippet || "",
+    reportedDate: formatReportDate(report.createdAt),
     reporter,
     reportedUser: {
       ...reportedUser,

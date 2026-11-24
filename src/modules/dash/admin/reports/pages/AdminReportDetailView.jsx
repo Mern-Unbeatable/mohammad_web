@@ -4,9 +4,8 @@ import ModerationHistoryModal from "@/components/modals/admin/ModerationHistoryM
 import ReasonModal from "@/components/modals/admin/ReasonModal";
 import PanelPage from "@/components/layout/PanelPage";
 import PanelBackButton from "@/components/layout/PanelBackButton";
-import ReasonBanner from "../components/detail/ReasonBanner";
+import CaseSummary from "../components/detail/CaseSummary";
 import PersonCard from "../components/detail/PersonCard";
-import ReportedTarget from "../components/detail/ReportedTarget";
 import DecisionActions from "../components/detail/DecisionActions";
 import { useAdminReportDetail } from "../hooks/useAdminReportDetail";
 import { reasonModalCopy } from "../utils/reports";
@@ -32,23 +31,24 @@ const AdminReportDetailView = () => {
     <PanelPage>
       <PanelBackButton fallback={REPORTS_PATH} />
 
-      <ReasonBanner reason={report.reason} detail={report.reasonDetail} />
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px] xl:gap-8">
+        <CaseSummary report={report} />
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <PersonCard person={report.reporter} variant="reporter" onProfile={detail.openReporter} />
-        <PersonCard
-          person={report.reportedUser}
-          variant="reported"
-          onProfile={detail.openReportedUser}
-          onAudit={history.show}
-        />
+        <aside className="space-y-4 lg:sticky lg:top-8 lg:self-start">
+          <PersonCard
+            person={report.reportedUser}
+            variant="reported"
+            onProfile={detail.openReportedUser}
+            onAudit={history.show}
+          />
+          <PersonCard
+            person={report.reporter}
+            variant="reporter"
+            onProfile={detail.openReporter}
+          />
+          <DecisionActions disabled={detail.busy} onDecide={detail.decide} />
+        </aside>
       </div>
-
-      {report.targetSnippet ? (
-        <ReportedTarget type={report.targetType} snippet={report.targetSnippet} />
-      ) : null}
-
-      <DecisionActions disabled={detail.busy} onDecide={detail.decide} />
 
       <ModerationHistoryModal
         open={history.open}
