@@ -207,6 +207,10 @@ export function CallProvider({ children }) {
   const startCall = useCallback(
     (chat) => {
       if (!chat?.id || !chat.otherUserId) return;
+      if (!chat.online) {
+        toast.error("This person is offline");
+        return;
+      }
       if (callRef.current) {
         toast("You are already in a call");
         return;
