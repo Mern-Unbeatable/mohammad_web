@@ -68,6 +68,7 @@ describe("AdminReportDetailView", () => {
     expect(html).toContain("View Reporter Profile");
     expect(html).toContain("Audit History");
     expect(html).toContain("Reported Post");
+    expect(html).toContain("Buy now!");
     for (const label of ["Remove Content", "Warn User", "Suspend User", "Ban User", "Mark Resolved"]) {
       expect(html).toContain(label);
     }

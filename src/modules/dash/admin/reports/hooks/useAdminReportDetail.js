@@ -36,7 +36,18 @@ export const useAdminReportDetail = () => {
     };
   }, [dispatch, reportId]);
 
-  const report = useMemo(() => toReportDetailModel(selectedReport), [selectedReport]);
+  const report = useMemo(
+    () =>
+      selectedReport?.id === reportId ? toReportDetailModel(selectedReport) : null,
+    [selectedReport, reportId],
+  );
+
+  // Treat "no report yet" as loading so the first paint doesn't redirect
+  // back to the list before fetchReportDetails.pending runs.
+  const loading =
+    Boolean(reportId) &&
+    (selectedReportLoading || (!report && !error));
+  const missing = Boolean(reportId) && !loading && !report;
 
   const moderate = async (action, note = "") => {
     const result = await dispatch(moderateReport({ reportId, action, note }));
@@ -76,8 +87,8 @@ export const useAdminReportDetail = () => {
     navigate(report.reportedUser.id ? userProfilePath(report.reportedUser.id) : USERS_PATH);
 
   return {
-    loading: selectedReportLoading,
-    missing: (error && !selectedReport) || !report,
+    loading,
+    missing,
     report,
     busy: actionLoading,
     decide,

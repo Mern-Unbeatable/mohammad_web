@@ -1,7 +1,8 @@
 import Card from "@/components/ui/Card";
 import StatusBadge from "@/components/data-display/DataTable/StatusBadge";
+import ReportedContentCard from "./ReportedContentCard";
 
-/** Left-rail case content: status, reason, and reported material. */
+/** Left-rail case content: status, reason, and the reported item preview. */
 const CaseSummary = ({ report }) => (
   <div className="min-w-0 space-y-4">
     <Card className="overflow-hidden">
@@ -41,16 +42,11 @@ const CaseSummary = ({ report }) => (
         </p>
       </div>
 
-      {report.targetSnippet ? (
-        <div className="px-5 py-5">
-          <p className="text-[12px] font-semibold uppercase tracking-wide text-[#98A2B3]">
-            Reported {report.targetType}
-          </p>
-          <p className="mt-2 text-[14px] leading-relaxed text-[#475467]">
-            &ldquo;{report.targetSnippet}&rdquo;
-          </p>
-        </div>
-      ) : null}
+      <ReportedContentCard
+        target={report.target}
+        fallbackType={report.targetType}
+        fallbackSnippet={report.targetSnippet}
+      />
     </Card>
   </div>
 );

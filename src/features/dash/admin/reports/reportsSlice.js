@@ -65,16 +65,21 @@ const reportsSlice = createSlice({
         state.statsLoading = false;
         state.error = action.payload;
       })
-      .addCase(fetchReportDetails.pending, (state) => {
+      .addCase(fetchReportDetails.pending, (state, action) => {
         state.selectedReportLoading = true;
         state.error = null;
+        if (state.selectedReport?.id && state.selectedReport.id !== action.meta.arg) {
+          state.selectedReport = null;
+        }
       })
       .addCase(fetchReportDetails.fulfilled, (state, action) => {
         state.selectedReportLoading = false;
         state.selectedReport = action.payload;
+        state.error = null;
       })
       .addCase(fetchReportDetails.rejected, (state, action) => {
         state.selectedReportLoading = false;
+        state.selectedReport = null;
         state.error = action.payload;
       })
       .addCase(updateReportStatus.pending, (state) => {

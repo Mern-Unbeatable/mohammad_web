@@ -153,6 +153,29 @@ export function toReportDetailModel(report) {
     date: formatDateTime(log.createdAt),
   }));
 
+  const target = report.target
+    ? {
+        type: TARGET_LABEL[report.target.type] || report.target.type || "",
+        id: report.target.id || null,
+        exists: Boolean(report.target.exists),
+        title: report.target.title || "",
+        body: report.target.body || report.targetSnippet || "",
+        imageUrl: report.target.imageUrl || report.target.images?.[0] || "",
+        images: Array.isArray(report.target.images) ? report.target.images : [],
+        meta: report.target.meta || "",
+        href: report.target.href || null,
+        author: report.target.author
+          ? {
+              id: report.target.author.id || null,
+              name: report.target.author.name || "Unknown",
+              avatar: report.target.author.avatar || null,
+              initials: report.target.author.initials || "U",
+              company: report.target.author.company || "",
+            }
+          : null,
+      }
+    : null;
+
   return {
     id: report.id,
     reason: REASON_LABEL[report.reason] || report.reason,
@@ -163,6 +186,7 @@ export function toReportDetailModel(report) {
     status: STATUS_LABEL[report.status] || report.status,
     targetType: TARGET_LABEL[report.targetType] || report.targetType,
     targetSnippet: report.targetSnippet || "",
+    target,
     reportedDate: formatReportDate(report.createdAt),
     reporter,
     reportedUser: {
