@@ -5,7 +5,7 @@ import PanelPage from "@/components/layout/PanelPage";
 import PanelBackButton from "@/components/layout/PanelBackButton";
 import AdHeader from "../components/detail/AdHeader";
 import AdBody from "../components/detail/AdBody";
-import ReviewActions from "../components/detail/ReviewActions";
+import AdControlsSidebar from "../components/detail/AdControlsSidebar";
 import AdLoadError from "../components/detail/AdLoadError";
 import RejectAdModal from "../components/common/RejectAdModal";
 import { useAdminAdDetail } from "../hooks/useAdminAdDetail";
@@ -37,16 +37,21 @@ const AdminAdvertisementDetailView = () => {
     <PanelPage>
       <PanelBackButton fallback={ADS_PATH} />
 
-      <Card className="overflow-hidden">
-        <AdHeader ad={ad} />
-        <AdBody ad={ad} />
-        <ReviewActions
-          status={ad.status}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px] xl:gap-8">
+        <div className="min-w-0">
+          <Card className="overflow-hidden">
+            <AdHeader ad={ad} />
+            <AdBody ad={ad} />
+          </Card>
+        </div>
+
+        <AdControlsSidebar
+          ad={ad}
           busy={detail.busy}
           onReview={detail.review}
           onReject={detail.openReject}
         />
-      </Card>
+      </div>
 
       <RejectAdModal
         open={detail.rejectOpen}

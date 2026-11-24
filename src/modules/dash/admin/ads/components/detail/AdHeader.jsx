@@ -1,9 +1,8 @@
 import { RefreshCw } from "lucide-react";
-import { STATUS_PILL } from "../../constant/constants";
 
-/** Company initials, name, category, location and the status pill. */
+/** Company initials, name, category and location for the ad preview. */
 const AdHeader = ({ ad }) => (
-  <div className="flex items-start justify-between gap-4 border-b border-[#E4E7EC] px-5 py-4 sm:px-6">
+  <div className="flex items-start gap-4 border-b border-[#E4E7EC] px-5 py-4 sm:px-6">
     <div className="flex items-center gap-3">
       <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-green-secondary text-[13px] font-bold text-green-primary">
         {ad.companyInitials}
@@ -19,13 +18,6 @@ const AdHeader = ({ ad }) => (
         </div>
       </div>
     </div>
-    <span
-      className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${
-        STATUS_PILL[ad.status] || STATUS_PILL.Expired
-      }`}
-    >
-      {ad.status}
-    </span>
   </div>
 );
 

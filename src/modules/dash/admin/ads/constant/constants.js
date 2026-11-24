@@ -2,6 +2,7 @@ import { Ban, CheckCircle2, Clock3 } from "lucide-react";
 
 export const ADS_PATH = "/admin/advertisement";
 export const adDetailPath = (id) => `${ADS_PATH}/${id}`;
+export const supplierProfilePath = (userId) => `/admin/users/${userId}`;
 
 export const ADS_PAGE_SIZE = 10;
 export const SEARCH_DEBOUNCE_MS = 350;

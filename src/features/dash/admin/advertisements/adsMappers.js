@@ -85,11 +85,12 @@ export function toAdDetailModel(ad) {
   if (!ad) return null;
 
   const supplier = ad.supplier || {};
-  const company =
-    supplier.company ||
+  const personName =
     supplier.name ||
     [supplier.firstName, supplier.lastName].filter(Boolean).join(" ") ||
-    "Lab Unity Partner";
+    "";
+  const company = supplier.company || personName || "Lab Unity Partner";
+  const creatorName = personName || company;
 
   return {
     id: ad.id,
@@ -112,6 +113,15 @@ export function toAdDetailModel(ad) {
     clicks: ad.clicks ?? 0,
     durationDays: ad.durationDays,
     supplierId: supplier.id || null,
+    creator: {
+      id: supplier.id || null,
+      name: creatorName,
+      title: supplier.title || "",
+      company: supplier.company || "",
+      location: supplier.location || supplier.country || "",
+      avatar: supplier.avatar || supplier.avatarUrl || "",
+      initials: supplier.initials || initialsFromName(creatorName),
+    },
     raw: ad,
   };
 }
