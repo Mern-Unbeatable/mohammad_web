@@ -31,6 +31,12 @@ export const authRoutes = [
             element: <ResetPasswordView />,
             handle: { title: "Reset password" },
           },
+          {
+            // Path token resists email-client redirects that break `?token=` links.
+            path: "/reset-password/:token",
+            element: <ResetPasswordView />,
+            handle: { title: "Reset password" },
+          },
         ],
       },
     ],

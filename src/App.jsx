@@ -12,6 +12,12 @@ function App() {
         toastOptions={{
           duration: 4000,
           style: { fontSize: "14px", maxWidth: "420px" },
+          error: {
+            style: {
+              background: "#dc2626",
+              color: "#fff",
+            },
+          },
         }}
       />
     </>

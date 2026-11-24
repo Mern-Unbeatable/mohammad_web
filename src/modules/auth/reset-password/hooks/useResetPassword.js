@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '@/shared/hooks/useAuth';
 import {
+  clearPersistedResetToken,
   formatExpiry,
   isValidTokenFormat,
+  persistResetToken,
   readToken,
   resolveStatus,
   toCheck,
@@ -26,8 +28,9 @@ const INITIAL_CHECK = { token: null, status: RESET_STATUS.CHECKING, message: '',
 export const useResetPassword = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { token: pathToken } = useParams();
   const [searchParams] = useSearchParams();
-  const { urlToken, token } = readToken(searchParams, location.state);
+  const { urlToken, token } = readToken(searchParams, location.state, pathToken);
   const hasValidFormat = isValidTokenFormat(token);
   const { verifyResetToken, resetPassword, loading } = useAuth();
 
@@ -41,12 +44,12 @@ export const useResetPassword = () => {
   const [formError, setFormError] = useState('');
   const requestedRef = useRef('');
 
-  // Move the secret out of the address bar (history, screenshots, Referer)
-  // into history state, which still survives a page refresh.
+  // Keep the secret out of the address bar (history, screenshots, Referer)
+  // and stash a copy so auth bootstrap remounts don't lose it.
   useEffect(() => {
-    if (urlToken) {
-      navigate(RESET_PASSWORD_PATH, { replace: true, state: { resetToken: urlToken } });
-    }
+    if (!urlToken || !isValidTokenFormat(urlToken)) return;
+    persistResetToken(urlToken);
+    navigate(RESET_PASSWORD_PATH, { replace: true, state: { resetToken: urlToken } });
   }, [urlToken, navigate]);
 
   useEffect(() => {
@@ -81,6 +84,7 @@ export const useResetPassword = () => {
       setDone(true);
       setPassword('');
       setConfirmPassword('');
+      clearPersistedResetToken();
       navigate(RESET_PASSWORD_PATH, { replace: true, state: null });
       toast.success(result.message || RESET_SUCCESS_MESSAGE);
       return;

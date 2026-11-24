@@ -39,7 +39,7 @@ export const useCheckoutReturn = () => {
           toast('Payment received — activating membership. Refresh if status lags.');
         }
       } else if (checkout === CHECKOUT_STATUS.CANCELLED) {
-        toast('Checkout cancelled — no payment was taken');
+        toast.error('Checkout cancelled — no payment was taken');
       }
 
       dispatch(fetchMySubscription());

@@ -9,10 +9,46 @@ import {
 
 export const isValidTokenFormat = (token) => TOKEN_PATTERN.test(token);
 
-/** Token from the URL, else from history state (where it is moved after load). */
-export const readToken = (searchParams, locationState) => {
-  const urlToken = searchParams.get('token')?.trim() || '';
-  return { urlToken, token: urlToken || locationState?.resetToken || '' };
+const STORAGE_KEY = 'labunity.resetToken';
+
+export const persistResetToken = (token) => {
+  if (!token || typeof sessionStorage === 'undefined') return;
+  try {
+    sessionStorage.setItem(STORAGE_KEY, token);
+  } catch {
+    /* private mode / quota */
+  }
+};
+
+export const clearPersistedResetToken = () => {
+  if (typeof sessionStorage === 'undefined') return;
+  try {
+    sessionStorage.removeItem(STORAGE_KEY);
+  } catch {
+    /* ignore */
+  }
+};
+
+const readPersistedResetToken = () => {
+  if (typeof sessionStorage === 'undefined') return '';
+  try {
+    return sessionStorage.getItem(STORAGE_KEY) || '';
+  } catch {
+    return '';
+  }
+};
+
+/**
+ * Token from the path (`/reset-password/:token`), query (`?token=`), history
+ * state, or sessionStorage (survives auth bootstrap remounts).
+ */
+export const readToken = (searchParams, locationState, pathToken = '') => {
+  const fromPath = typeof pathToken === 'string' ? pathToken.trim() : '';
+  const fromQuery = searchParams.get('token')?.trim() || '';
+  const urlToken = fromPath || fromQuery;
+  const token =
+    urlToken || locationState?.resetToken || readPersistedResetToken() || '';
+  return { urlToken, token };
 };
 
 /** Verify result → check state; a 400 means the link itself is bad. */

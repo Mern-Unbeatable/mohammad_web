@@ -21,7 +21,13 @@ describe('isValidTokenFormat', () => {
 });
 
 describe('readToken', () => {
-  it('prefers the trimmed URL token', () => {
+  it('prefers the path token, then the trimmed query token', () => {
+    expect(
+      readToken(new URLSearchParams(`token=old`), { resetToken: 'older' }, `  ${TOKEN}  `),
+    ).toEqual({
+      urlToken: TOKEN,
+      token: TOKEN,
+    });
     expect(readToken(new URLSearchParams(`token=%20${TOKEN}%20`), { resetToken: 'old' })).toEqual({
       urlToken: TOKEN,
       token: TOKEN,
