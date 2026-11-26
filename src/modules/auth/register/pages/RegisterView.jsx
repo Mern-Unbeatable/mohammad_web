@@ -1,6 +1,20 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { Loader2, Mail, ShieldCheck } from "lucide-react";
+import {
+  Briefcase,
+  Building2,
+  FileText,
+  Globe2,
+  KeyRound,
+  Loader2,
+  Lock,
+  Mail,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  User,
+  Users,
+} from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { getSafeRedirectPath } from "@/shared/router/utils/safeRedirect";
@@ -19,6 +33,14 @@ import {
   Textarea,
 } from "@/components/form-controls";
 import { DEFAULT_TRIAL_DAYS } from "@/components/navigation/constant/constants";
+
+const FieldIcon = ({ icon: Icon }) => (
+  <Icon
+    className="mr-1.5 inline h-3.5 w-3.5 text-[#98A2B3]"
+    strokeWidth={2.25}
+    aria-hidden="true"
+  />
+);
 
 const FormSection = ({ title, children }) => (
   <section className="space-y-5 border-t border-[#EAECF0] pt-6 first:border-t-0 first:pt-0">
@@ -143,7 +165,12 @@ const RegisterView = () => {
             <FormSection title="About you">
               <SelectField
                 id="profileType"
-                label="What best describes you?"
+                label={
+                  <>
+                    <FieldIcon icon={Users} />
+                    What best describes you?
+                  </>
+                }
                 value={profileType}
                 onChange={(e) => setProfileType(e.target.value)}
                 disabled={loading}
@@ -162,6 +189,7 @@ const RegisterView = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
                   <FormLabel variant="auth" htmlFor="firstName">
+                    <FieldIcon icon={User} />
                     First Name
                   </FormLabel>
                   <Input
@@ -177,6 +205,7 @@ const RegisterView = () => {
                 </div>
                 <div>
                   <FormLabel variant="auth" htmlFor="lastName">
+                    <FieldIcon icon={User} />
                     Last Name
                   </FormLabel>
                   <Input
@@ -195,6 +224,7 @@ const RegisterView = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
                   <FormLabel variant="auth" htmlFor="jobTitle">
+                    <FieldIcon icon={Briefcase} />
                     Job Title / Position
                   </FormLabel>
                   <Input
@@ -210,6 +240,7 @@ const RegisterView = () => {
                 </div>
                 <div>
                   <FormLabel variant="auth" htmlFor="company">
+                    <FieldIcon icon={Building2} />
                     Company or Laboratory Name
                   </FormLabel>
                   <Input
@@ -227,6 +258,7 @@ const RegisterView = () => {
 
               <div>
                 <FormLabel variant="auth" htmlFor="professionalInfo">
+                  <FieldIcon icon={FileText} />
                   Professional Information
                 </FormLabel>
                 <Textarea
@@ -246,6 +278,7 @@ const RegisterView = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
                   <FormLabel variant="auth" htmlFor="email">
+                    <FieldIcon icon={Mail} />
                     Email Address
                   </FormLabel>
                   <Input
@@ -261,6 +294,7 @@ const RegisterView = () => {
                 </div>
                 <div>
                   <FormLabel variant="auth" htmlFor="phone">
+                    <FieldIcon icon={Phone} />
                     Phone Number
                   </FormLabel>
                   <Input
@@ -279,7 +313,12 @@ const RegisterView = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <SelectField
                   id="country"
-                  label="Country"
+                  label={
+                    <>
+                      <FieldIcon icon={Globe2} />
+                      Country
+                    </>
+                  }
                   value={country}
                   onChange={(e) => setCountry(e.target.value)}
                   disabled={loading}
@@ -292,6 +331,7 @@ const RegisterView = () => {
                 </SelectField>
                 <div>
                   <FormLabel variant="auth" htmlFor="city">
+                    <FieldIcon icon={MapPin} />
                     City
                   </FormLabel>
                   <Input
@@ -313,7 +353,12 @@ const RegisterView = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <PasswordField
                   id="password"
-                  label="Password"
+                  label={
+                    <>
+                      <FieldIcon icon={Lock} />
+                      Password
+                    </>
+                  }
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   visible={showPassword}
@@ -322,7 +367,12 @@ const RegisterView = () => {
                 />
                 <PasswordField
                   id="confirmPassword"
-                  label="Confirm Password"
+                  label={
+                    <>
+                      <FieldIcon icon={KeyRound} />
+                      Confirm Password
+                    </>
+                  }
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   visible={showConfirmPassword}
