@@ -7,7 +7,7 @@ import { PRIVACY_PATH, TERMS_PATH } from '@/modules/public/legal';
 import { CONTACT_PATH } from '@/modules/public/contact';
 
 const FOOTER_LINKS = [
-  { to: TERMS_PATH, label: 'Terms of Service' },
+  { to: TERMS_PATH, label: 'Terms of Use and Sale' },
   { to: PRIVACY_PATH, label: 'Privacy Policy' },
   { to: CONTACT_PATH, label: 'Contact Us' },
 ];

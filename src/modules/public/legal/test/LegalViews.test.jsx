@@ -10,8 +10,8 @@ import { LEGAL_LAST_UPDATED } from '../constant/constants';
 const render = (element) => renderToStaticMarkup(<MemoryRouter>{element}</MemoryRouter>);
 
 describe.each([
-  ['Privacy Policy', PrivacyPolicyView, PRIVACY_SECTIONS, '/terms', 'Terms of Service'],
-  ['Terms of Service', TermsOfServiceView, TERMS_SECTIONS, '/privacy', 'Privacy Policy'],
+  ['Privacy Policy', PrivacyPolicyView, PRIVACY_SECTIONS, '/terms', 'Terms of Use and Sale'],
+  ['Terms of Use and Sale', TermsOfServiceView, TERMS_SECTIONS, '/privacy', 'Privacy Policy'],
 ])('%s', (title, View, sections, relatedHref, relatedLabel) => {
   const html = render(<View />);
 

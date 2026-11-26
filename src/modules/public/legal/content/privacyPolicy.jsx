@@ -1,164 +1,185 @@
 import { Link } from 'react-router';
 import { TERMS_PATH } from '../constant/constants';
-import { SUPPORT_CONTACT } from '@/shared/constants/support';
+import { CONTACT_EMAIL } from '@/modules/public/contact/constant/constants';
+
+const COMPANY = {
+  name: 'Global Medical Transport SRL',
+  address: 'Chaussée de Bruxelles 176, 6040 Jumet, Belgium',
+  enterpriseNumber: '1021.030.215',
+  vat: 'BE 1021.030.215',
+  email: CONTACT_EMAIL,
+};
 
 export const PRIVACY_POLICY = {
   title: 'Privacy Policy',
   intro:
-    'This policy explains what personal data Lab Unity collects, how we use and protect it, and the choices and rights you have.',
-  related: { to: TERMS_PATH, label: 'Terms of Service' },
+    'This policy explains who processes your data on LabUnity.be, what we use, why we use it, who receives it, how long we keep it, and your rights — including how cookies and similar technologies are managed.',
+  related: { to: TERMS_PATH, label: 'Terms of Use and Sale' },
 };
 
 export const PRIVACY_SECTIONS = [
   {
-    id: 'introduction',
-    heading: 'Who we are',
+    id: 'controller',
+    heading: 'Who processes your data?',
     content: (
       <>
         <p>
-          This Privacy Policy explains how Lab Unity (&quot;we&quot;, &quot;us&quot;) collects,
-          uses, shares and protects personal data when you visit our website or use the Lab Unity
-          platform (the &quot;Platform&quot;). Lab Unity is the controller of the personal data
-          described in this policy.
+          {COMPANY.name}, {COMPANY.address}, enterprise number {COMPANY.enterpriseNumber}, VAT{' '}
+          {COMPANY.vat}, is the controller for the operation of LabUnity.be and its app. For
+          questions or requests about your data, contact{' '}
+          <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a> or write to our registered office.
         </p>
         <p>
           This policy should be read together with our{' '}
-          <Link to={TERMS_PATH}>Terms of Service</Link>.
+          <Link to={TERMS_PATH}>Terms of Use and Sale</Link>.
         </p>
       </>
     ),
   },
   {
-    id: 'data-we-collect',
-    heading: 'Information we collect',
+    id: 'data-we-use',
+    heading: 'What data do we use?',
     content: (
       <>
         <p>
-          <strong>Information you give us when you register:</strong> first and last name, email
-          address, phone number, password (stored only in hashed form), profile type, job title or
-          position, company or laboratory name, country and any professional information you
-          choose to add.
+          We process information you provide, including contact, account and profile details,
+          information about your organisation, posts, listings, messages and support
+          communications. Orders, subscriptions and seller onboarding may involve transaction
+          references, invoicing details and, where necessary, verification information. Use of the
+          service generates technical data such as IP addresses, browser details and sign-in logs.
         </p>
         <p>
-          <strong>Profile and content:</strong> profile photos, posts, comments, documents and files
-          you upload, marketplace listings, recruitment posts, group activity and messages you send
-          to other members.
-        </p>
-        <p>
-          <strong>Subscription and billing information:</strong> if you choose a paid plan, your
-          plan, billing status and payment history. Card details are collected and processed
-          directly by our payment provider, Stripe, and are not stored by Lab Unity.
-        </p>
-        <p>
-          <strong>Technical information:</strong> IP address, browser and device type, pages
-          requested, timestamps and security logs, collected automatically when you use the
-          Platform.
-        </p>
-        <p>
-          <strong>Support communications:</strong> the content of emails and requests you send to
-          our support team.
+          We may receive information from the organisation that adds you to an account, another
+          member who reports or mentions you, or a payment provider that confirms a transaction.
+          Where required, we inform people whose data was collected indirectly. Please do not share
+          patient records, identifiable test results or other identifiable health data through the
+          service.
         </p>
       </>
     ),
   },
   {
-    id: 'how-we-use',
-    heading: 'How we use your information',
+    id: 'why-we-use',
+    heading: 'Why do we use this data?',
     content: (
       <>
-        <p>We use personal data to:</p>
-        <ul>
-          <li>create and manage your account and authenticate you when you sign in;</li>
-          <li>
-            provide the Platform&apos;s features, including the professional directory, feed,
-            groups, messaging, marketplace and recruitment tools;
-          </li>
-          <li>
-            send service emails such as account confirmations, password resets, security alerts
-            and important changes to our terms;
-          </li>
-          <li>process subscriptions and payments when you choose a paid plan;</li>
-          <li>
-            keep the Platform safe, including preventing fraud, spam and abuse and enforcing our{' '}
-            <Link to={TERMS_PATH}>Terms of Service</Link>;
-          </li>
-          <li>respond to your support requests;</li>
-          <li>maintain and improve the Platform and comply with our legal obligations.</li>
-        </ul>
-      </>
-    ),
-  },
-  {
-    id: 'legal-bases',
-    heading: 'Legal bases for processing',
-    content: (
-      <>
-        <p>
-          Where data protection laws such as the EU or UK General Data Protection Regulation (GDPR)
-          apply, we rely on the following legal bases:
-        </p>
         <ul>
           <li>
-            <strong>Contract:</strong> to provide the Platform and the services you have requested;
+            <strong>Accounts and features.</strong> We use the data needed to create your account,
+            display your profile according to its visibility settings, publish content, deliver
+            messages and provide requested features and subscriptions. The legal basis is
+            performance of a contract or steps taken at your request before entering into a contract
+            where you are a party to it. For contacts at a customer organisation, our legitimate
+            interest may be to manage the business relationship.
           </li>
           <li>
-            <strong>Legitimate interests:</strong> to keep the Platform secure, prevent abuse and
-            improve our services, balanced against your rights;
+            <strong>Marketplace and billing.</strong> We process orders, subscriptions, payments and
+            support requests to perform the contract. We retain tax records and verify or report
+            certain seller information where legally required.
           </li>
           <li>
-            <strong>Consent:</strong> where we ask for it, for example to list you in the
-            professional contacts directory when you register. You can withdraw consent at any
-            time;
+            <strong>Security and moderation.</strong> Our legitimate interests include fraud
+            prevention, account protection, processing reports and defending our rights, subject to
+            your rights and freedoms. Some processing also fulfils legal obligations.
           </li>
           <li>
-            <strong>Legal obligation:</strong> where we must keep or disclose data to comply with
-            the law.
+            <strong>Audience measurement and marketing.</strong> Where consent is required, we ask
+            before using trackers or sending marketing communications. You can withdraw consent at
+            any time.
           </li>
         </ul>
-      </>
-    ),
-  },
-  {
-    id: 'visibility',
-    heading: 'What other members can see',
-    content: (
-      <>
         <p>
-          Lab Unity is a professional network. Your profile, including your name, job title,
-          company or laboratory, country, profile type, profile photo and professional
-          information, is visible to other signed-in members and may appear in the professional
-          contacts directory and in search results.
-        </p>
-        <p>
-          Posts and comments are visible to the audience where you publish them, and private
-          messages are visible to the members in that conversation. Your email address, phone
-          number and password are not shown on your public profile.
+          Required fields are identified when data is collected. If information needed for an
+          account or order is missing, we may be unable to provide the service requested.
         </p>
       </>
     ),
   },
   {
-    id: 'sharing',
-    heading: 'How we share information',
+    id: 'recipients',
+    heading: 'Who receives your data?',
     content: (
       <>
-        <p>We do not sell your personal data. We share it only:</p>
+        <p>
+          People with access to a page can see public information according to your settings.
+          Messages are intended for the chosen recipients. Authorised people may access relevant
+          information where necessary to provide support, handle a report or comply with the law.
+          Information needed for a sale is shared with the other party. Sellers are responsible for
+          processing data for their own obligations.
+        </p>
+        <p>
+          Hosting, email, payment, support or analytics providers may receive data needed for the
+          services they actually perform. Providers may act as processors or separate controllers,
+          depending on their role. Data may be disclosed to competent authorities where legally
+          required.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 'transfers-retention',
+    heading: 'Transfers and retention',
+    content: (
+      <>
+        <p>
+          Service providers may process data in countries other than your own. Where personal data
+          is transferred outside the European Economic Area, we rely on appropriate safeguards such
+          as adequacy decisions or Standard Contractual Clauses. You may request information about
+          those safeguards by contacting{' '}
+          <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
+        </p>
+        <p>We keep data according to its purpose:</p>
         <ul>
           <li>
-            with service providers who help us run the Platform, such as hosting and storage
-            providers, email delivery services and our payment processor Stripe, under contracts
-            that require them to protect your data and use it only on our instructions;
-          </li>
-          <li>with other members, as described in the section above;</li>
-          <li>
-            when required by law, court order or a competent authority, or to protect the rights,
-            safety and property of Lab Unity, our members or others;
+            <strong>Accounts and profiles:</strong> for as long as the account remains active, then
+            deleted or anonymised within a reasonable period after closure;
           </li>
           <li>
-            in connection with a merger, acquisition or sale of assets, in which case this policy
-            will continue to apply to your data.
+            <strong>Posts and messages:</strong> while the content remains on the service, then
+            subject to temporary backups and mandatory retention after deletion;
+          </li>
+          <li>
+            <strong>Transactions and invoices:</strong> for the applicable statutory period;
+          </li>
+          <li>
+            <strong>Security logs and reports:</strong> for as long as needed for security,
+            investigation and legal defence;
+          </li>
+          <li>
+            <strong>Cookie preferences:</strong> for as long as needed to honour your choices.
           </li>
         </ul>
+        <p>
+          Data needed for a dispute or legal duty may be kept for the required period.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 'your-rights',
+    heading: 'What are your rights?',
+    content: (
+      <>
+        <p>
+          Depending on the processing, you may request access, rectification, erasure, restriction
+          or portability. You may object to processing based on legitimate interests on grounds
+          relating to your situation, and object to direct marketing at any time. You can withdraw
+          consent without affecting earlier lawful processing. Contact{' '}
+          <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>. We may ask for proof of identity
+          if we have reasonable doubts.
+        </p>
+        <p>
+          You may complain to the Belgian Data Protection Authority (
+          <a
+            href="https://www.dataprotectionauthority.be"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            dataprotectionauthority.be
+          </a>
+          ) or the competent authority where you live or work or where the alleged infringement
+          occurred.
+        </p>
       </>
     ),
   },
@@ -166,109 +187,55 @@ export const PRIVACY_SECTIONS = [
     id: 'cookies',
     heading: 'Cookies and similar technologies',
     content: (
-      <>
-        <p>
-          We use strictly necessary cookies to keep you signed in, remember your &quot;keep me
-          signed in&quot; preference and protect your session. These cookies are required for the
-          Platform to work and cannot be switched off without signing out.
-        </p>
-        <p>
-          We do not use advertising cookies or third-party tracking cookies. If we introduce
-          optional analytics in the future, we will update this policy and ask for your consent
-          where required.
-        </p>
-      </>
-    ),
-  },
-  {
-    id: 'retention',
-    heading: 'Data retention',
-    content: (
       <p>
-        We keep your personal data for as long as your account is active and as needed to provide
-        the Platform. When you close your account, we delete or anonymize your personal data
-        within a reasonable period, unless we need to keep certain information to comply with
-        legal, tax or accounting obligations, resolve disputes or enforce our agreements.
+        A cookie is a small file used by a website. The same choices apply to similar technologies
+        when they store or access information on your device. Strictly necessary trackers, for
+        example those essential to keep you signed in or remember your privacy choices, may be used
+        without consent. Optional trackers, such as most analytics tools, social integrations or
+        advertising, remain disabled until you agree to the relevant purpose, if such tools are
+        used.
       </p>
     ),
   },
   {
-    id: 'security',
-    heading: 'Security',
+    id: 'cookie-choices',
+    heading: 'Managing your cookie choices',
     content: (
       <p>
-        We use technical and organizational measures to protect your personal data, including
-        encrypted connections (HTTPS), hashed passwords, access controls and rate limiting on
-        sensitive actions such as sign-in and password reset. No online service can be completely
-        secure, so please use a strong, unique password and keep it confidential.
+        On your first visit you can select &quot;Accept all&quot;, &quot;Reject all&quot; or
+        &quot;Customise&quot;. Optional categories are off by default. Change your choices or
+        withdraw consent at any time via the Cookie preferences control on the site. Rejecting
+        optional trackers does not block essential features. Some optional integrations may remain
+        disabled.
       </p>
     ),
   },
   {
-    id: 'your-rights',
-    heading: 'Your rights',
+    id: 'tracker-list',
+    heading: 'Tracker list',
     content: (
       <>
-        <p>Depending on where you live, you may have the right to:</p>
+        <p>
+          The following categories describe trackers that may be used on the website and app.
+          Unused categories are not enabled.
+        </p>
         <ul>
-          <li>access the personal data we hold about you and receive a copy of it;</li>
-          <li>correct inaccurate or incomplete data;</li>
-          <li>ask us to delete your data;</li>
-          <li>restrict or object to certain processing;</li>
-          <li>receive your data in a portable format;</li>
-          <li>withdraw your consent at any time, where processing is based on consent;</li>
-          <li>lodge a complaint with your local data protection authority.</li>
+          <li>
+            <strong>Strictly necessary:</strong> session and authentication cookies required to keep
+            you signed in, protect your account and remember essential privacy choices. These are
+            first-party and last for the session or until you sign out / clear site data.
+          </li>
+          <li>
+            <strong>Payment:</strong> when you subscribe or pay, Stripe may set cookies or similar
+            technologies needed to process the payment securely. Stripe acts according to its role
+            as payment provider.
+          </li>
+          <li>
+            <strong>Optional analytics, social or advertising:</strong> disabled by default and only
+            used if you consent to the relevant purpose.
+          </li>
         </ul>
-        <p>
-          You can update most profile information from your account settings. To exercise any
-          other right, email us at{' '}
-          <a href={`mailto:${SUPPORT_CONTACT.email}`}>{SUPPORT_CONTACT.email}</a>. We may need to
-          verify your identity before responding.
-        </p>
       </>
-    ),
-  },
-  {
-    id: 'international-transfers',
-    heading: 'International data transfers',
-    content: (
-      <p>
-        Our service providers may process data in countries other than your own. Where personal
-        data is transferred outside the European Economic Area or the United Kingdom, we rely on
-        appropriate safeguards such as adequacy decisions or Standard Contractual Clauses.
-      </p>
-    ),
-  },
-  {
-    id: 'children',
-    heading: 'Children',
-    content: (
-      <p>
-        The Platform is intended for professionals aged 18 or over. We do not knowingly collect
-        personal data from children. If you believe a child has provided us with personal data,
-        please contact us and we will delete it.
-      </p>
-    ),
-  },
-  {
-    id: 'changes',
-    heading: 'Changes to this policy',
-    content: (
-      <p>
-        We may update this Privacy Policy from time to time. When we make material changes we will
-        update the &quot;Last updated&quot; date above and, where appropriate, notify you by email
-        or through the Platform.
-      </p>
-    ),
-  },
-  {
-    id: 'contact',
-    heading: 'Contact us',
-    content: (
-      <p>
-        If you have questions about this Privacy Policy or how we handle your personal data,
-        please email us at <a href={`mailto:${SUPPORT_CONTACT.email}`}>{SUPPORT_CONTACT.email}</a>.
-      </p>
     ),
   },
 ];

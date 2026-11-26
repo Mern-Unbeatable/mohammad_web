@@ -2,7 +2,7 @@ export const TERMS_PATH = '/terms';
 
 export const PRIVACY_PATH = '/privacy';
 
-export const LEGAL_LAST_UPDATED = 'October 11, 2026';
+export const LEGAL_LAST_UPDATED = 'November 26, 2026';
 
 /** Section counts as "current" once its top passes 24px and until it leaves the top 35%. */
 /** Top inset clears the sticky public navbar (up to 84px) plus breathing room. */
