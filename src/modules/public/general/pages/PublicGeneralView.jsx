@@ -1,18 +1,19 @@
-import { Link } from 'react-router';
-import Container from '@/components/ui/Container';
-import GeneralPostCard from '@/components/data-display/GeneralPostCard/GeneralPostCard';
-import Pagination from '@/components/common/Pagination/Pagination';
-import { CardSkeleton } from '@/components/loader';
-import CategoryPills from '../components/CategoryPills';
-import DocumentMeta from '../components/DocumentMeta';
-import GuestAuthPrompt from '../components/GuestAuthPrompt';
+import { Link } from "react-router";
+import Container from "@/components/ui/Container";
+import GeneralPostCard from "@/components/data-display/GeneralPostCard/GeneralPostCard";
+import Pagination from "@/components/common/Pagination/Pagination";
+import { CardSkeleton } from "@/components/loader";
+import CategoryPills from "../components/CategoryPills";
+import DocumentMeta from "../components/DocumentMeta";
+import GuestAuthPrompt from "../components/GuestAuthPrompt";
+import GuestLoadMore from "../components/GuestLoadMore";
 import {
   POSTS_GRID_CLASS,
   PUBLIC_GENERAL_PATH,
   PUBLIC_POSTS_PAGE_SIZE,
   publicGeneralPostPath,
-} from '../constant/constants';
-import { usePublicGeneralPosts } from '../hooks/usePublicGeneralPosts';
+} from "../constant/constants";
+import { usePublicGeneralPosts } from "../hooks/usePublicGeneralPosts";
 
 const PublicGeneralView = () => {
   const posts = usePublicGeneralPosts();
@@ -34,13 +35,16 @@ const PublicGeneralView = () => {
             General
           </h1>
           <p className="mt-2 text-[15px] leading-relaxed text-[#667085]">
-            News and documents from the Lab Unity community. Guests can preview a limited
-            selection; members get full access.
+            News and documents from the Lab Unity community. Guests can preview
+            a limited selection; members get full access.
           </p>
         </header>
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-          <CategoryPills value={posts.category} onChange={posts.onCategoryChange} />
+          <CategoryPills
+            value={posts.category}
+            onChange={posts.onCategoryChange}
+          />
           {posts.isAuthenticated ? (
             <Link
               to="/general"
@@ -84,14 +88,17 @@ const PublicGeneralView = () => {
             </div>
           ) : (
             <>
-              <div className={POSTS_GRID_CLASS}>
-                {posts.items.map((post) => (
-                  <GeneralPostCard
-                    key={post.id}
-                    post={post}
-                    detailHref={publicGeneralPostPath(post.id)}
-                  />
-                ))}
+              <div className="relative">
+                <div className={POSTS_GRID_CLASS}>
+                  {posts.items.map((post) => (
+                    <GeneralPostCard
+                      key={post.id}
+                      post={post}
+                      detailHref={publicGeneralPostPath(post.id)}
+                    />
+                  ))}
+                </div>
+                {!posts.isAuthenticated ? <GuestLoadMore /> : null}
               </div>
               {posts.isAuthenticated && posts.totalPages > 1 ? (
                 <Pagination
@@ -104,16 +111,16 @@ const PublicGeneralView = () => {
             </>
           )}
         </div>
-
-        {!posts.isAuthenticated && !posts.loading ? (
-          <div className="mt-10">
+        {/* 
+        {!posts.isAuthenticated && !posts.loading && posts.items.length ? (
+          <div className="mt-8">
             <GuestAuthPrompt
               title="Sign in to keep exploring"
               message="Create a free account or log in to browse more General posts and join the conversation."
               compact
             />
           </div>
-        ) : null}
+        ) : null} */}
       </Container>
     </section>
   );
