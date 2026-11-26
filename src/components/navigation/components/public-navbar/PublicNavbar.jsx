@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { Menu, X } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import Container from '@/components/ui/Container';
@@ -11,6 +11,7 @@ import { PUBLIC_NAV_LINKS } from '../../constant/constants';
 const PublicNavbar = () => {
   const { menuOpen, closeMenu, toggleMenu, handleSectionNav, handleLogoClick, activeSection } =
     usePublicNavbar();
+  const location = useLocation();
 
   return (
     <>
@@ -26,13 +27,34 @@ const PublicNavbar = () => {
             </Link>
 
             <ul className="hidden h-full items-center gap-8 lg:flex lg:gap-6 xl:gap-10">
-              {PUBLIC_NAV_LINKS.map(({ label, sectionId }) => {
-                const active = activeSection === sectionId;
+              {PUBLIC_NAV_LINKS.map((link) => {
+                if (link.to) {
+                  const active =
+                    location.pathname === link.to ||
+                    location.pathname.startsWith(`${link.to}/`);
+                  return (
+                    <li key={link.label} className="h-full">
+                      <Link
+                        to={link.to}
+                        aria-current={active ? 'page' : undefined}
+                        className={`relative flex h-full items-center text-[15px] leading-none transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:transition-colors xl:text-[16px] ${
+                          active
+                            ? 'font-medium text-primary after:bg-primary'
+                            : 'font-normal text-[#6B7280] after:bg-transparent hover:text-primary'
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  );
+                }
+
+                const active = activeSection === link.sectionId;
                 return (
-                  <li key={label} className="h-full">
+                  <li key={link.label} className="h-full">
                     <a
-                      href={`/#${sectionId}`}
-                      onClick={handleSectionNav(sectionId)}
+                      href={`/#${link.sectionId}`}
+                      onClick={handleSectionNav(link.sectionId)}
                       aria-current={active ? 'location' : undefined}
                       className={`relative flex h-full items-center text-[15px] leading-none transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:transition-colors xl:text-[16px] ${
                         active
@@ -40,7 +62,7 @@ const PublicNavbar = () => {
                           : 'font-normal text-[#6B7280] after:bg-transparent hover:text-primary'
                       }`}
                     >
-                      {label}
+                      {link.label}
                     </a>
                   </li>
                 );

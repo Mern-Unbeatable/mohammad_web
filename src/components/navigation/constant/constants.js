@@ -11,6 +11,7 @@ import {
   Users,
 } from 'lucide-react';
 import { CHAT_BASE_PATHS } from '@/features/messages/chatPaths';
+import { PUBLIC_GENERAL_PATH } from '@/modules/public/general';
 
 export const FEED_PATH = '/feed';
 export const PROFILE_PATH = '/profile';
@@ -79,11 +80,12 @@ export const DEFAULT_TRIAL_DAYS = 90;
 
 export const AVATAR_ACCENT_CLASS = 'bg-[#FEF3C7] text-[#B45309]';
 
-/** Public (marketing) navbar: in-page sections of the home page. */
+/** Public (marketing) navbar: home section anchors and public route links. */
 export const PUBLIC_NAV_LINKS = [
   { label: 'Platform', sectionId: 'platform' },
   { label: 'Community', sectionId: 'community' },
   { label: 'Marketplace', sectionId: 'marketplace' },
+  { label: 'General', to: PUBLIC_GENERAL_PATH },
 ];
 
 /** Section the logo scrolls to when already on the home page. */

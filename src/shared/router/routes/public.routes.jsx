@@ -7,6 +7,9 @@ import PricingView from '@/modules/public/pricing/pages/PricingView';
 import { PRICING_PATH } from '@/modules/public/pricing';
 import ContactView from '@/modules/public/contact/pages/ContactView';
 import { CONTACT_PATH } from '@/modules/public/contact';
+import PublicGeneralView from '@/modules/public/general/pages/PublicGeneralView';
+import PublicGeneralPostDetailView from '@/modules/public/general/pages/PublicGeneralPostDetailView';
+import { PUBLIC_GENERAL_PATH } from '@/modules/public/general';
 
 export const publicRoutes = {
   path: '/',
@@ -18,5 +21,15 @@ export const publicRoutes = {
     { path: PRIVACY_PATH, element: <PrivacyPolicyView />, handle: { title: 'Privacy Policy' } },
     { path: PRICING_PATH, element: <PricingView />, handle: { title: 'Pricing' } },
     { path: CONTACT_PATH, element: <ContactView />, handle: { title: 'Contact Us' } },
+    {
+      path: PUBLIC_GENERAL_PATH,
+      element: <PublicGeneralView />,
+      handle: { title: 'General' },
+    },
+    {
+      path: `${PUBLIC_GENERAL_PATH}/:postId`,
+      element: <PublicGeneralPostDetailView />,
+      handle: { title: 'General Post' },
+    },
   ],
 };

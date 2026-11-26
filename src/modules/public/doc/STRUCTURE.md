@@ -26,6 +26,14 @@ public/
 │   ├── constant/ test/ doc/
 │   └── index.js             Public API: TERMS_PATH, PRIVACY_PATH, LEGAL_LAST_UPDATED
 │
+├── general/                 Public General posts (/general-posts); SEO guest preview
+│   ├── pages/        PublicGeneralView, PublicGeneralPostDetailView
+│   ├── components/   DocumentMeta, GuestAuthPrompt, GuestConversationPrompt, CategoryPills
+│   ├── hooks/        usePublicGeneralPosts, usePublicGeneralPostDetail
+│   ├── utils/        guestViews, relatedPosts
+│   ├── constant/ index.js
+│   └── index.js             Public API: PUBLIC_GENERAL_PATH, publicGeneralPostPath
+│
 └── doc/STRUCTURE.md
 ```
 

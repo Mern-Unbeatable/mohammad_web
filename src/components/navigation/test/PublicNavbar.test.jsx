@@ -23,9 +23,10 @@ const render = (auth = {}) => {
 };
 
 describe("PublicNavbar", () => {
-  it("shows section links and guest actions (desktop + mobile)", () => {
+  it("shows section links, General route, and guest actions (desktop + mobile)", () => {
     const html = render();
     expect(html.match(/href="\/#community"/g)).toHaveLength(2);
+    expect(html.match(/href="\/general-posts"/g)).toHaveLength(2);
     expect(html.match(/>Log in</g)).toHaveLength(2);
     expect(html).toContain('href="/join"');
     expect(html).toContain('aria-label="Open menu"');

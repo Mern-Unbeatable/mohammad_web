@@ -4,7 +4,7 @@ import { RelatedPostsSkeleton } from '@/components/loader';
 import { generalPostPath, POST_TYPE, POST_TYPE_STYLES } from '../../constant/constants';
 
 /** Compact list of other posts; hidden once loaded if there are none. */
-const RelatedPosts = ({ loading, items }) => {
+const RelatedPosts = ({ loading, items, getPostPath = generalPostPath }) => {
   if (loading) return <RelatedPostsSkeleton />;
   if (!items.length) return null;
 
@@ -15,7 +15,7 @@ const RelatedPosts = ({ loading, items }) => {
         {items.map((post) => (
           <li key={post.id}>
             <Link
-              to={generalPostPath(post.id)}
+              to={getPostPath(post.id)}
               className="group flex gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
             >
               <img

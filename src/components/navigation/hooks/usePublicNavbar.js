@@ -4,7 +4,7 @@ import { useBodyScrollLock } from '@/shared/hooks/useBodyScrollLock';
 import { PUBLIC_NAV_LINKS, PUBLIC_TOP_SECTION } from '../constant/constants';
 
 const HOME_PATH = '/';
-const SECTION_IDS = PUBLIC_NAV_LINKS.map((link) => link.sectionId);
+const SECTION_IDS = PUBLIC_NAV_LINKS.map((link) => link.sectionId).filter(Boolean);
 /** A section counts as current once its top passes this far below the viewport top. */
 const SPY_OFFSET = 140;
 /** Ignore scroll-spy updates while a click-triggered smooth scroll is running. */
