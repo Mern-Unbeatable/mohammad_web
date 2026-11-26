@@ -5,9 +5,11 @@ import logo from '@/assets/logo.png';
 import Container from '@/components/ui/Container';
 import { PRIVACY_PATH, TERMS_PATH } from '@/modules/public/legal';
 import { CONTACT_PATH } from '@/modules/public/contact';
+import { ABOUT_PATH } from '@/modules/public/about';
 import { PUBLIC_GENERAL_PATH } from '@/modules/public/general';
 
 const FOOTER_LINKS = [
+  { to: ABOUT_PATH, label: 'About' },
   { to: PUBLIC_GENERAL_PATH, label: 'General' },
   { to: TERMS_PATH, label: 'Terms of Use and Sale' },
   { to: PRIVACY_PATH, label: 'Privacy Policy' },

@@ -6,6 +6,8 @@ import { PRIVACY_PATH, TERMS_PATH } from "@/modules/public/legal";
 import PublicGeneralView from "@/modules/public/general/pages/PublicGeneralView";
 import PublicGeneralPostDetailView from "@/modules/public/general/pages/PublicGeneralPostDetailView";
 import { PUBLIC_GENERAL_PATH } from "@/modules/public/general";
+import AboutView from "@/modules/public/about/pages/AboutView";
+import { ABOUT_PATH } from "@/modules/public/about";
 import { publicRoutes } from "../routes/public.routes";
 import { authRoutes } from "../routes/auth.routes";
 
@@ -18,6 +20,17 @@ describe("legal routes", () => {
   ])("%s renders its page without any auth guard", (path, page) => {
     const matches = matchRoutes(routes, path) || [];
     expect(matches.at(-1)?.route.element?.type).toBe(page);
+    for (const { route } of matches) {
+      expect(route.handle?.guestOnly).toBeFalsy();
+      expect(route.handle?.requiredRole).toBeFalsy();
+    }
+  });
+});
+
+describe("about route", () => {
+  it("is ungated", () => {
+    const matches = matchRoutes(routes, ABOUT_PATH) || [];
+    expect(matches.at(-1)?.route.element?.type).toBe(AboutView);
     for (const { route } of matches) {
       expect(route.handle?.guestOnly).toBeFalsy();
       expect(route.handle?.requiredRole).toBeFalsy();

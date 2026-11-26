@@ -1,10 +1,23 @@
-import { CheckCircle2, Loader2, Send } from 'lucide-react';
+import {
+  Building2,
+  CheckCircle2,
+  Loader2,
+  Mail,
+  MessageSquare,
+  Phone,
+  Send,
+  User,
+} from 'lucide-react';
 import { FormLabel, Input, Textarea } from '@/components/form-controls';
 import SelectField from '@/modules/auth/register/components/SelectField';
 import { useContactForm } from '../hooks/useContactForm';
 import { INQUIRY_OPTIONS, MESSAGE_MAX_LENGTH } from '../constant/constants';
 
 const OptionalTag = () => <span className="font-normal text-[#98A2B3]"> (optional)</span>;
+
+const FieldIcon = ({ icon: Icon }) => (
+  <Icon className="mr-1.5 inline h-3.5 w-3.5 text-slate-400" strokeWidth={2.25} aria-hidden="true" />
+);
 
 const SentState = ({ onSendAnother }) => (
   <div className="flex flex-col items-center py-10 text-center">
@@ -32,9 +45,20 @@ const ContactForm = () => {
 
   return (
     <form className="space-y-5" onSubmit={onSubmit} noValidate>
+      <div className="flex items-center gap-3 border-b border-slate-100 pb-5">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/10">
+          <MessageSquare className="h-[18px] w-[18px]" strokeWidth={2.25} aria-hidden="true" />
+        </span>
+        <div>
+          <h2 className="text-[16px] font-semibold text-deep-blue">Send a message</h2>
+          <p className="text-[13px] text-slate-500">We typically reply within 1–2 business days.</p>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
           <FormLabel variant="auth" htmlFor="contact-fullName">
+            <FieldIcon icon={User} />
             Full Name
           </FormLabel>
           <Input
@@ -51,6 +75,7 @@ const ContactForm = () => {
         </div>
         <div>
           <FormLabel variant="auth" htmlFor="contact-email">
+            <FieldIcon icon={Mail} />
             Email Address
           </FormLabel>
           <Input
@@ -71,6 +96,7 @@ const ContactForm = () => {
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
           <FormLabel variant="auth" htmlFor="contact-phone">
+            <FieldIcon icon={Phone} />
             Phone Number
             <OptionalTag />
           </FormLabel>
@@ -88,6 +114,7 @@ const ContactForm = () => {
         </div>
         <div>
           <FormLabel variant="auth" htmlFor="contact-company">
+            <FieldIcon icon={Building2} />
             Company
             <OptionalTag />
           </FormLabel>
@@ -120,6 +147,7 @@ const ContactForm = () => {
 
       <div>
         <FormLabel variant="auth" htmlFor="contact-message">
+          <FieldIcon icon={MessageSquare} />
           Message
         </FormLabel>
         <Textarea

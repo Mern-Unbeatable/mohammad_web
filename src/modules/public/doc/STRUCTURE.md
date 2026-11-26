@@ -34,6 +34,12 @@ public/
 │   ├── constant/ index.js
 │   └── index.js             Public API: PUBLIC_GENERAL_PATH, publicGeneralPostPath
 │
+├── about/                   About (/about); trust / company page
+│   ├── pages/        AboutView
+│   ├── components/   AboutHero, AboutMission, AboutPillars, AboutCta
+│   ├── constant/     ABOUT_PATH, company details
+│   └── index.js             Public API: ABOUT_PATH
+│
 └── doc/STRUCTURE.md
 ```
 
