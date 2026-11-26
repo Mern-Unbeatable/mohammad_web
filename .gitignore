@@ -27,5 +27,4 @@ temp_interactive_push.bat
 
 # Environment variables
 .env.*.local
-
 config.bat
