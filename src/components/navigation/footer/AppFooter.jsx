@@ -1,52 +1,36 @@
-import { Fragment } from 'react';
-import { Link } from 'react-router';
-import { Globe } from 'lucide-react';
-import logo from '@/assets/logo.png';
-import Container from '@/components/ui/Container';
-import { PRIVACY_PATH, TERMS_PATH } from '@/modules/public/legal';
-import { CONTACT_PATH } from '@/modules/public/contact';
-import { ABOUT_PATH } from '@/modules/public/about';
-import { PUBLIC_GENERAL_PATH } from '@/modules/public/general';
-
-const FOOTER_LINKS = [
-  { to: ABOUT_PATH, label: 'About' },
-  { to: PUBLIC_GENERAL_PATH, label: 'General' },
-  { to: TERMS_PATH, label: 'Terms of Use and Sale' },
-  { to: PRIVACY_PATH, label: 'Privacy Policy' },
-  { to: CONTACT_PATH, label: 'Contact Us' },
-];
-
-const linkClass =
-  'rounded-sm text-[13px] font-medium text-[#475467] underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 lg:text-[14px]';
+import { Globe } from "lucide-react";
+import Container from "@/components/ui/Container";
+import FooterBrand from "./FooterBrand";
+import FooterLinkColumn from "./FooterLinkColumn";
+import FooterPopularPosts from "./FooterPopularPosts";
+import { FOOTER_COMPANY_LINKS, FOOTER_HELP_LINKS } from "./constants";
 
 const AppFooter = () => {
   const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="mt-auto w-full border-t border-[#E4E7EC] bg-[#F7F8FA]">
-      <Container className="flex flex-col items-center justify-between gap-4 py-6 sm:flex-row lg:py-7">
-        <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-4">
-          <Link to="/" aria-label="Lab Unity home" className="shrink-0">
-            <img src={logo} alt="Lab Unity" className="h-8 w-auto object-contain mix-blend-multiply" />
-          </Link>
-          <p className="text-center text-[13px] text-[#667085] sm:border-l sm:border-[#E4E7EC] sm:pl-4 lg:text-[14px]">
-            © {currentYear} Lab Unity. All rights reserved.
-          </p>
+    <footer className="mt-auto w-full border-t border-slate-200/70 bg-white">
+      <Container className="py-14 lg:py-16">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
+          <FooterBrand />
+          <FooterLinkColumn title="Company" links={FOOTER_COMPANY_LINKS} />
+          <FooterLinkColumn title="Help" links={FOOTER_HELP_LINKS} />
+          <FooterPopularPosts />
         </div>
 
-        <nav aria-label="Footer" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
-          {FOOTER_LINKS.map(({ to, label }, index) => (
-            <Fragment key={to}>
-              {index > 0 && <span aria-hidden="true" className="h-4 w-px bg-[#D0D5DD]" />}
-              <Link to={to} className={linkClass}>
-                {label}
-              </Link>
-            </Fragment>
-          ))}
-          <span className="ml-2 inline-flex items-center gap-1.5 rounded-full border border-[#E4E7EC] bg-white px-3 py-1.5 text-[13px] font-medium text-[#475467] lg:text-[14px]">
-            <Globe className="h-3.5 w-3.5 text-[#98A2B3]" strokeWidth={2.25} />
+        <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-slate-200/80 pt-6 sm:flex-row sm:items-center">
+          <p className="text-[13px] text-slate-500">
+            © {currentYear} Lab Unity. All rights reserved.
+          </p>
+          <span className="inline-flex items-center gap-1.5 text-[13px] text-slate-500">
+            <Globe
+              className="h-3.5 w-3.5 text-slate-400"
+              strokeWidth={2.25}
+              aria-hidden="true"
+            />
             English
           </span>
-        </nav>
+        </div>
       </Container>
     </footer>
   );
