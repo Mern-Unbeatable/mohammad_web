@@ -14,7 +14,7 @@ export const publicRoutes = {
   handle: { audience: 'public' },
   children: [
     { index: true, element: <HomeView />, handle: { title: 'Home' } },
-    { path: TERMS_PATH, element: <TermsOfServiceView />, handle: { title: 'Terms of Service' } },
+    { path: TERMS_PATH, element: <TermsOfServiceView />, handle: { title: 'Terms of Use and Sale' } },
     { path: PRIVACY_PATH, element: <PrivacyPolicyView />, handle: { title: 'Privacy Policy' } },
     { path: PRICING_PATH, element: <PricingView />, handle: { title: 'Pricing' } },
     { path: CONTACT_PATH, element: <ContactView />, handle: { title: 'Contact Us' } },

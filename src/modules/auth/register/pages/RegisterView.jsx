@@ -63,7 +63,7 @@ const RegisterView = () => {
     }
 
     if (!acceptedTerms) {
-      toast.error("You must accept the Terms of Service and Privacy Policy.");
+      toast.error("You must accept the Terms of Use and Sale and Privacy Policy.");
       return;
     }
 
@@ -324,7 +324,7 @@ const RegisterView = () => {
                     rel="noopener noreferrer"
                     className="font-medium text-primary hover:underline"
                   >
-                    Terms of Service
+                    Terms of Use and Sale
                   </Link>{" "}
                   and{" "}
                   <Link

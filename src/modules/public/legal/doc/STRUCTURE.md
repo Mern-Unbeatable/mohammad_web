@@ -1,6 +1,6 @@
 # Public legal — structure
 
-The Terms of Service (`/terms`) and Privacy Policy (`/privacy`) pages,
+The Terms of Use and Sale (`/terms`) and Privacy Policy (`/privacy`) pages,
 rendered inside `layouts/RootLayout`. Both use one `LegalDocument` frame: a
 header with the last-updated date, a sticky "On this page" list that follows
 the scroll position, numbered sections, and links to the other page and to
