@@ -11,7 +11,7 @@ const PublicFooter = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto w-full border-t border-slate-200/70 bg-slate-100">
+    <footer className="relative z-10 mt-auto w-full border-t border-slate-200/70 bg-slate-100">
       <Container className="py-10 sm:py-12 lg:py-14">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-10 lg:grid-cols-4 lg:gap-10 xl:gap-12">
           <div className="min-w-0 sm:col-span-2 lg:col-span-1">

@@ -6,7 +6,7 @@ const FooterPopularPosts = () => {
   const { posts, loading } = useFooterPopularPosts();
 
   return (
-    <div className="min-w-0">
+    <div className="min-w-0 lg:min-h-[11.5rem]">
       <p className="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-slate-400 sm:text-[12px]">
         Popular posts
       </p>

@@ -11,31 +11,43 @@ const LegalToc = ({ title, sections, activeId, onSelect }) => {
     const list = listRef.current;
     const item = list?.querySelector('[aria-current="location"]');
     if (!list || !item || list.scrollHeight <= list.clientHeight) return;
+
     const itemTop = item.offsetTop - list.offsetTop;
     const itemBottom = itemTop + item.offsetHeight;
+    // Instant scroll — smooth here fights page scroll while the sticky TOC is in view.
     if (itemTop < list.scrollTop + 8) {
-      list.scrollTo({ top: itemTop - 8, behavior: 'smooth' });
+      list.scrollTo({ top: Math.max(0, itemTop - 8), behavior: 'auto' });
     } else if (itemBottom > list.scrollTop + list.clientHeight - 8) {
-      list.scrollTo({ top: itemBottom - list.clientHeight + 8, behavior: 'smooth' });
+      list.scrollTo({
+        top: itemBottom - list.clientHeight + 8,
+        behavior: 'auto',
+      });
     }
   }, [activeId]);
+
+  const handleSelect = (event, id) => {
+    event.preventDefault();
+    onSelect(id);
+    const target = document.getElementById(id);
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.history.replaceState(null, '', `#${id}`);
+  };
 
   return (
     <nav
       aria-label={`${title} sections`}
-      className="rounded-xl bg-white p-4 sm:p-5 lg:sticky lg:top-[100px] lg:flex lg:max-h-[calc(100vh-124px)] lg:flex-col xl:top-[108px] xl:max-h-[calc(100vh-132px)]"
+      className="z-0 rounded-xl bg-white p-4 sm:p-5 lg:sticky lg:top-[100px] lg:flex lg:max-h-[calc(100vh-124px)] lg:flex-col lg:self-start xl:top-[108px] xl:max-h-[calc(100vh-132px)]"
     >
       <div className="flex shrink-0 items-center justify-between px-3 pb-3">
         <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-deep-blue">
           On this page
         </p>
-        <span className="text-[12px] text-[#98A2B3]">
-          {sections.length} sections
-        </span>
+        <span className="text-[12px] text-[#98A2B3]">{sections.length} sections</span>
       </div>
       <ol
         ref={listRef}
-        className="relative grid grid-cols-1 gap-1 border-t border-[#F0F2F5] pt-3 sm:grid-cols-2 lg:min-h-0 lg:flex-1 lg:grid-cols-1 lg:content-start lg:overflow-y-auto lg:overscroll-contain lg:pr-1 [scrollbar-width:thin]"
+        className="relative grid grid-cols-1 gap-1 border-t border-[#F0F2F5] pt-3 sm:grid-cols-2 lg:min-h-0 lg:flex-1 lg:grid-cols-1 lg:content-start lg:overflow-y-auto lg:overscroll-y-auto lg:pr-1 [scrollbar-width:thin]"
       >
         {sections.map(({ id, heading }, index) => {
           const isActive = id === activeId;
@@ -43,7 +55,7 @@ const LegalToc = ({ title, sections, activeId, onSelect }) => {
             <li key={id}>
               <a
                 href={`#${id}`}
-                onClick={() => onSelect(id)}
+                onClick={(event) => handleSelect(event, id)}
                 aria-current={isActive ? 'location' : undefined}
                 className={`flex items-start gap-3 rounded-lg px-3 py-2.5 text-[15px] leading-[1.45] transition-colors ${
                   isActive

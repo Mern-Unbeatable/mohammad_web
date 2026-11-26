@@ -5,7 +5,7 @@ import PublicFooter from '@/components/navigation/footer/PublicFooter';
 /** Public site shell. `children` replaces the outlet when rendered outside the route tree (catch-all). */
 const RootLayout = ({ children }) => (
   <div className="flex min-h-screen flex-col">
-    <header className="sticky top-0 z-[70]">
+    <header className="sticky top-0 z-[70] bg-white">
       <PublicNavbar />
     </header>
     <main className="flex flex-1 flex-col">{children ?? <Outlet />}</main>

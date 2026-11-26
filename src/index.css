@@ -119,8 +119,15 @@
   margin: calc(-1 * var(--panel-gutter));
 }
 
-html {
-  scroll-behavior: smooth;
+/*
+ * Avoid `scroll-behavior: smooth` on `html` — it fights wheel/trackpad scrolling
+ * (especially near sticky sidebars and the public footer) and cannot be interrupted cleanly.
+ * In-page anchors that need easing should opt in via JS `scrollIntoView`.
+ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 .scrollbar-hide {
