@@ -6,7 +6,7 @@ import { CreatePostActionProvider } from "@/shared/context/CreatePostActionProvi
 import { LayoutChromeProvider } from "@/shared/context/LayoutChromeContext";
 import { CallProvider } from "@/features/calls";
 import { FloatingChatProvider } from "@/modules/dash/user/floatingChat";
-import AppFooter from "@/components/navigation/footer/AppFooter";
+import AuthFooter from "@/components/navigation/footer/AuthFooter";
 import { SubscriptionGate } from "@/components/subscription";
 import { fetchUserProfile } from "@/features/dash/user/profile";
 import { withChunkReload } from "@/shared/router/utils/chunkReload";
@@ -44,7 +44,7 @@ const UserLayout = ({ children }) => {
                 <SubscriptionGate>{children ?? <Outlet />}</SubscriptionGate>
               </main>
               <div className="hidden xl:block">
-                <AppFooter />
+                <AuthFooter />
               </div>
               <MobileBottomNav />
             </div>

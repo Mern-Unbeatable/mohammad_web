@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router';
 import { PublicNavbar } from '@/components/navigation';
-import AppFooter from '@/components/navigation/footer/AppFooter';
+import PublicFooter from '@/components/navigation/footer/PublicFooter';
 
 /** Public site shell. `children` replaces the outlet when rendered outside the route tree (catch-all). */
 const RootLayout = ({ children }) => (
@@ -9,7 +9,7 @@ const RootLayout = ({ children }) => (
       <PublicNavbar />
     </header>
     <main className="flex flex-1 flex-col">{children ?? <Outlet />}</main>
-    <AppFooter />
+    <PublicFooter />
   </div>
 );
 
