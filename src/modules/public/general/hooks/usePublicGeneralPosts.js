@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toGeneralPostModel, categoryToApi } from '@/features/dash/user/general';
 import * as publicGeneralApi from '@/features/public/general/generalApi';
 import {
@@ -6,6 +6,7 @@ import {
   PUBLIC_POSTS_PAGE_SIZE,
 } from '../constant/constants';
 import { hasReachedGuestViewLimit } from '../utils/guestViews';
+import { loadGuestBaseList } from '../utils/guestBaseList';
 import {
   getCachedPostsList,
   postsListCacheKey,
@@ -13,40 +14,53 @@ import {
 } from '../utils/postsListCache';
 import { useAuth } from '@/modules/auth';
 
+const filterByCategory = (items, category) => {
+  const type = categoryToApi(category);
+  if (!type) return items;
+  return items.filter((post) => post.type === type);
+};
+
 export const usePublicGeneralPosts = () => {
   const { isAuthenticated, sessionReady } = useAuth();
   const [category, setCategory] = useState(DEFAULT_CATEGORY);
   const [page, setPage] = useState(1);
-  const [items, setItems] = useState([]);
+  const [baseItems, setBaseItems] = useState([]);
   const [meta, setMeta] = useState({ page: 1, totalPages: 1, total: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [guestLimited, setGuestLimited] = useState(false);
 
-  const applyResult = useCallback(
-    (result) => {
-      setItems(result.items);
-      setMeta(result.meta);
-      setError(null);
-      if (!isAuthenticated) setGuestLimited(hasReachedGuestViewLimit());
-      else setGuestLimited(false);
-    },
-    [isAuthenticated],
-  );
+  const loadGuestList = useCallback(async ({ force = false } = {}) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const items = await loadGuestBaseList({ force });
+      setBaseItems(items);
+      setGuestLimited(hasReachedGuestViewLimit());
+    } catch (err) {
+      setError(publicGeneralApi.getApiErrorMessage(err, 'Failed to load posts'));
+      setBaseItems([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const load = useCallback(
+  const loadAuthenticatedList = useCallback(
     async ({ force = false } = {}) => {
-      const resolvedPage = isAuthenticated ? page : 1;
       const key = postsListCacheKey({
         category,
-        page: resolvedPage,
-        isAuthenticated,
+        page,
+        pageSize: PUBLIC_POSTS_PAGE_SIZE,
+        isAuthenticated: true,
       });
 
       if (!force) {
         const cached = getCachedPostsList(key);
         if (cached) {
-          applyResult(cached);
+          setBaseItems(cached.items);
+          setMeta(cached.meta);
+          setError(null);
+          setGuestLimited(false);
           setLoading(false);
           return;
         }
@@ -57,7 +71,7 @@ export const usePublicGeneralPosts = () => {
       try {
         const type = categoryToApi(category);
         const response = await publicGeneralApi.getPublicPostsList({
-          page: resolvedPage,
+          page,
           pageSize: PUBLIC_POSTS_PAGE_SIZE,
           sort: 'desc',
           ...(type ? { type } : {}),
@@ -67,29 +81,39 @@ export const usePublicGeneralPosts = () => {
           meta: response.meta || { page: 1, totalPages: 1, total: 0 },
         };
         setCachedPostsList(key, next);
-        applyResult(next);
+        setBaseItems(next.items);
+        setMeta(next.meta);
+        setGuestLimited(false);
       } catch (err) {
         setError(publicGeneralApi.getApiErrorMessage(err, 'Failed to load posts'));
-        setItems([]);
+        setBaseItems([]);
       } finally {
         setLoading(false);
       }
     },
-    [applyResult, category, page, isAuthenticated],
+    [category, page],
   );
 
   useEffect(() => {
     if (!sessionReady) return undefined;
-    load();
+    if (isAuthenticated) loadAuthenticatedList();
+    else loadGuestList();
     return undefined;
-  }, [load, sessionReady]);
+  }, [sessionReady, isAuthenticated, loadAuthenticatedList, loadGuestList]);
 
   useEffect(() => {
     if (!isAuthenticated) setGuestLimited(hasReachedGuestViewLimit());
     else setGuestLimited(false);
   }, [isAuthenticated]);
 
+  // Guests filter only inside the locked first-8 list — never fetch outside it.
+  const items = useMemo(() => {
+    if (isAuthenticated) return baseItems;
+    return filterByCategory(baseItems, category);
+  }, [baseItems, category, isAuthenticated]);
+
   const onCategoryChange = (next) => {
+    if (next === category) return;
     setCategory(next);
     setPage(1);
   };
@@ -103,7 +127,8 @@ export const usePublicGeneralPosts = () => {
     totalPages: isAuthenticated ? meta.totalPages || 1 : 1,
     loading: !sessionReady || loading,
     error,
-    retry: () => load({ force: true }),
+    retry: () =>
+      isAuthenticated ? loadAuthenticatedList({ force: true }) : loadGuestList({ force: true }),
     isAuthenticated,
     guestLimited,
   };

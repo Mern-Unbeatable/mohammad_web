@@ -17,7 +17,7 @@ const parseListResponse = (response, params = {}) => {
   let postsData = [];
   let metaData = {
     page: params.page || 1,
-    pageSize: params.pageSize || 12,
+    pageSize: params.pageSize || 8,
     total: 0,
     totalPages: 1,
   };
@@ -39,7 +39,7 @@ const parseListResponse = (response, params = {}) => {
 export async function getPublicPostsList(params = {}) {
   const query = {
     page: 1,
-    pageSize: 12,
+    pageSize: 8,
     sort: 'desc',
     ...params,
   };

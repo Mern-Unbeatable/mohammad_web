@@ -4,7 +4,13 @@ import PublicAuthActions from './PublicAuthActions';
 import { PUBLIC_NAV_LINKS } from '../../constant/constants';
 
 /** Backdrop + slide-down drawer below the navbar (hidden from `lg`). */
-const PublicMobileMenu = ({ open, onClose, onSectionNav, activeSection }) => {
+const PublicMobileMenu = ({
+  open,
+  onClose,
+  onSectionNav,
+  activeSection,
+  links = PUBLIC_NAV_LINKS,
+}) => {
   const location = useLocation();
 
   return (
@@ -28,7 +34,7 @@ const PublicMobileMenu = ({ open, onClose, onSectionNav, activeSection }) => {
       >
         <Container className="py-5">
           <ul className="flex flex-col gap-4">
-            {PUBLIC_NAV_LINKS.map((link) => {
+            {links.map((link) => {
               if (link.to) {
                 const active =
                   location.pathname === link.to ||

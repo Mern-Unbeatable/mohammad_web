@@ -85,7 +85,7 @@ export const PUBLIC_NAV_LINKS = [
   { label: 'Platform', sectionId: 'platform' },
   { label: 'Community', sectionId: 'community' },
   { label: 'Marketplace', sectionId: 'marketplace' },
-  { label: 'General', to: PUBLIC_GENERAL_PATH },
+  { label: 'General', to: PUBLIC_GENERAL_PATH, guestOnly: true },
 ];
 
 /** Section the logo scrolls to when already on the home page. */

@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
 import { Link, useLocation } from 'react-router';
 import { Menu, X } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import Container from '@/components/ui/Container';
+import { useAuth } from '@/modules/auth';
 import PublicAuthActions from './PublicAuthActions';
 import PublicMobileMenu from './PublicMobileMenu';
 import { usePublicNavbar } from '../../hooks/usePublicNavbar';
@@ -12,6 +14,12 @@ const PublicNavbar = () => {
   const { menuOpen, closeMenu, toggleMenu, handleSectionNav, handleLogoClick, activeSection } =
     usePublicNavbar();
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
+  const navLinks = useMemo(
+    () =>
+      PUBLIC_NAV_LINKS.filter((link) => !(link.guestOnly && isAuthenticated)),
+    [isAuthenticated],
+  );
 
   return (
     <>
@@ -27,7 +35,7 @@ const PublicNavbar = () => {
             </Link>
 
             <ul className="hidden h-full items-center gap-8 lg:flex lg:gap-6 xl:gap-10">
-              {PUBLIC_NAV_LINKS.map((link) => {
+              {navLinks.map((link) => {
                 if (link.to) {
                   const active =
                     location.pathname === link.to ||
@@ -92,6 +100,7 @@ const PublicNavbar = () => {
         onClose={closeMenu}
         onSectionNav={handleSectionNav}
         activeSection={activeSection}
+        links={navLinks}
       />
     </>
   );

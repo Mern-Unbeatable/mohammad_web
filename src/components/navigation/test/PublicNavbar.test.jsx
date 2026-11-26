@@ -32,7 +32,7 @@ describe("PublicNavbar", () => {
     expect(html).toContain('aria-label="Open menu"');
   });
 
-  it("links signed-in users to the feed", () => {
+  it("links signed-in users to the feed and hides General", () => {
     const html = render({
       isAuthenticated: true,
       user: { id: "u1", role: "USER" },
@@ -40,6 +40,7 @@ describe("PublicNavbar", () => {
     expect(html).toContain("Logout");
     expect(html).toContain('href="/feed"');
     expect(html).not.toContain(">Dashboard<");
+    expect(html).not.toContain('href="/general-posts"');
   });
 
   it("links suppliers to their dashboard", () => {

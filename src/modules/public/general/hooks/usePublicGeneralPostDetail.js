@@ -10,7 +10,10 @@ import {
   markGuestViewLimitReached,
   recordGuestPostView,
 } from '../utils/guestViews';
-import { RELATED_POSTS_LIMIT } from '../constant/constants';
+import {
+  isInGuestBaseList,
+  loadGuestBaseList,
+} from '../utils/guestBaseList';
 import { pickRelatedPosts } from '../utils/relatedPosts';
 
 const copyPageLink = async () => {
@@ -43,25 +46,52 @@ export const usePublicGeneralPostDetail = () => {
       setPost(null);
       setRelated([]);
 
-      if (!isAuthenticated && !canGuestViewPost(postId)) {
-        if (!cancelled) {
-          setGuestBlocked(true);
-          setLoading(false);
-        }
-        return;
-      }
-
       try {
+        if (!isAuthenticated) {
+          const baseItems = await loadGuestBaseList();
+          if (cancelled) return;
+
+          // Guests may only open posts from the locked first-8 list.
+          if (!isInGuestBaseList(postId, baseItems) || !canGuestViewPost(postId)) {
+            setGuestBlocked(true);
+            return;
+          }
+
+          const model = baseItems.find((item) => item.id === postId) || null;
+          if (!model) {
+            setGuestBlocked(true);
+            return;
+          }
+
+          // Prefer cached list item; refresh full detail when needed for body/document.
+          let detail = model;
+          try {
+            const raw = await publicGeneralApi.getPublicPostById(postId);
+            if (!cancelled) detail = toGeneralPostModel(raw) || model;
+          } catch (error) {
+            if (isGuestViewLimitError(error)) {
+              markGuestViewLimitReached();
+              setGuestBlocked(true);
+              return;
+            }
+          }
+
+          if (cancelled) return;
+          setPost(detail);
+          recordGuestPostView(postId);
+          setRelated(pickRelatedPosts(baseItems, postId));
+          return;
+        }
+
         const raw = await publicGeneralApi.getPublicPostById(postId);
         if (cancelled) return;
         const model = toGeneralPostModel(raw);
         setPost(model);
-        if (!isAuthenticated) recordGuestPostView(postId);
 
         try {
           const list = await publicGeneralApi.getPublicPostsList({
             page: 1,
-            pageSize: RELATED_POSTS_LIMIT + 1,
+            pageSize: 5,
             sort: 'desc',
             ...(model?.type ? { type: model.type } : {}),
           });

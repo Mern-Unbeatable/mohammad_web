@@ -2,8 +2,8 @@
 
 const cache = new Map();
 
-export const postsListCacheKey = ({ category, page, isAuthenticated }) =>
-  `${isAuthenticated ? 'auth' : 'guest'}:${category}:${page}`;
+export const postsListCacheKey = ({ category, page, pageSize, isAuthenticated }) =>
+  `${isAuthenticated ? 'auth' : 'guest'}:${category}:${page}:${pageSize}`;
 
 export const getCachedPostsList = (key) => cache.get(key) || null;
 

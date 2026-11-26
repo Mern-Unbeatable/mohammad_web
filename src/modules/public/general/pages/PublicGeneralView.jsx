@@ -104,6 +104,16 @@ const PublicGeneralView = () => {
             </>
           )}
         </div>
+
+        {!posts.isAuthenticated && !posts.loading ? (
+          <div className="mt-10">
+            <GuestAuthPrompt
+              title="Sign in to keep exploring"
+              message="Create a free account or log in to browse more General posts and join the conversation."
+              compact
+            />
+          </div>
+        ) : null}
       </Container>
     </section>
   );

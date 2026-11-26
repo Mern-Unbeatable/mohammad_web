@@ -9,7 +9,8 @@ export const GUEST_VIEW_LIMIT = 12;
 
 export const GUEST_VIEWS_STORAGE_KEY = 'lu_guest_general_views';
 
-export const PUBLIC_POSTS_PAGE_SIZE = GUEST_VIEW_LIMIT;
+/** Guest list preview size on `/general-posts`. */
+export const PUBLIC_POSTS_PAGE_SIZE = 8;
 export const RELATED_POSTS_LIMIT = 4;
 
 export const POSTS_GRID_CLASS =
