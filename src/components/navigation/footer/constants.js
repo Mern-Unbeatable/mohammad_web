@@ -22,14 +22,13 @@ export const FOOTER_SOCIAL_LINKS = [
 /** Company column links. */
 export const FOOTER_COMPANY_LINKS = [
   { to: ABOUT_PATH, label: "About" },
-  { to: PRICING_PATH, label: "Pricing" },
   { to: PUBLIC_GENERAL_PATH, label: "General posts" },
   { to: JOIN_PATH, label: "Join free" },
 ];
 
 /** Help column links. */
 export const FOOTER_HELP_LINKS = [
-  { to: CONTACT_PATH, label: "Customer support" },
+  { to: CONTACT_PATH, label: "Contact & support" },
   {
     to: TERMS_PATH,
     label: "Terms & conditions",

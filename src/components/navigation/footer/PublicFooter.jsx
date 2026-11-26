@@ -1,17 +1,17 @@
-import { Globe } from 'lucide-react';
-import Container from '@/components/ui/Container';
-import FooterBrand from './FooterBrand';
-import FooterLinkColumn from './FooterLinkColumn';
-import FooterPopularPosts from './FooterPopularPosts';
-import FooterSocialLinks from './FooterSocialLinks';
-import { FOOTER_COMPANY_LINKS, FOOTER_HELP_LINKS } from './constants';
+import { Globe } from "lucide-react";
+import Container from "@/components/ui/Container";
+import FooterBrand from "./FooterBrand";
+import FooterLinkColumn from "./FooterLinkColumn";
+import FooterPopularPosts from "./FooterPopularPosts";
+import FooterSocialLinks from "./FooterSocialLinks";
+import { FOOTER_COMPANY_LINKS, FOOTER_HELP_LINKS } from "./constants";
 
 /** Marketing / public-site footer (RootLayout). */
 const PublicFooter = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto w-full border-t border-slate-200/70 bg-white">
+    <footer className="mt-auto w-full border-t border-slate-200/70 bg-slate-100">
       <Container className="py-14 lg:py-10">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
           <FooterBrand />

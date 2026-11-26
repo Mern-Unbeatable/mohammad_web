@@ -1,4 +1,4 @@
-import { FOOTER_SOCIAL_LINKS } from './constants';
+import { FOOTER_SOCIAL_LINKS } from "./constants";
 
 const FooterSocialLinks = () => (
   <ul className="flex items-center justify-center gap-3">
@@ -9,7 +9,7 @@ const FooterSocialLinks = () => (
           target="_blank"
           rel="noopener noreferrer"
           aria-label={label}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
         >
           <Icon className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
         </a>
