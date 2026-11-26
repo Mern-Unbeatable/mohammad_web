@@ -1,6 +1,6 @@
-import { Link } from 'react-router';
-import { ArrowRight, LockKeyhole } from 'lucide-react';
-import { JOIN_PATH, LOGIN_PATH } from '../constant/constants';
+import { Link } from "react-router";
+import { ArrowRight, LockKeyhole } from "lucide-react";
+import { JOIN_PATH, LOGIN_PATH } from "../constant/constants";
 
 /** Static “Load more” CTA for guests. Sign-in card stays below. */
 const GuestLoadMore = () => (
@@ -19,14 +19,19 @@ const GuestLoadMore = () => (
       <div className="relative flex flex-col gap-5 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-8 sm:py-8">
         <div className="flex items-start gap-3 sm:gap-4">
           <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/80 sm:h-10 sm:w-10">
-            <LockKeyhole className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+            <LockKeyhole
+              className="h-4 w-4"
+              strokeWidth={2}
+              aria-hidden="true"
+            />
           </span>
           <div className="min-w-0">
             <p className="text-[14px] font-semibold text-white sm:text-[15px]">
               Free preview ends here
             </p>
             <p className="mt-1 text-[13px] leading-relaxed text-slate-400 sm:max-w-sm sm:text-[13.5px]">
-              Join Lab Unity to keep browsing the full library of posts and documents.
+              Join Lab Unity to keep browsing the full library of posts and
+              documents.
             </p>
           </div>
         </div>
