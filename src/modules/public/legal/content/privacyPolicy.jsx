@@ -11,6 +11,7 @@ const COMPANY = {
 };
 
 export const PRIVACY_POLICY = {
+  badge: 'Privacy',
   title: 'Privacy Policy',
   intro:
     'This policy explains who processes your data on LabUnity.be, what we use, why we use it, who receives it, how long we keep it, and your rights — including how cookies and similar technologies are managed.',
