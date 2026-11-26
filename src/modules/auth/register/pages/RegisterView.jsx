@@ -1,6 +1,20 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { Loader2, Mail, ShieldCheck, Sparkles } from "lucide-react";
+import {
+  Briefcase,
+  Building2,
+  FileText,
+  Globe2,
+  KeyRound,
+  Loader2,
+  Lock,
+  Mail,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  User,
+  Users,
+} from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { getSafeRedirectPath } from "@/shared/router/utils/safeRedirect";
@@ -19,6 +33,14 @@ import {
   Textarea,
 } from "@/components/form-controls";
 import { DEFAULT_TRIAL_DAYS } from "@/components/navigation/constant/constants";
+
+const FieldIcon = ({ icon: Icon }) => (
+  <Icon
+    className="mr-1.5 inline h-3.5 w-3.5 text-[#98A2B3]"
+    strokeWidth={2.25}
+    aria-hidden="true"
+  />
+);
 
 const FormSection = ({ title, children }) => (
   <section className="space-y-5 border-t border-[#EAECF0] pt-6 first:border-t-0 first:pt-0">
@@ -63,7 +85,9 @@ const RegisterView = () => {
     }
 
     if (!acceptedTerms) {
-      toast.error("You must accept the Terms of Use and Sale and Privacy Policy.");
+      toast.error(
+        "You must accept the Terms of Use and Sale and Privacy Policy.",
+      );
       return;
     }
 
@@ -100,11 +124,7 @@ const RegisterView = () => {
     <section className="px-4 py-10 sm:px-6 lg:py-14">
       <div className="mx-auto w-full max-w-[680px]">
         <div className="mb-8 text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[12px] font-semibold uppercase tracking-[0.08em] text-primary">
-            <Sparkles className="h-3.5 w-3.5" strokeWidth={2.2} />
-            {DEFAULT_TRIAL_DAYS}-day free trial
-          </span>
-          <h1 className="mt-4 text-[32px] font-bold tracking-[-0.02em] text-deep-blue sm:text-[36px]">
+          <h1 className="text-[32px] font-bold tracking-[-0.02em] text-deep-blue sm:text-[36px]">
             Join Lab Unity
           </h1>
           <p className="mx-auto mt-2 max-w-[540px] text-[15px] leading-[1.6] text-[#64748B]">
@@ -113,12 +133,44 @@ const RegisterView = () => {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-[#EAECF0] bg-white p-6 shadow-[0_1px_3px_rgba(16,24,40,0.06)] sm:p-8">
+        <div className="relative overflow-hidden rounded-2xl border border-[#EAECF0] bg-white p-6 shadow-[0_1px_3px_rgba(16,24,40,0.06)] sm:p-8">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute right-0 top-0 z-10 h-28 w-28 overflow-hidden"
+          >
+            <svg
+              className="absolute right-[-36px] top-[30px] origin-center rotate-45 text-primary drop-shadow-sm"
+              width="160"
+              height="28"
+              viewBox="0 0 160 28"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="160" height="28" fill="currentColor" />
+              <text
+                x="80"
+                y="14"
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill="#fff"
+                fontSize="11"
+                fontWeight="600"
+                letterSpacing="0.06em"
+                style={{ fontFamily: "inherit" }}
+              >
+                {DEFAULT_TRIAL_DAYS}-DAY FREE TRIAL
+              </text>
+            </svg>
+          </div>
           <form className="space-y-6" onSubmit={handleSubmit}>
             <FormSection title="About you">
               <SelectField
                 id="profileType"
-                label="What best describes you?"
+                label={
+                  <>
+                    <FieldIcon icon={Users} />
+                    What best describes you?
+                  </>
+                }
                 value={profileType}
                 onChange={(e) => setProfileType(e.target.value)}
                 disabled={loading}
@@ -137,6 +189,7 @@ const RegisterView = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
                   <FormLabel variant="auth" htmlFor="firstName">
+                    <FieldIcon icon={User} />
                     First Name
                   </FormLabel>
                   <Input
@@ -152,6 +205,7 @@ const RegisterView = () => {
                 </div>
                 <div>
                   <FormLabel variant="auth" htmlFor="lastName">
+                    <FieldIcon icon={User} />
                     Last Name
                   </FormLabel>
                   <Input
@@ -170,6 +224,7 @@ const RegisterView = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
                   <FormLabel variant="auth" htmlFor="jobTitle">
+                    <FieldIcon icon={Briefcase} />
                     Job Title / Position
                   </FormLabel>
                   <Input
@@ -185,6 +240,7 @@ const RegisterView = () => {
                 </div>
                 <div>
                   <FormLabel variant="auth" htmlFor="company">
+                    <FieldIcon icon={Building2} />
                     Company or Laboratory Name
                   </FormLabel>
                   <Input
@@ -202,6 +258,7 @@ const RegisterView = () => {
 
               <div>
                 <FormLabel variant="auth" htmlFor="professionalInfo">
+                  <FieldIcon icon={FileText} />
                   Professional Information
                 </FormLabel>
                 <Textarea
@@ -221,6 +278,7 @@ const RegisterView = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
                   <FormLabel variant="auth" htmlFor="email">
+                    <FieldIcon icon={Mail} />
                     Email Address
                   </FormLabel>
                   <Input
@@ -236,6 +294,7 @@ const RegisterView = () => {
                 </div>
                 <div>
                   <FormLabel variant="auth" htmlFor="phone">
+                    <FieldIcon icon={Phone} />
                     Phone Number
                   </FormLabel>
                   <Input
@@ -254,7 +313,12 @@ const RegisterView = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <SelectField
                   id="country"
-                  label="Country"
+                  label={
+                    <>
+                      <FieldIcon icon={Globe2} />
+                      Country
+                    </>
+                  }
                   value={country}
                   onChange={(e) => setCountry(e.target.value)}
                   disabled={loading}
@@ -267,6 +331,7 @@ const RegisterView = () => {
                 </SelectField>
                 <div>
                   <FormLabel variant="auth" htmlFor="city">
+                    <FieldIcon icon={MapPin} />
                     City
                   </FormLabel>
                   <Input
@@ -288,7 +353,12 @@ const RegisterView = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <PasswordField
                   id="password"
-                  label="Password"
+                  label={
+                    <>
+                      <FieldIcon icon={Lock} />
+                      Password
+                    </>
+                  }
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   visible={showPassword}
@@ -297,7 +367,12 @@ const RegisterView = () => {
                 />
                 <PasswordField
                   id="confirmPassword"
-                  label="Confirm Password"
+                  label={
+                    <>
+                      <FieldIcon icon={KeyRound} />
+                      Confirm Password
+                    </>
+                  }
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   visible={showConfirmPassword}
@@ -366,9 +441,16 @@ const RegisterView = () => {
         </div>
 
         <p className="mt-6 flex items-center justify-center gap-1.5 text-[14px] text-[#64748B]">
-          <Mail className="h-4 w-4 text-[#98A2B3]" strokeWidth={2.2} aria-hidden="true" />
+          <Mail
+            className="h-4 w-4 text-[#98A2B3]"
+            strokeWidth={2.2}
+            aria-hidden="true"
+          />
           Questions before joining?
-          <Link to={CONTACT_PATH} className="font-medium text-primary hover:underline">
+          <Link
+            to={CONTACT_PATH}
+            className="font-medium text-primary hover:underline"
+          >
             Contact us
           </Link>
         </p>

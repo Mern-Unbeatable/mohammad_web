@@ -18,7 +18,7 @@ const ContactSupportView = () => {
   } = useContactSupport();
 
   return (
-    <section className="flex min-h-[calc(100vh-72px)] items-center justify-center px-4 py-12 sm:px-6">
+    <section className="flex flex-1 flex-col items-center justify-center px-4 py-10 sm:px-6 sm:py-12">
       <div className="w-full max-w-[500px]">
         <div className="mb-8 text-center">
           <h1 className="text-[32px] font-bold tracking-[-0.02em] text-deep-blue sm:text-[36px]">

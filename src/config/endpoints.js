@@ -31,6 +31,11 @@ export const API_ENDPOINTS = {
       LIST: "/blogs",
       BY_SLUG: (slug) => `/blogs/${slug}`,
     },
+    /** Same `/general` reads as members; optional auth + guest view cookie on the server. */
+    GENERAL: {
+      LIST: "/general",
+      DETAILS: (postId) => `/general/${postId}`,
+    },
     SUBSCRIPTION_PLANS: "/subscriptions/plans",
   },
 

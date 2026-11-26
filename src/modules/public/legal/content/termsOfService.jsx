@@ -12,6 +12,7 @@ const COMPANY = {
 };
 
 export const TERMS_OF_SERVICE = {
+  badge: 'Terms',
   title: 'Terms of Use and Sale',
   intro:
     'These terms apply to profiles, posts, messaging, the marketplace, and subscriptions and other services sold by Global Medical Transport SRL under the LabUnity name.',

@@ -23,15 +23,16 @@ const render = (auth = {}) => {
 };
 
 describe("PublicNavbar", () => {
-  it("shows section links and guest actions (desktop + mobile)", () => {
+  it("shows section links, General route, and guest actions (desktop + mobile)", () => {
     const html = render();
     expect(html.match(/href="\/#community"/g)).toHaveLength(2);
+    expect(html.match(/href="\/general-posts"/g)).toHaveLength(2);
     expect(html.match(/>Log in</g)).toHaveLength(2);
     expect(html).toContain('href="/join"');
     expect(html).toContain('aria-label="Open menu"');
   });
 
-  it("links signed-in users to the feed", () => {
+  it("links signed-in users to the feed and hides General", () => {
     const html = render({
       isAuthenticated: true,
       user: { id: "u1", role: "USER" },
@@ -39,6 +40,7 @@ describe("PublicNavbar", () => {
     expect(html).toContain("Logout");
     expect(html).toContain('href="/feed"');
     expect(html).not.toContain(">Dashboard<");
+    expect(html).not.toContain('href="/general-posts"');
   });
 
   it("links suppliers to their dashboard", () => {

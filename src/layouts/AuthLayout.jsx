@@ -7,8 +7,8 @@ const AuthLayout = () => {
   const isLogin = pathname === '/login';
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA]">
-      <header className="sticky top-0 z-[70] border-b border-[#ECEEF2] bg-white">
+    <div className="flex min-h-dvh flex-col bg-[#F7F8FA]">
+      <header className="sticky top-0 z-[70] shrink-0 border-b border-[#ECEEF2] bg-white">
         <Container className="flex h-[72px] items-center justify-between">
           <Link to="/" className="shrink-0">
             <img
@@ -38,7 +38,7 @@ const AuthLayout = () => {
         </Container>
       </header>
 
-      <main>
+      <main className="flex flex-1 flex-col">
         <Outlet />
       </main>
     </div>
